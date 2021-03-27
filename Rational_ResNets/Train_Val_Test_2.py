@@ -27,7 +27,7 @@ ResNet_arg_parser = arg.ArgumentParser()
 ResNet_arg_parser.add_argument('-bs', '--batch_size', default=128, type=int)
 ResNet_arg_parser.add_argument('-lr', '--learning_rate', default=0.01, type=float)
 ResNet_arg_parser.add_argument('-m', '--model', default='rational_resnet20_cifar10', type=str,
-                               choices=['rational_resnet20_cifar10', 'resnet20_cifar10', 'rational_resnet18_imagenet', 'resnet18_imagenet', 'multi_rational_resnet20_cifar10', 'pt'])
+                               choices=['rational_resnet20_cifar10', 'resnet20_cifar10', 'rational_resnet18_imagenet', 'resnet18_imagenet', 'multi_rational_resnet20_cifar10', 'pt'])  # pt is the original ResNet18 model from Pytorch with Rationals
 ResNet_arg_parser.add_argument('-ds', '--dataset', default='cifar10', type=str, choices=['cifar10', 'SVHN'])
 ResNet_arg_parser.add_argument('-tnep', '--training_number_of_epochs', default=50, type=int)
 
@@ -271,13 +271,13 @@ for mod in model.modules():
         print(mod.numerator)
 
 # Observe that all parameters are being optimized
-optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
+optimizer = optim.SGD(model.parameters(), lr=ResNet_args.learning_rate, momentum=0.9)
 
 # Decay LR by a factor of 0.1 every 7 epochs
 exp_lr_scheduler = lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.1)
 
 test = train_val_test_model(model, criterion, optimizer, exp_lr_scheduler,
-                            num_epochs=25)
+                            num_epochs=ResNet_args.training_number_of_epochs)
 final_plot()
 
 # torch.save(test, 'Saved_Models_wo_rationals/hopefully_finally_4.pth')

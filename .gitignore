@@ -1,0 +1,9 @@
+/data/
+*.pth
+*.svg
+*.log
+*.mat
+
+/data/cifar10/
+/data/cifar10/cifar-10-batches-py/
+/data/SVHN/
