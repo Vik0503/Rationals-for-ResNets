@@ -18,15 +18,19 @@ from Rational_ResNets.ResNet_Models import Rational_ResNet18_ImageNet as RRN18
 from Rational_ResNets.ResNet_Models import Rational_ResNet20_CiFAR10 as RRN20
 from Rational_ResNets.ResNet_Models import ResNet18_ImageNet as RN18
 from Rational_ResNets.ResNet_Models import ResNet20_CIFAR10 as RN20
+from Rational_ResNets.ResNet_Models import Multi_Variant_Rational_ResNet20_CIFAR10 as MVRRN20
+from Rational_ResNets.ResNet_Models import Pytorch_Rational_ResNets_ImageNet as PT
 
 ResNet_arg_parser = arg.ArgumentParser()
 ResNet_arg_parser.add_argument('-bs', '--batch_size', default=128, type=int)
-ResNet_arg_parser.add_argument('-lr', '--learning_rate', default=0.03, type=float)
-ResNet_arg_parser.add_argument('-m', '--model', default='rational_resnet18_cifar10', type=str, choices=['rational_resnet18_cifar10', 'resnet18_cifar10', 'rational_resnet18_imagenet', 'resnet18_imagenet'])
+ResNet_arg_parser.add_argument('-lr', '--learning_rate', default=0.01, type=float)
+ResNet_arg_parser.add_argument('-m', '--model', default='rational_resnet20_cifar10', type=str,
+                               choices=['rational_resnet20_cifar10', 'resnet20_cifar10', 'rational_resnet18_imagenet', 'resnet18_imagenet', 'multi_rational_resnet20_cifar10',
+                                        'pt'])  # pt is the original ResNet18 model from Pytorch with Rationals
 ResNet_arg_parser.add_argument('-ds', '--dataset', default='cifar10', type=str, choices=['cifar10', 'SVHN'])
+ResNet_arg_parser.add_argument('-tnep', '--training_number_of_epochs', default=2, type=int)
 
-ResNet_arg_parser.add_argument('-tnep', '--training_number_of_epochs', default=3, type=int)
-ResNet_args = ResNet_arg_parser.parse_args(['--model', 'rational_resnet18_cifar10', '--dataset', 'SVHN'])
+ResNet_args = ResNet_arg_parser.parse_args(['--model', 'rational_resnet20_cifar10', '--dataset', 'SVHN'])
 
 global trainset
 global valset
@@ -64,29 +68,26 @@ elif ResNet_args.dataset is 'SVHN':
     classes = SVHN.get_classes()
     num_classes = SVHN.get_num_classes()
 
-if ResNet_args.model is 'rational_resnet18_cifar10':
+if ResNet_args.model is 'rational_resnet20_cifar10':
     model = RRN20.rational_resnet20()
-    model.apply(RRN20.weights_init)
     model_type = RRN20
-elif ResNet_args.model is 'resnet18_cifar10':
+elif ResNet_args.model is 'resnet20_cifar10':
     model = RN20.resnet20()
-    model.apply(RN20.weights_init)
     model_type = RN20
 elif ResNet_args.model is 'rational_resnet18_imagenet':
     model = RRN18.rational_resnet18()
-    model.apply(RRN18.weights_init)
     model_type = RRN18
 elif ResNet_args.model is 'resnet18_imagenet':
     model = RN18.resnet18()
-    model.apply(RN18.weights_init)
     model_type = RN18
+elif ResNet_args.model is 'multi_rational_resnet20_cifar10':
+    model = MVRRN20.multi_variant_rational_resnet20()
+    model_type = MVRRN20
+elif ResNet_args.model is 'pt':
+    model = PT.resnet18()
+    model_type = PT
 
-writer = SummaryWriter('runs/rational_resnet18_SVHN_run21')
-
-if torch.cuda.is_available():
-    device = 'cuda'
-else:
-    device = 'cpu'
+    writer = SummaryWriter('runs/rational_resnet18_SVHN_run21')
 
 """Method train_val_test_model based on https://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html"""
 

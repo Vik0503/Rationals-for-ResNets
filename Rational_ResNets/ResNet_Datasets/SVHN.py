@@ -1,7 +1,6 @@
 import torch
 import torchvision
 from torchvision import transforms
-import numpy as np
 
 train_transform = transforms.Compose([
     transforms.ToTensor(),

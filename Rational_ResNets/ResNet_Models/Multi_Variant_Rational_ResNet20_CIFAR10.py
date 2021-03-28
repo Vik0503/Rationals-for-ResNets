@@ -1,21 +1,11 @@
 from __future__ import print_function, division
 
-import time
 from typing import Type, Any, List
 
-import matplotlib.pyplot as plt
-import seaborn as sns
 import torch
 import torch.nn as nn
 from rational.torch import Rational
-from sklearn.metrics import confusion_matrix
 from torch import Tensor
-from torch import optim
-from torch.optim import lr_scheduler
-import matplotlib
-
-from LTH_for_Rational_ResNets.Mask import Mask
-from Rational_ResNets.ResNet_Datasets import SVHN
 
 if torch.cuda.is_available():
     cuda = True
@@ -108,7 +98,7 @@ class RationalBasicBlock(nn.Module):
         return out
 
 
-def initial_state(model):
+def initial_state(model):  # mask?
     """Return the initial initialization before training."""
     initial_state_dict = {}
     for name, param in model.named_parameters():
@@ -116,28 +106,10 @@ def initial_state(model):
     return initial_state_dict
 
 
-def reinit(model, mask, initial_state_model):
-    """
-    Reset pruned model's weights to the initial initialization.
-    Parameter
-    ---------
-    model: RationalResNet
-    mask: Mask
-          A mask with pruned weights.
-    initial_state_model: dict
-                         Initially saved state, before the model is trained.
-    """
-    for name, param in model.named_parameters():
-        if 'weight' not in name or 'batch_norm' in name or 'shortcut' in name or 'fc' in name:
-            continue
-        param.data = param.data.cpu()
-        param.data = initial_state_model[name].cpu() * mask[name]
-
-
 class RationalResNet(nn.Module):
     """A ResNet as described in the paper above."""
 
-    def __init__(self, block: Type[RationalBasicBlock], layers: List[int], num_classes: int = 10, mask: Mask = None, ) -> None:
+    def __init__(self, block: Type[RationalBasicBlock], layers: List[int], num_classes: int = 10,) -> None:
         """
         Initialize parameters of the ResNet.
         Parameters
@@ -148,8 +120,6 @@ class RationalResNet(nn.Module):
                 The list with the number of layers, and the number of blocks in each layer.
         num_classes: int
                      The number of different classes in a dataset.
-        mask: Mask
-              The mask that is used for the Lottery Ticket Hypothesis. It sets the pruned weights to zero.
         """
 
         super(RationalResNet, self).__init__()
@@ -179,10 +149,6 @@ class RationalResNet(nn.Module):
             elif isinstance(mod, (nn.BatchNorm2d, nn.GroupNorm)):
                 nn.init.constant_(mod.weight, 1)
                 nn.init.constant_(mod.bias, 0)
-
-        self.mask = mask
-        if self.mask is not None:
-            self.apply_mask(mask=mask)
 
     def make_layer(self, block: Type[RationalBasicBlock], planes_out: int, num_blocks: int, stride: int) -> nn.Sequential:
         """
@@ -215,22 +181,6 @@ class RationalResNet(nn.Module):
         print(nn.Sequential(*layers))
 
         return nn.Sequential(*layers)
-
-    def apply_mask(self, mask: Mask):
-        """
-        Apply a new mask to a net.
-        Parameters
-        ----------
-        self:
-               The model to which the mask is applied.
-        mask: Mask
-        """
-        if mask is not None:
-            for name, param in self.named_parameters():
-                if 'weight' not in name or 'batch_norm' in name or 'shortcut' in name or 'fc' in name:
-                    continue
-                param.data = param.data.cpu()
-                param.data *= mask[name]
 
     def multi_variant_rationals(self, out) -> Tensor:
 
@@ -268,8 +218,6 @@ class RationalResNet(nn.Module):
         out: Tensor
              Fed forward input value.
         """
-        if self.mask is not None:
-            self.apply_mask(mask=self.mask)
         self = self.to(device)
         out = out.to(device)
         out = self.conv_layer_1(out)
@@ -301,7 +249,7 @@ class RationalResNet(nn.Module):
         return prunable_layer_list
 
 
-def _resnet(arch: str, block: Type[RationalBasicBlock], layers: List[int], mask: Mask, **kwargs: Any) -> RationalResNet:
+def _resnet(arch: str, block: Type[RationalBasicBlock], layers: List[int], **kwargs: Any) -> RationalResNet:
     """
     The universal ResNet definition.
     Parameters
@@ -317,11 +265,11 @@ def _resnet(arch: str, block: Type[RationalBasicBlock], layers: List[int], mask:
     -------
     model: RationalResNet
     """
-    model = RationalResNet(block, layers, mask=mask, **kwargs)
+    model = RationalResNet(block, layers, **kwargs)
 
     return model
 
 
-def multi_variant_rational_resnet20(mask: Mask = None, **kwargs: Any) -> RationalResNet:
+def multi_variant_rational_resnet20(**kwargs: Any) -> RationalResNet:
     """ResNet for CIFAR10 as mentioned in the paper above"""
-    return _resnet('resnet20', RationalBasicBlock, [3, 3, 3], mask=mask, **kwargs)
+    return _resnet('resnet20', RationalBasicBlock, [3, 3, 3], **kwargs)

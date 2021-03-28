@@ -5,13 +5,15 @@ with Padè Activation Units as activation functions instead of reLu activation f
 """
 
 from __future__ import print_function, division
-
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 from typing import Type, Any, List
 
 import torch
 import torch.nn as nn
 from rational.torch import Rational
 from torch import Tensor
+
 
 if torch.cuda.is_available():
     cuda = True

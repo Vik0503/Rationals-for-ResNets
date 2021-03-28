@@ -1,4 +1,7 @@
 from __future__ import print_function, division
+import os
+
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 import argparse as arg
 import copy
@@ -10,6 +13,7 @@ import seaborn as sns
 import torch
 import torch.nn as nn
 from rational.torch import Rational
+import numpy as np
 
 from sklearn.metrics import confusion_matrix
 from torch import optim
@@ -27,11 +31,12 @@ ResNet_arg_parser = arg.ArgumentParser()
 ResNet_arg_parser.add_argument('-bs', '--batch_size', default=128, type=int)
 ResNet_arg_parser.add_argument('-lr', '--learning_rate', default=0.01, type=float)
 ResNet_arg_parser.add_argument('-m', '--model', default='rational_resnet20_cifar10', type=str,
-                               choices=['rational_resnet20_cifar10', 'resnet20_cifar10', 'rational_resnet18_imagenet', 'resnet18_imagenet', 'multi_rational_resnet20_cifar10', 'pt'])  # pt is the original ResNet18 model from Pytorch with Rationals
+                               choices=['rational_resnet20_cifar10', 'resnet20_cifar10', 'rational_resnet18_imagenet', 'resnet18_imagenet', 'multi_rational_resnet20_cifar10',
+                                        'pt'])  # pt is the original ResNet18 model from Pytorch with Rationals
 ResNet_arg_parser.add_argument('-ds', '--dataset', default='cifar10', type=str, choices=['cifar10', 'SVHN'])
-ResNet_arg_parser.add_argument('-tnep', '--training_number_of_epochs', default=50, type=int)
+ResNet_arg_parser.add_argument('-tnep', '--training_number_of_epochs', default=2, type=int)
 
-ResNet_args = ResNet_arg_parser.parse_args(['--model', 'rational_resnet20_cifar10', '--dataset', 'SVHN'])
+ResNet_args = ResNet_arg_parser.parse_args(['--model', 'multi_rational_resnet20_cifar10', '--dataset', 'SVHN'])
 
 global trainset
 global valset
@@ -88,16 +93,13 @@ elif ResNet_args.model is 'pt':
     model = PT.resnet18()
     model_type = PT
 
-if torch.cuda.is_available():
-    device = 'cuda'
-else:
-    device = 'cpu'
 
 """Method train_val_test_model based on https://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html"""
 
 
 def train_val_test_model(model, criterion, optimizer, scheduler, num_epochs):
     # import ipdb; ipdb.set_trace()
+    torch.autograd.set_detect_anomaly(True)
     best_model = copy.deepcopy(model.state_dict())
     since = time.time()
     avg_epoch_time = []
@@ -181,6 +183,7 @@ def train_val_test_model(model, criterion, optimizer, scheduler, num_epochs):
                 best_model = copy.deepcopy(model.state_dict())
 
         accuracy_plot_x_vals.append(epoch)
+
         for mod in model.modules():
             if isinstance(mod, Rational):
                 # print(mod)
@@ -194,17 +197,16 @@ def train_val_test_model(model, criterion, optimizer, scheduler, num_epochs):
         avg_epoch_time.append(time_elapsed_epoch)
         print('Epoch finished in {:.0f}m {:.0f}s'.format(time_elapsed_epoch // 60, time_elapsed_epoch % 60))
 
-    summary_plot(accuracy_plot_x_vals, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals)
-    test_labels_array = confusion_prepare(all_test_labels)
-    test_preds_array = confusion_prepare(all_test_preds)
-    cm_test = confusion_matrix(test_labels_array, test_preds_array, labels=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
-    print('cm_test: ', cm_test)
     time_elapsed_epoch = average_epoch_time(avg_epoch_time)
-    plot_confusion_matrix(cm_test, num_epochs, time_elapsed_epoch, 'test_1.svg', best_acc)
+
+    summary_plot(accuracy_plot_x_vals, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals)
+    plot_confusion_matrix(cm, num_epochs, time_elapsed_epoch, best_acc)
+
     time_elapsed = time.time() - since
     print('Training complete in {:.0f}m {:.0f}s'.format(
         time_elapsed // 60, time_elapsed % 60))
     print('Best test Acc: {:4f}'.format(best_acc))
+
     model.load_state_dict(best_model)
 
     return model
@@ -217,23 +219,12 @@ matplotlib.rcParams.update({
 })
 
 
-def average_epoch_time(avg_epoch_time):  # calculates average time per epoch
-    avg_epoch_int = 0.0
-    for i in range(len(avg_epoch_time)):
-        avg_epoch_int += avg_epoch_time[i]
-    return avg_epoch_int / len(avg_epoch_time)
+def average_epoch_time(avg_epoch_time):  # calculates average time per epoch. not yet tested!!!
+    avg_epoch = np.sum(avg_epoch_time)
+    return avg_epoch / len(avg_epoch_time)
 
 
-def confusion_prepare(pl):  # converts pred + acc arrays of arrays with tensors to array
-    pl_array = []
-    for i in range(len(pl)):
-        k = pl[i]
-        for j in range(len(k)):
-            pl_array.append(k[j])
-    return pl_array
-
-
-def plot_confusion_matrix(cm, num_epochs, epoch_time, title, test_acc):  # plots confusion matrix as heatmap
+def plot_confusion_matrix(cm, num_epochs, epoch_time, test_acc):  # plots confusion matrix as heatmap
     plt.subplot(132)
     cm_1 = sns.heatmap(cm, linewidths=1, cmap='plasma')
     props = dict(boxstyle='round', facecolor='grey', alpha=0.5)
@@ -266,8 +257,8 @@ criterion = nn.CrossEntropyLoss()
 
 for mod in model.modules():
     if isinstance(mod, Rational):
-        #print(mod)
-        #mod.show()
+        # print(mod)
+        # mod.show()
         print(mod.numerator)
 
 # Observe that all parameters are being optimized
@@ -276,22 +267,17 @@ optimizer = optim.SGD(model.parameters(), lr=ResNet_args.learning_rate, momentum
 # Decay LR by a factor of 0.1 every 7 epochs
 exp_lr_scheduler = lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.1)
 
-test = train_val_test_model(model, criterion, optimizer, exp_lr_scheduler,
-                            num_epochs=ResNet_args.training_number_of_epochs)
+model = train_val_test_model(model, criterion, optimizer, exp_lr_scheduler,
+                             num_epochs=ResNet_args.training_number_of_epochs)
 final_plot()
 
 # torch.save(test, 'Saved_Models_wo_rationals/hopefully_finally_4.pth')
 
-for mod in test.modules():
-    if isinstance(mod, Rational):
-        #print(mod)
-        #mod.show()
-        print(mod.numerator)
 
 for mod in model.modules():
     if isinstance(mod, Rational):
-        #print(mod)
-        #mod.show()
+        # print(mod)
+        # mod.show()
         print(mod.numerator)
 
-test.layer2.__getitem__(2).rational.show()
+model.layer2.__getitem__(2).rational.show()
