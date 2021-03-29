@@ -1,14 +1,11 @@
 import time
 
 import torch
-from torch.utils.tensorboard import SummaryWriter
 
 if torch.cuda.is_available():
     device = 'cuda'
 else:
     device = 'cpu'
-
-writer = SummaryWriter('runs/rational_resnet18_CIFAR10_run1')
 
 
 def train(model, criterion, optimizer, scheduler, num_epochs, trainset, valset, trainloader, valloader):
@@ -22,7 +19,7 @@ def train(model, criterion, optimizer, scheduler, num_epochs, trainset, valset, 
         best_acc = 0.0
 
         for phase in ['train', 'val']:
-            running_loss = 0.0
+            count_loss = 0.0
             running_corrects = 0
             if phase == 'train':
                 model.train()  # Set model to training mode
@@ -51,19 +48,15 @@ def train(model, criterion, optimizer, scheduler, num_epochs, trainset, valset, 
                     step += 1
                     scheduler.step()
 
-                running_loss += loss.item() * inputs.size(0)
+                count_loss += loss.item() * inputs.size(0)
                 running_corrects += torch.sum(preds == labels.data)
             if phase == 'train':
-                epoch_loss = running_loss / len(trainset)
-                writer.add_scalar('training loss', epoch_loss, epoch)
+                epoch_loss = count_loss / len(trainset)
                 epoch_acc = running_corrects.double() / len(trainset)
-                writer.add_scalar('training accuracy', epoch_acc, epoch)
 
             if phase == 'val':
-                epoch_loss = running_loss / len(valset)
-                writer.add_scalar('validation loss', epoch_loss, epoch)
+                epoch_loss = count_loss / len(valset)
                 epoch_acc = running_corrects.double() / len(valset)
-                writer.add_scalar('validation accuracy', epoch_acc, epoch)
                 if epoch_acc > best_acc:
                     best_acc = epoch_acc
 
@@ -75,7 +68,7 @@ def train(model, criterion, optimizer, scheduler, num_epochs, trainset, valset, 
 
 
 def train_til_val_acc(model, criterion, optimizer, scheduler, trainset, valset, trainloader, valloader):
-    """Train a model until it reaches a certain validation accuracy"""
+    """Train a model until it reaches a certain validation accuracy. WARNING: might lead to endless loop"""
     validation_accuracy = 0
     number_epochs = 0
     while validation_accuracy < 0.93:
@@ -83,8 +76,8 @@ def train_til_val_acc(model, criterion, optimizer, scheduler, trainset, valset, 
         print('*' * 10)
         number_epochs += 1
         for phase in ['train', 'val']:
-            running_loss = 0.0
-            running_corrects = 0
+            count_loss = 0.0
+            count_corrects = 0
             if phase == 'train':
                 model.train()  # Set model to training mode
                 dataloader = trainloader
@@ -112,15 +105,15 @@ def train_til_val_acc(model, criterion, optimizer, scheduler, trainset, valset, 
                 if phase == 'train':
                     scheduler.step()
 
-                running_loss += loss.item() * inputs.size(0)
-                running_corrects += torch.sum(preds == labels.data)
+                count_loss += loss.item() * inputs.size(0)
+                count_corrects += torch.sum(preds == labels.data)
             if phase == 'train':
-                epoch_loss = running_loss / len(trainset)
-                epoch_acc = running_corrects.double() / len(trainset)
+                epoch_loss = count_loss / len(trainset)
+                epoch_acc = count_corrects.double() / len(trainset)
 
             if phase == 'val':
-                epoch_loss = running_loss / len(valset)
-                epoch_acc = running_corrects.double() / len(valset)
+                epoch_loss = count_loss / len(valset)
+                epoch_acc = count_corrects.double() / len(valset)
                 validation_accuracy = epoch_acc
 
             print('{} Loss: {:.4f} Acc: {:.4f}'.format(phase, epoch_loss, epoch_acc))

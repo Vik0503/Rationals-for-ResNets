@@ -52,7 +52,15 @@ class RationalBasicBlock(nn.Module):
             )
 
     def multi_variant_rationals(self, out) -> Tensor:
-
+        """
+        Split the tensor into four equal parts and feed those to four different rational activation functions and put the tensor back together.
+        Parameters
+        ----------
+        out: Tensor
+        Returns
+        -------
+        out: Tensor
+        """
         num_planes = out.shape[1]
         rat_planes = int(num_planes / 4)
         splitted = torch.split(out.clone(), rat_planes, dim=1)
@@ -183,7 +191,15 @@ class RationalResNet(nn.Module):
         return nn.Sequential(*layers)
 
     def multi_variant_rationals(self, out) -> Tensor:
-
+        """
+        Split the tensor into four equal parts and feed those to four different rational activation functions and put the tensor back together.
+        Parameters
+        ----------
+        out: Tensor
+        Returns
+        -------
+        out: Tensor
+        """
         num_planes = out.shape[1]
         rat_planes = int(num_planes / 4)
         splitted = torch.split(out.clone(), rat_planes, dim=1)

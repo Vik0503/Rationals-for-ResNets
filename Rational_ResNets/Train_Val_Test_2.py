@@ -1,7 +1,7 @@
 from __future__ import print_function, division
 import os
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+# os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 import argparse as arg
 import copy
@@ -36,7 +36,7 @@ ResNet_arg_parser.add_argument('-m', '--model', default='rational_resnet20_cifar
 ResNet_arg_parser.add_argument('-ds', '--dataset', default='cifar10', type=str, choices=['cifar10', 'SVHN'])
 ResNet_arg_parser.add_argument('-tnep', '--training_number_of_epochs', default=2, type=int)
 
-ResNet_args = ResNet_arg_parser.parse_args(['--model', 'multi_rational_resnet20_cifar10', '--dataset', 'SVHN'])
+ResNet_args = ResNet_arg_parser.parse_args()
 
 global trainset
 global valset
@@ -99,7 +99,7 @@ elif ResNet_args.model is 'pt':
 
 def train_val_test_model(model, criterion, optimizer, scheduler, num_epochs):
     # import ipdb; ipdb.set_trace()
-    torch.autograd.set_detect_anomaly(True)
+    # torch.autograd.set_detect_anomaly(True)
     best_model = copy.deepcopy(model.state_dict())
     since = time.time()
     avg_epoch_time = []
@@ -219,7 +219,7 @@ matplotlib.rcParams.update({
 })
 
 
-def average_epoch_time(avg_epoch_time):  # calculates average time per epoch. not yet tested!!!
+def average_epoch_time(avg_epoch_time):  # calculates average time per epoch
     avg_epoch = np.sum(avg_epoch_time)
     return avg_epoch / len(avg_epoch_time)
 

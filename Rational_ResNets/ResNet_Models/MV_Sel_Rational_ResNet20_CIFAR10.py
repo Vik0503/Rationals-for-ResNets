@@ -37,7 +37,8 @@ class RationalBasicBlock(nn.Module):
                     The number of channels that go out of the convolutional layers.
         stride: int
         downsample: bool
-
+        num_rationals: int
+                        The number of different rational activation functions per basic-block.
         """
         super(RationalBasicBlock, self).__init__()
 
