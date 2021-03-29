@@ -162,7 +162,6 @@ class RationalResNet(nn.Module):
         out: Tensor
              Fed forward input value.
         """
-        self = self.to(device)
         out = out.to(device)
         out = self.conv_layer_1(out)
         out = self.batch_norm_1(out)

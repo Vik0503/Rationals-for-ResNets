@@ -49,12 +49,12 @@ else:
     device = 'cpu'
 
 if ResNet_args.dataset is 'cifar10':
-    trainset = CIFAR10.get_trainset()
+    trainset = CIFAR10.get_train_data()
     valset = CIFAR10.get_validationset()
     testset = CIFAR10.get_testset()
     trainloader = CIFAR10.get_trainloader(ResNet_args.batch_size)
-    valloader = CIFAR10.get_valloader(ResNet_args.batch_size)
-    testloader = CIFAR10.get_testloader(ResNet_args.batch_size)
+    valloader = CIFAR10.get_validation_data(ResNet_args.batch_size)
+    testloader = CIFAR10.get_test_data(ResNet_args.batch_size)
     classes = CIFAR10.get_classes()
     num_classes = CIFAR10.get_num_classes()
 

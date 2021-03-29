@@ -5,7 +5,7 @@
 * ``-exp_name``: Name of the experiment
   
 
-* ```-wi```: number of warm-up iterations
+* ```-wi```: Number of warm-up iterations
   * Default: 0
     
 

@@ -11,7 +11,6 @@ __all__ = ['ResNet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
 cuda = False
 if torch.cuda.is_available():
     cuda = True
-    print('CUDA')
 
 else:
     cuda = False
@@ -228,7 +227,6 @@ class ResNet(nn.Module):
     def _forward_impl(self, x: Tensor) -> Tensor:
         # See note [TorchScript super()]
         x = x.to('cuda')
-        self = self.to('cuda')
         x = self.conv1(x)
         x = self.bn1(x)
         x = self.rational(x)

@@ -208,7 +208,6 @@ class ResNet(nn.Module):
         """
         if self.mask is not None:
             self.apply_mask(mask=self.mask)
-        self = self.to(device)
         out = out.to(device)
         out = self.conv_layer_1(out)
         out = self.batch_norm_1(out)
