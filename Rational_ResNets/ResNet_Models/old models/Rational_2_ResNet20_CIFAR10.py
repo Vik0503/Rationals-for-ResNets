@@ -202,5 +202,5 @@ def _resnet(arch: str, block: Type[RationalBasicBlock], layers: List[int], **kwa
 
 def rational_resnet20(**kwargs: Any) -> RationalResNet:
     """ResNet for CIFAR10 as mentioned in the paper above"""
+    print(':)')
     return _resnet('resnet20', RationalBasicBlock, [3, 3, 3], **kwargs)
-

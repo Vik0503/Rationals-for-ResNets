@@ -18,7 +18,6 @@ from Rational_ResNets.ResNet_Models import Rational_ResNet18_ImageNet as RRN18
 from Rational_ResNets.ResNet_Models import Rational_ResNet20_CiFAR10 as RRN20
 from Rational_ResNets.ResNet_Models import ResNet18_ImageNet as RN18
 from Rational_ResNets.ResNet_Models import ResNet20_CIFAR10 as RN20
-from Rational_ResNets.ResNet_Models import Multi_Variant_Rational_ResNet20_CIFAR10 as MVRRN20
 from Rational_ResNets.ResNet_Models import Pytorch_Rational_ResNets_ImageNet as PT
 
 ResNet_arg_parser = arg.ArgumentParser()

@@ -48,7 +48,7 @@ class RationalBasicBlock(nn.Module):
         self.rational = Rational(cuda=cuda)
         self.conv_layer_2 = nn.Conv2d(planes_out, planes_out, kernel_size=3, stride=1, padding=1, bias=False)
         self.batch_norm_2 = nn.BatchNorm2d(planes_out)
-
+        self.rational_2 = Rational(cuda=cuda)
         self.shortcut = nn.Sequential()
         if downsample:
             self.shortcut = nn.Sequential(
@@ -74,7 +74,7 @@ class RationalBasicBlock(nn.Module):
         out = self.conv_layer_2(out)
         out = self.batch_norm_2(out)
         out += self.shortcut(x)
-        out = self.rational(out)
+        out = self.rational_2(out)
 
         return out
 

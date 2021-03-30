@@ -46,9 +46,9 @@ class RationalBasicBlock(nn.Module):
         self.batch_norm_1 = nn.BatchNorm2d(planes_out)
         # use Rationals instead of reLu activation function
         self.rational = Rational(cuda=cuda)
-        print(Rational().numerator)
         self.conv_layer_2 = nn.Conv2d(planes_out, planes_out, kernel_size=3, stride=1, padding=1, bias=False)
         self.batch_norm_2 = nn.BatchNorm2d(planes_out)
+        self.rational_2 = Rational(cuda=cuda)
 
         self.shortcut = nn.Sequential()
         if downsample:
@@ -75,7 +75,7 @@ class RationalBasicBlock(nn.Module):
         out = self.conv_layer_2(out)
         out = self.batch_norm_2(out)
         out += self.shortcut(x)
-        out = self.rational(out)
+        out = self.rational_2(out)
 
         return out
 

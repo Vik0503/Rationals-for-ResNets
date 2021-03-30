@@ -80,11 +80,11 @@ def prune(pruning_frac: float, model_prune, mask: Mask):
     prunable_layers = set(model_prune.prunable_layers())
 
     model_weights = {}
-    for item, values in model_prune.state_dict().items():  # property of model?
+    for item, values in model_prune.state_dict().items():
         if item in prunable_layers:
             model_weights[item] = values.clone().cpu().numpy()
 
-    weights_unpruned = torch.Tensor(get_unpruned_weights(model_weights=model_weights, mask=np_mask)) # eventuell in class ResNet
+    weights_unpruned = torch.Tensor(get_unpruned_weights(model_weights=model_weights, mask=np_mask))
 
     num_rem_weights = get_number_of_unpruned_weights(mask)
     num_prune_weights = np.ceil((pruning_frac / 100) * num_rem_weights.cpu().numpy())
@@ -147,7 +147,7 @@ def tensor_to_dict(tensor: torch.Tensor, ref_dict: Dict[str, torch.Tensor]) -> D
     return tensor_dict
 
 
-def get_unpruned_weights(model_weights, mask: Mask) -> List:
+def get_unpruned_weights(model_weights, mask: Mask) -> List:  # TODO: unbedingt schöner machen!!!
     """
     Return a list containing all unpruned weights.
     Parameters

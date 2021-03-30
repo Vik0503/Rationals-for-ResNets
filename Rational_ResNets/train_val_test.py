@@ -18,7 +18,7 @@ else:
     device = 'cpu'
 
 
-def train_val_test_model(model, criterion, optimizer, scheduler, num_epochs, trainloader, valloader, testloader, trainset, valset, testset, exp_name, learning_rate, batch_size):
+def train_val_test_model(model, criterion, optimizer, scheduler, num_epochs, trainloader, valloader, testloader, trainset, valset, testset):
     best_model = copy.deepcopy(model.state_dict())
     since = time.time()
     avg_epoch_time = []
@@ -118,8 +118,8 @@ def train_val_test_model(model, criterion, optimizer, scheduler, num_epochs, tra
 
     time_elapsed_epoch = average_epoch_time(avg_epoch_time)
 
-    plots.final_plot(acc_x_vals=accuracy_plot_x_vals, train_acc_y_vals=train_acc_plot_y_vals, val_acc_y_vals=val_acc_plot_y_vals, test_acc_y_vals=test_acc_plot_y_vals, cm=cm, num_epochs=num_epochs, epoch_time=time_elapsed_epoch,
-                     test_acc=best_acc, exp_name=exp_name, batch_size=batch_size, learning_rate=learning_rate, dataset='SVHN')
+    plots.final_plot(acc_x_vals=accuracy_plot_x_vals, train_acc_y_vals=train_acc_plot_y_vals, val_acc_y_vals=val_acc_plot_y_vals, test_acc_y_vals=test_acc_plot_y_vals, cm=cm, epoch_time=time_elapsed_epoch,
+                     test_acc=best_acc)
 
     time_elapsed = time.time() - since
     print('Training complete in {:.0f}m {:.0f}s'.format(

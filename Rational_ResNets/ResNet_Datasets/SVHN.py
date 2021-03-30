@@ -55,8 +55,10 @@ def get_train_data(aug: bool = False, bs: int = 128):
     """
     if aug:
         data_transform = aug_transform
+        print('here')
     else:
         data_transform = transform
+        print('HERE')
 
     train_val_set = torchvision.datasets.SVHN(root='/home/viktoria/Git/thesis_stuff/data/SVHN', split='train', download=True, transform=data_transform)
     trainset, _ = torch.utils.data.random_split(train_val_set, [54943, 18314])

@@ -1,7 +1,7 @@
 # Rationals for ResNets
 
 ## LTH_for_Rational_ResNets
-``python3 Lottery_Ticket_Hypothesis.py``
+``python3 main.py``
 * ``-exp_name``: Name of the experiment
   
 
@@ -48,7 +48,7 @@
     * Default: 2
 
 ## Rational_ResNets
-```python3 Train_Val_Test_2.py```
+```python3 main.py```
 
 * ```-bs```: Batch size
     * Default: 128
@@ -60,8 +60,8 @@
 
 * ```-m```: Model
   * Default: rational_resnet20_cifar10
-  * Choices: rational_resnet20_cifar10, resnet20_cifar10, rational_resnet18_imagenet, resnet18_imagenet, multi_rational_resnet20_cifar10,
-                                        pt
+  * Choices: rational_resnet20_cifar10, resnet20_cifar10, rational_resnet18_imagenet, resnet18_imagenet,
+                                        pt, multi_select_variant_rational_resnet20_cifar10
     
 
 * ```-ds```: Dataset
@@ -71,4 +71,6 @@
 
 * ```-tnep```: Number of epochs for training
     * Default: 2
- 
+  
+* ```-num_rat```: Number of Rational Activation Functions per Vector (2 Vectors per BasicBlock)
+    * Default: 1
