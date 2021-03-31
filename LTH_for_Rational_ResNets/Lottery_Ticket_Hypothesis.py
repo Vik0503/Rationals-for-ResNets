@@ -64,7 +64,7 @@ def one_shot_pruning(prune_model, prune_mask: Mask, optimizer, criterion, exp_lr
     print('Test Accuracy with 100 Percent of weights: ', test_accuracy)
 
     pruned_model, updated_mask = prune(pruning_percentage, prune_model, prune_mask)
-    pruned_model = pruned_model.to(device)
+    # pruned_model = pruned_model.to(device)
 
     model_type.reinit(pruned_model, updated_mask, initial_state)
     pruned_model.mask = Mask.cuda(updated_mask)
@@ -162,7 +162,7 @@ def iterative_pruning_by_test_acc(prune_model, prune_mask: Mask, acc_threshold: 
         sparsity.append(mask_sparsity(prune_mask) * 100)
 
         prune_model.mask = prune_mask
-        prune_model = prune_model.to(device)
+        # prune_model = prune_model.to(device)
 
         prune_model, best_val_accuracy, num_iterations = tvt.train(prune_model, criterion, optimizer, exp_lr_scheduler, training_number_of_epochs, trainset, valset, trainloader, valloader)  # train
 

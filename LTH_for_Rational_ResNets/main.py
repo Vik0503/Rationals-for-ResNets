@@ -16,8 +16,8 @@ from LTH_for_Rational_ResNets.LTH_Models import mv_select_rational_resnet20_cifa
 from LTH_for_Rational_ResNets.Mask import make_initial_mask
 
 LTH_arg_parser = argparser.get_argparser()
-LTH_args = LTH_arg_parser.parse_args(['--model', 'rational_resnet20_cifar10', '--dataset', 'SVHN', '--warmup_iterations', '2000', '--iterative_pruning_epochs', '2', '--training_number_of_epochs', '15',
-                                      '--stop_criteria', 'test_acc', '--experiment_name', 'rational_test'])
+LTH_args = LTH_arg_parser.parse_args(['--model', 'rational_resnet20_cifar10', '--dataset', 'SVHN', '--warmup_iterations', '2000', '--iterative_pruning_epochs', '2', '--training_number_of_epochs', '25',
+                                      '--stop_criteria', 'test_acc', '--experiment_name', 'rational_test_2'])
 
 global trainset
 global valset
