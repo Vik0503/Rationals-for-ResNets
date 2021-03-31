@@ -1,32 +1,30 @@
-"""
-ResNet18 Model for CIFAR10 as originally described in: Deep Residual Learning for Image Recognition (arXiv:1512.03385)
-by Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun
-"""
-
 from __future__ import print_function, division
 
 from typing import Type, Any, List
 
 import torch
 import torch.nn as nn
+from rational.torch import Rational
 from torch import Tensor
 
 from LTH_for_Rational_ResNets.Mask import Mask
 
-
 if torch.cuda.is_available():
+    cuda = True
     device = 'cuda'
 else:
+    cuda = False
     device = 'cpu'
 
 
-class BasicBlock(nn.Module):
-    """A Basic Block as described in the paper above, with ReLu as activation function"""
+class RationalBasicBlock(nn.Module):
+    """A Basic Block as described in the paper above, with Rationals as activation function instead of ReLu"""
     expansion = 1
 
-    def __init__(self, planes_in, planes_out, stride=1, downsample=False):
+    def __init__(self, planes_in: int, planes_out: int, stride: int = 1, downsample: bool = False, num_rationals: int = 4):
         """
         Initialize the Basic Block.
+
         Parameters
         ----------
         planes_in: int
@@ -35,12 +33,21 @@ class BasicBlock(nn.Module):
                     The number of channels that go out of the convolutional layers.
         stride: int
         downsample: bool
-
+        num_rationals: int
+                        The number of different rational activation functions per vector per basic-block.
         """
-        super(BasicBlock, self).__init__()
+        super(RationalBasicBlock, self).__init__()
+
         self.conv_layer_1 = nn.Conv2d(planes_in, planes_out, kernel_size=3, stride=stride, padding=1, bias=False)
         self.batch_norm_1 = nn.BatchNorm2d(planes_out)
-        self.relu = nn.ReLU(inplace=True)
+
+        self.num_rationals = num_rationals
+        self.rational_list = []  # total num per BB or number per Vector???
+        self.rational_list_2 = []
+        for n in range(self.num_rationals):
+            self.rational_list.append(Rational(cuda=cuda))
+            self.rational_list_2.append(Rational(cuda=cuda))
+
         self.conv_layer_2 = nn.Conv2d(planes_out, planes_out, kernel_size=3, stride=1, padding=1, bias=False)
         self.batch_norm_2 = nn.BatchNorm2d(planes_out)
 
@@ -51,13 +58,31 @@ class BasicBlock(nn.Module):
                 nn.BatchNorm2d(self.expansion * planes_out)
             )
 
+    def select_multi_variant_rationals(self, out: Tensor, rational_list) -> Tensor:
+        num_rationals = self.num_rationals
+        split_size = int(out.shape[1] / num_rationals)
+        splitted = torch.split(out.clone(), split_size, dim=1)
+        out_list = []
+
+        for n in range(num_rationals):
+            rational = rational_list[n]
+            out_list.append(rational(splitted[n].clone()).clone())
+
+        for i in range(out.shape[0]):
+            for n in range(num_rationals):
+                out[i][n * split_size:(n + 1) * split_size] = out_list[n][i].clone()
+
+        return out
+
     def forward(self, x: Tensor) -> Tensor:
         """
         Move input forward through the basic block.
+
         Parameters
         ----------
         x: Tensor
-             Training input value.
+           Training input value.
+
         Returns
         -------
         out: Tensor
@@ -65,11 +90,11 @@ class BasicBlock(nn.Module):
         """
         out = self.conv_layer_1(x)
         out = self.batch_norm_1(out)
-        out = self.relu(out)
+        out = self.select_multi_variant_rationals(out, self.rational_list)
         out = self.conv_layer_2(out)
         out = self.batch_norm_2(out)
         out += self.shortcut(x)
-        out = self.relu(out)
+        out = self.select_multi_variant_rationals(out, self.rational_list_2)
 
         return out
 
@@ -87,7 +112,7 @@ def reinit(model, mask, initial_state_model):
     Reset pruned model's weights to the initial initialization.
     Parameter
     ---------
-    model: ResNet
+    model: RationalResNet
     mask: Mask
           A mask with pruned weights.
     initial_state_model: dict
@@ -96,14 +121,17 @@ def reinit(model, mask, initial_state_model):
     for name, param in model.named_parameters():
         if 'weight' not in name or 'batch_norm' in name or 'shortcut' in name or 'fc' in name:
             continue
+        param.data = param.data.cpu()
         param.data = initial_state_model[name] * mask[name]
 
 
-class ResNet(nn.Module):
+class RationalResNet(nn.Module):
     """A ResNet as described in the paper above."""
-    def __init__(self, block: Type[BasicBlock], layers: List[int], num_classes: int = 10, mask: Mask = None) -> None:
+
+    def __init__(self, block: Type[RationalBasicBlock], layers: List[int], num_classes: int = 10, num_rationals: int = 4, mask: Mask = None) -> None:
         """
         Initialize parameters of the ResNet.
+
         Parameters
         ----------
         block: RationalBasicBlock
@@ -112,25 +140,32 @@ class ResNet(nn.Module):
                 The list with the number of layers, and the number of blocks in each layer.
         num_classes: int
                      The number of different classes in a dataset.
-        mask: Mask
+                mask: Mask
               The mask that is used for the Lottery Ticket Hypothesis. It sets the pruned weights to zero.
         """
-        super(ResNet, self).__init__()
+
+        super(RationalResNet, self).__init__()
 
         self.norm_layer = nn.BatchNorm2d
 
         self.planes_in = 16
 
-        self.conv_layer_1 = nn.Conv2d(3, self.planes_in, kernel_size=3, stride=1, padding=1, bias=False)
+        self.conv_layer_1 = nn.Conv2d(in_channels=3, out_channels=self.planes_in, kernel_size=3, stride=1, padding=1, bias=False)
         self.batch_norm_1 = self.norm_layer(self.planes_in)
-        self.relu = nn.ReLU(inplace=True)
 
+        self.num_rationals = num_rationals
+        self.rational_list = []  # total num per BB or number per Vector???
+        for n in range(self.num_rationals):
+            self.rational_list.append(Rational(cuda=cuda))
+
+        block.num_rationals = self.num_rationals
         self.layer1 = self.make_layer(block=block, planes_out=16, num_blocks=layers[0], stride=1)
         self.layer2 = self.make_layer(block=block, planes_out=32, num_blocks=layers[1], stride=2)
         self.layer3 = self.make_layer(block=block, planes_out=64, num_blocks=layers[2], stride=2)
 
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.fc = nn.Linear(64, num_classes)
+
         for mod in self.modules():
             if isinstance(mod, nn.Conv2d):
                 nn.init.kaiming_normal_(mod.weight, mode='fan_out', nonlinearity='relu')
@@ -140,34 +175,38 @@ class ResNet(nn.Module):
 
         self.mask = mask
         if self.mask is not None:
-            self.apply_mask(mask=self.mask)
+            self.apply_mask(mask=mask)
 
-    def make_layer(self, block: Type[BasicBlock], planes_out: int, num_blocks: int, stride: int):
+    def make_layer(self, block: Type[RationalBasicBlock], planes_out: int, num_blocks: int, stride: int) -> nn.Sequential:
         """
         Build ResNet's layers. Each layer contains a number of Basic Blocks.
 
         Parameters
         ----------
-        block: BasicBlock
+        block: RationalBasicBlock
         planes_out: int
         num_blocks: int
-                    The number of BasicBlocks in this layer.
+                    The number of RationalBasicBlocks in this layer.
         stride: int
+
         Returns
         -------
         nn.Sequential
-                     A layer build with BasicBlocks.
+                     A layer build with RationalBasicBlocks.
         """
         downsample = False
         if stride != 1 or planes_out != self.planes_in:
             downsample = True
+
         layers = []
-        layers.append(block(self.planes_in, planes_out, stride, downsample=downsample))
+        layers.append(block(self.planes_in, planes_out, stride, downsample=downsample, num_rationals=self.num_rationals))
+
         downsample = False
         stride = 1
         self.planes_in = planes_out * block.expansion
+
         for _ in range(1, num_blocks):
-            layers.append(block(self.planes_in, planes_out, stride, downsample=downsample))
+            layers.append(block(self.planes_in, planes_out, stride, downsample=downsample, num_rationals=self.num_rationals))
         print(nn.Sequential(*layers))
 
         return nn.Sequential(*layers)
@@ -178,8 +217,6 @@ class ResNet(nn.Module):
 
         Parameters
         ----------
-        self:
-               The model to which the mask is applied.
         mask: Mask
         """
         if mask is not None:
@@ -187,6 +224,22 @@ class ResNet(nn.Module):
                 if 'weight' not in name or 'batch_norm' in name or 'shortcut' in name or 'fc' in name:
                     continue
                 param.data *= mask[name]
+
+    def select_multi_variant_rationals(self, out: Tensor) -> Tensor:
+        num_rationals = self.num_rationals
+        split_size = int(out.shape[1] / num_rationals)
+        splitted = torch.split(out.clone(), split_size, dim=1)
+        out_list = []
+
+        for n in range(num_rationals):
+            rational = self.rational_list[n]
+            out_list.append(rational(splitted[n].clone()).clone())
+
+        for i in range(out.shape[0]):
+            for n in range(num_rationals):
+                out[i][n * split_size:(n + 1) * split_size] = out_list[n][i].clone()
+
+        return out
 
     def forward(self, out: Tensor):
         """
@@ -206,12 +259,11 @@ class ResNet(nn.Module):
             self.apply_mask(mask=self.mask)
         out = self.conv_layer_1(out)
         out = self.batch_norm_1(out)
-        out = self.relu(out)
+        out = self.select_multi_variant_rationals(out)
 
         out = self.layer1(out)
         out = self.layer2(out)
         out = self.layer3(out)
-
         out = self.avgpool(out)
         out = torch.flatten(out, 1)
         out = self.fc(out)
@@ -221,6 +273,7 @@ class ResNet(nn.Module):
     def prunable_layers(self) -> List:
         """
         Return all layers that are prunable.
+
         Returns
         -------
         prunable_layer_list: List
@@ -234,9 +287,10 @@ class ResNet(nn.Module):
         return prunable_layer_list
 
 
-def _resnet(arch: str, block: Type[BasicBlock], layers: List[int], mask: Mask, **kwargs: Any) -> ResNet:
+def _resnet(arch: str, block: Type[RationalBasicBlock], layers: List[int], num_rationals: int, mask: Mask, **kwargs: Any) -> RationalResNet:
     """
     The universal ResNet definition.
+
     Parameters
     ----------
     arch: str
@@ -246,26 +300,16 @@ def _resnet(arch: str, block: Type[BasicBlock], layers: List[int], mask: Mask, *
     layers: list
             The list with the number of layers, and the number of blocks in each layer.
     mask: Mask
+
     Returns
     -------
     model: RationalResNet
     """
-    model = ResNet(block, layers, mask=mask, **kwargs)
+    model = RationalResNet(block, layers, num_rationals=num_rationals, mask=mask, **kwargs)
 
     return model
 
 
-def resnet20(mask: Mask = None, **kwargs: Any) -> ResNet:
-    """ResNet for CIFAR10 as mentioned in the paper above."""
-    return _resnet('resnet20', BasicBlock, [3, 3, 3], mask=mask, **kwargs)
-
-
-def prunable_layer_dict(model):
-    prune_dict = {}
-    for name, param in model.named_parameters():
-        if 'weight' not in name:
-            continue
-
-        prune_dict[name] = param
-
-    return prune_dict
+def multi_select_variant_rational_resnet20(mask: Mask = None, num_rationals: int = 4, **kwargs: Any) -> RationalResNet:
+    """ResNet for CIFAR10 as mentioned in the paper above"""
+    return _resnet('resnet20', RationalBasicBlock, [3, 3, 3], num_rationals=num_rationals, mask=mask, **kwargs)

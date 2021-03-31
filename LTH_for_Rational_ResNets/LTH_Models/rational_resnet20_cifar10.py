@@ -30,6 +30,7 @@ class RationalBasicBlock(nn.Module):
     def __init__(self, planes_in: int, planes_out: int, stride: int = 1, downsample: bool = False):
         """
         Initialize the Basic Block.
+
         Parameters
         ----------
         planes_in: int
@@ -102,8 +103,7 @@ def reinit(model, mask, initial_state_model):
     for name, param in model.named_parameters():
         if 'weight' not in name or 'batch_norm' in name or 'shortcut' in name or 'fc' in name:
             continue
-        param.data = param.data.cpu()
-        param.data = initial_state_model[name].cpu() * mask[name]
+        param.data = initial_state_model[name] * mask[name]
 
 
 class RationalResNet(nn.Module):
@@ -112,6 +112,7 @@ class RationalResNet(nn.Module):
     def __init__(self, block: Type[RationalBasicBlock], layers: List[int], num_classes: int = 10, mask: Mask = None, ) -> None:
         """
         Initialize parameters of the ResNet.
+
         Parameters
         ----------
         block: RationalBasicBlock
@@ -156,6 +157,7 @@ class RationalResNet(nn.Module):
     def make_layer(self, block: Type[RationalBasicBlock], planes_out: int, num_blocks: int, stride: int) -> nn.Sequential:
         """
         Build ResNet's layers. Each layer contains a number of Basic Blocks.
+
         Parameters
         ----------
         block: RationalBasicBlock
@@ -163,6 +165,7 @@ class RationalResNet(nn.Module):
         num_blocks: int
                     The number of RationalBasicBlocks in this layer.
         stride: int
+
         Returns
         -------
         nn.Sequential
@@ -188,6 +191,7 @@ class RationalResNet(nn.Module):
     def apply_mask(self, mask: Mask):
         """
         Apply a new mask to a net.
+
         Parameters
         ----------
         mask: Mask
@@ -196,16 +200,17 @@ class RationalResNet(nn.Module):
             for name, param in self.named_parameters():
                 if 'weight' not in name or 'batch_norm' in name or 'shortcut' in name or 'fc' in name:
                     continue
-                param.data = param.data.cpu()
                 param.data *= mask[name]
 
     def forward(self, out: Tensor):
         """
         Move input forward through the net.
+
         Parameters
         ----------
         out: Tensor
              Training input value.
+
         Returns
         -------
         out: Tensor
@@ -213,7 +218,6 @@ class RationalResNet(nn.Module):
         """
         if self.mask is not None:
             self.apply_mask(mask=self.mask)
-        out = out.to(device)
         out = self.conv_layer_1(out)
         out = self.batch_norm_1(out)
         out = self.rational(out)
@@ -230,6 +234,7 @@ class RationalResNet(nn.Module):
     def prunable_layers(self) -> List:
         """
         Return all layers that are prunable.
+
         Returns
         -------
         prunable_layer_list: List

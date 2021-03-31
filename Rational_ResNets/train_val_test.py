@@ -118,8 +118,7 @@ def train_val_test_model(model, criterion, optimizer, scheduler, num_epochs, tra
 
     time_elapsed_epoch = average_epoch_time(avg_epoch_time)
 
-    plots.final_plot(acc_x_vals=accuracy_plot_x_vals, train_acc_y_vals=train_acc_plot_y_vals, val_acc_y_vals=val_acc_plot_y_vals, test_acc_y_vals=test_acc_plot_y_vals, cm=cm, epoch_time=time_elapsed_epoch,
-                     test_acc=best_acc)
+    plots.accuracy_plot(acc_x_vals=accuracy_plot_x_vals, train_acc_y_vals=train_acc_plot_y_vals, val_acc_y_vals=val_acc_plot_y_vals, test_acc_y_vals=test_acc_plot_y_vals)
 
     time_elapsed = time.time() - since
     print('Training complete in {:.0f}m {:.0f}s'.format(
@@ -128,7 +127,7 @@ def train_val_test_model(model, criterion, optimizer, scheduler, num_epochs, tra
 
     model.load_state_dict(best_model)
 
-    return model
+    return model, cm, time_elapsed_epoch, best_acc
 
 
 def average_epoch_time(avg_epoch_time):  # calculates average time per epoch

@@ -24,6 +24,7 @@ class RationalBasicBlock(nn.Module):
     def __init__(self, planes_in: int, planes_out: int, stride: int = 1, downsample: bool = False):
         """
         Initialize the Basic Block.
+
         Parameters
         ----------
         planes_in: int
@@ -55,10 +56,12 @@ class RationalBasicBlock(nn.Module):
     def multi_variant_rationals(self, out) -> Tensor:
         """
         Split tensor in four parts, feed them to four different Rational Activation Functions, and but them back together.
+
         Parameters
         ----------
         out: Tensor
              The tensor that is fed through the block.
+
         Returns
         -------
         out: Tensor
@@ -88,10 +91,12 @@ class RationalBasicBlock(nn.Module):
     def forward(self, x: Tensor) -> Tensor:
         """
         Move input forward through the basic block.
+
         Parameters
         ----------
         x: Tensor
            Training input value.
+
         Returns
         -------
         out: Tensor
@@ -140,6 +145,7 @@ class RationalResNet(nn.Module):
     def __init__(self, block: Type[RationalBasicBlock], layers: List[int], num_classes: int = 10, mask: Mask = None, ) -> None:
         """
         Initialize parameters of the ResNet.
+
         Parameters
         ----------
         block: RationalBasicBlock
@@ -219,6 +225,7 @@ class RationalResNet(nn.Module):
     def apply_mask(self, mask: Mask):
         """
         Apply a new mask to a net.
+
         Parameters
         ----------
         mask: Mask
@@ -233,10 +240,12 @@ class RationalResNet(nn.Module):
     def multi_variant_rationals(self, out) -> Tensor:
         """
         Split tensor in four parts, feed them to four different Rational Activation Functions, and but them back together.
+
         Parameters
         ----------
         out: Tensor
              The tensor that is fed through the net.
+
         Returns
         -------
         out: Tensor
@@ -266,10 +275,12 @@ class RationalResNet(nn.Module):
     def forward(self, out: Tensor):
         """
         Move input forward through the net.
+
         Parameters
         ----------
         out: Tensor
              Training input value.
+
         Returns
         -------
         out: Tensor
@@ -277,7 +288,6 @@ class RationalResNet(nn.Module):
         """
         if self.mask is not None:
             self.apply_mask(mask=self.mask)
-        out = out.to(device)
         out = self.conv_layer_1(out)
         out = self.batch_norm_1(out)
         out = self.multi_variant_rationals(out)
@@ -294,6 +304,7 @@ class RationalResNet(nn.Module):
     def prunable_layers(self) -> List:
         """
         Return all layers that are prunable.
+
         Returns
         -------
         prunable_layer_list: List
@@ -310,6 +321,7 @@ class RationalResNet(nn.Module):
 def _resnet(arch: str, block: Type[RationalBasicBlock], layers: List[int], mask: Mask, **kwargs: Any) -> RationalResNet:
     """
     The universal ResNet definition.
+
     Parameters
     ----------
     arch: str
@@ -319,6 +331,7 @@ def _resnet(arch: str, block: Type[RationalBasicBlock], layers: List[int], mask:
     layers: list
             The list with the number of layers, and the number of blocks in each layer.
     mask: Mask
+
     Returns
     -------
     model: RationalResNet

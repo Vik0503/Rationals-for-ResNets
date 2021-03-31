@@ -4,6 +4,7 @@ import torch
 
 if torch.cuda.is_available():
     device = 'cuda'
+    print(device)
 else:
     device = 'cpu'
 

@@ -4,12 +4,16 @@ import numpy as np
 
 class Mask(dict):
     """Mask class for the Lottery Ticket Hypothesis."""
+
     def __init__(self, mask_dict=None):
         super(Mask, self).__init__()
 
         if mask_dict is not None:
             for key, values in mask_dict.items():
                 self[key] = values
+
+    def cuda(self):
+        return {k: v.cuda() for k, v in self.items()}
 
 
 def make_initial_mask(model):
@@ -68,7 +72,7 @@ def get_number_of_unpruned_weights(mask: Mask):
     Tensor
            Number of unpruned weights.
     """
-    return torch.sum(torch.Tensor([torch.sum(torch.Tensor(values)) for values in mask.values()]))
+    return torch.sum(torch.Tensor([torch.sum(torch.Tensor(values.cpu())) for values in mask.values()]))
 
 
 def get_number_of_weights(mask: Mask):
@@ -82,7 +86,7 @@ def get_number_of_weights(mask: Mask):
     Tensor
            Number of weights.
     """
-    return torch.sum(torch.tensor([torch.sum(torch.ones_like(torch.Tensor(values))) for values in mask.values()]))
+    return torch.sum(torch.tensor([torch.sum(torch.ones_like(torch.Tensor(values.cpu()))) for values in mask.values()]))
 
 
 def make_new_mask(upper_limit, mask: Mask, weights) -> Mask:
@@ -101,10 +105,12 @@ def make_new_mask(upper_limit, mask: Mask, weights) -> Mask:
          Updated mask with all values set to zero, where the weights of the net are lower than the threshold.
     """
     new_mask = Mask({key: np.where(np.abs(values) > upper_limit, mask[key], np.zeros_like(values))
-                     for key, values in weights.items()})  # nochmal selber schreiben
+                     for key, values in weights.items()})
     for key in mask:
         if key not in new_mask:
             new_mask[key] = mask[key]
+
+    new_mask = {k: torch.tensor(v).cuda() for k, v in new_mask.items()}
     return Mask(new_mask)
 
 

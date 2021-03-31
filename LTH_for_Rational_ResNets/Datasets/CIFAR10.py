@@ -15,7 +15,7 @@ test_transform = transforms.Compose([
 ])
 
 train_val_set = torchvision.datasets.CIFAR10(root='/home/viktoria/Git/thesis_stuff/data/cifar10', train=True, download=True, transform=train_transform)
-testset = torchvision.datasets.CIFAR10(root='/home/viktoria/Git/thesis_stuff/data/cifar10', train=False, download=True, transform=test_transform)
+testset = torchvision.datasets.CIFAR10(root='/home/viktoria/Git/thesis_stuff/data/cifar10', train=False, download=True, transform=train_transform)
 trainset, valset = torch.utils.data.random_split(train_val_set, [45000, 5000])
 
 

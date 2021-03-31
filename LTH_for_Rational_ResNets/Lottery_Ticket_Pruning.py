@@ -54,6 +54,7 @@ def prune_layerwise(pruning_frac: float, model_prune, mask: Mask = None):  # nee
 def prune(pruning_frac: float, model_prune, mask: Mask):
     """
     Prune a percentage of the model's weights globally.
+
     Parameters
     ----------
     pruning_frac: float
@@ -61,6 +62,7 @@ def prune(pruning_frac: float, model_prune, mask: Mask):
     model_prune:
                  Model whose weights will be pruned.
     mask: Mask
+
     Returns
     -------
     model_prune:
@@ -94,17 +96,20 @@ def prune(pruning_frac: float, model_prune, mask: Mask):
 
     updated_mask = make_new_mask(upper_limit=upper_prune_limit, mask=np_mask, weights=model_weights)
 
-    model_prune.apply_mask(updated_mask)
+    # updated_mask = Mask.cuda(updated_mask)
+    # model_prune.apply_mask(updated_mask)
     return model_prune, updated_mask
 
 
 def dict_to_list(dictionary) -> List:
     """
     Transform a dictionary into a list.
+
     Parameters
     ----------
     dictionary:
                 Dictionary to be transformed into a list.
+
     Returns
     -------
     weight_list: List
@@ -126,11 +131,13 @@ def dict_to_list(dictionary) -> List:
 def tensor_to_dict(tensor: torch.Tensor, ref_dict: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
     """
     Transform a tensor into a dict with a given shape.
+
     Parameters
     ----------
     tensor: torch.Tensor
     ref_dict: Dict[str, torch.Tensor]
               Dictionary that has the shape that the output dictionary should have.
+
     Returns
     -------
     tensor_dict: Dict[str, torch.Tensor]
@@ -150,11 +157,13 @@ def tensor_to_dict(tensor: torch.Tensor, ref_dict: Dict[str, torch.Tensor]) -> D
 def get_unpruned_weights(model_weights, mask: Mask) -> List:  # TODO: unbedingt schöner machen!!!
     """
     Return a list containing all unpruned weights.
+
     Parameters
     ----------
     model_weights:
                     All weights of the model.
     mask: Mask
+
     Returns
     -------
     unpruned_weights: List

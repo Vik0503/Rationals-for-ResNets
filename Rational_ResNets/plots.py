@@ -2,7 +2,6 @@ import matplotlib
 import matplotlib.pyplot as plt
 import seaborn as sns
 from rational.torch import Rational
-from Rational_ResNets.main import get_resnet_args
 
 plt.style.use(["science", "grid"])
 matplotlib.rcParams.update({
@@ -11,8 +10,7 @@ matplotlib.rcParams.update({
 })
 
 
-def final_plot(acc_x_vals, train_acc_y_vals, val_acc_y_vals, test_acc_y_vals, cm, epoch_time, test_acc):
-    args = get_resnet_args()
+def accuracy_plot(acc_x_vals, train_acc_y_vals, val_acc_y_vals, test_acc_y_vals):
     plt.figure(figsize=(20, 5))
     plt.subplot(131)
     plt.plot(acc_x_vals, train_acc_y_vals)
@@ -21,17 +19,21 @@ def final_plot(acc_x_vals, train_acc_y_vals, val_acc_y_vals, test_acc_y_vals, cm
     plt.xlabel('Epochs')
     plt.ylabel('Accuracy')
     plt.legend(['Train Accuracy', 'Validation Accuracy', 'Test Accuracy'])
+
+
+def final_plot(cm, epoch_time, test_acc, num_epochs, learning_rate, num_rationals, dataset, experiment_name, batch_size):
+
     plt.subplot(132)
     cm_1 = sns.heatmap(cm, linewidths=1, cmap='plasma')
     props = dict(boxstyle='round', facecolor='grey', alpha=0.5)
-    text = 'num epochs: {}, '.format(args.num_epochs) + \
-           'batch size: {}, '.format(args.batch_size) + 'lr: {}, '.format(args.learning_rate) + '\n' + \
-           'number of rationals per BasicBlock: {}, '.format(args.num_rationals) + '\n' + \
+    text = 'num epochs: {}, '.format(num_epochs) + \
+           'batch size: {}, '.format(batch_size) + 'lr: {}, '.format(learning_rate) + '\n' + \
+           'number of rationals per BasicBlock: {}, '.format(num_rationals) + '\n' + \
            'avg time per epoch: {:.0f}m {:.0f}s, '.format(epoch_time // 60, epoch_time % 60) + \
-           'test accuracy: {:4f}, '.format(test_acc) + 'dataset: {}'.format(args.dataset)
+           'test accuracy: {:4f}, '.format(test_acc) + 'dataset: {}'.format(dataset)
     plt.text(15, 5, text, size=10, bbox=props)
 
-    plt.savefig('{}.svg'.format(args.experiment_name))
+    plt.savefig('{}.svg'.format(experiment_name))
     plt.show()
 
 
