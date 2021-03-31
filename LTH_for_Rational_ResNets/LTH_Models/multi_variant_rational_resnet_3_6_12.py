@@ -107,20 +107,6 @@ class RationalBasicBlock(nn.Module):
         return out
 
 
-def weights_init(model):
-    """
-    Initialize weights of model.
-    Parameters
-    ----------
-    model: Model
-    """
-    if isinstance(model, nn.Conv2d):
-        nn.init.kaiming_normal_(model.weight, mode='fan_out', nonlinearity='relu')
-    elif isinstance(model, (nn.BatchNorm2d, nn.GroupNorm)):
-        nn.init.constant_(model.weight, 1)
-        nn.init.constant_(model.bias, 0)
-
-
 def initial_state(model):
     """Return the initial initialization before training."""
     initial_state_dict = {}
@@ -143,8 +129,7 @@ def reinit(model, mask, initial_state_model):
     for name, param in model.named_parameters():
         if 'weight' not in name or 'batch_norm' in name or 'shortcut' in name or 'fc' in name:
             continue
-        param.data = param.data.cpu()
-        param.data = initial_state_model[name].cpu() * mask[name]
+        param.data = initial_state_model[name] * mask[name]
 
 
 class RationalResNet(nn.Module):
@@ -184,7 +169,14 @@ class RationalResNet(nn.Module):
 
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.fc = nn.Linear(12, num_classes)
-        self.apply(weights_init)
+
+        for mod in self.modules():
+            if isinstance(mod, nn.Conv2d):
+                nn.init.kaiming_normal_(mod.weight, mode='fan_out', nonlinearity='relu')
+            elif isinstance(mod, (nn.BatchNorm2d, nn.GroupNorm)):
+                nn.init.constant_(mod.weight, 1)
+                nn.init.constant_(mod.bias, 0)
+
         self.mask = mask
         if self.mask is not None:
             self.apply_mask(mask=mask)
@@ -192,6 +184,7 @@ class RationalResNet(nn.Module):
     def make_layer(self, block: Type[RationalBasicBlock], planes_out: int, num_blocks: int, stride: int) -> nn.Sequential:
         """
         Build ResNet's layers. Each layer contains a number of Basic Blocks.
+
         Parameters
         ----------
         block: RationalBasicBlock
@@ -199,6 +192,7 @@ class RationalResNet(nn.Module):
         num_blocks: int
                     The number of RationalBasicBlocks in this layer.
         stride: int
+
         Returns
         -------
         nn.Sequential
@@ -224,6 +218,7 @@ class RationalResNet(nn.Module):
     def apply_mask(self, mask: Mask):
         """
         Apply a new mask to a net.
+
         Parameters
         ----------
         mask: Mask
@@ -232,7 +227,6 @@ class RationalResNet(nn.Module):
             for name, param in self.named_parameters():
                 if 'weight' not in name or 'batch_norm' in name or 'shortcut' in name or 'fc' in name:
                     continue
-                param.data = param.data.cpu()
                 param.data *= mask[name]
 
     def multi_variant_rationals(self, out) -> Tensor:
@@ -280,7 +274,6 @@ class RationalResNet(nn.Module):
         """
         if self.mask is not None:
             self.apply_mask(mask=self.mask)
-        out = out.to(device)
         out = self.conv_layer_1(out)
         out = self.batch_norm_1(out)
         out = self.multi_variant_rationals(out)

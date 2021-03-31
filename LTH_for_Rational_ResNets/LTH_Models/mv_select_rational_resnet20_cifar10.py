@@ -121,7 +121,6 @@ def reinit(model, mask, initial_state_model):
     for name, param in model.named_parameters():
         if 'weight' not in name or 'batch_norm' in name or 'shortcut' in name or 'fc' in name:
             continue
-        param.data = param.data.cpu()
         param.data = initial_state_model[name] * mask[name]
 
 

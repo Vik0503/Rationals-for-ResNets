@@ -96,7 +96,6 @@ def reinit(model, mask, initial_state_model):
     for name, param in model.named_parameters():
         if 'weight' not in name or 'batch_norm' in name or 'shortcut' in name or 'fc' in name:
             continue
-        param.data = param.data.cpu()
         param.data = initial_state_model[name].cpu() * mask[name]
 
 
@@ -191,7 +190,6 @@ class ResNet(nn.Module):
             for name, param in self.named_parameters():
                 if 'weight' not in name or 'batch_norm' in name or 'shortcut' in name or 'fc' in name:
                     continue
-                param.data = param.data.cpu()
                 param.data *= mask[name]
 
     def forward(self, out: Tensor):
@@ -208,7 +206,6 @@ class ResNet(nn.Module):
         """
         if self.mask is not None:
             self.apply_mask(mask=self.mask)
-        out = out.to(device)
         out = self.conv_layer_1(out)
         out = self.batch_norm_1(out)
         out = self.relu(out)
