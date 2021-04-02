@@ -8,6 +8,7 @@
 /data/cifar10/cifar-10-batches-py/
 /data/SVHN/
 
+/.idea
 /.idea/inspectionProfiles
 /.idea/misc.xml
 /.idea/modules.xml
