@@ -24,6 +24,7 @@ classes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 def get_classes() -> list:
     """
     Return all the different classes in the SVHN dataset.
+
     Returns
     -------
     classes: list
@@ -34,6 +35,7 @@ def get_classes() -> list:
 def get_num_classes() -> int:
     """
      Return number of different classes in the CIFAR10 dataset.
+
      Returns
      -------
      int
@@ -60,10 +62,12 @@ def get_testset():
 def get_trainloader(bs: int):
     """
     Return dataloader with the train set and batch size.
+
     Parameters
     ----------
     bs: int
         Batch size for the train dataloader.
+
     Returns
     -------
     trainloader: DataLoader
@@ -75,10 +79,12 @@ def get_trainloader(bs: int):
 def get_valloader(bs: int):
     """
     Return dataloader with the validation set and batch size.
+
     Parameters
     ----------
     bs: int
         Batch size for the validation dataloader.
+
     Returns
     -------
     valloader: DataLoader
@@ -90,10 +96,12 @@ def get_valloader(bs: int):
 def get_testloader(bs: int):
     """
     Return dataloader with the test set and batch size.
+
     Parameters
     ----------
     bs: int
         Batch size for the test dataloader.
+
     Returns
     -------
     testloader: DataLoader

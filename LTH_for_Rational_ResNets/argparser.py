@@ -16,4 +16,12 @@ LTH_arg_parser.add_argument('-test_acc', '--test_accuracy_threshold', default=0.
 
 
 def get_argparser():
+    """
+    Return the argument parser.
+
+    Returns
+    -------
+    ResNet_arg_parser: arg.ArgumentParser
+                       Argument Parser for all experiments with ResNets.
+    """
     return LTH_arg_parser

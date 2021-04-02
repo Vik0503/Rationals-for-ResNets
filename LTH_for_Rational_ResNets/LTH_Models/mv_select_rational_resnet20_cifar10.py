@@ -110,6 +110,7 @@ def initial_state(model):
 def reinit(model, mask, initial_state_model):
     """
     Reset pruned model's weights to the initial initialization.
+
     Parameter
     ---------
     model: RationalResNet

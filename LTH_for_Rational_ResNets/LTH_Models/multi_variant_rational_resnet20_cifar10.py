@@ -124,6 +124,7 @@ def initial_state(model):
 def reinit(model, mask, initial_state_model):
     """
     Reset pruned model's weights to the initial initialization.
+
     Parameter
     ---------
     model: RationalResNet
@@ -192,6 +193,7 @@ class RationalResNet(nn.Module):
     def make_layer(self, block: Type[RationalBasicBlock], planes_out: int, num_blocks: int, stride: int) -> nn.Sequential:
         """
         Build ResNet's layers. Each layer contains a number of Basic Blocks.
+
         Parameters
         ----------
         block: RationalBasicBlock
@@ -199,6 +201,7 @@ class RationalResNet(nn.Module):
         num_blocks: int
                     The number of RationalBasicBlocks in this layer.
         stride: int
+
         Returns
         -------
         nn.Sequential

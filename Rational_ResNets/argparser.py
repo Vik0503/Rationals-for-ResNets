@@ -1,5 +1,6 @@
 import argparse as arg
 
+
 ResNet_arg_parser = arg.ArgumentParser()
 ResNet_arg_parser.add_argument('-exp_name', '--experiment_name', type=str, required=True)
 ResNet_arg_parser.add_argument('-bs', '--batch_size', default=128, type=int)
@@ -13,5 +14,13 @@ ResNet_arg_parser.add_argument('-tnep', '--training_number_of_epochs', default=2
 ResNet_arg_parser.add_argument('-num_rat', '--number_of_rationals_per_vector', default=1, type=int)
 
 
-def get_argparser():
+def get_argparser() -> arg.ArgumentParser:
+    """
+    Return the argument parser.
+
+    Returns
+    -------
+    ResNet_arg_parser: arg.ArgumentParser
+                       Argument Parser for all experiments with ResNets.
+    """
     return ResNet_arg_parser

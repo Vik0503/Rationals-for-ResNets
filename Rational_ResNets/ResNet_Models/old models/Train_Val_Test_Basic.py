@@ -15,7 +15,7 @@ from torch.utils.tensorboard import SummaryWriter
 
 from Rational_ResNets.ResNet_Datasets import CIFAR10, SVHN
 from Rational_ResNets.ResNet_Models import Rational_ResNet18_ImageNet as RRN18
-from Rational_ResNets.ResNet_Models import Rational_ResNet20_CiFAR10 as RRN20
+from Rational_ResNets.ResNet_Models import Rational_ResNet20_CIFAR10 as RRN20
 from Rational_ResNets.ResNet_Models import ResNet18_ImageNet as RN18
 from Rational_ResNets.ResNet_Models import ResNet20_CIFAR10 as RN20
 from Rational_ResNets.ResNet_Models import Pytorch_Rational_ResNets_ImageNet as PT

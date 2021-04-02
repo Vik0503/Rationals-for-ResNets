@@ -118,7 +118,7 @@ def iterative_pruning_by_num(prune_model, prune_mask: Mask, epochs: int, optimiz
 
 
 def iterative_pruning_by_test_acc(prune_model, prune_mask: Mask, acc_threshold: float, optimizer, criterion, exp_lr_scheduler, trainset, valset, trainloader, valloader, model_type, testset, testloader, training_number_of_epochs,
-                                  pruning_percentage):
+                                  pruning_percentage) -> int:
     """
     Prune iteratively until the test accuracy is lower than the threshold. Save checkpoint after every pruning epoch.
 

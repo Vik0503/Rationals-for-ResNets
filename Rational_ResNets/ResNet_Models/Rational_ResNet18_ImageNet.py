@@ -28,6 +28,7 @@ class RationalBasicBlock(nn.Module):
     def __init__(self, planes_in, planes_out, stride=1, downsample=False):
         """
         Initialize the Basic Block.
+
         Parameters
         ----------
         planes_in: int
@@ -56,10 +57,12 @@ class RationalBasicBlock(nn.Module):
     def forward(self, x: Tensor) -> Tensor:
         """
         Move input forward through the basic block.
+
         Parameters
         ----------
         x: Tensor
              Training input value.
+
         Returns
         -------
         out: Tensor
@@ -81,6 +84,7 @@ class RationalResNet(nn.Module):
     def __init__(self, block: Type[RationalBasicBlock], layers: List[int], num_classes: int = 10) -> None:
         """
         Initialize parameters of the ResNet.
+
         Parameters
         ----------
         block: RationalBasicBlock
@@ -121,6 +125,7 @@ class RationalResNet(nn.Module):
     def make_layer(self, block: Type[RationalBasicBlock], planes_out: int, num_blocks: int, stride: int):
         """
         Build ResNet's layers. Each layer contains a number of Basic Blocks.
+
         Parameters
         ----------
         block: RationalBasicBlock
@@ -128,6 +133,7 @@ class RationalResNet(nn.Module):
         num_blocks: int
                     The number of RationalBasicBlocks in this layer.
         stride: int
+
         Returns
         -------
         nn.Sequential
@@ -153,10 +159,12 @@ class RationalResNet(nn.Module):
     def forward(self, out: Tensor):
         """
         Move input forward through the net.
+
         Parameters
         ----------
         out: Tensor
              Training input value.
+
         Returns
         -------
         out: Tensor
@@ -181,6 +189,7 @@ class RationalResNet(nn.Module):
 def _resnet(arch: str, block: Type[RationalBasicBlock], layers: List[int], **kwargs: Any) -> RationalResNet:
     """
     The universal ResNet definition
+
     Parameters
     ----------
     arch: str
@@ -189,6 +198,7 @@ def _resnet(arch: str, block: Type[RationalBasicBlock], layers: List[int], **kwa
            The block type of the ResNet.
     layers: list
            The list with the number of layers and the number of blocks in each layer.
+
     Returns
     -------
     model: RationalResNet

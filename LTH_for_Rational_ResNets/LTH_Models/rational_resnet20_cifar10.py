@@ -61,10 +61,12 @@ class RationalBasicBlock(nn.Module):
     def forward(self, x: Tensor) -> Tensor:
         """
         Move input forward through the basic block.
+
         Parameters
         ----------
         x: Tensor
            Training input value.
+
         Returns
         -------
         out: Tensor
@@ -92,6 +94,7 @@ def initial_state(model):
 def reinit(model, mask, initial_state_model):
     """
     Reset pruned model's weights to the initial initialization.
+
     Parameter
     ---------
     model: RationalResNet
@@ -251,6 +254,7 @@ class RationalResNet(nn.Module):
 def _resnet(arch: str, block: Type[RationalBasicBlock], layers: List[int], mask: Mask, **kwargs: Any) -> RationalResNet:
     """
     The universal ResNet definition.
+
     Parameters
     ----------
     arch: str
@@ -260,6 +264,7 @@ def _resnet(arch: str, block: Type[RationalBasicBlock], layers: List[int], mask:
     layers: list
             The list with the number of layers, and the number of blocks in each layer.
     mask: Mask
+
     Returns
     -------
     model: RationalResNet

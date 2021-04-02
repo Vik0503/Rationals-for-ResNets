@@ -19,14 +19,14 @@ from Rational_ResNets.ResNet_Datasets import CIFAR10, SVHN
 from Rational_ResNets.ResNet_Models import MV_Sel_Rational_ResNet20_CIFAR10 as MVSelRRN20
 from Rational_ResNets.ResNet_Models import Pytorch_Rational_ResNets_ImageNet as PT
 from Rational_ResNets.ResNet_Models import Rational_ResNet18_ImageNet as RRN18
-from Rational_ResNets.ResNet_Models import Rational_ResNet20_CiFAR10 as RRN20
+from Rational_ResNets.ResNet_Models import Rational_ResNet20_CIFAR10 as RRN20
 from Rational_ResNets.ResNet_Models import ResNet18_ImageNet as RN18
 from Rational_ResNets.ResNet_Models import ResNet20_CIFAR10 as RN20
 
 resnet_argparser = argparser.get_argparser()
 resnet_args = resnet_argparser.parse_args(
     ['--model', 'multi_select_variant_rational_resnet20_cifar10', '--dataset', 'cifar10', '--experiment_name',
-     'multi_select_variant_8_rational_resnet20_cifar10', '--training_number_of_epochs', '2',
+     'rational_resnet20_cifar10', '--training_number_of_epochs', '2',
      '--number_of_rationals_per_vector', '4', '--augment_data', 'True'])
 
 global trainset

@@ -27,6 +27,7 @@ class BasicBlock(nn.Module):
     def __init__(self, planes_in, planes_out, stride=1, downsample=False):
         """
         Initialize the Basic Block.
+
         Parameters
         ----------
         planes_in: int
@@ -54,10 +55,12 @@ class BasicBlock(nn.Module):
     def forward(self, x: Tensor) -> Tensor:
         """
         Move input forward through the basic block.
+
         Parameters
         ----------
         x: Tensor
              Training input value.
+
         Returns
         -------
         out: Tensor
@@ -85,6 +88,7 @@ def initial_state(model):
 def reinit(model, mask, initial_state_model):
     """
     Reset pruned model's weights to the initial initialization.
+
     Parameter
     ---------
     model: ResNet
@@ -104,6 +108,7 @@ class ResNet(nn.Module):
     def __init__(self, block: Type[BasicBlock], layers: List[int], num_classes: int = 10, mask: Mask = None) -> None:
         """
         Initialize parameters of the ResNet.
+
         Parameters
         ----------
         block: RationalBasicBlock
@@ -153,6 +158,7 @@ class ResNet(nn.Module):
         num_blocks: int
                     The number of BasicBlocks in this layer.
         stride: int
+
         Returns
         -------
         nn.Sequential
@@ -221,6 +227,7 @@ class ResNet(nn.Module):
     def prunable_layers(self) -> List:
         """
         Return all layers that are prunable.
+
         Returns
         -------
         prunable_layer_list: List
@@ -237,6 +244,7 @@ class ResNet(nn.Module):
 def _resnet(arch: str, block: Type[BasicBlock], layers: List[int], mask: Mask, **kwargs: Any) -> ResNet:
     """
     The universal ResNet definition.
+
     Parameters
     ----------
     arch: str
@@ -246,6 +254,7 @@ def _resnet(arch: str, block: Type[BasicBlock], layers: List[int], mask: Mask, *
     layers: list
             The list with the number of layers, and the number of blocks in each layer.
     mask: Mask
+
     Returns
     -------
     model: RationalResNet

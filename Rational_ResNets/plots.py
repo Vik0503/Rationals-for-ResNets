@@ -2,7 +2,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import seaborn as sns
 from rational.torch import Rational
-
+import torch
 plt.style.use(["science", "grid"])
 matplotlib.rcParams.update({
     "font.family": "serif",
@@ -10,7 +10,21 @@ matplotlib.rcParams.update({
 })
 
 
-def accuracy_plot(acc_x_vals, train_acc_y_vals, val_acc_y_vals, test_acc_y_vals):
+def accuracy_plot(acc_x_vals: list, train_acc_y_vals: list, val_acc_y_vals: list, test_acc_y_vals: list):
+    """
+    Plot the train-, validation- and test accuracy.
+
+    Parameters
+    ----------
+    acc_x_vals: list
+                A list with the x values fr the plot.
+    train_acc_y_vals: list
+                      A list with all training accuracies.
+    val_acc_y_vals: list
+                    A list with all validation accuracies.
+    test_acc_y_vals: list
+                     A list with all test accuracies.
+    """
     plt.figure(figsize=(20, 5))
     plt.subplot(131)
     plt.plot(acc_x_vals, train_acc_y_vals)
@@ -21,8 +35,27 @@ def accuracy_plot(acc_x_vals, train_acc_y_vals, val_acc_y_vals, test_acc_y_vals)
     plt.legend(['Train Accuracy', 'Validation Accuracy', 'Test Accuracy'])
 
 
-def final_plot(cm, epoch_time, test_acc, num_epochs, learning_rate, num_rationals, dataset, experiment_name, batch_size):
+def final_plot(cm, epoch_time, test_acc: float, num_epochs: int, learning_rate: float, num_rationals: int, dataset: str, experiment_name: str, batch_size: int):
+    """
+    Plot the confusion matrix and add the description box.
 
+    Parameters
+    ----------
+    cm: Tensor
+        Tensor with confusion matrix.
+    epoch_time:
+                Average time per epoch
+    test_acc: float
+              Best test accuracy.
+    num_epochs: int
+                Number of training epochs.
+    learning_rate: float
+    num_rationals: int
+                   Number of Rational Activation Functions per BasicBlock
+    dataset: str
+    experiment_name: str
+    batch_size: int
+    """
     plt.subplot(132)
     cm_1 = sns.heatmap(cm, linewidths=1, cmap='plasma')
     props = dict(boxstyle='round', facecolor='grey', alpha=0.5)
@@ -38,6 +71,7 @@ def final_plot(cm, epoch_time, test_acc, num_epochs, learning_rate, num_rational
 
 
 def activation_function_plots(model):
+    """ Plot all Rational Activation Functions. """
     for mod in model.modules():
         if isinstance(mod, Rational):
             mod.show()

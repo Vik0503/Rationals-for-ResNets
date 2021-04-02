@@ -10,6 +10,7 @@ from LTH_for_Rational_ResNets.Mask import Mask, make_new_mask, get_number_of_unp
 def make_pruning_global(mask) -> Mask:
     """
     Shuffle mask to make random, global pruning possible.
+
     Parameters
     ----------
     mask: Mask
@@ -29,13 +30,15 @@ def make_pruning_global(mask) -> Mask:
 def prune_layerwise(pruning_frac: float, model_prune, mask: Mask = None):  # needed???
     """
     Prune every layer with the same percentage.
-        Parameters
+
+    Parameters
     ----------
     pruning_frac: float
                   Fracture of the model's weights that will be pruned.
     model_prune:
                  Model whose weights will be pruned.
     mask: Mask
+
     Returns
     -------
     model_prune:

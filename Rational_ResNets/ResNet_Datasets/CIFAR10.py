@@ -20,6 +20,7 @@ classes = ['bird', 'car', 'cat', 'deer', 'dog', 'frog', 'horse', 'plane', 'ship'
 def get_classes() -> list:
     """
     Return all the different classes in the CIFAR10 dataset.
+
     Returns
     -------
     classes: list
@@ -30,6 +31,7 @@ def get_classes() -> list:
 def get_num_classes() -> int:
     """
     Return number of different classes in the CIFAR10 dataset.
+
     Returns
     -------
     int
@@ -40,12 +42,15 @@ def get_num_classes() -> int:
 
 def get_train_data(aug: bool = False, bs: int = 128):
     """
+    Return train set and train set's dataloader with specific batch size.
+
     Parameters
     ----------
     aug: bool
          data augmentation
     bs: int
         Batch size for the train dataloader.
+
     Returns
     -------
     trainset:
@@ -65,13 +70,15 @@ def get_train_data(aug: bool = False, bs: int = 128):
 
 def get_validation_data(aug: bool = False, bs: int = 128):
     """
-    Return dataloader with the validation set and batch size.
+    Return validation set and dataloader with the validation set and batch size.
+
     Parameters
     ----------
     aug: bool
          data augmentation
     bs: int
         Batch size for the validation dataloader.
+
     Returns
     -------
     valset:
@@ -91,13 +98,15 @@ def get_validation_data(aug: bool = False, bs: int = 128):
 
 def get_test_data(aug: bool = False, bs: int = 128):
     """
-    Return dataloader with the test set and batch size.
+    Return test set and dataloader with the test set and batch size.
+
     Parameters
     ----------
     aug: bool
          data augmentation
     bs: int
         Batch size for the test dataloader.
+
     Returns
     -------
     testset:

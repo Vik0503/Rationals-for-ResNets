@@ -19,10 +19,12 @@ class Mask(dict):
 def make_initial_mask(model):
     """
     Make mask that spans over the whole model.
+
     Parameters
     ----------
     model:
           The model that the mask spans.
+
     Returns
     -------
     mask: Mask
@@ -36,9 +38,11 @@ def make_initial_mask(model):
 def mask_sparsity(mask: Mask):
     """
     Return the sparsity of the mask's model.
+
     Parameters
     __________
     mask: Mask
+
     Returns
     _______
     Tensor
@@ -50,9 +54,11 @@ def mask_sparsity(mask: Mask):
 def mask_density(mask):
     """
     Return the density of the mask's model.
+
     Parameters
     __________
     mask: Mask
+
     Returns
     _______
     Tensor
@@ -64,9 +70,11 @@ def mask_density(mask):
 def get_number_of_unpruned_weights(mask: Mask):
     """
     Return number of unpruned weights.
+
     Parameters
     __________
     mask: Mask
+
     Returns
     -------
     Tensor
@@ -78,9 +86,11 @@ def get_number_of_unpruned_weights(mask: Mask):
 def get_number_of_weights(mask: Mask):
     """
     Return number of weights.
+
     Parameters
     __________
     mask : Mask
+
     Returns
     -------
     Tensor
@@ -92,6 +102,7 @@ def get_number_of_weights(mask: Mask):
 def make_new_mask(upper_limit, mask: Mask, weights) -> Mask:
     """
     Make updated mask.
+
     Parameters
     ----------
     upper_limit:
@@ -99,6 +110,7 @@ def make_new_mask(upper_limit, mask: Mask, weights) -> Mask:
     mask: Mask
     weights:
              All weights of the net.
+
     Returns
     -------
     Mask
@@ -117,6 +129,7 @@ def make_new_mask(upper_limit, mask: Mask, weights) -> Mask:
 def apply_mask(model, mask: Mask):
     """
     Apply a new mask to a net.
+
     Parameters
     ----------
     model:

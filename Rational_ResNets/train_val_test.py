@@ -130,7 +130,8 @@ def train_val_test_model(model, criterion, optimizer, scheduler, num_epochs, tra
     return model, cm, time_elapsed_epoch, best_acc
 
 
-def average_epoch_time(avg_epoch_time):  # calculates average time per epoch
+def average_epoch_time(avg_epoch_time: list):
+    """ Calculate the average time per epoch. """
     avg_epoch = np.sum(avg_epoch_time)
     return avg_epoch / len(avg_epoch_time)
 
