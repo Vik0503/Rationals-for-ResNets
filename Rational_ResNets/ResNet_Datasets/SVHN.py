@@ -60,7 +60,7 @@ def get_train_data(aug: bool = False, bs: int = 128):
         data_transform = transform
         print('HERE')
 
-    train_val_set = torchvision.datasets.SVHN(root='/home/viktoria/Git/thesis_stuff/data/SVHN', split='train', download=True, transform=data_transform)
+    train_val_set = torchvision.datasets.SVHN(root='./data/SVHN', split='train', download=True, transform=data_transform)
     trainset, _ = torch.utils.data.random_split(train_val_set, [54943, 18314])
     trainloader = torch.utils.data.DataLoader(trainset, shuffle=True, num_workers=16, batch_size=bs, drop_last=True)
     return trainset, trainloader
@@ -86,7 +86,7 @@ def get_validation_data(aug: bool = False, bs: int = 128):
     else:
         data_transform = transform
 
-    train_val_set = torchvision.datasets.SVHN(root='/home/viktoria/Git/thesis_stuff/data/SVHN', split='train', download=True, transform=data_transform)
+    train_val_set = torchvision.datasets.SVHN(root='./data/SVHN', split='train', download=True, transform=data_transform)
     _, valset = torch.utils.data.random_split(train_val_set, [54943, 18314])
     valloader = torch.utils.data.DataLoader(valset, shuffle=True, num_workers=16, batch_size=bs, drop_last=True)
     return valset, valloader
@@ -111,6 +111,6 @@ def get_test_data(aug: bool = False, bs: int = 128):
         data_transform = aug_transform
     else:
         data_transform = transform
-    testset = torchvision.datasets.SVHN(root='/home/viktoria/Git/thesis_stuff/data/SVHN', split='test', download=True, transform=data_transform)
+    testset = torchvision.datasets.SVHN(root='./data/SVHN', split='test', download=True, transform=data_transform)
     testloader = torch.utils.data.DataLoader(testset, shuffle=False, num_workers=16, batch_size=bs, drop_last=True)
     return testset, testloader
