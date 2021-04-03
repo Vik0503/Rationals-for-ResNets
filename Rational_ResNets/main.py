@@ -25,9 +25,8 @@ from Rational_ResNets.ResNet_Models import ResNet20_CIFAR10 as RN20
 
 resnet_argparser = argparser.get_argparser()
 resnet_args = resnet_argparser.parse_args(
-    ['--model', 'multi_select_variant_rational_resnet20_cifar10', '--dataset', 'cifar10', '--experiment_name',
-     'rational_resnet20_cifar10', '--training_number_of_epochs', '2',
-     '--number_of_rationals_per_vector', '4', '--augment_data', 'True'])
+    ['--model', 'rational_resnet20_cifar10', '--dataset', 'cifar10', '--experiment_name',
+     'rational_resnet20_cifar10', '--training_number_of_epochs', '2', '--augment_data', 'True'])
 
 global trainset
 global valset
@@ -95,7 +94,7 @@ model, cm, avg_time, best_test_acc = tvt.train_val_test_model(model, criterion, 
                                                               testset=testset, valset=valset)
 
 plots.final_plot(cm, avg_time, best_test_acc, resnet_args.training_number_of_epochs, resnet_args.learning_rate,
-                 num_rationals, resnet_args.dataset, resnet_args.experiment_name, resnet_args.batch_size)
+                 num_rationals, resnet_args.dataset, resnet_args.model, resnet_args.batch_size)
 
 
 def get_resnet_args():

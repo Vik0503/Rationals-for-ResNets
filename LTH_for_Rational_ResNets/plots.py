@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import matplotlib.pyplot as plt
 import matplotlib
 
@@ -28,12 +30,15 @@ def make_LTH_test_acc_plot(test_accuracies: list, sparsity: list):
     plt.legend(['Test Accuracy'])
 
 
-def final_plot_LTH(model, dataset, batch_size, num_pruning_epochs, training_number_of_epochs, learning_rate, pruning_percentage, warmup_iterations, exp_name):
+def final_plot_LTH(model, dataset, batch_size, num_pruning_epochs, training_number_of_epochs, learning_rate, pruning_percentage, warmup_iterations):
     props = dict(boxstyle='round', facecolor='grey', alpha=0.5)
     text = 'model: {}, '.format(model) + 'dataset: {}, '.format(dataset) + 'batch size: {}, '.format(batch_size) + '\n' + 'number of iterative pruning epochs: {}, '.format(num_pruning_epochs) \
            + '\n' + 'number of training epochs per pruning epoch: {}, '.format(training_number_of_epochs) + '\n' + \
            'learning rate: {}, '.format(learning_rate) + 'pruning percentage per epoch: {}, '.format(pruning_percentage) + '\n' + 'number of warm-up iterations: {}'.format(warmup_iterations)
 
     plt.figtext(0.525, 0.5, text, bbox=props, size=9)
-    plt.savefig('{}.svg'.format(exp_name))
+
+    time_stamp = datetime.now()
+    PATH = '/Results/LTH_{}'.format(model) + '_' + '{}'.format(time_stamp) + '_' + '{}'.format(model) + '_' + '{}'.format(dataset) + '.svg'
+    plt.savefig(PATH)
     plt.show()

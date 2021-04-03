@@ -27,7 +27,7 @@ class RationalBasicBlock(nn.Module):
     """A Basic Block as described in the paper above, with Rationals as activation function instead of ReLu"""
     expansion = 1
 
-    def __init__(self, planes_in: int, planes_out: int, stride: int = 1, downsample: bool = False):
+    def __init__(self, planes_in: int, planes_out: int, stride: int = 1, downsample: bool = False) -> None:
         """
         Initialize the Basic Block.
 
@@ -81,14 +81,6 @@ class RationalBasicBlock(nn.Module):
         out = self.rational_2(out)
 
         return out
-
-
-def initial_state(model):
-    """Return the initial initialization before training."""
-    initial_state_dict = {}
-    for name, param in model.named_parameters():
-        initial_state_dict[name] = param.data.clone().detach()
-    return initial_state_dict
 
 
 def reinit(model, mask, initial_state_model):
@@ -205,7 +197,7 @@ class RationalResNet(nn.Module):
                     continue
                 param.data *= mask[name]
 
-    def forward(self, out: Tensor):
+    def forward(self, out: Tensor) -> Tensor:
         """
         Move input forward through the net.
 

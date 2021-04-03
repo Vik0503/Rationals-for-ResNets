@@ -76,15 +76,7 @@ class BasicBlock(nn.Module):
         return out
 
 
-def initial_state(model):
-    """Return the initial initialization before training."""
-    initial_state_dict = {}
-    for name, param in model.named_parameters():
-        initial_state_dict[name] = param.data.clone().detach()
-    return initial_state_dict
-
-
-def reinit(model, mask, initial_state_model):
+def reinit(model, mask: Mask, initial_state_model):
     """
     Reset pruned model's weights to the initial initialization.
 
@@ -152,7 +144,7 @@ class ResNet(nn.Module):
         if self.mask is not None:
             self.apply_mask(mask=mask)
 
-    def make_layer(self, block: Type[BasicBlock], planes_out: int, num_blocks: int, stride: int):
+    def make_layer(self, block: Type[BasicBlock], planes_out: int, num_blocks: int, stride: int) -> nn.Sequential:
         """
         Build ResNet's layers. Each layer contains a number of Basic Blocks.
 
@@ -199,7 +191,7 @@ class ResNet(nn.Module):
                     continue
                 param.data *= mask[name]
 
-    def forward(self, out: Tensor):
+    def forward(self, out: Tensor) -> Tensor:
         """
         Move input forward through the net.
 

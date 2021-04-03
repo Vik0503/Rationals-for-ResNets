@@ -133,4 +133,4 @@ elif LTH_args.stop_criteria is 'one_shot':
 
 plots.final_plot_LTH(LTH_args.model, LTH_args.dataset, LTH_args.batch_size, num_pruning_epochs,
                      LTH_args.training_number_of_epochs, LTH_args.learning_rate, LTH_args.pruning_percentage,
-                     LTH_args.warmup_iterations, LTH_args.experiment_name)
+                     LTH_args.warmup_iterations)

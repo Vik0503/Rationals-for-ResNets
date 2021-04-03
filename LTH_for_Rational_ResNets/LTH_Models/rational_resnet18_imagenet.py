@@ -27,7 +27,7 @@ class RationalBasicBlock(nn.Module):
     """A Basic Block as described in the paper above, with Rationals as activation function instead of ReLu"""
     expansion = 1
 
-    def __init__(self, planes_in, planes_out, stride=1, downsample=False):
+    def __init__(self, planes_in, planes_out, stride=1, downsample=False) -> None:
         """
         Initialize the Basic Block.
 
@@ -82,15 +82,7 @@ class RationalBasicBlock(nn.Module):
         return out
 
 
-def initial_state(model):
-    """Return the initial initialization before training."""
-    initial_state_dict = {}
-    for name, param in model.named_parameters():
-        initial_state_dict[name] = param.data.clone().detach()
-    return initial_state_dict
-
-
-def reinit(model, mask, initial_state_model):
+def reinit(model, mask: Mask, initial_state_model):
     """
     Reset pruned model's weights to the initial initialization.
 
@@ -158,7 +150,7 @@ class RationalResNet(nn.Module):
         if self.mask is not None:
             self.apply_mask(mask=mask)
 
-    def make_layer(self, block: Type[RationalBasicBlock], planes_out: int, num_blocks: int, stride: int):
+    def make_layer(self, block: Type[RationalBasicBlock], planes_out: int, num_blocks: int, stride: int) -> nn.Sequential:
         """
         Build ResNet's layers. Each layer contains a number of Basic Blocks.
 

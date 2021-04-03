@@ -14,8 +14,8 @@ test_transform = transforms.Compose([
     transforms.Normalize(mean=[0.4377, 0.4438, 0.4728], std=[0.1980, 0.2010, 0.1970])
 ])
 
-train_val_set = torchvision.datasets.SVHN(root='./data/SVHN', split='train', download=True, transform=train_transform)
-testset = torchvision.datasets.SVHN(root='.data/SVHN', split='test', download=True, transform=train_transform)
+train_val_set = torchvision.datasets.SVHN(root='../data/SVHN', split='train', download=True, transform=train_transform)
+testset = torchvision.datasets.SVHN(root='..data/SVHN', split='test', download=True, transform=train_transform)
 trainset, valset = torch.utils.data.random_split(train_val_set, [54943, 18314])  # 3/4 of train set for training 1/4 for validation
 
 classes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]

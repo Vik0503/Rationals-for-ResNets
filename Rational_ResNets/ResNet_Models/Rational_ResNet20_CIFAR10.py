@@ -14,6 +14,7 @@ import torch.nn as nn
 from rational.torch import Rational
 from torch import Tensor
 
+import yaml
 
 if torch.cuda.is_available():
     cuda = True
@@ -84,6 +85,7 @@ class RationalBasicBlock(nn.Module):
 
 class RationalResNet(nn.Module):
     """A ResNet as described in the paper above."""
+
     def __init__(self, block: Type[RationalBasicBlock], layers: List[int], num_classes: int = 10) -> None:
         """
         Initialize parameters of the ResNet.
@@ -213,4 +215,8 @@ def _resnet(arch: str, block: Type[RationalBasicBlock], layers: List[int], **kwa
 def rational_resnet20(**kwargs: Any) -> RationalResNet:
     """ResNet for CIFAR10 as mentioned in the paper above"""
     return _resnet('resnet20', RationalBasicBlock, [3, 3, 3], **kwargs)
+
+
+print(yaml.dump(rational_resnet20()))
+
 

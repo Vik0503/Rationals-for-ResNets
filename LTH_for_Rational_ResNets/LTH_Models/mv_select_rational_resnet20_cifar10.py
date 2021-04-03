@@ -1,3 +1,9 @@
+"""
+ResNet18 Model for ImageNet as originally described in: Deep Residual Learning for Image Recognition (arXiv:1512.03385)
+by Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun
+with Padè Activation Units as activation functions instead of reLu activation functions
+"""
+
 from __future__ import print_function, division
 
 from typing import Type, Any, List
@@ -21,7 +27,7 @@ class RationalBasicBlock(nn.Module):
     """A Basic Block as described in the paper above, with Rationals as activation function instead of ReLu"""
     expansion = 1
 
-    def __init__(self, planes_in: int, planes_out: int, stride: int = 1, downsample: bool = False, num_rationals: int = 4):
+    def __init__(self, planes_in: int, planes_out: int, stride: int = 1, downsample: bool = False, num_rationals: int = 4) -> None:
         """
         Initialize the Basic Block.
 
@@ -58,7 +64,7 @@ class RationalBasicBlock(nn.Module):
                 nn.BatchNorm2d(self.expansion * planes_out)
             )
 
-    def select_multi_variant_rationals(self, out: Tensor, rational_list) -> Tensor:
+    def select_multi_variant_rationals(self, out: Tensor, rational_list: list) -> Tensor:
         num_rationals = self.num_rationals
         split_size = int(out.shape[1] / num_rationals)
         splitted = torch.split(out.clone(), split_size, dim=1)
@@ -97,14 +103,6 @@ class RationalBasicBlock(nn.Module):
         out = self.select_multi_variant_rationals(out, self.rational_list_2)
 
         return out
-
-
-def initial_state(model):
-    """Return the initial initialization before training."""
-    initial_state_dict = {}
-    for name, param in model.named_parameters():
-        initial_state_dict[name] = param.data.clone().detach()
-    return initial_state_dict
 
 
 def reinit(model, mask, initial_state_model):
@@ -241,7 +239,7 @@ class RationalResNet(nn.Module):
 
         return out
 
-    def forward(self, out: Tensor):
+    def forward(self, out: Tensor) -> Tensor:
         """
         Move input forward through the net.
 
@@ -311,5 +309,5 @@ def _resnet(arch: str, block: Type[RationalBasicBlock], layers: List[int], num_r
 
 
 def multi_select_variant_rational_resnet20(mask: Mask = None, num_rationals: int = 4, **kwargs: Any) -> RationalResNet:
-    """ResNet for CIFAR10 as mentioned in the paper above"""
+    """ResNet20 with multiple Rational Activation Functions for CIFAR10 as mentioned in the paper above"""
     return _resnet('resnet20', RationalBasicBlock, [3, 3, 3], num_rationals=num_rationals, mask=mask, **kwargs)

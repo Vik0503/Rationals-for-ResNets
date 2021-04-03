@@ -2,6 +2,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import seaborn as sns
 from rational.torch import Rational
+from datetime import datetime
 import torch
 plt.style.use(["science", "grid"])
 matplotlib.rcParams.update({
@@ -35,7 +36,7 @@ def accuracy_plot(acc_x_vals: list, train_acc_y_vals: list, val_acc_y_vals: list
     plt.legend(['Train Accuracy', 'Validation Accuracy', 'Test Accuracy'])
 
 
-def final_plot(cm, epoch_time, test_acc: float, num_epochs: int, learning_rate: float, num_rationals: int, dataset: str, experiment_name: str, batch_size: int):
+def final_plot(cm, epoch_time, test_acc: float, num_epochs: int, learning_rate: float, num_rationals: int, dataset: str, model: str, batch_size: int):
     """
     Plot the confusion matrix and add the description box.
 
@@ -53,7 +54,7 @@ def final_plot(cm, epoch_time, test_acc: float, num_epochs: int, learning_rate: 
     num_rationals: int
                    Number of Rational Activation Functions per BasicBlock
     dataset: str
-    experiment_name: str
+    model: str
     batch_size: int
     """
     plt.subplot(132)
@@ -66,7 +67,9 @@ def final_plot(cm, epoch_time, test_acc: float, num_epochs: int, learning_rate: 
            'test accuracy: {:4f}, '.format(test_acc) + 'dataset: {}'.format(dataset)
     plt.text(15, 5, text, size=10, bbox=props)
 
-    plt.savefig('{}.svg'.format(experiment_name))
+    time_stamp = datetime.now()
+    PATH = '/Results/{}'.format(model) + '_' + '{}'.format(time_stamp) + '_' + '{}'.format(model) + '_' + '{}'.format(dataset) + '.svg'
+    plt.savefig(PATH)
     plt.show()
 
 

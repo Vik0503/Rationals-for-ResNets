@@ -14,8 +14,8 @@ test_transform = transforms.Compose([
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
 
-train_val_set = torchvision.datasets.CIFAR10(root='./data/cifar10', train=True, download=True, transform=train_transform)
-testset = torchvision.datasets.CIFAR10(root='./data/cifar10', train=False, download=True, transform=train_transform)
+train_val_set = torchvision.datasets.CIFAR10(root='../data/cifar10', train=True, download=True, transform=train_transform)
+testset = torchvision.datasets.CIFAR10(root='../data/cifar10', train=False, download=True, transform=train_transform)
 trainset, valset = torch.utils.data.random_split(train_val_set, [45000, 5000])
 
 
