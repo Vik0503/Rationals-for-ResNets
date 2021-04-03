@@ -1,8 +1,7 @@
 # Rationals for ResNets
 
 ## LTH_for_Rational_ResNets
-``python3 main.py``
-* ``-exp_name``: Name of the experiment
+``python3 LTH_for_Rational_ResNets/main.py``
   
 
 * ```-wi```: Number of warm-up iterations
@@ -48,7 +47,7 @@
     * Default: 2
 
 ## Rational_ResNets
-```python3 main.py```
+```python3 Rational_ResNets/main.py```
 
 * ```-bs```: Batch size
     * Default: 128

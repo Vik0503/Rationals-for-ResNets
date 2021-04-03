@@ -39,6 +39,6 @@ def final_plot_LTH(model, dataset, batch_size, num_pruning_epochs, training_numb
     plt.figtext(0.525, 0.5, text, bbox=props, size=9)
 
     time_stamp = datetime.now()
-    PATH = '/Results/LTH_{}'.format(model) + '_' + '{}'.format(time_stamp) + '_' + '{}'.format(model) + '_' + '{}'.format(dataset) + '.svg'
+    PATH = './Results/LTH_{}'.format(model) + '/' + '{}'.format(time_stamp) + '_' + '{}'.format(model) + '_' + '{}'.format(dataset) + '.svg'
     plt.savefig(PATH)
     plt.show()

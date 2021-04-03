@@ -2,7 +2,6 @@ import argparse as arg
 
 
 ResNet_arg_parser = arg.ArgumentParser()
-ResNet_arg_parser.add_argument('-exp_name', '--experiment_name', type=str, required=True)
 ResNet_arg_parser.add_argument('-bs', '--batch_size', default=128, type=int)
 ResNet_arg_parser.add_argument('-lr', '--learning_rate', default=0.01, type=float)
 ResNet_arg_parser.add_argument('-m', '--model', default='rational_resnet20_cifar10', type=str,

@@ -1,9 +1,10 @@
+from datetime import datetime
+
 import matplotlib
 import matplotlib.pyplot as plt
 import seaborn as sns
 from rational.torch import Rational
-from datetime import datetime
-import torch
+
 plt.style.use(["science", "grid"])
 matplotlib.rcParams.update({
     "font.family": "serif",
@@ -68,7 +69,7 @@ def final_plot(cm, epoch_time, test_acc: float, num_epochs: int, learning_rate: 
     plt.text(15, 5, text, size=10, bbox=props)
 
     time_stamp = datetime.now()
-    PATH = '/Results/{}'.format(model) + '_' + '{}'.format(time_stamp) + '_' + '{}'.format(model) + '_' + '{}'.format(dataset) + '.svg'
+    PATH = './Results/{}'.format(model) + '/' + '{}'.format(time_stamp) + '_' + '{}'.format(model) + '_' + '{}'.format(dataset) + '.svg'
     plt.savefig(PATH)
     plt.show()
 

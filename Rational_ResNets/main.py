@@ -25,8 +25,7 @@ from Rational_ResNets.ResNet_Models import ResNet20_CIFAR10 as RN20
 
 resnet_argparser = argparser.get_argparser()
 resnet_args = resnet_argparser.parse_args(
-    ['--model', 'rational_resnet20_cifar10', '--dataset', 'cifar10', '--experiment_name',
-     'rational_resnet20_cifar10', '--training_number_of_epochs', '2', '--augment_data', 'True'])
+    ['--model', 'resnet20_cifar10', '--dataset', 'cifar10', '--training_number_of_epochs', '1', '--augment_data', 'True'])
 
 global trainset
 global valset

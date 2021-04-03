@@ -27,7 +27,7 @@ LTH_arg_parser = argparser.get_argparser()
 LTH_args = LTH_arg_parser.parse_args(
     ['--model', 'rational_resnet20_cifar10', '--dataset', 'SVHN', '--warmup_iterations', '2000',
      '--iterative_pruning_epochs', '2', '--training_number_of_epochs', '25',
-     '--stop_criteria', 'test_acc', '--experiment_name', 'rational_test_2'])
+     '--stop_criteria', 'test_acc'])
 
 global trainset
 global valset

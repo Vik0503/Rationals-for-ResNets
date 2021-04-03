@@ -1,7 +1,6 @@
 import argparse as arg
 
 LTH_arg_parser = arg.ArgumentParser()
-LTH_arg_parser.add_argument('-exp_name', '--experiment_name', type=str, required=True)
 LTH_arg_parser.add_argument('-bs', '--batch_size', default=128, type=int)
 LTH_arg_parser.add_argument('-lr', '--learning_rate', default=0.03, type=float)
 LTH_arg_parser.add_argument('-m', '--model', default='rational_resnet20_cifar10', type=str, choices=['rational_resnet20_cifar10', 'resnet20_cifar10', 'rational_resnet18_imagenet',
