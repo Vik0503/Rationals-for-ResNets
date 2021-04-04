@@ -54,7 +54,7 @@ def prune_layerwise(pruning_frac: float, model_prune, mask: Mask = None):  # nee
     return model_prune, mask
 
 
-def prune(pruning_frac: float, model_prune, mask: Mask):
+def prune(pruning_frac: float, model_prune, mask: Mask):  # eventuell alles auf GPU lassen?
     """
     Prune a percentage of the model's weights globally.
 
@@ -87,7 +87,7 @@ def prune(pruning_frac: float, model_prune, mask: Mask):
     model_weights = {}
     for item, values in model_prune.state_dict().items():
         if item in prunable_layers:
-            model_weights[item] = values.clone().cpu().numpy()
+            model_weights[item] = values.clone().detach().cpu().numpy()
 
     weights_unpruned = torch.Tensor(get_unpruned_weights(model_weights=model_weights, mask=np_mask))
 
@@ -187,3 +187,18 @@ def get_unpruned_weights(model_weights, mask: Mask) -> List:  # TODO: unbedingt 
     return unpruned_weights
 
 
+def get_unpruned_weights_2(model_weights, mask: Mask):
+    unpruned_weight_item = []
+    unpruned_weight_item = torch.cat([values[mask[key] == 1] for key, values in model_weights.items()])
+    return unpruned_weight_item
+
+
+def prune_2(model, mask: Mask):
+    prunable_layers = set(model.prunable_layers)
+
+    model_weights = {}
+    for item, values in model.state_dict().items():
+        if item in prunable_layers:
+            model_weights[item] = values.clone().detach().cpu().numpy()
+
+    num_prunable_weights = get_number_of_unpruned_weights(mask)
