@@ -193,7 +193,7 @@ def get_unpruned_weights_2(model_weights, mask: Mask):
     return unpruned_weight_item
 
 
-def prune_2(model, mask: Mask):
+def prune_2(model, mask: Mask, pruning_frac: float):
     prunable_layers = set(model.prunable_layers)
 
     model_weights = {}
@@ -201,8 +201,12 @@ def prune_2(model, mask: Mask):
         if item in prunable_layers:
             model_weights[item] = values.clone().detach()
 
+    weights_unpruned = get_unpruned_weights_2(model_weights, mask)
     num_prunable_weights = get_number_of_unpruned_weights(mask)
 
     num_weights = get_number_of_weights(mask)
 
     threshold = torch.sum(torch.abs(torch.tensor(model_weights))) / num_weights
+
+    num_rem_weights = get_number_of_unpruned_weights(mask)
+    num_prune_weights = np.ceil((pruning_frac / 100) * num_rem_weights.cpu().numpy())

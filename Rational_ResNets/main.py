@@ -22,10 +22,11 @@ from Rational_ResNets.ResNet_Models import Rational_ResNet18_ImageNet as RRN18
 from Rational_ResNets.ResNet_Models import Rational_ResNet20_CIFAR10 as RRN20
 from Rational_ResNets.ResNet_Models import ResNet18_ImageNet as RN18
 from Rational_ResNets.ResNet_Models import ResNet20_CIFAR10 as RN20
+from Rational_ResNets.ResNet_Models import Test_MV_ResNet20 as TestMV
 
 resnet_argparser = argparser.get_argparser()
 resnet_args = resnet_argparser.parse_args(
-    ['--model', 'resnet20_cifar10', '--dataset', 'cifar10', '--training_number_of_epochs', '1', '--augment_data', 'True'])
+    ['--model', 'test_mv_resnet20', '--dataset', 'SVHN', '--training_number_of_epochs', '25', '--augment_data', 'True'])
 
 global trainset
 global valset
@@ -75,6 +76,9 @@ elif resnet_args.model is 'pt':
 elif resnet_args.model is 'multi_select_variant_rational_resnet20_cifar10':
     model = MVSelRRN20.multi_select_variant_rational_resnet20(num_rationals=resnet_args.number_of_rationals_per_vector)
     num_rationals = 2 * resnet_args.number_of_rationals_per_vector
+elif resnet_args.model is 'test_mv_resnet20':
+    model = TestMV.test_mv_resnet20()
+    num_rationals = 4
 
 model = model.to(device)
 

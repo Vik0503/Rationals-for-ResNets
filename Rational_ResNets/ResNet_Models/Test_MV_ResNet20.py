@@ -5,14 +5,16 @@ with Padè Activation Units as activation functions instead of reLu activation f
 """
 
 from __future__ import print_function, division
-# import os
-# os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 from typing import Type, Any, List
 
 import torch
 import torch.nn as nn
+import torchvision
 from rational.torch import Rational
-from torch import Tensor
+from sklearn.metrics import confusion_matrix
+from torch import Tensor, optim
+from torch.optim import lr_scheduler
+from torchvision import transforms
 
 if torch.cuda.is_available():
     cuda = True
@@ -44,10 +46,13 @@ class RationalBasicBlock(nn.Module):
         self.conv_layer_1 = nn.Conv2d(planes_in, planes_out, kernel_size=3, stride=stride, padding=1, bias=False)
         self.batch_norm_1 = nn.BatchNorm2d(planes_out)
         # use Rationals instead of reLu activation function
-        self.rational = Rational(cuda=cuda)
+        self.rational_list = []  # total num per BB or number per Vector???
+        self.rational_list_2 = []
+        for n in range(2):
+            self.rational_list.append(Rational(cuda=cuda))
+            self.rational_list_2.append(Rational(cuda=cuda))
         self.conv_layer_2 = nn.Conv2d(planes_out, planes_out, kernel_size=3, stride=1, padding=1, bias=False)
         self.batch_norm_2 = nn.BatchNorm2d(planes_out)
-        self.rational_2 = Rational(cuda=cuda)
 
         self.shortcut = nn.Sequential()
         if downsample:
@@ -55,6 +60,20 @@ class RationalBasicBlock(nn.Module):
                 nn.Conv2d(planes_in, self.expansion * planes_out, kernel_size=1, stride=stride, bias=False),
                 nn.BatchNorm2d(self.expansion * planes_out)
             )
+
+    def multi_rational(self, out: Tensor, rational_list) -> Tensor:
+        # print(rational_list)
+        rational_1 = rational_list[0]
+        rational_2 = rational_list[1]
+
+        rational_1 = rational_1(out)
+        rational_2 = rational_2(out)
+        # print('BB 1', rational_1[0])
+        # print('BB 2', rational_2[0])
+        # print(rational_1[0] == rational_2[0])
+        out = (0.5 * rational_1).clone() + (0.5 * rational_2).clone()
+
+        return out
 
     def forward(self, x: Tensor) -> Tensor:
         """
@@ -72,11 +91,11 @@ class RationalBasicBlock(nn.Module):
         """
         out = self.conv_layer_1(x)
         out = self.batch_norm_1(out)
-        out = self.rational(out)
+        out = self.multi_rational(out, self.rational_list)
         out = self.conv_layer_2(out)
         out = self.batch_norm_2(out)
         out += self.shortcut(x)
-        out = self.rational_2(out)
+        out = self.multi_rational(out, self.rational_list_2)
 
         return out
 
@@ -106,7 +125,9 @@ class RationalResNet(nn.Module):
         self.conv_layer_1 = nn.Conv2d(3, self.planes_in, kernel_size=3, stride=1, padding=1, bias=False)
         self.batch_norm_1 = self.norm_layer(self.planes_in)
 
-        self.rational = Rational(cuda=cuda)
+        self.rational_list = []  # total num per BB or number per Vector???
+        for n in range(2):
+            self.rational_list.append(Rational(cuda=cuda))
 
         # self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
 
@@ -159,6 +180,20 @@ class RationalResNet(nn.Module):
 
         return nn.Sequential(*layers)
 
+    def multi_rational(self, out: Tensor) -> Tensor:
+        # print(self.rational_list)
+        rational_1 = self.rational_list[0]
+        rational_2 = self.rational_list[1]
+
+        rational_1 = rational_1(out)
+        rational_2 = rational_2(out)
+        # print('RN 1', rational_1[0])
+        # print('RN 2', rational_2[0])
+        # print(rational_1[0] == rational_2[0])
+        out = (0.5 * rational_1).clone() + (0.5 * rational_2).clone()
+
+        return out
+
     def forward(self, out: Tensor):
         """
         Move input forward through the net.
@@ -176,7 +211,7 @@ class RationalResNet(nn.Module):
         out = out.to(device)
         out = self.conv_layer_1(out)
         out = self.batch_norm_1(out)
-        out = self.rational(out)
+        out = self.multi_rational(out)
 
         out = self.layer1(out)
         out = self.layer2(out)
@@ -199,7 +234,7 @@ def _resnet(arch: str, block: Type[RationalBasicBlock], layers: List[int], **kwa
     block: RationalBasicBlock
            The block type of the ResNet.
     layers: list
-           The list with the number of layers and the number of blocks in each layer.
+           The list with the number of layers, and the number of blocks in each layer.
 
     Returns
     -------
@@ -210,8 +245,7 @@ def _resnet(arch: str, block: Type[RationalBasicBlock], layers: List[int], **kwa
     return model
 
 
-def rational_resnet20(**kwargs: Any) -> RationalResNet:
+def test_mv_resnet20(**kwargs: Any) -> RationalResNet:
     """ResNet for CIFAR10 as mentioned in the paper above"""
     return _resnet('resnet20', RationalBasicBlock, [3, 3, 3], **kwargs)
-
 

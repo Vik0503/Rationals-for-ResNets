@@ -2,7 +2,8 @@ from __future__ import print_function, division
 
 import copy
 import time
-
+# import os
+# os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 import numpy as np
 import torch
 from rational.torch import Rational
@@ -29,6 +30,7 @@ def train_val_test_model(model, criterion, optimizer, scheduler, num_epochs, tra
     train_acc_plot_y_vals = []
     val_acc_plot_y_vals = []
     test_acc_plot_y_vals = []
+    torch.autograd.set_detect_anomaly(True)
 
     for epoch in range(num_epochs):
         print('Epoch {}/{}'.format(epoch, num_epochs - 1))

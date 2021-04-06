@@ -106,14 +106,6 @@ class RationalBasicBlock(nn.Module):
         return out
 
 
-def initial_state(model):  # mask?
-    """Return the initial initialization before training."""
-    initial_state_dict = {}
-    for name, param in model.named_parameters():
-        initial_state_dict[name] = param.data.clone().detach()
-    return initial_state_dict
-
-
 class RationalResNet(nn.Module):
     """A ResNet as described in the paper above."""
 
