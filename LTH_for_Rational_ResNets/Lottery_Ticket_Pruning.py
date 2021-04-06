@@ -4,7 +4,7 @@ from typing import List, Dict
 import numpy as np
 import torch
 
-from LTH_for_Rational_ResNets.Mask import Mask, make_new_mask, get_number_of_unpruned_weights
+from LTH_for_Rational_ResNets.Mask import Mask, make_new_mask, get_number_of_unpruned_weights, get_number_of_weights
 
 
 def make_pruning_global(mask) -> Mask:
@@ -199,6 +199,10 @@ def prune_2(model, mask: Mask):
     model_weights = {}
     for item, values in model.state_dict().items():
         if item in prunable_layers:
-            model_weights[item] = values.clone().detach().cpu().numpy()
+            model_weights[item] = values.clone().detach()
 
     num_prunable_weights = get_number_of_unpruned_weights(mask)
+
+    num_weights = get_number_of_weights(mask)
+
+    threshold = torch.sum(torch.abs(torch.tensor(model_weights))) / num_weights
