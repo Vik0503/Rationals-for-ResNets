@@ -13,7 +13,7 @@ class Mask(dict):
                 self[key] = values
 
     def cuda(self):
-        return {k: v.cuda() for k, v in self.items()}
+        return Mask({k: v.cuda() for k, v in self.items()})
 
 
 def make_initial_mask(model):
@@ -118,12 +118,20 @@ def make_new_mask(upper_limit, mask: Mask, weights) -> Mask:
     """
     new_mask = Mask({key: np.where(np.abs(values) > upper_limit, mask[key], np.zeros_like(values))
                      for key, values in weights.items()})
+
+    new_mask = {}
+    for key, values in weights.items():
+        if torch.abs(values) > upper_limit:
+            new_mask[key] = mask[key]
+        else:
+            new_mask[key] = torch.zeros_like(values)
+
     for key in mask:
         if key not in new_mask:
             new_mask[key] = mask[key]
 
-    new_mask = {k: torch.tensor(v).cuda() for k, v in new_mask.items()}
-    return Mask(new_mask)
+    new_mask = Mask(new_mask)
+    return Mask(new_mask.cuda())
 
 
 def apply_mask(model, mask: Mask):
@@ -139,5 +147,5 @@ def apply_mask(model, mask: Mask):
     for name, param in model.named_parameters():
         if 'weight' not in name or 'batch_norm' in name or 'shortcut' in name or 'fc' in name:
             continue
-        param.data = param.data.cpu()
+        # param.data = param.data.cpu()
         param.data *= mask[name]
