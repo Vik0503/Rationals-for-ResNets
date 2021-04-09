@@ -8,6 +8,7 @@ sys.path.insert(0, parent_dir)
 
 import torch
 from torch import nn, optim
+import numpy as np
 from torch.optim import lr_scheduler
 
 from LTH_for_Rational_ResNets import Lottery_Ticket_Hypothesis
@@ -94,12 +95,25 @@ optimizer = optim.SGD(model.parameters(), lr=LTH_args.learning_rate, momentum=0.
 num_ftrs = model.fc.in_features
 model.fc = nn.Linear(num_ftrs, num_classes)
 model = model.to(device)
-if LTH_args.warmup_iterations is not 0:
-    exp_lr_scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer,
-                                                         lambda it: min(1.0, it / LTH_args.warmup_iterations))
-else:
-    exp_lr_scheduler = lr_scheduler.LambdaLR(optimizer, lambda it: 1)
 
+
+
+def get_scheduler():
+    lambdas = [lambda it: 1.0]
+    if training_hparams.milestone_steps:
+        milestones = [Step.from_str(x, iterations_per_epoch).iteration
+                  for x in training_hparams.milestone_steps.split(',')]
+    lambdas.append(lambda it: training_hparams.gamma ** bisect.bisect(milestones, it))
+
+# Add linear learning rate warmup if specified
+    if LTH_args.warmup_iterations:
+    warmup_iters = Step.from_str(training_hparams.warmup_steps, iterations_per_epoch).iteration
+    lambdas.append(lambda it: min(1.0, it / warmup_iters))
+
+# Combine the lambdas.
+    return lr_scheduler.LambdaLR(optimizer, lambda it: np.product([l(it) for l in lambdas]))
+
+exp_lr_scheduler = get_scheduler()
 if LTH_args.stop_criteria is 'test_acc':
     num_pruning_epochs = Lottery_Ticket_Hypothesis.iterative_pruning_by_test_acc(model, mask,
                                                                                  LTH_args.test_accuracy_threshold,

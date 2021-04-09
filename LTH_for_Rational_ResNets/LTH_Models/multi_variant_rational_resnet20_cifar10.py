@@ -140,7 +140,7 @@ def reinit(model, mask: Mask, initial_state_model):
 class RationalResNet(nn.Module):
     """A ResNet as described in the paper above."""
 
-    def __init__(self, block: Type[RationalBasicBlock], layers: List[int], num_classes: int = 10, mask: Mask = None, ) -> None:
+    def __init__(self, block: Type[RationalBasicBlock], layers: List[int], num_classes: int = 10, mask: Mask = None) -> None:
         """
         Initialize parameters of the ResNet.
 

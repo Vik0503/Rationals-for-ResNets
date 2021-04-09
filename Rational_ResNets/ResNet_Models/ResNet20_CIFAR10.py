@@ -104,6 +104,7 @@ class ResNet(nn.Module):
 
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.fc = nn.Linear(64, num_classes)
+
         for mod in self.modules():
             if isinstance(mod, nn.Conv2d):
                 nn.init.kaiming_normal_(mod.weight, mode='fan_out', nonlinearity='relu')
@@ -156,7 +157,6 @@ class ResNet(nn.Module):
         out: Tensor
              Fed forward input value.
         """
-        out = out.to(device)
         out = self.conv_layer_1(out)
         out = self.batch_norm_1(out)
         out = self.relu(out)
@@ -197,4 +197,29 @@ def _resnet(arch: str, block: Type[BasicBlock], layers: List[int], **kwargs: Any
 def resnet20(**kwargs: Any) -> ResNet:
     """ResNet for CIFAR10 as mentioned in the paper above"""
     return _resnet('resnet20', BasicBlock, [3, 3, 3], **kwargs)
+
+
+def resnet32(**kwargs: Any) -> ResNet:
+    """ResNet for CIFAR10 as mentioned in the paper above"""
+    return _resnet('resnet32', BasicBlock, [5, 5, 5], **kwargs)
+
+
+def resnet44(**kwargs: Any) -> ResNet:
+    """ResNet for CIFAR10 as mentioned in the paper above"""
+    return _resnet('resnet44', BasicBlock, [7, 7, 7], **kwargs)
+
+
+def resnet56(**kwargs: Any) -> ResNet:
+    """ResNet for CIFAR10 as mentioned in the paper above"""
+    return _resnet('resnet56', BasicBlock, [9, 9, 9], **kwargs)
+
+
+def resnet110(**kwargs: Any) -> ResNet:
+    """ResNet for CIFAR10 as mentioned in the paper above"""
+    return _resnet('resnet110_cifar10', BasicBlock, [18, 18, 18], **kwargs)
+
+
+def resnet1202(**kwargs: Any) -> ResNet:
+    """ResNet for CIFAR10 as mentioned in the paper above"""
+    return _resnet('resnet1202', BasicBlock, [200, 200, 200], **kwargs)
 

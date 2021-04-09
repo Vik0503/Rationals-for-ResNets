@@ -24,10 +24,11 @@ from Rational_ResNets.ResNet_Models import ResNet18_ImageNet as RN18
 from Rational_ResNets.ResNet_Models import ResNet20_CIFAR10 as RN20
 from Rational_ResNets.ResNet_Models import Test_MV_ResNet20 as TestMV
 from Rational_ResNets.ResNet_Models import Recurrent_Rational_ResNet20_CIFAR10 as RecRRN20
+from Rational_ResNets.ResNet_Models import two_expert_groups_test as two_exp
 
 resnet_argparser = argparser.get_argparser()
 resnet_args = resnet_argparser.parse_args(
-    ['--model', 'rational_resnet20_cifar10', '--dataset', 'SVHN', '--training_number_of_epochs', '25', '--augment_data', 'True'])
+    ['--model', 'two_expert_groups_test', '--dataset', 'SVHN', '--training_number_of_epochs', '25', '--augment_data', 'True', '--number_of_rationals_per_vector', '10'])
 
 global trainset
 global valset
@@ -78,11 +79,23 @@ elif resnet_args.model is 'multi_select_variant_rational_resnet20_cifar10':
     model = MVSelRRN20.multi_select_variant_rational_resnet20(num_rationals=resnet_args.number_of_rationals_per_vector)
     num_rationals = 2 * resnet_args.number_of_rationals_per_vector
 elif resnet_args.model is 'test_mv_resnet20':
-    model = TestMV.test_mv_resnet20()
-    num_rationals = 4
+    model = TestMV.test_mv_resnet20(num_rationals=resnet_args.number_of_rationals_per_vector)
+    num_rationals = resnet_args.number_of_rationals_per_vector
 elif resnet_args.model is 'recurrent_rational_resnet20_cifar10':
     model = RecRRN20.rational_resnet20()
     num_rationals = 1
+elif resnet_args.model is 'test_mv_resnet110':
+    model = TestMV.test_mv_resnet110(num_rationals=resnet_args.number_of_rationals_per_vector)
+    num_rationals = resnet_args.number_of_rationals_per_vector
+elif resnet_args.model is 'resnet110_cifar10':
+    model = RN20.resnet110()
+    num_rationals = 0
+elif resnet_args.model is 'rational_resnet110_cifar10':
+    model = RRN20.rational_resnet110()
+    num_rationals = 2
+elif resnet_args.model is 'two_expert_groups_test':
+    model = two_exp.test_mv_resnet20(num_rationals=resnet_args.number_of_rationals_per_vector)
+    num_rationals = resnet_args.number_of_rationals_per_vector
 
 model = model.to(device)
 
@@ -103,6 +116,3 @@ model, cm, avg_time, best_test_acc = tvt.train_val_test_model(model, criterion, 
 plots.final_plot(cm, avg_time, best_test_acc, resnet_args.training_number_of_epochs, resnet_args.learning_rate,
                  num_rationals, resnet_args.dataset, resnet_args.model, resnet_args.batch_size)
 
-
-def get_resnet_args():
-    return resnet_args

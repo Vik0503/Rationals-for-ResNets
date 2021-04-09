@@ -2,11 +2,8 @@ from __future__ import print_function, division
 
 import copy
 import time
-# import os
-# os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 import numpy as np
 import torch
-from rational.torch import Rational
 from sklearn.metrics import confusion_matrix
 
 from Rational_ResNets import plots
@@ -30,7 +27,6 @@ def train_val_test_model(model, criterion, optimizer, scheduler, num_epochs, tra
     train_acc_plot_y_vals = []
     val_acc_plot_y_vals = []
     test_acc_plot_y_vals = []
-    torch.autograd.set_detect_anomaly(True)
 
     for epoch in range(num_epochs):
         print('Epoch {}/{}'.format(epoch, num_epochs - 1))
@@ -104,12 +100,6 @@ def train_val_test_model(model, criterion, optimizer, scheduler, num_epochs, tra
                 best_model = copy.deepcopy(model.state_dict())
 
         accuracy_plot_x_vals.append(epoch)
-
-        for mod in model.modules():
-            if isinstance(mod, Rational):
-                # print(mod)
-                # mod.show()
-                print(mod.numerator)
 
         cm = torch.tensor(confusion_matrix(labels.to('cpu'), preds.to('cpu')))
         print(cm)
