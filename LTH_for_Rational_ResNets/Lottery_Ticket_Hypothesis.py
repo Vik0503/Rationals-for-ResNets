@@ -30,7 +30,7 @@ def checkpoint_save(optimizer, epoch: int, save_model, model_mask: Mask, test_ac
                     The sparsity of the model.
     """
 
-    PATH = '/home/viktoria/Git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Saved_Models/ep{}s{:.5f}test{:.5f}.pth'.format(epoch, model_sparsity, test_accuracy)
+    PATH = '/home/viktoria/Git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Saved_Models/ep{}s{:.5f}test{:.5f}.pth'.format(epoch, model_sparsity, test_accuracy)  # TODO: Update PATH + saved models names
     torch.save({
         'epoch': epoch,
         'model_state_dict': save_model.state_dict(),
@@ -75,7 +75,8 @@ def one_shot_pruning(prune_model, prune_mask: Mask, optimizer, criterion, exp_lr
     print('Test Accuracy with {} Percent of weights: {}'.format(1 - pruning_percentage, test_accuracy))
 
 
-def iterative_pruning_by_num(prune_model, prune_mask: Mask, epochs: int, optimizer, criterion, exp_lr_scheduler, trainset, valset, trainloader, valloader, model_type, testset, testloader, pruning_percentage, training_number_of_epochs):  # eventuell Reihenfolge ändern?
+def iterative_pruning_by_num(prune_model, prune_mask: Mask, epochs: int, optimizer, criterion, exp_lr_scheduler, trainset, valset, trainloader, valloader, model_type, testset, testloader, pruning_percentage, training_number_of_epochs):
+    # TODO: update order
     """
     Prune iteratively for a number of epochs. Save checkpoint after every pruning epoch.
 

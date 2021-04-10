@@ -46,6 +46,10 @@
 * ```-tnep```: Number of epochs for training
     * Default: 2
 
+
+* ```-init_rationals```: Different initializations for the Rational Activation Functions
+    * Default: leaky_relu, gelu, swish, tanh, sigmoid
+    * Choices: leaky_relu, gelu, swish, tanh, sigmoid
 ## Rational_ResNets
 ```python3 Rational_ResNets/main.py```
 

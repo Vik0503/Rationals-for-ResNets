@@ -19,13 +19,15 @@ from LTH_for_Rational_ResNets.Datasets import SVHN
 from LTH_for_Rational_ResNets.LTH_Models import rational_resnet18_imagenet as rrn18, resnet20_cifar10 as rn20
 from LTH_for_Rational_ResNets.LTH_Models import rational_resnet20_cifar10 as rrn20
 from LTH_for_Rational_ResNets.LTH_Models import resnet18_imagenet as rn18
+from LTH_for_Rational_ResNets.LTH_Models import select_2_expert_groups_rational_resnet as sel2exp
+from LTH_for_Rational_ResNets.LTH_Models import select_1_expert_group_rational_resnet as sel1exp
 from LTH_for_Rational_ResNets.Mask import make_initial_mask
 
 LTH_arg_parser = argparser.get_argparser()
 LTH_args = LTH_arg_parser.parse_args(
     ['--model', 'rational_resnet20_cifar10', '--dataset', 'SVHN', '--warmup_iterations', '2000',
-     '--iterative_pruning_epochs', '2', '--training_number_of_epochs', '2',
-     '--stop_criteria', 'test_acc'])
+     '--iterative_pruning_epochs', '2', '--training_number_of_epochs', '1',
+     '--stop_criteria', 'num_prune_epochs'])
 
 global trainset
 global valset
@@ -40,11 +42,16 @@ global model_type
 global checkpoint
 global num_pruning_epochs
 global it_per_ep
+global num_rationals
 
 if torch.cuda.is_available():
     device = 'cuda'
 else:
     device = 'cpu'
+
+if LTH_args.initialize_rationals:
+    rational_inits = LTH_args.initialize_rationals  # TODO: catch exceptions
+    num_rationals = len(rational_inits)
 
 if LTH_args.dataset is 'cifar10':
     trainset = cifar10.get_trainset()
@@ -80,7 +87,10 @@ elif LTH_args.model is 'rational_resnet18_imagenet':
 elif LTH_args.model is 'resnet18_imagenet':
     model = rn18.resnet18()
     model_type = rn18
-
+elif LTH_args.model is 'select_2_expert_groups_rational_resnet20':
+    model = sel2exp.select_2_expert_groups_rational_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)
+elif LTH_args.model is 'select_1_expert_group_rational_resnet20':
+    model = sel1exp.select_1_expert_group_rational_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)
 
 mask = make_initial_mask(model)
 mask = mask.cuda()

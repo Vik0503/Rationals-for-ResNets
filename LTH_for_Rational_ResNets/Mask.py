@@ -116,22 +116,10 @@ def make_new_mask(upper_limit, mask: Mask, weights) -> Mask:
     Mask
          Updated mask with all values set to zero, where the weights of the net are lower than the threshold.
     """
-    new_mask = Mask({key: np.where(np.abs(values) > upper_limit, mask[key], np.zeros_like(values))
-                     for key, values in weights.items()})
-
-    new_mask = {}
     for key, values in weights.items():
-        if torch.abs(values) > upper_limit:
-            new_mask[key] = mask[key]
-        else:
-            new_mask[key] = torch.zeros_like(values)
+        mask[key][torch.abs(values) <= upper_limit] = 0
 
-    for key in mask:
-        if key not in new_mask:
-            new_mask[key] = mask[key]
-
-    new_mask = Mask(new_mask)
-    return Mask(new_mask.cuda())
+    return Mask(mask.cuda())
 
 
 def apply_mask(model, mask: Mask):
