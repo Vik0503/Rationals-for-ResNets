@@ -111,3 +111,5 @@ def get_testloader(bs: int):
     return testloader
 
 
+def get_it_per_epoch(bs: int = 128) -> int:
+    return np.ceil(len(trainset) / bs).astype(int)

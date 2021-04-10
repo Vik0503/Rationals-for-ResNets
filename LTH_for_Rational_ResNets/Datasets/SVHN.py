@@ -1,6 +1,7 @@
 import torch
 import torchvision
 from torchvision import transforms
+import numpy as np
 
 train_transform = transforms.Compose([
     transforms.RandomHorizontalFlip(),
@@ -109,3 +110,6 @@ def get_testloader(bs: int):
     testloader = torch.utils.data.DataLoader(testset, shuffle=False, num_workers=16, batch_size=bs, drop_last=True)
     return testloader
 
+
+def get_it_per_epoch(bs: int = 128) -> int:
+    return np.ceil(len(trainset) / bs).astype(int)

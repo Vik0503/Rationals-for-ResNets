@@ -8,7 +8,6 @@ from sklearn.metrics import confusion_matrix
 
 from Rational_ResNets import plots
 
-"""Method train_val_test_model based on https://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html"""
 
 if torch.cuda.is_available():
     device = 'cuda'

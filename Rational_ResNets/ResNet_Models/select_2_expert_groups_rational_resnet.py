@@ -4,7 +4,7 @@ by Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun
 with Padè Activation Units as activation functions instead of reLu activation functions.
 """
 
-from __future__ import print_function, division
+from __future__ import print_function, division  # TODO: Update Doc
 
 from typing import Type, Any, List
 
@@ -25,7 +25,7 @@ class RationalBasicBlock(nn.Module):
     """A Basic Block as described in the paper above, with Rationals as activation function instead of ReLu."""
     expansion = 1
 
-    def __init__(self, planes_in, planes_out, num_rationals: int = 4, stride=1, downsample=False):
+    def __init__(self, planes_in, planes_out, rational_inits: List[str], num_rationals: int = 4, stride=1, downsample=False):
         """
         Initialize the Basic Block.
 
@@ -39,17 +39,24 @@ class RationalBasicBlock(nn.Module):
         downsample: bool
         """
         super(RationalBasicBlock, self).__init__()
+        self.rational_inits = rational_inits
         self.conv_layer_1 = nn.Conv2d(planes_in, planes_out, kernel_size=3, stride=stride, padding=1, bias=False)
         self.batch_norm_1 = nn.BatchNorm2d(planes_out)
         # use Rationals instead of reLu activation function
         self.num_rationals = num_rationals
-        self.rational_1 = Rational(cuda=cuda, approx_func="leaky_relu")
-        self.rational_2 = Rational(cuda=cuda, approx_func="sigmoid")
-        self.rational_3 = Rational(cuda=cuda, approx_func="gelu")
-        self.rational_4 = Rational(cuda=cuda, approx_func="tanh")
-        self.rational_5 = Rational(cuda=cuda, approx_func="swish")
-        data = initialize_alpha(5)
-        self.alpha = torch.nn.parameter.Parameter(data, requires_grad=True)
+        self.expert_group_1 = []
+        self.expert_group_2 = []
+
+        for n in range(self.num_rationals):
+            self.expert_group_1.append(Rational(cuda=cuda, approx_func=self.rational_inits[n]))
+            self.expert_group_2.append(Rational(cuda=cuda, approx_func=self.rational_inits[n]))
+
+        data_alpha_1 = initialize_alpha(self.num_rationals)
+        self.alpha_1 = torch.nn.parameter.Parameter(data_alpha_1, requires_grad=True)
+
+        data_alpha_2 = initialize_alpha(self.num_rationals)
+        self.alpha_2 = torch.nn.parameter.Parameter(data_alpha_2, requires_grad=True)
+
         self.conv_layer_2 = nn.Conv2d(planes_out, planes_out, kernel_size=3, stride=1, padding=1, bias=False)
         self.batch_norm_2 = nn.BatchNorm2d(planes_out)
 
@@ -60,14 +67,13 @@ class RationalBasicBlock(nn.Module):
                 nn.BatchNorm2d(self.expansion * planes_out)
             )
 
-    def multi_rational(self, out: Tensor) -> Tensor:
-        rat_out_1 = self.rational_1(out.clone())
-        rat_out_2 = self.rational_2(out.clone())
-        rat_out_3 = self.rational_3(out.clone())
-        rat_out_4 = self.rational_4(out.clone())
-        rat_out_5 = self.rational_5(out.clone())
-
-        out = self.alpha[0].clone() * rat_out_1.clone() + self.alpha[1].clone() * rat_out_2.clone() + self.alpha[2].clone() * rat_out_3.clone() + self.alpha[3].clone() * rat_out_4.clone() + self.alpha[4].clone() * rat_out_5.clone()
+    def multi_rational(self, out: Tensor, alphas: torch.Tensor, rationals: list) -> Tensor:
+        out_tensor = torch.zeros_like(out)
+        for n in range(self.num_rationals):
+            rational = rationals[n]
+            rational_out = rational(out.clone())
+            out_tensor = out_tensor.clone() + alphas[n].clone() * rational_out.clone()
+        out = out_tensor.clone()
         return out
 
     def forward(self, x: Tensor) -> Tensor:
@@ -86,11 +92,11 @@ class RationalBasicBlock(nn.Module):
         """
         out = self.conv_layer_1(x)
         out = self.batch_norm_1(out)
-        out = self.multi_rational(out)
+        out = self.multi_rational(out, self.alpha_1, self.expert_group_1)
         out = self.conv_layer_2(out)
         out = self.batch_norm_2(out)
         out += self.shortcut(x)
-        out = self.multi_rational(out)
+        out = self.multi_rational(out, self.alpha_2, self.expert_group_2)
 
         return out
 
@@ -98,7 +104,7 @@ class RationalBasicBlock(nn.Module):
 class RationalResNet(nn.Module):
     """A ResNet as described in the paper above."""
 
-    def __init__(self, block: Type[RationalBasicBlock], layers: List[int], num_rationals: int, num_classes: int = 10) -> None:
+    def __init__(self, block: Type[RationalBasicBlock], layers: List[int], rational_inits: List[str], num_rationals: int, num_classes: int = 10) -> None:
         """
         Initialize parameters of the ResNet.
 
@@ -115,16 +121,16 @@ class RationalResNet(nn.Module):
 
         self.norm_layer = nn.BatchNorm2d
         self.planes_in = 16
-
+        self.rational_inits = rational_inits
         self.conv_layer_1 = nn.Conv2d(3, self.planes_in, kernel_size=3, stride=1, padding=1, bias=False)
         self.batch_norm_1 = self.norm_layer(self.planes_in)
         self.num_rationals = num_rationals
-        self.rational_1 = Rational(cuda=cuda, approx_func="leaky_relu")
-        self.rational_2 = Rational(cuda=cuda, approx_func="sigmoid")
-        self.rational_3 = Rational(cuda=cuda, approx_func="gelu")
-        self.rational_4 = Rational(cuda=cuda, approx_func="tanh")
-        self.rational_5 = Rational(cuda=cuda, approx_func="swish")
-        data = initialize_alpha(5)
+        self.expert_group = []
+
+        for n in range(self.num_rationals):
+            self.expert_group.append(Rational(cuda=cuda, approx_func=self.rational_inits[n]))
+
+        data = initialize_alpha(self.num_rationals)
         self.alpha = torch.nn.parameter.Parameter(data, requires_grad=True)
 
         self.layer1 = self.make_layer(block=block, planes_out=16, num_blocks=layers[0], stride=1)
@@ -163,26 +169,25 @@ class RationalResNet(nn.Module):
             downsample = True
 
         layers = []
-        layers.append(block(self.planes_in, planes_out, self.num_rationals, stride, downsample=downsample))
+        layers.append(block(self.planes_in, planes_out, self.rational_inits, self.num_rationals, stride, downsample=downsample))
 
         downsample = False
         stride = 1
         self.planes_in = planes_out * block.expansion
 
         for _ in range(1, num_blocks):
-            layers.append(block(self.planes_in, planes_out, self.num_rationals, stride, downsample=downsample))
+            layers.append(block(self.planes_in, planes_out, self.rational_inits, self.num_rationals, stride, downsample=downsample))
         print(nn.Sequential(*layers))
 
         return nn.Sequential(*layers)
 
     def multi_rational(self, out: Tensor) -> Tensor:
-        rat_out_1 = self.rational_1(out.clone())
-        rat_out_2 = self.rational_2(out.clone())
-        rat_out_3 = self.rational_3(out.clone())
-        rat_out_4 = self.rational_4(out.clone())
-        rat_out_5 = self.rational_5(out.clone())
-
-        out = self.alpha[0].clone() * rat_out_1.clone() + self.alpha[1].clone() * rat_out_2.clone() + self.alpha[2].clone() * rat_out_3.clone() + self.alpha[3].clone() * rat_out_4.clone() + self.alpha[4].clone() * rat_out_5.clone()
+        out_tensor = torch.zeros_like(out)
+        for n in range(self.num_rationals):
+            rational = self.expert_group[n]
+            rational_out = rational(out.clone())
+            out_tensor = out_tensor.clone() + self.alpha[n].clone() * rational_out.clone()
+        out = out_tensor.clone()
         return out
 
     def forward(self, out: Tensor):
@@ -236,7 +241,7 @@ def initialize_alpha(b: int = 4) -> torch.Tensor:
     return alpha
 
 
-def _resnet(arch: str, block: Type[RationalBasicBlock], layers: List[int], num_rationals: int, **kwargs: Any) -> RationalResNet:
+def _resnet(arch: str, block: Type[RationalBasicBlock], layers: List[int], rational_inits: List[str] ,num_rationals: int, **kwargs: Any) -> RationalResNet:
     """
     The universal ResNet definition.
 
@@ -254,36 +259,36 @@ def _resnet(arch: str, block: Type[RationalBasicBlock], layers: List[int], num_r
     model: RationalResNet
     """
     print('inside def 2', num_rationals)
-    model = RationalResNet(block, layers, num_rationals, **kwargs)
+    model = RationalResNet(block, layers, rational_inits, num_rationals, **kwargs)
 
     return model
 
 
-def test_mv_resnet20(num_rationals: int = 4, **kwargs: Any) -> RationalResNet:
+def select_2_expert_groups_rational_resnet20(rational_inits: List[str], num_rationals: int = 4, **kwargs: Any) -> RationalResNet:
     """ResNet for CIFAR10 as mentioned in the paper above"""
-    return _resnet('resnet20', RationalBasicBlock, [3, 3, 3], num_rationals=num_rationals, **kwargs)
+    return _resnet('resnet20', RationalBasicBlock, [3, 3, 3], rational_inits=rational_inits, num_rationals=num_rationals, **kwargs)
 
 
-def test_mv_resnet32(num_rationals: int = 4, **kwargs: Any) -> RationalResNet:
+def select_2_expert_groups_rational_resnet32(rational_inits: List[str], num_rationals: int = 4, **kwargs: Any) -> RationalResNet:
     """ResNet for CIFAR10 as mentioned in the paper above"""
-    return _resnet('resnet32', RationalBasicBlock, [5, 5, 5], num_rationals=num_rationals, **kwargs)
+    return _resnet('resnet32', RationalBasicBlock, [5, 5, 5], rational_inits=rational_inits, num_rationals=num_rationals, **kwargs)
 
 
-def test_mv_resnet44(num_rationals: int = 4, **kwargs: Any) -> RationalResNet:
+def select_2_expert_groups_rational_resnet44(rational_inits: List[str], num_rationals: int = 4, **kwargs: Any) -> RationalResNet:
     """ResNet for CIFAR10 as mentioned in the paper above"""
-    return _resnet('resnet44', RationalBasicBlock, [7, 7, 7], num_rationals=num_rationals, **kwargs)
+    return _resnet('resnet44', RationalBasicBlock, [7, 7, 7], rational_inits=rational_inits, num_rationals=num_rationals, **kwargs)
 
 
-def test_mv_resnet56(num_rationals: int = 4, **kwargs: Any) -> RationalResNet:
+def select_2_expert_groups_rational_resnet56(rational_inits: List[str], num_rationals: int = 4, **kwargs: Any) -> RationalResNet:
     """ResNet for CIFAR10 as mentioned in the paper above"""
-    return _resnet('resnet56', RationalBasicBlock, [9, 9, 9], num_rationals=num_rationals, **kwargs)
+    return _resnet('resnet56', RationalBasicBlock, [9, 9, 9], rational_inits=rational_inits, num_rationals=num_rationals, **kwargs)
 
 
-def test_mv_resnet110(num_rationals: int = 4, **kwargs: Any) -> RationalResNet:
+def select_2_expert_groups_rational_resnet110(rational_inits: List[str], num_rationals: int = 4, **kwargs: Any) -> RationalResNet:
     """ResNet for CIFAR10 as mentioned in the paper above"""
-    return _resnet('resnet110_cifar10', RationalBasicBlock, [18, 18, 18], num_rationals=num_rationals, **kwargs)
+    return _resnet('resnet110_cifar10', RationalBasicBlock, [18, 18, 18], rational_inits=rational_inits, num_rationals=num_rationals, **kwargs)
 
 
-def test_mv_resnet1202(num_rationals: int = 4, **kwargs: Any) -> RationalResNet:
+def select_2_expert_groups_rational_resnet1202(rational_inits: List[str], num_rationals: int = 4, **kwargs: Any) -> RationalResNet:
     """ResNet for CIFAR10 as mentioned in the paper above"""
-    return _resnet('resnet1202', RationalBasicBlock, [200, 200, 200], num_rationals=num_rationals, **kwargs)
+    return _resnet('resnet1202', RationalBasicBlock, [200, 200, 200], rational_inits=rational_inits, num_rationals=num_rationals, **kwargs)

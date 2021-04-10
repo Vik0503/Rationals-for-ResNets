@@ -35,7 +35,7 @@
 * ```-m```: Model
   * Default: rational_resnet20_cifar10
   * Choices: rational_resnet20_cifar10, resnet20_cifar10, rational_resnet18_imagenet, resnet18_imagenet, multi_rational_resnet20_cifar10,
-                                        pt
+                                        pt 
     
 
 * ```-ds```: Dataset
@@ -60,7 +60,8 @@
 * ```-m```: Model
   * Default: rational_resnet20_cifar10
   * Choices: rational_resnet20_cifar10, resnet20_cifar10, rational_resnet18_imagenet, resnet18_imagenet,
-                                        pt, multi_select_variant_rational_resnet20_cifar10
+                                        pt, recurrent_rational_resnet20_cifar10, resnet110_cifar10,
+                                        rational_resnet110_cifar10, select_2_expert_groups_rational_resnet
     
 
 * ```-ds```: Dataset
@@ -68,8 +69,12 @@
   * Choices: SVHN, cifar10
     
 
-* ```-tnep```: Number of epochs for training
+* ```-epochs```: Number of epochs for training
     * Default: 2
   
 * ```-num_rat```: Number of Rational Activation Functions per Vector (2 Vectors per BasicBlock)
     * Default: 1
+  
+* ```-init_rationasl```: Different initializations for the Rational Activation Functions
+    * Default: leaky_relu, gelu, swish, tanh, sigmoid
+    * Choices: leaky_relu, gelu, swish, tanh, sigmoid

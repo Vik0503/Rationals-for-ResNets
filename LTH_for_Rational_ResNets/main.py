@@ -42,6 +42,7 @@ global model
 global model_type
 global checkpoint
 global num_pruning_epochs
+global it_per_ep
 
 if torch.cuda.is_available():
     device = 'cuda'
@@ -57,6 +58,7 @@ if LTH_args.dataset is 'cifar10':
     testloader = cifar10.get_testloader(bs=LTH_args.batch_size)
     classes = cifar10.get_classes()
     num_classes = cifar10.get_num_classes()
+    it_per_ep = cifar10.get_it_per_epoch(bs=LTH_args.batch_size)
 
 elif LTH_args.dataset is 'SVHN':
     trainset = SVHN.get_trainset()
@@ -67,6 +69,7 @@ elif LTH_args.dataset is 'SVHN':
     testloader = SVHN.get_testloader(bs=LTH_args.batch_size)
     classes = SVHN.get_classes()
     num_classes = SVHN.get_num_classes()
+    it_per_ep = SVHN.get_it_per_epoch(bs=LTH_args.batch_size)
 
 if LTH_args.model is 'rational_resnet20_cifar10':
     model = rrn20.rational_resnet20()
@@ -97,21 +100,16 @@ model.fc = nn.Linear(num_ftrs, num_classes)
 model = model.to(device)
 
 
-
 def get_scheduler():
-    lambdas = [lambda it: 1.0]
-    if training_hparams.milestone_steps:
-        milestones = [Step.from_str(x, iterations_per_epoch).iteration
-                  for x in training_hparams.milestone_steps.split(',')]
-    lambdas.append(lambda it: training_hparams.gamma ** bisect.bisect(milestones, it))
+    lambdas = [lambda it: 1.0, lambda it: 0.1 ** (10 * it_per_ep), lambda it: 0.1 ** (15 * it_per_ep), lambda it: 0.1 ** (20 * it_per_ep)]
 
-# Add linear learning rate warmup if specified
+    # Add linear learning rate warmup if specified
     if LTH_args.warmup_iterations:
-    warmup_iters = Step.from_str(training_hparams.warmup_steps, iterations_per_epoch).iteration
-    lambdas.append(lambda it: min(1.0, it / warmup_iters))
+        warmup_iterations = LTH_args.warmup_iterations
+        lambdas.append(lambda it: min(1.0, it / warmup_iterations))
 
-# Combine the lambdas.
     return lr_scheduler.LambdaLR(optimizer, lambda it: np.product([l(it) for l in lambdas]))
+
 
 exp_lr_scheduler = get_scheduler()
 if LTH_args.stop_criteria is 'test_acc':
