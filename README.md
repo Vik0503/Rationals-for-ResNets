@@ -75,6 +75,6 @@
 * ```-num_rat```: Number of Rational Activation Functions per Vector (2 Vectors per BasicBlock)
     * Default: 1
   
-* ```-init_rationasl```: Different initializations for the Rational Activation Functions
+* ```-init_rationals```: Different initializations for the Rational Activation Functions
     * Default: leaky_relu, gelu, swish, tanh, sigmoid
     * Choices: leaky_relu, gelu, swish, tanh, sigmoid
