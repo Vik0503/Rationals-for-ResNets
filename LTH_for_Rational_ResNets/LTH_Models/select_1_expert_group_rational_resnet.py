@@ -4,14 +4,15 @@ by Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun
 with Padè Activation Units as activation functions instead of reLu activation functions.
 """
 
-from __future__ import print_function, division  # TODO: make selectable
-
+from __future__ import print_function, division
 from typing import Type, Any, List
 
 import torch
 import torch.nn as nn
 from rational.torch import Rational
 from torch import Tensor
+
+from LTH_for_Rational_ResNets.Mask import Mask
 
 if torch.cuda.is_available():
     cuda = True
@@ -49,6 +50,7 @@ class RationalBasicBlock(nn.Module):
             self.expert_group.append(Rational(cuda=cuda, approx_func=self.rational_inits[n]))
         data_alpha = initialize_alpha(self.num_rationals)
         self.alpha = torch.nn.parameter.Parameter(data_alpha, requires_grad=True)
+
         self.conv_layer_2 = nn.Conv2d(planes_out, planes_out, kernel_size=3, stride=1, padding=1, bias=False)
         self.batch_norm_2 = nn.BatchNorm2d(planes_out)
 
@@ -93,10 +95,28 @@ class RationalBasicBlock(nn.Module):
         return out
 
 
+def reinit(model, mask: Mask, initial_state_model):
+    """
+    Reset pruned model's weights to the initial initialization.
+
+    Parameter
+    ---------
+    model: RationalResNet
+    mask: Mask
+          A mask with pruned weights.
+    initial_state_model: dict
+                         Initially saved state, before the model is trained.
+    """
+    for name, param in model.named_parameters():
+        if 'weight' not in name or 'batch_norm' in name or 'shortcut' in name or 'fc' in name:
+            continue
+        param.data = initial_state_model[name].cpu() * mask[name]
+
+
 class RationalResNet(nn.Module):
     """A ResNet as described in the paper above."""
 
-    def __init__(self, block: Type[RationalBasicBlock], layers: List[int], rational_inits: List[str], num_rationals: int, num_classes: int = 10) -> None:
+    def __init__(self, block: Type[RationalBasicBlock], layers: List[int], rational_inits: List[str], num_rationals: int, num_classes: int = 10, mask: Mask = None) -> None:
         """
         Initialize parameters of the ResNet.
 
@@ -139,6 +159,10 @@ class RationalResNet(nn.Module):
                 nn.init.constant_(mod.weight, 1)
                 nn.init.constant_(mod.bias, 0)
 
+        self.mask = mask
+        if self.mask is not None:
+            self.apply_mask(mask=mask)
+
     def make_layer(self, block: Type[RationalBasicBlock], planes_out: int, num_blocks: int, stride: int):
         """
         Build ResNet's layers. Each layer contains a number of Basic Blocks.
@@ -173,6 +197,20 @@ class RationalResNet(nn.Module):
 
         return nn.Sequential(*layers)
 
+    def apply_mask(self, mask: Mask):
+        """
+        Apply a new mask to a net.
+
+        Parameters
+        ----------
+        mask: Mask
+        """
+        if mask is not None:
+            for name, param in self.named_parameters():
+                if 'weight' not in name or 'batch_norm' in name or 'shortcut' in name or 'fc' in name:
+                    continue
+                param.data *= mask[name]
+
     def multi_rational(self, out: Tensor) -> Tensor:
         out_tensor = torch.zeros_like(out)
         for n in range(self.num_rationals):
@@ -196,6 +234,8 @@ class RationalResNet(nn.Module):
         out: Tensor
              Fed forward input value.
         """
+        if self.mask is not None:
+            self.apply_mask(mask=self.mask)
         out = self.conv_layer_1(out)
         out = self.batch_norm_1(out)
         out = self.multi_rational(out)
@@ -208,6 +248,22 @@ class RationalResNet(nn.Module):
         out = self.fc(out)
 
         return out
+
+    def prunable_layers(self) -> List:
+        """
+        Return all layers that are prunable.
+
+        Returns
+        -------
+        prunable_layer_list: List
+                            A list with all layers that are prunable.
+        """
+        prunable_layer_list = []
+        for n, module in self.named_modules():
+            if isinstance(module, nn.Conv2d) and 'shortcut' not in n:
+                prunable_layer_list.append(n + '.weight')
+
+        return prunable_layer_list
 
 
 def initialize_alpha(b: int = 4) -> torch.Tensor:
@@ -255,31 +311,31 @@ def _resnet(arch: str, block: Type[RationalBasicBlock], layers: List[int], ratio
     return model
 
 
-def select_1_expert_group_rational_resnet20(rational_inits: List[str], num_rationals: int = 4, **kwargs: Any) -> RationalResNet:
+def select_1_expert_group_rational_resnet20(rational_inits: List[str], num_rationals: int = 4, mask: Mask = None, **kwargs: Any) -> RationalResNet:
     """ResNet for CIFAR10 as mentioned in the paper above"""
-    return _resnet('resnet20', RationalBasicBlock, [3, 3, 3], rational_inits=rational_inits, num_rationals=num_rationals, **kwargs)
+    return _resnet('resnet20', RationalBasicBlock, [3, 3, 3], rational_inits=rational_inits, num_rationals=num_rationals, mask=mask, **kwargs)
 
 
-def select_1_expert_group_rational_resnet32(rational_inits: List[str], num_rationals: int = 4, **kwargs: Any) -> RationalResNet:
+def select_1_expert_group_rational_resnet32(rational_inits: List[str], num_rationals: int = 4, mask: Mask = None, **kwargs: Any) -> RationalResNet:
     """ResNet for CIFAR10 as mentioned in the paper above"""
-    return _resnet('resnet32', RationalBasicBlock, [5, 5, 5], rational_inits=rational_inits, num_rationals=num_rationals, **kwargs)
+    return _resnet('resnet32', RationalBasicBlock, [5, 5, 5], rational_inits=rational_inits, num_rationals=num_rationals, mask=mask, **kwargs)
 
 
-def select_1_expert_group_rational_resnet44(rational_inits: List[str], num_rationals: int = 4, **kwargs: Any) -> RationalResNet:
+def select_1_expert_group_rational_resnet44(rational_inits: List[str], num_rationals: int = 4, mask: Mask = None, **kwargs: Any) -> RationalResNet:
     """ResNet for CIFAR10 as mentioned in the paper above"""
-    return _resnet('resnet44', RationalBasicBlock, [7, 7, 7], rational_inits=rational_inits, num_rationals=num_rationals, **kwargs)
+    return _resnet('resnet44', RationalBasicBlock, [7, 7, 7], rational_inits=rational_inits, num_rationals=num_rationals, mask=mask, **kwargs)
 
 
-def select_1_expert_group_rational_resnet56(rational_inits: List[str], num_rationals: int = 4, **kwargs: Any) -> RationalResNet:
+def select_1_expert_group_rational_resnet56(rational_inits: List[str], num_rationals: int = 4, mask: Mask = None, **kwargs: Any) -> RationalResNet:
     """ResNet for CIFAR10 as mentioned in the paper above"""
-    return _resnet('resnet56', RationalBasicBlock, [9, 9, 9], rational_inits=rational_inits, num_rationals=num_rationals, **kwargs)
+    return _resnet('resnet56', RationalBasicBlock, [9, 9, 9], rational_inits=rational_inits, num_rationals=num_rationals, mask=mask, **kwargs)
 
 
-def select_1_expert_group_rational_resnet110(rational_inits: List[str], num_rationals: int = 4, **kwargs: Any) -> RationalResNet:
+def select_1_expert_group_rational_resnet110(rational_inits: List[str], num_rationals: int = 4, mask: Mask = None, **kwargs: Any) -> RationalResNet:
     """ResNet for CIFAR10 as mentioned in the paper above"""
-    return _resnet('resnet110_cifar10', RationalBasicBlock, [18, 18, 18], rational_inits=rational_inits, num_rationals=num_rationals, **kwargs)
+    return _resnet('resnet110_cifar10', RationalBasicBlock, [18, 18, 18], rational_inits=rational_inits, num_rationals=num_rationals, mask=mask, **kwargs)
 
 
-def select_1_expert_group_rational_resnet1202(rational_inits: List[str], num_rationals: int = 4, **kwargs: Any) -> RationalResNet:
+def select_1_expert_group_rational_resnet1202(rational_inits: List[str], num_rationals: int = 4, mask: Mask = None, **kwargs: Any) -> RationalResNet:
     """ResNet for CIFAR10 as mentioned in the paper above"""
-    return _resnet('resnet1202', RationalBasicBlock, [200, 200, 200], rational_inits=rational_inits, num_rationals=num_rationals, **kwargs)
+    return _resnet('resnet1202', RationalBasicBlock, [200, 200, 200], rational_inits=rational_inits, num_rationals=num_rationals, mask=mask, **kwargs)

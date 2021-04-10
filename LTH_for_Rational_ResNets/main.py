@@ -16,18 +16,15 @@ from LTH_for_Rational_ResNets import plots
 from LTH_for_Rational_ResNets import argparser
 from LTH_for_Rational_ResNets.Datasets import CIFAR10 as cifar10
 from LTH_for_Rational_ResNets.Datasets import SVHN
-from LTH_for_Rational_ResNets.LTH_Models import multi_variant_rational_resnet20_cifar10 as mvrrn20
-from LTH_for_Rational_ResNets.LTH_Models import rational_resnet18_imagenet as rrn18
+from LTH_for_Rational_ResNets.LTH_Models import rational_resnet18_imagenet as rrn18, resnet20_cifar10 as rn20
 from LTH_for_Rational_ResNets.LTH_Models import rational_resnet20_cifar10 as rrn20
 from LTH_for_Rational_ResNets.LTH_Models import resnet18_imagenet as rn18
-from LTH_for_Rational_ResNets.LTH_Models import resnet20_cifar10 as rn20
-from LTH_for_Rational_ResNets.LTH_Models import mv_select_rational_resnet20_cifar10 as mvselrrn20
 from LTH_for_Rational_ResNets.Mask import make_initial_mask
 
 LTH_arg_parser = argparser.get_argparser()
 LTH_args = LTH_arg_parser.parse_args(
     ['--model', 'rational_resnet20_cifar10', '--dataset', 'SVHN', '--warmup_iterations', '2000',
-     '--iterative_pruning_epochs', '2', '--training_number_of_epochs', '25',
+     '--iterative_pruning_epochs', '2', '--training_number_of_epochs', '2',
      '--stop_criteria', 'test_acc'])
 
 global trainset
@@ -83,12 +80,7 @@ elif LTH_args.model is 'rational_resnet18_imagenet':
 elif LTH_args.model is 'resnet18_imagenet':
     model = rn18.resnet18()
     model_type = rn18
-elif LTH_args.model is 'multi_variant_rational_resnet20_cifar10':
-    model = mvrrn20.multi_variant_rational_resnet20()
-    model_type = mvrrn20
-elif LTH_args.model is 'multi_select_variant_rational_resnet20_cifar10':
-    model = mvselrrn20.multi_select_variant_rational_resnet20()
-    model_type = mvselrrn20
+
 
 mask = make_initial_mask(model)
 mask = mask.cuda()
@@ -112,6 +104,7 @@ def get_scheduler():
 
 
 exp_lr_scheduler = get_scheduler()
+
 if LTH_args.stop_criteria is 'test_acc':
     num_pruning_epochs = Lottery_Ticket_Hypothesis.iterative_pruning_by_test_acc(model, mask,
                                                                                  LTH_args.test_accuracy_threshold,

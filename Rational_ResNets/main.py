@@ -21,7 +21,7 @@ from Rational_ResNets.ResNet_Models import Rational_ResNet18_ImageNet as RRN18
 from Rational_ResNets.ResNet_Models import Rational_ResNet20_CIFAR10 as RRN20
 from Rational_ResNets.ResNet_Models import ResNet18_ImageNet as RN18
 from Rational_ResNets.ResNet_Models import ResNet20_CIFAR10 as RN20
-# from Rational_ResNets.ResNet_Models import select_1_expert_group_rational_resnet
+from Rational_ResNets.ResNet_Models import select_1_expert_group_rational_resnet as sel1exp
 from Rational_ResNets.ResNet_Models import Recurrent_Rational_ResNet20_CIFAR10 as RecRRN20
 from Rational_ResNets.ResNet_Models import select_2_expert_groups_rational_resnet as sel2exp
 
@@ -87,9 +87,10 @@ elif resnet_args.model is 'resnet110_cifar10':
 elif resnet_args.model is 'rational_resnet110_cifar10':
     model = RRN20.rational_resnet110()
     num_rationals = 2
-elif resnet_args.model is 'select_2_expert_groups_rational_resnet':
+elif resnet_args.model is 'select_2_expert_groups_rational_resnet20':
     model = sel2exp.select_2_expert_groups_rational_resnet20(num_rationals=num_rationals, rational_inits=rational_inits)
-    num_rationals = resnet_args.number_of_rationals_per_vector
+elif resnet_args.model is 'select_1_expert_group_rational_resnet20':
+    model = sel1exp.select_1_expert_group_rational_resnet20(num_rationals=num_rationals, rational_inits=rational_inits)
 
 model = model.to(device)
 

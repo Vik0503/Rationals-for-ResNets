@@ -6,7 +6,7 @@ ResNet_arg_parser.add_argument('-lr', '--learning_rate', default=0.01, type=floa
 ResNet_arg_parser.add_argument('-m', '--model', default='rational_resnet20_cifar10', type=str,
                                choices=['rational_resnet20_cifar10', 'resnet20_cifar10', 'rational_resnet18_imagenet', 'resnet18_imagenet',
                                         'pt', 'recurrent_rational_resnet20_cifar10', 'resnet110_cifar10',
-                                        'rational_resnet110_cifar10', 'select_2_expert_groups_rational_resnet'])  # pt is the original ResNet18 model from Pytorch with Rationals TODO: add shared parameters models + bigger models
+                                        'rational_resnet110_cifar10', 'select_2_expert_groups_rational_resnet20', 'select_1_expert_group_rational_resnet20'])  # pt is the original ResNet18 model from Pytorch with Rationals TODO: add shared parameters models + bigger models
 ResNet_arg_parser.add_argument('-ds', '--dataset', default='cifar10', type=str, choices=['cifar10', 'SVHN'])
 ResNet_arg_parser.add_argument('-aug', '--augment_data', default=False, type=bool)
 ResNet_arg_parser.add_argument('-epochs', '--training_number_of_epochs', default=25, type=int)
