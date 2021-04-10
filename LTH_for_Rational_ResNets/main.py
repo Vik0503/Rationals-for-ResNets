@@ -105,7 +105,6 @@ model = model.to(device)
 def get_scheduler():
     lambdas = [lambda it: 1.0, lambda it: 0.1 ** (10 * it_per_ep), lambda it: 0.1 ** (15 * it_per_ep), lambda it: 0.1 ** (20 * it_per_ep)]
 
-    # Add linear learning rate warmup if specified
     if LTH_args.warmup_iterations:
         warmup_iterations = LTH_args.warmup_iterations
         lambdas.append(lambda it: min(1.0, it / warmup_iterations))

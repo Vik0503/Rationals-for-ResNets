@@ -1,3 +1,4 @@
+from datetime import datetime
 from copy import deepcopy
 
 import torch
@@ -29,8 +30,8 @@ def checkpoint_save(optimizer, epoch: int, save_model, model_mask: Mask, test_ac
     model_sparsity: float
                     The sparsity of the model.
     """
-
-    PATH = '/home/viktoria/Git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Saved_Models/ep{}s{:.5f}test{:.5f}.pth'.format(epoch, model_sparsity, test_accuracy)  # TODO: Update PATH + saved models names
+    time_stamp = datetime.now()
+    PATH = '/home/viktoria/Git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Saved_Models/{}_ep{}s{:.5f}_test{:.5f}.pth'.format(time_stamp, epoch, model_sparsity, test_accuracy)  # TODO: Update PATH + saved models names
     torch.save({
         'epoch': epoch,
         'model_state_dict': save_model.state_dict(),
@@ -115,11 +116,11 @@ def iterative_pruning_by_num(prune_model, prune_mask: Mask, epochs: int, optimiz
         print('at {} Training Iterations'.format(num_iterations))
         print('Sparsity of Pruned Mask: ', mask_sparsity(updated_mask))
 
-    plots.make_LTH_test_acc_plot(test_accuracies, sparsity)
+    return test_accuracies, sparsity
 
 
 def iterative_pruning_by_test_acc(prune_model, prune_mask: Mask, acc_threshold: float, optimizer, criterion, exp_lr_scheduler, trainset, valset, trainloader, valloader, model_type, testset, testloader, training_number_of_epochs,
-                                  pruning_percentage) -> int:
+                                  pruning_percentage):
     """
     Prune iteratively until the test accuracy is lower than the threshold. Save checkpoint after every pruning epoch.
 
@@ -180,8 +181,6 @@ def iterative_pruning_by_test_acc(prune_model, prune_mask: Mask, acc_threshold: 
         print('at {} Training Iterations'.format(num_iterations))
         print('Sparsity of Pruned Mask: ', mask_sparsity(updated_mask))
 
-    plots.make_LTH_test_acc_plot(test_accuracies, sparsity)
-
-    return num_pruning_epochs
+    return num_pruning_epochs, test_accuracies, sparsity
 
 
