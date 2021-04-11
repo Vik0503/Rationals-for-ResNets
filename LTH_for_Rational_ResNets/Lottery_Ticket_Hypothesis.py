@@ -2,6 +2,8 @@ from datetime import datetime
 from copy import deepcopy
 
 import torch
+from torch import optim
+from torch.optim import lr_scheduler
 
 from LTH_for_Rational_ResNets import plots
 from LTH_for_Rational_ResNets import Train_Val_Test as tvt
@@ -12,6 +14,34 @@ if torch.cuda.is_available():
     device = 'cuda'
 else:
     device = 'cpu'
+
+
+def get_scheduler_optimizer(num_warmup_it, lr, model, it_per_ep):
+    optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9, weight_decay=0.0001)
+
+    def lr_lambda(it):
+        if it < num_warmup_it:
+            if it % 500 == 0:
+                print('inside warmup')
+            return min(1.0, it / num_warmup_it)
+        elif it < 10 * it_per_ep:
+            if it % 500 == 0:
+                print('Before MS 1')
+            return 1
+        elif 10 * it_per_ep <= it < 15 * it_per_ep:
+            if it % 500 == 0:
+                print('In MS 1')
+            return 0.1
+        elif 15 * it_per_ep <= it < 20 * it_per_ep:
+            if it % 500 == 0:
+                print('in MS 2')
+            return 0.01
+        elif it >= 20 * it_per_ep:
+            if it % 500 == 0:
+                print('after MS 2')
+            return 0.001
+
+    return lr_scheduler.LambdaLR(optimizer, lr_lambda=lr_lambda), optimizer
 
 
 def checkpoint_save(optimizer, epoch: int, save_model, model_mask: Mask, test_accuracy: float, training_epochs: int, model_sparsity: float = 0):
@@ -119,8 +149,8 @@ def iterative_pruning_by_num(prune_model, prune_mask: Mask, epochs: int, optimiz
     return test_accuracies, sparsity
 
 
-def iterative_pruning_by_test_acc(prune_model, prune_mask: Mask, acc_threshold: float, optimizer, criterion, exp_lr_scheduler, trainset, valset, trainloader, valloader, model_type, testset, testloader, training_number_of_epochs,
-                                  pruning_percentage):
+def iterative_pruning_by_test_acc(prune_model, prune_mask: Mask, acc_threshold: float, criterion, trainset, valset, trainloader, valloader, model_type, testset, testloader, training_number_of_epochs,
+                                  pruning_percentage, lr: float, it_per_epoch: int, num_warmup_it: int):
     """
     Prune iteratively until the test accuracy is lower than the threshold. Save checkpoint after every pruning epoch.
 
@@ -138,10 +168,10 @@ def iterative_pruning_by_test_acc(prune_model, prune_mask: Mask, acc_threshold: 
     num_pruning_epochs = 0
     sparsity.append(0)
     prune_model.mask = Mask.cuda(prune_mask)
-    # prune_model = prune_model.to(device)
     initial_state = deepcopy(prune_model.state_dict())
 
-    prune_model, best_val_accuracy, num_iterations = tvt.train(prune_model, criterion, optimizer, exp_lr_scheduler, training_number_of_epochs, trainset, valset, trainloader, valloader)
+    scheduler, optimizer = get_scheduler_optimizer(lr=lr, it_per_ep=it_per_epoch, model=prune_model, num_warmup_it=num_warmup_it)
+    prune_model, best_val_accuracy, num_iterations = tvt.train(prune_model, criterion, optimizer, scheduler, training_number_of_epochs, trainset, valset, trainloader, valloader)
 
     test_accuracy = tvt.test(prune_model, testset, testloader)
     test_accuracies.append(test_accuracy * 100)
@@ -165,8 +195,8 @@ def iterative_pruning_by_test_acc(prune_model, prune_mask: Mask, acc_threshold: 
 
         prune_model.mask = prune_mask
         # prune_model = prune_model.to(device)
-
-        prune_model, best_val_accuracy, num_iterations = tvt.train(prune_model, criterion, optimizer, exp_lr_scheduler, training_number_of_epochs, trainset, valset, trainloader, valloader)  # train
+        scheduler, optimizer = get_scheduler_optimizer(lr=lr, it_per_ep=it_per_epoch, model=prune_model, num_warmup_it=num_warmup_it)
+        prune_model, best_val_accuracy, num_iterations = tvt.train(prune_model, criterion, optimizer, scheduler, training_number_of_epochs, trainset, valset, trainloader, valloader)  # train
 
         test_accuracy = tvt.test(prune_model, testset, testloader)  # test
         test_accuracies.append(test_accuracy * 100)
@@ -182,5 +212,3 @@ def iterative_pruning_by_test_acc(prune_model, prune_mask: Mask, acc_threshold: 
         print('Sparsity of Pruned Mask: ', mask_sparsity(updated_mask))
 
     return num_pruning_epochs, test_accuracies, sparsity
-
-

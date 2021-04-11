@@ -39,15 +39,6 @@ matplotlib.rcParams.update({
     "text.usetex": False,
 })
 
-
-def get_scheduler():
-    lambdas = [lambda it: 1.0, lambda it: 0.1 ** (10 * it_per_ep), lambda it: 0.1 ** (15 * it_per_ep), lambda it: 0.1 ** (20 * it_per_ep)]
-    warmup_iterations = 7167
-    lambdas.append(lambda it: min(1.0, it / warmup_iterations))
-
-    return lr_scheduler.LambdaLR(optimizer, lambda it: np.product([l(it) for l in lambdas]))
-
-
 trainset = SVHN.get_trainset()
 valset = SVHN.get_validationset()
 testset = SVHN.get_testset()
@@ -59,7 +50,9 @@ num_classes = SVHN.get_num_classes()
 it_per_ep = SVHN.get_it_per_epoch(bs=128)
 pruning_percentage = 20
 training_epochs = 25
-
+num_warmup = 7167
+lr = 0.03
+threshold = 0.89
 criterion = nn.CrossEntropyLoss()
 dataset = 'SVHN'
 
@@ -74,25 +67,23 @@ model_type_1 = rrn20
 mask_1 = make_initial_mask(model_1)
 mask_1 = mask_1.cuda()
 
-optimizer = optim.SGD(model_1.parameters(), lr=0.03, momentum=0.9, weight_decay=0.0001)
-exp_lr_scheduler = get_scheduler()
-
 num_ftrs = model_1.fc.in_features
 model_1.fc = nn.Linear(num_ftrs, num_classes)
 model_1 = model_1.to(device)
 
 num_pruning_epochs, test_accuracies, sparsities = Lottery_Ticket_Hypothesis.iterative_pruning_by_test_acc(model_1, mask_1,
-                                                                                                          0.89,
+                                                                                                          acc_threshold=threshold,
                                                                                                           model_type=model_type_1,
-                                                                                                          optimizer=optimizer,
                                                                                                           criterion=criterion,
-                                                                                                          exp_lr_scheduler=exp_lr_scheduler,
                                                                                                           testset=testset, testloader=testloader,
                                                                                                           trainset=trainset,
                                                                                                           trainloader=trainloader,
                                                                                                           valloader=valloader, valset=valset,
                                                                                                           pruning_percentage=pruning_percentage,
-                                                                                                          training_number_of_epochs=training_epochs)
+                                                                                                          training_number_of_epochs=training_epochs,
+                                                                                                          lr=lr,
+                                                                                                          it_per_epoch=it_per_ep,
+                                                                                                          num_warmup_it=num_warmup)
 """test_accuracies, sparsities = Lottery_Ticket_Hypothesis.iterative_pruning_by_num(model_1, mask_1, 2,
                                                                                  model_type=model_type_1, optimizer=optimizer, criterion=criterion,
                                                                                  exp_lr_scheduler=exp_lr_scheduler, testset=testset,
@@ -108,24 +99,23 @@ model_type_2 = rn20
 mask_2 = make_initial_mask(model_2)
 mask_2 = mask_2.cuda()
 
-optimizer = optim.SGD(model_2.parameters(), lr=0.03, momentum=0.9, weight_decay=0.0001)
-exp_lr_scheduler = get_scheduler()
 num_ftrs = model_2.fc.in_features
 model_2.fc = nn.Linear(num_ftrs, num_classes)
 model_2 = model_2.to(device)
 
 num_pruning_epochs_2, test_accuracies_2, sparsities_2 = Lottery_Ticket_Hypothesis.iterative_pruning_by_test_acc(model_2, mask_2,
-                                                                                                                0.89,
+                                                                                                                acc_threshold=threshold,
                                                                                                                 model_type=model_type_2,
-                                                                                                                optimizer=optimizer,
                                                                                                                 criterion=criterion,
-                                                                                                                exp_lr_scheduler=exp_lr_scheduler,
                                                                                                                 testset=testset, testloader=testloader,
                                                                                                                 trainset=trainset,
                                                                                                                 trainloader=trainloader,
                                                                                                                 valloader=valloader, valset=valset,
                                                                                                                 pruning_percentage=pruning_percentage,
-                                                                                                                training_number_of_epochs=training_epochs)
+                                                                                                                training_number_of_epochs=training_epochs,
+                                                                                                                lr=lr,
+                                                                                                                it_per_epoch=it_per_ep,
+                                                                                                                num_warmup_it=num_warmup)
 
 """test_accuracies_2, sparsities_2 = Lottery_Ticket_Hypothesis.iterative_pruning_by_num(model_2, mask_2, 2,
                                                                                      model_type=model_type_2, optimizer=optimizer, criterion=criterion,
@@ -142,8 +132,6 @@ model_type_3 = sel2exp
 mask_3 = make_initial_mask(model_3)
 mask_3 = mask_3.cuda()
 
-optimizer = optim.SGD(model_3.parameters(), lr=0.03, momentum=0.9, weight_decay=0.0001)
-exp_lr_scheduler = get_scheduler()
 num_ftrs = model_3.fc.in_features
 model_3.fc = nn.Linear(num_ftrs, num_classes)
 model_3 = model_3.to(device)
@@ -151,15 +139,16 @@ model_3 = model_3.to(device)
 num_pruning_epochs_3, test_accuracies_3, sparsities_3 = Lottery_Ticket_Hypothesis.iterative_pruning_by_test_acc(model_3, mask_3,
                                                                                                                 0.89,
                                                                                                                 model_type=model_type_3,
-                                                                                                                optimizer=optimizer,
                                                                                                                 criterion=criterion,
-                                                                                                                exp_lr_scheduler=exp_lr_scheduler,
                                                                                                                 testset=testset, testloader=testloader,
                                                                                                                 trainset=trainset,
                                                                                                                 trainloader=trainloader,
                                                                                                                 valloader=valloader, valset=valset,
                                                                                                                 pruning_percentage=pruning_percentage,
-                                                                                                                training_number_of_epochs=training_epochs)
+                                                                                                                training_number_of_epochs=training_epochs,
+                                                                                                                lr=lr,
+                                                                                                                it_per_epoch=it_per_ep,
+                                                                                                                num_warmup_it=num_warmup)
 """test_accuracies_3, sparsities_3 = Lottery_Ticket_Hypothesis.iterative_pruning_by_num(model_3, mask_3, 2,
                                                                                      model_type=model_type_3, optimizer=optimizer, criterion=criterion,
                                                                                      exp_lr_scheduler=exp_lr_scheduler, testset=testset,
