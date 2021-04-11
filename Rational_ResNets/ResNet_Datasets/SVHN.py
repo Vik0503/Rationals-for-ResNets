@@ -2,6 +2,7 @@ import torch
 import torchvision
 from torchvision import transforms
 
+
 transform = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.4377, 0.4438, 0.4728], std=[0.1980, 0.2010, 0.1970])

@@ -15,6 +15,8 @@ ResNet_arg_parser.add_argument('-num_rat', '--number_of_rationals_per_vector', d
 ResNet_arg_parser.add_argument('-init_rationals', '--initialize_rationals',
                                type=str, nargs='+', default=['leaky_relu', 'gelu', 'swish', 'tanh', 'sigmoid'], choices=['leaky_relu', 'gelu', 'swish', 'tanh', 'sigmoid'],
                                help="Examples: -init_rationals leaky_relu gelu, -init_rationals tanh")
+ResNet_arg_parser.add_argument("--train-all", default=False, action="store_true",
+                               help="Flag to perform all three experiments `original`, `univariate rational` and `mixture of experts` in a sequence and plot the results in one graph for further comparison.")
 
 
 def get_argparser() -> arg.ArgumentParser:

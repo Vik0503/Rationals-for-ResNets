@@ -7,10 +7,13 @@ parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
 
 import torch
+torch.cuda.manual_seed_all(42)
 import torch.nn as nn
 from torch import optim
 from torch.optim import lr_scheduler
 
+import numpy as np
+np.random.seed(42)
 
 from Rational_ResNets import argparser
 from Rational_ResNets import train_val_test as tvt
