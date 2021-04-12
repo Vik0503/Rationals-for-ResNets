@@ -1,15 +1,22 @@
 import inspect
 import os
 import sys
+from datetime import datetime
+
+import matplotlib
+import matplotlib.pyplot as plt
 
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
 
 import torch
-from torch import nn, optim
+
+torch.cuda.manual_seed_all(42)
+from torch import nn
 import numpy as np
-from torch.optim import lr_scheduler
+
+np.random.seed(42)
 
 from LTH_for_Rational_ResNets import Lottery_Ticket_Hypothesis
 from LTH_for_Rational_ResNets import plots
@@ -27,7 +34,7 @@ LTH_arg_parser = argparser.get_argparser()
 LTH_args = LTH_arg_parser.parse_args(
     ['--model', 'rational_resnet20_cifar10', '--dataset', 'SVHN', '--warmup_iterations', '2000',
      '--iterative_pruning_epochs', '2', '--training_number_of_epochs', '1',
-     '--stop_criteria', 'num_prune_epochs'])
+     '--stop_criteria', 'num_prune_epochs', '--run_all'])
 
 global trainset
 global valset
@@ -37,17 +44,20 @@ global valloader
 global testloader
 global classes
 global num_classes
-global model
-global model_type
-global checkpoint
-global num_pruning_epochs
 global it_per_ep
 global num_rationals
+global rational_inits
 
 if torch.cuda.is_available():
     device = 'cuda'
 else:
     device = 'cpu'
+
+plt.style.use(["science", "grid"])
+matplotlib.rcParams.update({
+    "font.family": "serif",
+    "text.usetex": False,
+})
 
 if LTH_args.initialize_rationals:
     rational_inits = LTH_args.initialize_rationals  # TODO: catch exceptions
@@ -75,76 +85,156 @@ elif LTH_args.dataset is 'SVHN':
     num_classes = SVHN.get_num_classes()
     it_per_ep = SVHN.get_it_per_epoch(bs=LTH_args.batch_size)
 
-if LTH_args.model is 'rational_resnet20_cifar10':
-    model = rrn20.rational_resnet20()
-    model_type = rrn20
-elif LTH_args.model is 'resnet20_cifar10':
-    model = rn20.resnet20()
-    model_type = rn20
-elif LTH_args.model is 'rational_resnet18_imagenet':
-    model = rrn18.rational_resnet18()
-    model_type = rrn18
-elif LTH_args.model is 'resnet18_imagenet':
-    model = rn18.resnet18()
-    model_type = rn18
-elif LTH_args.model is 'select_2_expert_groups_rational_resnet20':
-    model = sel2exp.select_2_expert_groups_rational_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)
-elif LTH_args.model is 'select_1_expert_group_rational_resnet20':
-    model = sel1exp.select_1_expert_group_rational_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)
-
-mask = make_initial_mask(model)
-mask = mask.cuda()
-criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(model.parameters(), lr=LTH_args.learning_rate, momentum=0.9, weight_decay=0.0001)
-
-num_ftrs = model.fc.in_features
-model.fc = nn.Linear(num_ftrs, num_classes)
-model = model.to(device)
+models_run_all = [rrn20.rational_resnet20(), rn20.resnet20(), sel2exp.select_2_expert_groups_rational_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)]
 
 
-def get_scheduler():
-    lambdas = [lambda it: 1.0, lambda it: 0.1 ** (10 * it_per_ep), lambda it: 0.1 ** (15 * it_per_ep), lambda it: 0.1 ** (20 * it_per_ep)]
+def run_all():  # TODO: Solve Problem with Plots and Problem with select
 
-    if LTH_args.warmup_iterations:
-        warmup_iterations = LTH_args.warmup_iterations
-        lambdas.append(lambda it: min(1.0, it / warmup_iterations))
+    plot_labels = ['ResNet20 univ. Rat.', 'ResNet20 Original', 'ResNet20 mixture of 5 univ. Rat.']
+    plt.figure(figsize=(10, 7))
+    plt.subplot(121)
+    plt.xlabel('Percent of Pruned Weights')
+    plt.ylabel('Test Accuracy in Percent')
 
-    return lr_scheduler.LambdaLR(optimizer, lambda it: np.product([l(it) for l in lambdas]))
+    num_epochs = 0
+    test_accuracies = []
+    sparsities = []
+    num_epoch_list = []
+    criterion = nn.CrossEntropyLoss()
 
+    for m in range(len(models_run_all)):
+        model = models_run_all[m]
+        num_ftrs = model.fc.in_features
+        model.fc = nn.Linear(num_ftrs, num_classes)
+        model = model.to(device)
+        mask = make_initial_mask(model)
+        mask = mask.cuda()
 
-exp_lr_scheduler = get_scheduler()
+        if LTH_args.stop_criteria is 'test_acc':
+            num_epochs, test_accuracies, sparsities = Lottery_Ticket_Hypothesis.iterative_pruning_by_test_acc(model, mask,
+                                                                                                              LTH_args.test_accuracy_threshold,
+                                                                                                              criterion=criterion,
+                                                                                                              testset=testset, testloader=testloader,
+                                                                                                              trainset=trainset,
+                                                                                                              trainloader=trainloader,
+                                                                                                              valloader=valloader, valset=valset,
+                                                                                                              pruning_percentage=LTH_args.pruning_percentage,
+                                                                                                              training_number_of_epochs=LTH_args.training_number_of_epochs,
+                                                                                                              lr=LTH_args.learning_rate,
+                                                                                                              it_per_epoch=it_per_ep,
+                                                                                                              num_warmup_it=LTH_args.warmup_iterations)
 
-if LTH_args.stop_criteria is 'test_acc':
-    num_pruning_epochs = Lottery_Ticket_Hypothesis.iterative_pruning_by_test_acc(model, mask,
-                                                                                 LTH_args.test_accuracy_threshold,
-                                                                                 model_type=model_type,
-                                                                                 optimizer=optimizer,
-                                                                                 criterion=criterion,
-                                                                                 exp_lr_scheduler=exp_lr_scheduler,
-                                                                                 testset=testset, testloader=testloader,
-                                                                                 trainset=trainset,
-                                                                                 trainloader=trainloader,
-                                                                                 valloader=valloader, valset=valset,
-                                                                                 pruning_percentage=LTH_args.pruning_percentage,
-                                                                                 training_number_of_epochs=LTH_args.training_number_of_epochs)
-elif LTH_args.stop_criteria is 'num_prune_epochs':
-    Lottery_Ticket_Hypothesis.iterative_pruning_by_num(model, mask, LTH_args.iterative_pruning_epochs,
-                                                       model_type=model_type, optimizer=optimizer, criterion=criterion,
+        elif LTH_args.stop_criteria is 'num_prune_epochs':
+            test_accuracies, sparsities = Lottery_Ticket_Hypothesis.iterative_pruning_by_num(model, mask, LTH_args.iterative_pruning_epochs, criterion=criterion,
+                                                                                             testset=testset,
+                                                                                             testloader=testloader, trainset=trainset,
+                                                                                             trainloader=trainloader, valloader=valloader, valset=valset,
+                                                                                             pruning_percentage=LTH_args.pruning_percentage,
+                                                                                             training_number_of_epochs=LTH_args.training_number_of_epochs,
+                                                                                             lr=LTH_args.learning_rate,
+                                                                                             it_per_epoch=it_per_ep,
+                                                                                             num_warmup_it=LTH_args.warmup_iterations)
+            num_epochs = LTH_args.iterative_pruning_epochs
+
+        elif LTH_args.stop_criteria is 'one_shot':
+            Lottery_Ticket_Hypothesis.one_shot_pruning(model, optimizer=optimizer, criterion=criterion,
                                                        exp_lr_scheduler=exp_lr_scheduler, testset=testset,
-                                                       testloader=testloader, trainset=trainset,
-                                                       trainloader=trainloader, valloader=valloader, valset=valset,
+                                                       testloader=testloader, trainset=trainset, trainloader=trainloader,
+                                                       valloader=valloader, valset=valset, prune_mask=mask,
                                                        pruning_percentage=LTH_args.pruning_percentage,
                                                        training_number_of_epochs=LTH_args.training_number_of_epochs)
-    num_pruning_epochs = LTH_args.iterative_pruning_epochs
-elif LTH_args.stop_criteria is 'one_shot':
-    Lottery_Ticket_Hypothesis.one_shot_pruning(model, optimizer=optimizer, criterion=criterion,
-                                               exp_lr_scheduler=exp_lr_scheduler, testset=testset,
-                                               testloader=testloader, trainset=trainset, trainloader=trainloader,
-                                               valloader=valloader, valset=valset, prune_mask=mask,
-                                               model_type=model_type, pruning_percentage=LTH_args.pruning_percentage,
-                                               training_number_of_epochs=LTH_args.training_number_of_epochs)
-    num_pruning_epochs = 1
 
-plots.final_plot_LTH(LTH_args.model, LTH_args.dataset, LTH_args.batch_size, num_pruning_epochs,
-                     LTH_args.training_number_of_epochs, LTH_args.learning_rate, LTH_args.pruning_percentage,
-                     LTH_args.warmup_iterations)
+        plt.plot(sparsities, test_accuracies, label=plot_labels[m])
+        num_epoch_list.append(num_epochs)
+
+    plt.subplots_adjust(bottom=0.2)
+    plt.legend(['ResNet20 univ. Rat.', 'ResNet20 Original', 'ResNet20 mixture of 5 univ. Rat.'], bbox_to_anchor=(0.1, -0.2), loc='upper center', ncol=1, mode="expand", borderaxespad=0.)
+
+    props = dict(boxstyle='round', facecolor='grey', alpha=0.5)
+    text = 'dataset: {}, '.format(LTH_args.dataset) + 'batch size: {}, '.format(LTH_args.batch_size) + '\n' + '{} training epochs per pruning epoch, '.format(LTH_args.training_number_of_epochs) + '\n' + \
+           'learning rate: {}, '.format(0.03) + '{}% pruning per epoch, '.format(LTH_args.pruning_percentage) + '\n' + '{} warm-up iterations'.format(LTH_args.warmup_iterations) + '\n' + 'number of iterative pruning epochs: ' + '\n' + \
+           '- ResNet20 univ. Rat: {}'.format(num_epoch_list[0]) + '\n' + '- ResNet20 Original: {}'.format(num_epoch_list[1]) + '\n' + '- ResNet20 mixture 5 univ. Rat: {}'.format(num_epoch_list[2])
+
+    plt.figtext(0.525, 0.5, text, bbox=props, size=9)
+
+    time_stamp = datetime.now()
+    PATH = './Results/LTH_all_models' + '/' + '{}'.format(time_stamp) + '_' + '{}'.format(LTH_args.dataset) + '.svg'
+    plt.savefig(PATH)
+    plt.show()
+
+
+def run_one():
+    if LTH_args.model is 'rational_resnet20_cifar10':
+        print('HELLO')
+        model = rrn20.rational_resnet20()
+        model_type = rrn20
+    elif LTH_args.model is 'resnet20_cifar10':
+        model = rn20.resnet20()
+        model_type = rn20
+    elif LTH_args.model is 'rational_resnet18_imagenet':
+        model = rrn18.rational_resnet18()
+        model_type = rrn18
+    elif LTH_args.model is 'resnet18_imagenet':
+        model = rn18.resnet18()
+        model_type = rn18
+    elif LTH_args.model is 'select_2_expert_groups_rational_resnet20':
+        model = sel2exp.select_2_expert_groups_rational_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)
+    elif LTH_args.model is 'select_1_expert_group_rational_resnet20':
+        model = sel1exp.select_1_expert_group_rational_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)
+
+    mask = make_initial_mask(model)
+    mask = mask.cuda()
+    criterion = nn.CrossEntropyLoss()
+
+    num_ftrs = model.fc.in_features
+    model.fc = nn.Linear(num_ftrs, num_classes)
+    model = model.to(device)
+
+    num_epochs = 0
+    test_accuracies = []
+    sparsities = []
+
+    if LTH_args.stop_criteria is 'test_acc':
+        num_epochs, test_accuracies, sparsities = Lottery_Ticket_Hypothesis.iterative_pruning_by_test_acc(model, mask,
+                                                                                                          LTH_args.test_accuracy_threshold,
+                                                                                                          criterion=criterion,
+                                                                                                          testset=testset, testloader=testloader,
+                                                                                                          trainset=trainset,
+                                                                                                          trainloader=trainloader,
+                                                                                                          valloader=valloader, valset=valset,
+                                                                                                          pruning_percentage=LTH_args.pruning_percentage,
+                                                                                                          training_number_of_epochs=LTH_args.training_number_of_epochs,
+                                                                                                          lr=LTH_args.learning_rate,
+                                                                                                          it_per_epoch=it_per_ep,
+                                                                                                          num_warmup_it=LTH_args.warmup_iterations)
+
+    elif LTH_args.stop_criteria is 'num_prune_epochs':
+        test_accuracies, sparsities = Lottery_Ticket_Hypothesis.iterative_pruning_by_num(model, mask, LTH_args.iterative_pruning_epochs, criterion=criterion,
+                                                                                         testset=testset,
+                                                                                         testloader=testloader, trainset=trainset,
+                                                                                         trainloader=trainloader, valloader=valloader, valset=valset,
+                                                                                         pruning_percentage=LTH_args.pruning_percentage,
+                                                                                         training_number_of_epochs=LTH_args.training_number_of_epochs,
+                                                                                         lr=LTH_args.learning_rate,
+                                                                                         it_per_epoch=it_per_ep,
+                                                                                         num_warmup_it=LTH_args.warmup_iterations)
+        num_epochs = LTH_args.iterative_pruning_epochs
+
+    elif LTH_args.stop_criteria is 'one_shot':
+        Lottery_Ticket_Hypothesis.one_shot_pruning(model, optimizer=optimizer, criterion=criterion,
+                                                   exp_lr_scheduler=exp_lr_scheduler, testset=testset,
+                                                   testloader=testloader, trainset=trainset, trainloader=trainloader,
+                                                   valloader=valloader, valset=valset, prune_mask=mask,
+                                                   pruning_percentage=LTH_args.pruning_percentage,
+                                                   training_number_of_epochs=LTH_args.training_number_of_epochs)
+        num_epochs = 1
+
+    plots.make_LTH_test_acc_plot(test_accuracies, sparsities)
+    plots.final_plot_LTH(LTH_args.model, LTH_args.dataset, LTH_args.batch_size, num_epochs,
+                         LTH_args.training_number_of_epochs, LTH_args.learning_rate, LTH_args.pruning_percentage, LTH_args.warmup_iterations)
+
+
+if LTH_args.run_all:
+    run_all()
+else:
+    run_one()

@@ -1,5 +1,6 @@
 import torch
 import numpy as np
+import utils
 
 
 class Mask(dict):
@@ -30,7 +31,8 @@ def make_initial_mask(model):
     mask: Mask
     """
     mask = Mask()
-    for module in model.prunable_layers():
+    prunable_layers = utils.prunable_layers(model)
+    for module in prunable_layers:
         mask[module] = torch.ones(list(model.state_dict()[module].shape))
     return mask
 

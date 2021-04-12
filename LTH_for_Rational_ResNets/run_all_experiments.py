@@ -73,7 +73,6 @@ model_1 = model_1.to(device)
 
 num_pruning_epochs, test_accuracies, sparsities = Lottery_Ticket_Hypothesis.iterative_pruning_by_test_acc(model_1, mask_1,
                                                                                                           acc_threshold=threshold,
-                                                                                                          model_type=model_type_1,
                                                                                                           criterion=criterion,
                                                                                                           testset=testset, testloader=testloader,
                                                                                                           trainset=trainset,
@@ -105,7 +104,6 @@ model_2 = model_2.to(device)
 
 num_pruning_epochs_2, test_accuracies_2, sparsities_2 = Lottery_Ticket_Hypothesis.iterative_pruning_by_test_acc(model_2, mask_2,
                                                                                                                 acc_threshold=threshold,
-                                                                                                                model_type=model_type_2,
                                                                                                                 criterion=criterion,
                                                                                                                 testset=testset, testloader=testloader,
                                                                                                                 trainset=trainset,
@@ -138,7 +136,6 @@ model_3 = model_3.to(device)
 
 num_pruning_epochs_3, test_accuracies_3, sparsities_3 = Lottery_Ticket_Hypothesis.iterative_pruning_by_test_acc(model_3, mask_3,
                                                                                                                 0.89,
-                                                                                                                model_type=model_type_3,
                                                                                                                 criterion=criterion,
                                                                                                                 testset=testset, testloader=testloader,
                                                                                                                 trainset=trainset,

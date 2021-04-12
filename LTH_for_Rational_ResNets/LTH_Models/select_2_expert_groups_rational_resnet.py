@@ -52,7 +52,7 @@ class RationalBasicBlock(nn.Module):
         for n in range(self.num_rationals):
             self.expert_group_1.append(Rational(cuda=cuda, approx_func=self.rational_inits[n]))
             self.expert_group_2.append(Rational(cuda=cuda, approx_func=self.rational_inits[n]))
-
+        # self.rational_expert_group = torch.nn.parameter.Parameter(self.expert_group_1)
         data_alpha_1 = initialize_alpha(self.num_rationals)
         self.alpha_1 = torch.nn.parameter.Parameter(data_alpha_1, requires_grad=True)
 
@@ -101,24 +101,6 @@ class RationalBasicBlock(nn.Module):
         out = self.multi_rational(out, self.alpha_2, self.expert_group_2)
 
         return out
-
-
-def reinit(model, mask: Mask, initial_state_model):
-    """
-    Reset pruned model's weights to the initial initialization.
-
-    Parameter
-    ---------
-    model: RationalResNet
-    mask: Mask
-          A mask with pruned weights.
-    initial_state_model: dict
-                         Initially saved state, before the model is trained.
-    """
-    for name, param in model.named_parameters():
-        if 'weight' not in name or 'batch_norm' in name or 'shortcut' in name or 'fc' in name:
-            continue
-        param.data = initial_state_model[name] * mask[name]
 
 
 class RationalResNet(nn.Module):
@@ -189,7 +171,7 @@ class RationalResNet(nn.Module):
                      A layer build with RationalBasicBlocks.
         """
         downsample = False
-        if stride != 1 or planes_out != self.planes_in:
+        if stride != 1 or planes_out * block.expansion != self.planes_in:
             downsample = True
 
         layers = []
@@ -256,22 +238,6 @@ class RationalResNet(nn.Module):
         out = self.fc(out)
 
         return out
-
-    def prunable_layers(self) -> List:
-        """
-        Return all layers that are prunable.
-
-        Returns
-        -------
-        prunable_layer_list: List
-                            A list with all layers that are prunable.
-        """
-        prunable_layer_list = []
-        for n, module in self.named_modules():
-            if isinstance(module, nn.Conv2d) and 'shortcut' not in n:
-                prunable_layer_list.append(n + '.weight')
-
-        return prunable_layer_list
 
 
 def initialize_alpha(b: int = 4) -> torch.Tensor:

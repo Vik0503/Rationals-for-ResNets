@@ -14,7 +14,9 @@ LTH_arg_parser.add_argument('-stop', '--stop_criteria', default='test_acc', type
 LTH_arg_parser.add_argument('-test_acc', '--test_accuracy_threshold', default=0.89, type=float)
 LTH_arg_parser.add_argument('-init_rationals', '--initialize_rationals',
                             type=str, nargs='+', default=['leaky_relu', 'gelu', 'swish', 'tanh', 'sigmoid'], choices=['leaky_relu', 'gelu', 'swish', 'tanh', 'sigmoid'],
-                            help="Examples: -init_rationals leaky_relu gelu, -init_rationals tanh")
+                            help='Examples: -init_rationals leaky_relu gelu, -init_rationals tanh')
+LTH_arg_parser.add_argument('--run_all', default=False, action='store_true',
+                            help="Flag to perform all three experiments `original`, `univariate rational` and `mixture of experts` in a sequence and plot the results in one graph for further comparison.")
 
 
 def get_argparser():

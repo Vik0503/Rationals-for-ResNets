@@ -27,7 +27,7 @@ def make_LTH_test_acc_plot(test_accuracies: list, sparsity: list):
     plt.plot(sparsity, test_accuracies)
     plt.xlabel('Percent of Pruned Weights')
     plt.ylabel('Test Accuracy in Percent')
-    plt.legend(['Test Accuracy'])
+    return plt
 
 
 def final_plot_LTH(model, dataset, batch_size, num_pruning_epochs, training_number_of_epochs, learning_rate, pruning_percentage, warmup_iterations):

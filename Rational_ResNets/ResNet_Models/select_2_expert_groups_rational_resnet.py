@@ -165,7 +165,7 @@ class RationalResNet(nn.Module):
                      A layer build with RationalBasicBlocks.
         """
         downsample = False
-        if stride != 1 or planes_out != self.planes_in:
+        if stride != 1 or planes_out * block.expansion != self.planes_in:
             downsample = True
 
         layers = []

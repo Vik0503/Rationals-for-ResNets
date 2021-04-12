@@ -30,7 +30,7 @@ from Rational_ResNets.ResNet_Models import select_2_expert_groups_rational_resne
 
 resnet_argparser = argparser.get_argparser()
 resnet_args = resnet_argparser.parse_args(
-    ['--model', 'select_2_expert_groups_rational_resnet', '--dataset', 'SVHN', '--training_number_of_epochs', '2', '--augment_data', 'True', '--number_of_rationals_per_vector', '5', '--initialize_rationals', 'leaky_relu', 'gelu', 'swish', 'tanh', 'sigmoid'])
+    ['--model', 'rational_resnet20_cifar10', '--dataset', 'SVHN', '--training_number_of_epochs', '2', '--augment_data', 'True', '--number_of_rationals_per_vector', '5', '--initialize_rationals', 'leaky_relu', 'gelu', 'swish', 'tanh', 'sigmoid'])
 
 global trainset
 global valset

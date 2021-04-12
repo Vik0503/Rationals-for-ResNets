@@ -4,6 +4,7 @@ from typing import List, Dict
 import numpy as np
 import torch
 
+from LTH_for_Rational_ResNets import utils
 from LTH_for_Rational_ResNets.Mask import Mask, make_new_mask, get_number_of_unpruned_weights, get_number_of_weights
 
 
@@ -194,7 +195,7 @@ def get_unpruned_weights(model_weights, mask: Mask):
 
 
 def prune(pruning_frac: float, model, mask: Mask):
-    prunable_layers = set(model.prunable_layers())
+    prunable_layers = set(utils.prunable_layers(model))
 
     model_weights = {}
     for item, values in model.state_dict().items():

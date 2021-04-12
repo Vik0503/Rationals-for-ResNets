@@ -9,6 +9,7 @@ from LTH_for_Rational_ResNets import plots
 from LTH_for_Rational_ResNets import Train_Val_Test as tvt
 from LTH_for_Rational_ResNets.Lottery_Ticket_Pruning import prune
 from LTH_for_Rational_ResNets.Mask import mask_sparsity, Mask
+from LTH_for_Rational_ResNets import utils
 
 if torch.cuda.is_available():
     device = 'cuda'
@@ -16,29 +17,19 @@ else:
     device = 'cpu'
 
 
-def get_scheduler_optimizer(num_warmup_it, lr, model, it_per_ep):
+def get_scheduler_optimizer(num_warmup_it, lr, model, it_per_ep):  # TODO: allow diff. milestones maybe in utils?
     optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9, weight_decay=0.0001)
 
     def lr_lambda(it):
         if it < num_warmup_it:
-            if it % 500 == 0:
-                print('inside warmup')
             return min(1.0, it / num_warmup_it)
         elif it < 10 * it_per_ep:
-            if it % 500 == 0:
-                print('Before MS 1')
             return 1
         elif 10 * it_per_ep <= it < 15 * it_per_ep:
-            if it % 500 == 0:
-                print('In MS 1')
             return 0.1
         elif 15 * it_per_ep <= it < 20 * it_per_ep:
-            if it % 500 == 0:
-                print('in MS 2')
             return 0.01
         elif it >= 20 * it_per_ep:
-            if it % 500 == 0:
-                print('after MS 2')
             return 0.001
 
     return lr_scheduler.LambdaLR(optimizer, lr_lambda=lr_lambda), optimizer
@@ -73,7 +64,7 @@ def checkpoint_save(optimizer, epoch: int, save_model, model_mask: Mask, test_ac
     }, PATH)
 
 
-def one_shot_pruning(prune_model, prune_mask: Mask, optimizer, criterion, exp_lr_scheduler, trainset, valset, trainloader, valloader, model_type, testset, testloader, pruning_percentage, training_number_of_epochs):
+def one_shot_pruning(prune_model, prune_mask: Mask, optimizer, criterion, exp_lr_scheduler, trainset, valset, trainloader, valloader, testset, testloader, pruning_percentage, training_number_of_epochs):
     """
     Prune trained model once and reinitialize and test it.
 
@@ -85,7 +76,6 @@ def one_shot_pruning(prune_model, prune_mask: Mask, optimizer, criterion, exp_lr
                 The mask used to prune the model.
     """
     prune_model.mask = Mask.cuda(prune_mask)
-    # prune_model = prune_model.to(device)
 
     initial_state = deepcopy(prune_model.state_dict())
 
@@ -95,9 +85,8 @@ def one_shot_pruning(prune_model, prune_mask: Mask, optimizer, criterion, exp_lr
     print('Test Accuracy with 100 Percent of weights: ', test_accuracy)
 
     pruned_model, updated_mask = prune(pruning_percentage, prune_model, prune_mask)
-    # pruned_model = pruned_model.to(device)
 
-    model_type.reinit(pruned_model, updated_mask, initial_state)
+    utils.reinit(pruned_model, updated_mask, initial_state)
     pruned_model.mask = Mask.cuda(updated_mask)
 
     pruned_model, best_val_accuracy, num_iterations = tvt.train(pruned_model, criterion, optimizer, exp_lr_scheduler, training_number_of_epochs, trainset, valset, trainloader, valloader)
@@ -106,7 +95,8 @@ def one_shot_pruning(prune_model, prune_mask: Mask, optimizer, criterion, exp_lr
     print('Test Accuracy with {} Percent of weights: {}'.format(1 - pruning_percentage, test_accuracy))
 
 
-def iterative_pruning_by_num(prune_model, prune_mask: Mask, epochs: int, optimizer, criterion, exp_lr_scheduler, trainset, valset, trainloader, valloader, model_type, testset, testloader, pruning_percentage, training_number_of_epochs):
+def iterative_pruning_by_num(prune_model, prune_mask: Mask, epochs: int, criterion, trainset, valset, trainloader, valloader, testset, testloader, pruning_percentage, training_number_of_epochs,
+                             lr: float, it_per_epoch: int, num_warmup_it: int):
     # TODO: update order
     """
     Prune iteratively for a number of epochs. Save checkpoint after every pruning epoch.
@@ -126,7 +116,8 @@ def iterative_pruning_by_num(prune_model, prune_mask: Mask, epochs: int, optimiz
 
     for epoch in range(epochs):
         prune_model.mask = Mask.cuda(prune_mask)
-        prune_model, best_val_accuracy, num_iterations = tvt.train(prune_model, criterion, optimizer, exp_lr_scheduler, training_number_of_epochs, trainset, valset, trainloader, valloader)
+        scheduler, optimizer = get_scheduler_optimizer(lr=lr, it_per_ep=it_per_epoch, model=prune_model, num_warmup_it=num_warmup_it)
+        prune_model, best_val_accuracy, num_iterations = tvt.train(prune_model, criterion, optimizer, scheduler, training_number_of_epochs, trainset, valset, trainloader, valloader)
 
         test_accuracy = tvt.test(prune_model, testset, testloader)
         test_accuracies.append(test_accuracy * 100)
@@ -136,7 +127,7 @@ def iterative_pruning_by_num(prune_model, prune_mask: Mask, epochs: int, optimiz
         prune_model = pruned_model
         prune_mask = Mask.cuda(updated_mask)
 
-        model_type.reinit(prune_model, prune_mask, initial_state)
+        utils.reinit(prune_model, prune_mask, initial_state)
 
         checkpoint_save(optimizer, epoch, pruned_model, updated_mask, test_accuracy, training_number_of_epochs, mask_sparsity(prune_mask) * 100)
 
@@ -149,7 +140,7 @@ def iterative_pruning_by_num(prune_model, prune_mask: Mask, epochs: int, optimiz
     return test_accuracies, sparsity
 
 
-def iterative_pruning_by_test_acc(prune_model, prune_mask: Mask, acc_threshold: float, criterion, trainset, valset, trainloader, valloader, model_type, testset, testloader, training_number_of_epochs,
+def iterative_pruning_by_test_acc(prune_model, prune_mask: Mask, acc_threshold: float, criterion, trainset, valset, trainloader, valloader, testset, testloader, training_number_of_epochs,
                                   pruning_percentage, lr: float, it_per_epoch: int, num_warmup_it: int):
     """
     Prune iteratively until the test accuracy is lower than the threshold. Save checkpoint after every pruning epoch.
@@ -184,24 +175,22 @@ def iterative_pruning_by_test_acc(prune_model, prune_mask: Mask, acc_threshold: 
 
         pruned_model, updated_mask = prune(pruning_percentage, prune_model, prune_mask)
 
-        # pruned_model = pruned_model.to(device)
         prune_model = pruned_model
         prune_mask = Mask.cuda(updated_mask)
 
         if num_pruning_epochs == 1:
-            model_type.reinit(prune_model, prune_mask, initial_state)
+            utils.reinit(prune_model, prune_mask, initial_state)
 
         sparsity.append(mask_sparsity(prune_mask) * 100)
 
         prune_model.mask = prune_mask
-        # prune_model = prune_model.to(device)
         scheduler, optimizer = get_scheduler_optimizer(lr=lr, it_per_ep=it_per_epoch, model=prune_model, num_warmup_it=num_warmup_it)
         prune_model, best_val_accuracy, num_iterations = tvt.train(prune_model, criterion, optimizer, scheduler, training_number_of_epochs, trainset, valset, trainloader, valloader)  # train
 
         test_accuracy = tvt.test(prune_model, testset, testloader)  # test
         test_accuracies.append(test_accuracy * 100)
 
-        model_type.reinit(prune_model, prune_mask, initial_state)  # reinit
+        utils.reinit(prune_model, prune_mask, initial_state)  # reinit
 
         checkpoint_save(optimizer, num_pruning_epochs, prune_model, prune_mask, test_accuracy, training_number_of_epochs, mask_sparsity(prune_mask) * 100)  # save
 
