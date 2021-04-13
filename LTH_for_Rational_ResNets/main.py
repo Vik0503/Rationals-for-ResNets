@@ -88,10 +88,11 @@ elif LTH_args.dataset is 'SVHN':
 models_run_all = [rrn20.rational_resnet20(), rn20.resnet20(), sel2exp.select_2_expert_groups_rational_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)]
 
 
-def run_all():  # TODO: Solve Problem with Plots and Problem with select
+def run_all():  # TODO: Solve Problem with select
 
     plot_labels = ['ResNet20 univ. Rat.', 'ResNet20 Original', 'ResNet20 mixture of 5 univ. Rat.']
-    plt.figure(figsize=(10, 7))
+    plot_colors = ['C1', 'C0', 'C2']
+    plt.figure(figsize=(10, 6))
     plt.subplot(121)
     plt.xlabel('Percent of Pruned Weights')
     plt.ylabel('Test Accuracy in Percent')
@@ -137,18 +138,20 @@ def run_all():  # TODO: Solve Problem with Plots and Problem with select
             num_epochs = LTH_args.iterative_pruning_epochs
 
         elif LTH_args.stop_criteria is 'one_shot':
-            Lottery_Ticket_Hypothesis.one_shot_pruning(model, optimizer=optimizer, criterion=criterion,
-                                                       exp_lr_scheduler=exp_lr_scheduler, testset=testset,
+            Lottery_Ticket_Hypothesis.one_shot_pruning(model, criterion=criterion, testset=testset,
                                                        testloader=testloader, trainset=trainset, trainloader=trainloader,
                                                        valloader=valloader, valset=valset, prune_mask=mask,
                                                        pruning_percentage=LTH_args.pruning_percentage,
-                                                       training_number_of_epochs=LTH_args.training_number_of_epochs)
+                                                       training_number_of_epochs=LTH_args.training_number_of_epochs,
+                                                       lr=LTH_args.learning_rate,
+                                                       it_per_epoch=it_per_ep,
+                                                       num_warmup_it=LTH_args.warmup_iterations)
 
-        plt.plot(sparsities, test_accuracies, label=plot_labels[m])
+        plt.plot(sparsities, test_accuracies, label=plot_labels[m], color=plot_colors[m])
         num_epoch_list.append(num_epochs)
 
-    plt.subplots_adjust(bottom=0.2)
-    plt.legend(['ResNet20 univ. Rat.', 'ResNet20 Original', 'ResNet20 mixture of 5 univ. Rat.'], bbox_to_anchor=(0.1, -0.2), loc='upper center', ncol=1, mode="expand", borderaxespad=0.)
+    plt.subplots_adjust(bottom=0.3)
+    plt.legend(['ResNet20 univ. Rat.', 'ResNet20 Original', 'ResNet20 mixture of 5 univ. Rat.'], bbox_to_anchor=(0.5, -0.2), loc='upper center', ncol=1)
 
     props = dict(boxstyle='round', facecolor='grey', alpha=0.5)
     text = 'dataset: {}, '.format(LTH_args.dataset) + 'batch size: {}, '.format(LTH_args.batch_size) + '\n' + '{} training epochs per pruning epoch, '.format(LTH_args.training_number_of_epochs) + '\n' + \
@@ -165,18 +168,13 @@ def run_all():  # TODO: Solve Problem with Plots and Problem with select
 
 def run_one():
     if LTH_args.model is 'rational_resnet20_cifar10':
-        print('HELLO')
         model = rrn20.rational_resnet20()
-        model_type = rrn20
     elif LTH_args.model is 'resnet20_cifar10':
         model = rn20.resnet20()
-        model_type = rn20
     elif LTH_args.model is 'rational_resnet18_imagenet':
         model = rrn18.rational_resnet18()
-        model_type = rrn18
     elif LTH_args.model is 'resnet18_imagenet':
         model = rn18.resnet18()
-        model_type = rn18
     elif LTH_args.model is 'select_2_expert_groups_rational_resnet20':
         model = sel2exp.select_2_expert_groups_rational_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)
     elif LTH_args.model is 'select_1_expert_group_rational_resnet20':
@@ -221,17 +219,19 @@ def run_one():
         num_epochs = LTH_args.iterative_pruning_epochs
 
     elif LTH_args.stop_criteria is 'one_shot':
-        Lottery_Ticket_Hypothesis.one_shot_pruning(model, optimizer=optimizer, criterion=criterion,
-                                                   exp_lr_scheduler=exp_lr_scheduler, testset=testset,
+        Lottery_Ticket_Hypothesis.one_shot_pruning(model, criterion=criterion, testset=testset,
                                                    testloader=testloader, trainset=trainset, trainloader=trainloader,
                                                    valloader=valloader, valset=valset, prune_mask=mask,
                                                    pruning_percentage=LTH_args.pruning_percentage,
-                                                   training_number_of_epochs=LTH_args.training_number_of_epochs)
+                                                   training_number_of_epochs=LTH_args.training_number_of_epochs,
+                                                   lr=LTH_args.learning_rate,
+                                                   it_per_epoch=it_per_ep,
+                                                   num_warmup_it=LTH_args.warmup_iterations)
         num_epochs = 1
-
-    plots.make_LTH_test_acc_plot(test_accuracies, sparsities)
-    plots.final_plot_LTH(LTH_args.model, LTH_args.dataset, LTH_args.batch_size, num_epochs,
-                         LTH_args.training_number_of_epochs, LTH_args.learning_rate, LTH_args.pruning_percentage, LTH_args.warmup_iterations)
+    if LTH_args.stop_criteria is not 'one_shot':
+        plots.make_LTH_test_acc_plot(test_accuracies, sparsities)
+        plots.final_plot_LTH(LTH_args.model, LTH_args.dataset, LTH_args.batch_size, num_epochs,
+                             LTH_args.training_number_of_epochs, LTH_args.learning_rate, LTH_args.pruning_percentage, LTH_args.warmup_iterations)
 
 
 if LTH_args.run_all:

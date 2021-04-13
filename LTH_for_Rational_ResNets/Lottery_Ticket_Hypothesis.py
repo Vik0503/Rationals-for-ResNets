@@ -64,7 +64,7 @@ def checkpoint_save(optimizer, epoch: int, save_model, model_mask: Mask, test_ac
     }, PATH)
 
 
-def one_shot_pruning(prune_model, prune_mask: Mask, optimizer, criterion, exp_lr_scheduler, trainset, valset, trainloader, valloader, testset, testloader, pruning_percentage, training_number_of_epochs):
+def one_shot_pruning(prune_model, prune_mask: Mask, criterion, trainset, valset, trainloader, valloader, testset, testloader, pruning_percentage, training_number_of_epochs, lr: float, it_per_epoch: int, num_warmup_it: int):
     """
     Prune trained model once and reinitialize and test it.
 
@@ -78,8 +78,8 @@ def one_shot_pruning(prune_model, prune_mask: Mask, optimizer, criterion, exp_lr
     prune_model.mask = Mask.cuda(prune_mask)
 
     initial_state = deepcopy(prune_model.state_dict())
-
-    prune_model, best_val_accuracy, num_iterations = tvt.train(prune_model, criterion, optimizer, exp_lr_scheduler, training_number_of_epochs, trainset, valset, trainloader, valloader)
+    scheduler, optimizer = get_scheduler_optimizer(lr=lr, it_per_ep=it_per_epoch, model=prune_model, num_warmup_it=num_warmup_it)
+    prune_model, best_val_accuracy, num_iterations = tvt.train(prune_model, criterion, optimizer, scheduler, training_number_of_epochs, trainset, valset, trainloader, valloader)
 
     test_accuracy = tvt.test(prune_model, testset, testloader)
     print('Test Accuracy with 100 Percent of weights: ', test_accuracy)
@@ -89,7 +89,7 @@ def one_shot_pruning(prune_model, prune_mask: Mask, optimizer, criterion, exp_lr
     utils.reinit(pruned_model, updated_mask, initial_state)
     pruned_model.mask = Mask.cuda(updated_mask)
 
-    pruned_model, best_val_accuracy, num_iterations = tvt.train(pruned_model, criterion, optimizer, exp_lr_scheduler, training_number_of_epochs, trainset, valset, trainloader, valloader)
+    pruned_model, best_val_accuracy, num_iterations = tvt.train(pruned_model, criterion, optimizer, scheduler, training_number_of_epochs, trainset, valset, trainloader, valloader)
 
     test_accuracy = tvt.test(pruned_model, testset, testloader)
     print('Test Accuracy with {} Percent of weights: {}'.format(1 - pruning_percentage, test_accuracy))
