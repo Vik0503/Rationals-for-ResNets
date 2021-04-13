@@ -53,6 +53,8 @@ class RationalBasicBlock(nn.Module):
             self.expert_group_1.append(Rational(cuda=cuda, approx_func=self.rational_inits[n]))
             self.expert_group_2.append(Rational(cuda=cuda, approx_func=self.rational_inits[n]))
         # self.rational_expert_group = torch.nn.parameter.Parameter(self.expert_group_1)
+        self.rational_expert_group_1 = nn.Sequential(*self.expert_group_1)
+        self.rational_expert_group_2 = nn.Sequential(*self.expert_group_2)
         data_alpha_1 = initialize_alpha(self.num_rationals)
         self.alpha_1 = torch.nn.parameter.Parameter(data_alpha_1, requires_grad=True)
 
@@ -69,7 +71,7 @@ class RationalBasicBlock(nn.Module):
                 nn.BatchNorm2d(self.expansion * planes_out)
             )
 
-    def multi_rational(self, out: Tensor, alphas: torch.Tensor, rationals: list) -> Tensor:
+    def multi_rational(self, out: Tensor, alphas: torch.Tensor, rationals) -> Tensor:
         out_tensor = torch.zeros_like(out)
         for n in range(self.num_rationals):
             rational = rationals[n]
@@ -94,11 +96,11 @@ class RationalBasicBlock(nn.Module):
         """
         out = self.conv_layer_1(x)
         out = self.batch_norm_1(out)
-        out = self.multi_rational(out, self.alpha_1, self.expert_group_1)
+        out = self.multi_rational(out, self.alpha_1, self.rational_expert_group_1)
         out = self.conv_layer_2(out)
         out = self.batch_norm_2(out)
         out += self.shortcut(x)
-        out = self.multi_rational(out, self.alpha_2, self.expert_group_2)
+        out = self.multi_rational(out, self.alpha_2, self.rational_expert_group_2)
 
         return out
 
@@ -131,6 +133,8 @@ class RationalResNet(nn.Module):
 
         for n in range(self.num_rationals):
             self.expert_group.append(Rational(cuda=cuda, approx_func=self.rational_inits[n]))
+
+        self.rational_expert_group = nn.Sequential(*self.expert_group)
 
         data = initialize_alpha(self.num_rationals)
         self.alpha = torch.nn.parameter.Parameter(data, requires_grad=True)
@@ -174,8 +178,7 @@ class RationalResNet(nn.Module):
         if stride != 1 or planes_out * block.expansion != self.planes_in:
             downsample = True
 
-        layers = []
-        layers.append(block(self.planes_in, planes_out, self.rational_inits, self.num_rationals, stride, downsample=downsample))
+        layers = [block(self.planes_in, planes_out, self.rational_inits, self.num_rationals, stride, downsample=downsample)]
 
         downsample = False
         stride = 1
@@ -204,7 +207,7 @@ class RationalResNet(nn.Module):
     def multi_rational(self, out: Tensor) -> Tensor:
         out_tensor = torch.zeros_like(out)
         for n in range(self.num_rationals):
-            rational = self.expert_group[n]
+            rational = self.rational_expert_group[n]
             rational_out = rational(out.clone())
             out_tensor = out_tensor.clone() + self.alpha[n].clone() * rational_out.clone()
         out = out_tensor.clone()

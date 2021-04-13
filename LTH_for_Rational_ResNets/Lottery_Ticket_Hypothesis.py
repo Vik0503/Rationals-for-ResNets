@@ -1,15 +1,13 @@
 from datetime import datetime
-from copy import deepcopy
 
 import torch
 from torch import optim
 from torch.optim import lr_scheduler
 
-from LTH_for_Rational_ResNets import plots
 from LTH_for_Rational_ResNets import Train_Val_Test as tvt
+from LTH_for_Rational_ResNets import utils
 from LTH_for_Rational_ResNets.Lottery_Ticket_Pruning import prune
 from LTH_for_Rational_ResNets.Mask import mask_sparsity, Mask
-from LTH_for_Rational_ResNets import utils
 
 if torch.cuda.is_available():
     device = 'cuda'
@@ -77,7 +75,7 @@ def one_shot_pruning(prune_model, prune_mask: Mask, criterion, trainset, valset,
     """
     prune_model.mask = Mask.cuda(prune_mask)
 
-    initial_state = deepcopy(prune_model.state_dict())
+    initial_state = utils.initial_state(model=prune_model)
     scheduler, optimizer = get_scheduler_optimizer(lr=lr, it_per_ep=it_per_epoch, model=prune_model, num_warmup_it=num_warmup_it)
     prune_model, best_val_accuracy, num_iterations = tvt.train(prune_model, criterion, optimizer, scheduler, training_number_of_epochs, trainset, valset, trainloader, valloader)
 
@@ -112,7 +110,7 @@ def iterative_pruning_by_num(prune_model, prune_mask: Mask, epochs: int, criteri
     """
     sparsity = []
     test_accuracies = []
-    initial_state = deepcopy(prune_model.state_dict())
+    initial_state = utils.initial_state(model=prune_model)
 
     for epoch in range(epochs):
         prune_model.mask = Mask.cuda(prune_mask)
@@ -159,7 +157,7 @@ def iterative_pruning_by_test_acc(prune_model, prune_mask: Mask, acc_threshold: 
     num_pruning_epochs = 0
     sparsity.append(0)
     prune_model.mask = Mask.cuda(prune_mask)
-    initial_state = deepcopy(prune_model.state_dict())
+    initial_state = utils.initial_state(model=prune_model)
 
     scheduler, optimizer = get_scheduler_optimizer(lr=lr, it_per_ep=it_per_epoch, model=prune_model, num_warmup_it=num_warmup_it)
     prune_model, best_val_accuracy, num_iterations = tvt.train(prune_model, criterion, optimizer, scheduler, training_number_of_epochs, trainset, valset, trainloader, valloader)

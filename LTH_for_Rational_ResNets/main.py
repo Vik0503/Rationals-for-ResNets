@@ -32,9 +32,9 @@ from LTH_for_Rational_ResNets.Mask import make_initial_mask
 
 LTH_arg_parser = argparser.get_argparser()
 LTH_args = LTH_arg_parser.parse_args(
-    ['--model', 'rational_resnet20_cifar10', '--dataset', 'SVHN', '--warmup_iterations', '2000',
-     '--iterative_pruning_epochs', '2', '--training_number_of_epochs', '1',
-     '--stop_criteria', 'num_prune_epochs', '--run_all'])
+    ['--model', 'resnet20_cifar10', '--dataset', 'SVHN', '--warmup_iterations', '7167',
+     '--iterative_pruning_epochs', '4', '--training_number_of_epochs', '3',
+     '--stop_criteria', 'num_prune_epochs'])
 
 global trainset
 global valset
@@ -167,6 +167,7 @@ def run_all():  # TODO: Solve Problem with select
 
 
 def run_one():
+    global model
     if LTH_args.model is 'rational_resnet20_cifar10':
         model = rrn20.rational_resnet20()
     elif LTH_args.model is 'resnet20_cifar10':

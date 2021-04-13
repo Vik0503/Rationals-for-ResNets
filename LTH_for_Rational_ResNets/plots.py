@@ -34,7 +34,7 @@ def make_LTH_test_acc_plot(test_accuracies: list, sparsity: list):
 
 def final_plot_LTH(model, dataset, batch_size, num_pruning_epochs, training_number_of_epochs, learning_rate, pruning_percentage, warmup_iterations):
     props = dict(boxstyle='round', facecolor='grey', alpha=0.5)
-    text = 'model: {}, '.format(model) + 'dataset: {}, '.format(dataset) + 'batch size: {}, '.format(batch_size) + '\n' + '{} iterative pruning epochs, '.format(num_pruning_epochs) \
+    text = 'model: {}, '.format(model) + 'dataset: {}, '.format(dataset) + '\n' + 'batch size: {}, '.format(batch_size)  + '{} iterative pruning epochs, '.format(num_pruning_epochs) \
            + '\n' + '{} training epochs per pruning epoch, '.format(training_number_of_epochs) + '\n' + \
            'learning rate: {}, '.format(learning_rate) + '{}% pruning per epoch, '.format(pruning_percentage) + '\n' + '{} warm-up iterations'.format(warmup_iterations)
 
