@@ -1,5 +1,5 @@
 import torch
-import numpy as np
+
 import utils
 
 
@@ -124,18 +124,3 @@ def make_new_mask(upper_limit, mask: Mask, weights) -> Mask:
     return Mask(mask.cuda())
 
 
-def apply_mask(model, mask: Mask):
-    """
-    Apply a new mask to a net.
-
-    Parameters
-    ----------
-    model:
-           The model to which the mask is applied.
-    mask: Mask
-    """
-    for name, param in model.named_parameters():
-        if 'weight' not in name or 'batch_norm' in name or 'shortcut' in name or 'fc' in name:
-            continue
-        # param.data = param.data.cpu()
-        param.data *= mask[name]

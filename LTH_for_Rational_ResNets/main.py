@@ -31,10 +31,7 @@ from LTH_for_Rational_ResNets.LTH_Models import select_1_expert_group_rational_r
 from LTH_for_Rational_ResNets.Mask import make_initial_mask
 
 LTH_arg_parser = argparser.get_argparser()
-LTH_args = LTH_arg_parser.parse_args(
-    ['--model', 'resnet20_cifar10', '--dataset', 'SVHN', '--warmup_iterations', '7167',
-     '--iterative_pruning_epochs', '4', '--training_number_of_epochs', '3',
-     '--stop_criteria', 'num_prune_epochs'])
+LTH_args = argparser.get_arguments()
 
 global trainset
 global valset
@@ -47,6 +44,7 @@ global num_classes
 global it_per_ep
 global num_rationals
 global rational_inits
+global prune_shortcuts
 
 if torch.cuda.is_available():
     device = 'cuda'
@@ -62,6 +60,11 @@ matplotlib.rcParams.update({
 if LTH_args.initialize_rationals:
     rational_inits = LTH_args.initialize_rationals  # TODO: catch exceptions
     num_rationals = len(rational_inits)
+
+if LTH_args.prune_shortcuts:
+    prune_shortcuts = True
+else:
+    prune_shortcuts = False
 
 if LTH_args.dataset is 'cifar10':
     trainset = cifar10.get_trainset()
@@ -155,8 +158,9 @@ def run_all():  # TODO: Solve Problem with select
 
     props = dict(boxstyle='round', facecolor='grey', alpha=0.5)
     text = 'dataset: {}, '.format(LTH_args.dataset) + 'batch size: {}, '.format(LTH_args.batch_size) + '\n' + '{} training epochs per pruning epoch, '.format(LTH_args.training_number_of_epochs) + '\n' + \
-           'learning rate: {}, '.format(0.03) + '{}% pruning per epoch, '.format(LTH_args.pruning_percentage) + '\n' + '{} warm-up iterations'.format(LTH_args.warmup_iterations) + '\n' + 'number of iterative pruning epochs: ' + '\n' + \
-           '- ResNet20 univ. Rat: {}'.format(num_epoch_list[0]) + '\n' + '- ResNet20 Original: {}'.format(num_epoch_list[1]) + '\n' + '- ResNet20 mixture 5 univ. Rat: {}'.format(num_epoch_list[2])
+           'learning rate: {}, '.format(0.03) + '{}% pruning per epoch, '.format(LTH_args.pruning_percentage) + '\n' + '{} warm-up iterations'.format(LTH_args.warmup_iterations) + '\n' + 'shortcuts pruned: {}'.format(prune_shortcuts) + \
+           '\n' + 'number of iterative pruning epochs: ' + '\n' + \
+           '- ResNet20 univ. Rat: {}'.format(num_epoch_list[0]) + '\n' + '- ResNet20 Original: {}'.format(num_epoch_list[1]) + '\n' + '- ResNet20 mixture of 5 univ. Rat: {}'.format(num_epoch_list[2])
 
     plt.figtext(0.525, 0.5, text, bbox=props, size=9)
 
@@ -232,10 +236,12 @@ def run_one():
     if LTH_args.stop_criteria is not 'one_shot':
         plots.make_LTH_test_acc_plot(test_accuracies, sparsities)
         plots.final_plot_LTH(LTH_args.model, LTH_args.dataset, LTH_args.batch_size, num_epochs,
-                             LTH_args.training_number_of_epochs, LTH_args.learning_rate, LTH_args.pruning_percentage, LTH_args.warmup_iterations)
+                             LTH_args.training_number_of_epochs, LTH_args.learning_rate, LTH_args.pruning_percentage, LTH_args.warmup_iterations, prune_shortcuts)
 
 
 if LTH_args.run_all:
     run_all()
 else:
     run_one()
+
+

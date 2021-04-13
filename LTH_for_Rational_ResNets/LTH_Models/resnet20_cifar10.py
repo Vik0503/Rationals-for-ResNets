@@ -12,7 +12,10 @@ import torch.nn as nn
 from torch import Tensor
 
 from LTH_for_Rational_ResNets.Mask import Mask
+from LTH_for_Rational_ResNets import argparser
 
+args = argparser.get_arguments()
+prune_shortcuts = args.prune_shortcuts
 
 if torch.cuda.is_available():
     device = 'cuda'
@@ -75,24 +78,6 @@ class BasicBlock(nn.Module):
         out = self.relu(out)
 
         return out
-
-
-def reinit(model, mask: Mask, initial_state_model):
-    """
-    Reset pruned model's weights to the initial initialization.
-
-    Parameter
-    ---------
-    model: ResNet
-    mask: Mask
-          A mask with pruned weights.
-    initial_state_model: dict
-                         Initially saved state, before the model is trained.
-    """
-    for name, param in model.named_parameters():
-        if 'weight' not in name or 'batch_norm' in name or 'shortcut' in name or 'fc' in name:
-            continue
-        param.data = initial_state_model[name] * mask[name]
 
 
 class ResNet(nn.Module):
@@ -176,15 +161,18 @@ class ResNet(nn.Module):
 
         Parameters
         ----------
-        self:
-               The model to which the mask is applied.
         mask: Mask
         """
         if mask is not None:
             for name, param in self.named_parameters():
-                if 'weight' not in name or 'batch_norm' in name or 'shortcut' in name or 'fc' in name:
-                    continue
-                param.data *= mask[name]
+                if prune_shortcuts:
+                    if 'weight' not in name or 'batch_norm' in name or 'fc' in name or 'shortcut.1.' in name:  # TODO: find better solution for shortcut.1 problem
+                        continue
+                    param.data *= mask[name]
+                else:
+                    if 'weight' not in name or 'batch_norm' in name or 'shortcut' in name or 'fc' in name:
+                        continue
+                    param.data *= mask[name]
 
     def forward(self, out: Tensor) -> Tensor:
         """
@@ -261,12 +249,3 @@ def resnet20(mask: Mask = None, **kwargs: Any) -> ResNet:
     return _resnet('resnet20', BasicBlock, [3, 3, 3], mask=mask, **kwargs)
 
 
-def prunable_layer_dict(model):
-    prune_dict = {}
-    for name, param in model.named_parameters():
-        if 'weight' not in name:
-            continue
-
-        prune_dict[name] = param
-
-    return prune_dict

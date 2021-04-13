@@ -55,56 +55,6 @@ def prune_layerwise(pruning_frac: float, model_prune, mask: Mask = None):  # nee
     return model_prune, mask
 
 
-def prune_2(pruning_frac: float, model_prune, mask: Mask):  # eventuell alles auf GPU lassen?
-    """
-    Prune a percentage of the model's weights globally.
-
-    Parameters
-    ----------
-    pruning_frac: float
-                  Fracture of the model's weights that will be pruned.
-    model_prune:
-                 Model whose weights will be pruned.
-    mask: Mask
-
-    Returns
-    -------
-    model_prune:
-                 Model with pruned weights.
-    updated_mask: Mask
-    """
-    np_array = False
-    for item, value in mask.items():
-        if isinstance(value, np.ndarray):
-            np_array = True
-            break
-    if not np_array:
-        np_mask = {key: values.cpu().numpy() for key, values in mask.items()}
-    else:
-        np_mask = mask
-
-    prunable_layers = set(model_prune.prunable_layers())
-
-    model_weights = {}
-    for item, values in model_prune.state_dict().items():
-        if item in prunable_layers:
-            model_weights[item] = values.clone().detach().cpu().numpy()
-
-    weights_unpruned = torch.Tensor(get_unpruned_weights(model_weights=model_weights, mask=np_mask))
-
-    num_rem_weights = get_number_of_unpruned_weights(mask)
-    num_prune_weights = np.ceil((pruning_frac / 100) * num_rem_weights.cpu().numpy())
-    print('number of weights to prune: ', num_prune_weights)
-
-    upper_prune_limit = np.sort(np.abs(weights_unpruned.numpy()))[num_prune_weights.astype(int)]
-
-    updated_mask = make_new_mask(upper_limit=upper_prune_limit, mask=np_mask, weights=model_weights)
-
-    # updated_mask = Mask.cuda(updated_mask)
-    # model_prune.apply_mask(updated_mask)
-    return model_prune, updated_mask
-
-
 def dict_to_list(dictionary) -> List:
     """
     Transform a dictionary into a list.
@@ -156,36 +106,6 @@ def tensor_to_dict(tensor: torch.Tensor, ref_dict: Dict[str, torch.Tensor]) -> D
         tensor_dict[key] = element.reshape(shape)
 
     return tensor_dict
-
-
-def get_unpruned_weights_2(model_weights, mask: Mask) -> List:  # TODO: unbedingt schöner machen!!!
-    """
-    Return a list containing all unpruned weights.
-
-    Parameters
-    ----------
-    model_weights:
-                    All weights of the model.
-    mask: Mask
-
-    Returns
-    -------
-    unpruned_weights: List
-                      A list containing all unpruned weights.
-    """
-    unpruned_weights_items = []
-    unpruned_weights = []
-    for key, values in model_weights.items():
-        unpruned_weights_items.append([values[mask[key] == 1]])
-
-    for i in range(len(unpruned_weights_items)):
-        k = unpruned_weights_items[i]
-        for j in range(len(k)):
-            l = k[j]
-            for m in range(len(l)):
-                unpruned_weights.append(l[m])
-
-    return unpruned_weights
 
 
 def get_unpruned_weights(model_weights, mask: Mask):

@@ -14,6 +14,10 @@ from rational.torch import Rational
 from torch import Tensor
 
 from LTH_for_Rational_ResNets.Mask import Mask
+from LTH_for_Rational_ResNets import argparser
+
+args = argparser.get_arguments()
+prune_shortcuts = args.prune_shortcuts
 
 if torch.cuda.is_available():
     cuda = True
@@ -52,7 +56,6 @@ class RationalBasicBlock(nn.Module):
         for n in range(self.num_rationals):
             self.expert_group_1.append(Rational(cuda=cuda, approx_func=self.rational_inits[n]))
             self.expert_group_2.append(Rational(cuda=cuda, approx_func=self.rational_inits[n]))
-        # self.rational_expert_group = torch.nn.parameter.Parameter(self.expert_group_1)
         self.rational_expert_group_1 = nn.Sequential(*self.expert_group_1)
         self.rational_expert_group_2 = nn.Sequential(*self.expert_group_2)
         data_alpha_1 = initialize_alpha(self.num_rationals)
@@ -200,9 +203,14 @@ class RationalResNet(nn.Module):
         """
         if mask is not None:
             for name, param in self.named_parameters():
-                if 'weight' not in name or 'batch_norm' in name or 'shortcut' in name or 'fc' in name:
-                    continue
-                param.data *= mask[name]
+                if prune_shortcuts:
+                    if 'weight' not in name or 'batch_norm' in name or 'fc' in name or 'shortcut.1.' in name:  # TODO: find better solution for shortcut.1 problem
+                        continue
+                    param.data *= mask[name]
+                else:
+                    if 'weight' not in name or 'batch_norm' in name or 'shortcut' in name or 'fc' in name:
+                        continue
+                    param.data *= mask[name]
 
     def multi_rational(self, out: Tensor) -> Tensor:
         out_tensor = torch.zeros_like(out)

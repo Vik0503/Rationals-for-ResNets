@@ -17,6 +17,7 @@ LTH_arg_parser.add_argument('-init_rationals', '--initialize_rationals',
                             help='Examples: -init_rationals leaky_relu gelu, -init_rationals tanh')
 LTH_arg_parser.add_argument('--run_all', default=False, action='store_true',
                             help="Flag to perform all three experiments `original`, `univariate rational` and `mixture of experts` in a sequence and plot the results in one graph for further comparison.")
+LTH_arg_parser.add_argument('--prune_shortcuts', default=False, action='store_true', help='Flag to prune shortcuts.')
 
 
 def get_argparser():
@@ -29,3 +30,13 @@ def get_argparser():
                        Argument Parser for all experiments with ResNets.
     """
     return LTH_arg_parser
+
+
+LTH_args = LTH_arg_parser.parse_args(
+    ['--model', 'select_2_expert_groups_rational_resnet20', '--dataset', 'SVHN', '--warmup_iterations', '7167',
+     '--iterative_pruning_epochs', '3', '--training_number_of_epochs', '3',
+     '--stop_criteria', 'num_prune_epochs', '--run_all'])
+
+
+def get_arguments():
+    return LTH_args
