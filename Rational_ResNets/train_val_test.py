@@ -7,12 +7,14 @@ import torch
 from sklearn.metrics import confusion_matrix
 
 from Rational_ResNets import plots
-
+import argparser
 
 if torch.cuda.is_available():
     device = 'cuda'
 else:
     device = 'cpu'
+
+resnet_args = argparser.get_args()
 
 
 def train_val_test_model(model, criterion, optimizer, scheduler, num_epochs, trainloader, valloader, testloader, trainset, valset, testset):
@@ -118,7 +120,7 @@ def train_val_test_model(model, criterion, optimizer, scheduler, num_epochs, tra
 
     model.load_state_dict(best_model)
 
-    return model, cm, time_elapsed_epoch, best_acc
+    return model, cm, time_elapsed_epoch, best_acc, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals, accuracy_plot_x_vals
 
 
 def average_epoch_time(avg_epoch_time: list):

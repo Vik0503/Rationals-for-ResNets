@@ -34,8 +34,8 @@ def get_argparser():
 
 LTH_args = LTH_arg_parser.parse_args(
     ['--model', 'select_2_expert_groups_rational_resnet20', '--dataset', 'SVHN', '--warmup_iterations', '7167',
-     '--iterative_pruning_epochs', '3', '--training_number_of_epochs', '3',
-     '--stop_criteria', 'num_prune_epochs', '--run_all'])
+     '--test_accuracy_threshold', '0.90', '--training_number_of_epochs', '25',
+     '--stop_criteria', 'test_acc', '--run_all', '--prune_shortcuts'])
 
 
 def get_arguments():

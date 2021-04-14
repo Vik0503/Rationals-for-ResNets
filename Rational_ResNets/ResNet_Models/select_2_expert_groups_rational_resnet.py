@@ -21,7 +21,7 @@ else:
     device = 'cpu'
 
 
-class RationalBasicBlock(nn.Module):
+class RationalBasicBlock(nn.Module):  # TODO: Update with sequential
     """A Basic Block as described in the paper above, with Rationals as activation function instead of ReLu."""
     expansion = 1
 

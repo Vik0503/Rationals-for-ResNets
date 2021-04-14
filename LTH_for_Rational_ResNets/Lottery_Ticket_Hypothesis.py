@@ -20,14 +20,24 @@ def get_scheduler_optimizer(num_warmup_it, lr, model, it_per_ep):  # TODO: allow
 
     def lr_lambda(it):
         if it < num_warmup_it:
+            if it % 500 == 0:
+                print('Warmup')
             return min(1.0, it / num_warmup_it)
         elif it < 10 * it_per_ep:
+            if it % 500 == 0:
+                print('MS 1')
             return 1
         elif 10 * it_per_ep <= it < 15 * it_per_ep:
+            if it % 500 == 0:
+                print('MS 2')
             return 0.1
         elif 15 * it_per_ep <= it < 20 * it_per_ep:
+            if it % 500 == 0:
+                print('MS 3')
             return 0.01
         elif it >= 20 * it_per_ep:
+            if it % 500 == 0:
+                print('After MS 3')
             return 0.001
 
     return lr_scheduler.LambdaLR(optimizer, lr_lambda=lr_lambda), optimizer
@@ -138,8 +148,8 @@ def iterative_pruning_by_num(prune_model, prune_mask: Mask, epochs: int, criteri
     return test_accuracies, sparsity
 
 
-def iterative_pruning_by_test_acc(prune_model, prune_mask: Mask, acc_threshold: float, criterion, trainset, valset, trainloader, valloader, testset, testloader, training_number_of_epochs,
-                                  pruning_percentage, lr: float, it_per_epoch: int, num_warmup_it: int):
+def iterative_pruning_by_test_acc_2(prune_model, prune_mask: Mask, acc_threshold: float, criterion, trainset, valset, trainloader, valloader, testset, testloader, training_number_of_epochs,
+                                    pruning_percentage, lr: float, it_per_epoch: int, num_warmup_it: int):
     """
     Prune iteratively until the test accuracy is lower than the threshold. Save checkpoint after every pruning epoch.
 
@@ -197,5 +207,54 @@ def iterative_pruning_by_test_acc(prune_model, prune_mask: Mask, acc_threshold: 
         print('Model Test Accuracy: ', test_accuracy)
         print('at {} Training Iterations'.format(num_iterations))
         print('Sparsity of Pruned Mask: ', mask_sparsity(updated_mask))
+
+    return num_pruning_epochs, test_accuracies, sparsity
+
+
+def iterative_pruning_by_test_acc(prune_model, prune_mask: Mask, acc_threshold: float, criterion, trainset, valset, trainloader, valloader, testset, testloader, training_number_of_epochs,
+                                  pruning_percentage, lr: float, it_per_epoch: int, num_warmup_it: int):
+    sparsity = []
+    test_accuracies = []
+    num_pruning_epochs = 0
+    sparsity.append(0)
+
+    prune_model.mask = Mask.cuda(prune_mask)
+
+    initial_state = utils.initial_state(model=prune_model)
+
+    scheduler, optimizer = get_scheduler_optimizer(lr=lr, it_per_ep=it_per_epoch, model=prune_model, num_warmup_it=num_warmup_it)
+
+    prune_model, best_val_accuracy, num_iterations = tvt.train(prune_model, criterion, optimizer, scheduler, training_number_of_epochs, trainset, valset, trainloader, valloader)
+
+    test_accuracy = tvt.test(prune_model, testset, testloader)
+    test_accuracies.append(test_accuracy * 100)
+    print('Before Pruning')
+    print('+' * 18)
+    print('Model Test Accuracy: ', test_accuracy)
+    while test_accuracy > acc_threshold:
+        num_pruning_epochs += 1
+
+        print('Pruning Epoch {}'.format(num_pruning_epochs))
+        print('+' * 18)
+
+        pruned_model, updated_mask = prune(pruning_percentage, prune_model, prune_mask)
+        sparsity.append(mask_sparsity(prune_mask) * 100)
+
+        prune_model = pruned_model
+        prune_mask = Mask.cuda(updated_mask)
+
+        print('Sparsity of Pruned Mask: ', mask_sparsity(updated_mask))
+
+        utils.reinit(prune_model, prune_mask, initial_state)  # reinit
+
+        checkpoint_save(optimizer, num_pruning_epochs, prune_model, prune_mask, test_accuracy, training_number_of_epochs, mask_sparsity(prune_mask) * 100)  # save
+
+        scheduler, optimizer = get_scheduler_optimizer(lr=lr, it_per_ep=it_per_epoch, model=prune_model, num_warmup_it=num_warmup_it)
+        prune_model, best_val_accuracy, num_iterations = tvt.train(prune_model, criterion, optimizer, scheduler, training_number_of_epochs, trainset, valset, trainloader, valloader)  # train
+
+        test_accuracy = tvt.test(prune_model, testset, testloader)  # test
+        test_accuracies.append(test_accuracy * 100)
+
+        print('Model Test Accuracy: ', test_accuracy)
 
     return num_pruning_epochs, test_accuracies, sparsity

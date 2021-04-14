@@ -18,6 +18,7 @@ from LTH_for_Rational_ResNets import argparser
 
 args = argparser.get_arguments()
 prune_shortcuts = args.prune_shortcuts
+print('rr20: ', prune_shortcuts)
 
 if torch.cuda.is_available():
     cuda = True

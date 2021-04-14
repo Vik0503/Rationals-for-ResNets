@@ -11,12 +11,13 @@ parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
 
 import torch
-
 torch.cuda.manual_seed_all(42)
 from torch import nn
 import numpy as np
 
 np.random.seed(42)
+
+import time
 
 from LTH_for_Rational_ResNets import Lottery_Ticket_Hypothesis
 from LTH_for_Rational_ResNets import plots
@@ -30,7 +31,6 @@ from LTH_for_Rational_ResNets.LTH_Models import select_2_expert_groups_rational_
 from LTH_for_Rational_ResNets.LTH_Models import select_1_expert_group_rational_resnet as sel1exp
 from LTH_for_Rational_ResNets.Mask import make_initial_mask
 
-LTH_arg_parser = argparser.get_argparser()
 LTH_args = argparser.get_arguments()
 
 global trainset
@@ -93,6 +93,7 @@ models_run_all = [rrn20.rational_resnet20(), rn20.resnet20(), sel2exp.select_2_e
 
 def run_all():  # TODO: Solve Problem with select
 
+    since = time.time()
     plot_labels = ['ResNet20 univ. Rat.', 'ResNet20 Original', 'ResNet20 mixture of 5 univ. Rat.']
     plot_colors = ['C1', 'C0', 'C2']
     plt.figure(figsize=(10, 6))
@@ -158,12 +159,14 @@ def run_all():  # TODO: Solve Problem with select
 
     props = dict(boxstyle='round', facecolor='grey', alpha=0.5)
     text = 'dataset: {}, '.format(LTH_args.dataset) + 'batch size: {}, '.format(LTH_args.batch_size) + '\n' + '{} training epochs per pruning epoch, '.format(LTH_args.training_number_of_epochs) + '\n' + \
-           'learning rate: {}, '.format(0.03) + '{}% pruning per epoch, '.format(LTH_args.pruning_percentage) + '\n' + '{} warm-up iterations'.format(LTH_args.warmup_iterations) + '\n' + 'shortcuts pruned: {}'.format(prune_shortcuts) + \
+           'learning rate: {}, '.format(0.03) + '{}% pruning per epoch, '.format(LTH_args.pruning_percentage) + '\n' + '{} warm-up iterations, '.format(LTH_args.warmup_iterations) + '\n' + 'shortcuts pruned: {}, '.format(prune_shortcuts) + \
            '\n' + 'number of iterative pruning epochs: ' + '\n' + \
            '- ResNet20 univ. Rat: {}'.format(num_epoch_list[0]) + '\n' + '- ResNet20 Original: {}'.format(num_epoch_list[1]) + '\n' + '- ResNet20 mixture of 5 univ. Rat: {}'.format(num_epoch_list[2])
 
     plt.figtext(0.525, 0.5, text, bbox=props, size=9)
-
+    time_elapsed = time.time() - since
+    print('Experiments completed in {:.0f}m {:.0f}s'.format(
+        time_elapsed // 60, time_elapsed % 60))
     time_stamp = datetime.now()
     PATH = './Results/LTH_all_models' + '/' + '{}'.format(time_stamp) + '_' + '{}'.format(LTH_args.dataset) + '.svg'
     plt.savefig(PATH)
