@@ -66,7 +66,8 @@ def get_train_data(aug: bool = False, bs: int = 128):
     train_val_set = torchvision.datasets.CIFAR10(root='../data/cifar10', train=True, download=True, transform=data_transform)
     trainset, _ = torch.utils.data.random_split(train_val_set, [45000, 5000])
     trainloader = torch.utils.data.DataLoader(trainset, shuffle=True, num_workers=16, batch_size=bs, drop_last=True)
-    return trainset, trainloader
+    it_per_ep = np.ceil(len(trainset) / bs).astype(int)
+    return trainset, trainloader, it_per_ep
 
 
 def get_validation_data(aug: bool = False, bs: int = 128):

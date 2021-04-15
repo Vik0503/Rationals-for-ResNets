@@ -1,6 +1,7 @@
 import torch
 import torchvision
 from torchvision import transforms
+import numpy as np
 
 
 transform = transforms.Compose([
@@ -67,7 +68,8 @@ def get_train_data(aug: bool = False, bs: int = 128):
     train_val_set = torchvision.datasets.SVHN(root='../data/SVHN', split='train', download=True, transform=data_transform)
     trainset, _ = torch.utils.data.random_split(train_val_set, [54943, 18314])
     trainloader = torch.utils.data.DataLoader(trainset, shuffle=True, num_workers=16, batch_size=bs, drop_last=True)
-    return trainset, trainloader
+    it_per_ep = np.ceil(len(trainset) / bs).astype(int)
+    return trainset, trainloader, it_per_ep
 
 
 def get_validation_data(aug: bool = False, bs: int = 128):

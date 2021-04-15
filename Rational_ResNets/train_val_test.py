@@ -69,6 +69,9 @@ def train_val_test_model(model, criterion, optimizer, scheduler, num_epochs, tra
                         loss.backward()
                         optimizer.step()
 
+                if phase == 'train':
+                    scheduler.step()
+
                 if phase == 'test':
                     all_test_preds.append(preds.cpu().numpy())
                     all_test_labels.append(labels.cpu().numpy())
@@ -81,7 +84,6 @@ def train_val_test_model(model, criterion, optimizer, scheduler, num_epochs, tra
                 epoch_loss = running_loss / len(trainset)
                 epoch_acc = running_corrects.double() / len(trainset)
                 train_acc_plot_y_vals.append(epoch_acc.cpu() * 100)
-                scheduler.step()
 
             if phase == 'val':
                 epoch_loss = running_loss / len(valset)

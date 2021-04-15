@@ -114,7 +114,7 @@ def plot_overview_all(training_accs, val_accs, test_accs, x_vals, best_test_accs
 
     props = dict(boxstyle='round', facecolor='grey', alpha=0.5)
     text = 'dataset: {}, '.format(ResNet_args.dataset) + 'batch size: {}, '.format(ResNet_args.batch_size) + '\n' + '{} training epochs, '.format(ResNet_args.training_number_of_epochs) + '\n' + \
-           'learning rate: {}, '.format(ResNet_args.learning_rate) + '{} warm-up iterations, '.format(ResNet_args.warmup_iterations) + \
+           'learning rate: {}, '.format(ResNet_args.learning_rate) + '{} warm-up iterations, '.format(ResNet_args.warmup_iterations) + '\n' + \
            'best test accuracy: ' + '\n' + \
            '- ResNet20 univ. Rat: {:4f}'.format(best_test_accs[0]) + '\n' + '- ResNet20 Original: {:4f}'.format(best_test_accs[1]) + '\n' + '- ResNet20 mixture of 5 univ. Rat: {:4f}'.format(best_test_accs[2]) + '\n' + \
            'average time per epoch: ' + '\n' + \
