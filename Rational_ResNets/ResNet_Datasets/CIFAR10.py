@@ -1,3 +1,5 @@
+import random
+
 import torch
 import torchvision
 from torchvision import transforms
@@ -16,6 +18,12 @@ aug_transform = transforms.Compose([
 ])
 
 classes = ['bird', 'car', 'cat', 'deer', 'dog', 'frog', 'horse', 'plane', 'ship', 'truck']
+
+
+def random_seed_for_worker(worker_id):
+    seed = torch.initial_seed() % 2 ** 32
+    np.random.seed(seed)
+    random.seed(seed)
 
 
 def get_classes() -> list:
@@ -65,7 +73,7 @@ def get_train_data(aug: bool = False, bs: int = 128):
 
     train_val_set = torchvision.datasets.CIFAR10(root='../data/cifar10', train=True, download=True, transform=data_transform)
     trainset, _ = torch.utils.data.random_split(train_val_set, [45000, 5000])
-    trainloader = torch.utils.data.DataLoader(trainset, shuffle=True, num_workers=16, batch_size=bs, drop_last=True)
+    trainloader = torch.utils.data.DataLoader(trainset, shuffle=True, num_workers=16, batch_size=bs, drop_last=True, worker_init_fn=random_seed_for_worker)
     it_per_ep = np.ceil(len(trainset) / bs).astype(int)
     return trainset, trainloader, it_per_ep
 
@@ -94,7 +102,7 @@ def get_validation_data(aug: bool = False, bs: int = 128):
 
     train_val_set = torchvision.datasets.CIFAR10(root='../data/cifar10', train=True, download=True, transform=data_transform)
     _, valset = torch.utils.data.random_split(train_val_set, [45000, 5000])
-    valloader = torch.utils.data.DataLoader(valset, shuffle=True, num_workers=16, batch_size=bs, drop_last=True)
+    valloader = torch.utils.data.DataLoader(valset, shuffle=True, num_workers=16, batch_size=bs, drop_last=True, worker_init_fn=random_seed_for_worker)
     return valset, valloader
 
 
@@ -120,5 +128,5 @@ def get_test_data(aug: bool = False, bs: int = 128):
     else:
         data_transform = transform
     testset = torchvision.datasets.CIFAR10(root='../data/cifar10', train=False, download=True, transform=data_transform)
-    testloader = torch.utils.data.DataLoader(testset, shuffle=False, num_workers=16, batch_size=bs, drop_last=True)
+    testloader = torch.utils.data.DataLoader(testset, shuffle=False, num_workers=16, batch_size=bs, drop_last=True, worker_init_fn=random_seed_for_worker)
     return testset, testloader

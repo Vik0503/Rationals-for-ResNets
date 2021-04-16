@@ -5,12 +5,14 @@ from datetime import datetime
 
 import matplotlib
 import matplotlib.pyplot as plt
+import yaml
 
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
 
 import torch
+
 torch.cuda.manual_seed_all(42)
 from torch import nn
 import numpy as np
@@ -87,6 +89,26 @@ elif LTH_args.dataset is 'SVHN':
     classes = SVHN.get_classes()
     num_classes = SVHN.get_num_classes()
     it_per_ep = SVHN.get_it_per_epoch(bs=LTH_args.batch_size)
+
+
+def make_yaml(models: list, csv=None):  # TODO: add Rational Init + One Shot Option
+    time_stamp = datetime.now()
+    yaml_data = [{'Date': [time_stamp]}, {'Model(s)': models}, {'Dataset': [LTH_args.dataset]}, {'Batch Size': [LTH_args.batch_size]}, {'Pruning Percentage per Epoch': [LTH_args.pruning_percentage]},
+                 {'Training Epochs per Pruning Epoch': [LTH_args.training_number_of_epochs]}, {'Learning Rate': [LTH_args.learning_rate]},{'Warm-Up Iterations': [LTH_args.warmup_iterations]},
+                 {'Shortcuts pruned': [LTH_args.prune_shortcuts]}]
+
+    if LTH_args.stop_criteria is 'num_prune_epochs':
+        yaml_data.append({'Iterative Pruning Epochs': [LTH_args.iterative_pruning_epochs]})
+    elif LTH_args.stop_criteria is 'test_acc':
+        yaml_data.append({'Test Accuracy Threshold': [LTH_args.test_acc]})
+
+    if LTH_args.save_res_csv:
+        yaml_data.append({'CSV File': [csv]})
+
+    PATH = 'YAML/{}'.format(time_stamp) + '.yaml'
+    with open(PATH, 'w') as file:
+        documents = yaml.dump(yaml_data, file)
+
 
 models_run_all = [rrn20.rational_resnet20(), rn20.resnet20(), sel2exp.select_2_expert_groups_rational_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)]
 
@@ -171,6 +193,7 @@ def run_all():  # TODO: Solve Problem with select
     PATH = './Results/LTH_all_models' + '/' + '{}'.format(time_stamp) + '_' + '{}'.format(LTH_args.dataset) + '.svg'
     plt.savefig(PATH)
     plt.show()
+    make_yaml(['rational_resnet20_cifar10', 'resnet20_cifar10', 'select_2_expert_groups_rational_resnet20'])
 
 
 def run_one():
@@ -241,10 +264,10 @@ def run_one():
         plots.final_plot_LTH(LTH_args.model, LTH_args.dataset, LTH_args.batch_size, num_epochs,
                              LTH_args.training_number_of_epochs, LTH_args.learning_rate, LTH_args.pruning_percentage, LTH_args.warmup_iterations, prune_shortcuts)
 
+    make_yaml([LTH_args.model])
+
 
 if LTH_args.run_all:
     run_all()
 else:
     run_one()
-
-

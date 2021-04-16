@@ -2,8 +2,14 @@ from __future__ import print_function, division
 
 import copy
 import time
-import numpy as np
+
 import torch
+
+torch.cuda.manual_seed_all(42)
+
+import numpy as np
+np.random.seed(42)
+
 from sklearn.metrics import confusion_matrix
 
 from Rational_ResNets import plots

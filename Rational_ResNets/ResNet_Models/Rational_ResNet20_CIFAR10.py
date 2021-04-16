@@ -9,6 +9,7 @@ from __future__ import print_function, division
 from typing import Type, Any, List
 
 import torch
+
 import torch.nn as nn
 from rational.torch import Rational
 from torch import Tensor

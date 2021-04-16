@@ -1,0 +1,6 @@
+- Date: [!!timestamp '2021-04-16 16:41:52.443537']
+- Model(s): [rational_resnet20_cifar10]
+- Dataset: [SVHN]
+- {Batch Size: 128}
+- {Learning Rate: 0.01}
+- {Epochs: 3}

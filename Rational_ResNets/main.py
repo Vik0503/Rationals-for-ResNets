@@ -2,6 +2,8 @@ import os
 import sys
 import inspect
 
+import yaml
+
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
@@ -16,6 +18,8 @@ from torch.optim import lr_scheduler
 import numpy as np
 
 np.random.seed(42)
+
+from datetime import datetime
 
 from Rational_ResNets import argparser
 from Rational_ResNets import train_val_test as tvt
@@ -90,8 +94,20 @@ def get_scheduler_optimizer(num_warmup_it, lr, model, it_per_ep):  # TODO: allow
     return lr_scheduler.LambdaLR(optimizer, lr_lambda=lr_lambda), optimizer
 
 
-def run_all():
+def make_yaml(models: list, csv=None):  # TODO: add Rational Init + One Shot Option
+    time_stamp = datetime.now()
+    yaml_data = [{'Date': [time_stamp]}, {'Model(s)': models}, {'Dataset': [resnet_args.dataset]}, {'Batch Size': [resnet_args.batch_size]},
+                 {'Learning Rate': [resnet_args.learning_rate]}, {'Epochs': [resnet_args.training_number_of_epochs]}, {'Warm-Up Iterations': [resnet_args.warmup_iterations]}]
 
+    if resnet_args.save_res_csv:
+        yaml_data.append({'CSV File': [csv]})
+
+    PATH = 'YAML/{}'.format(time_stamp) + '.yaml'
+    with open(PATH, 'w') as file:
+        documents = yaml.dump(yaml_data, file)
+
+
+def run_all():
     rational_inits = resnet_args.initialize_rationals  # TODO: catch exceptions
     num_rationals = len(rational_inits)
 
@@ -109,7 +125,7 @@ def run_all():
         model = model.to(device)
         criterion = nn.CrossEntropyLoss()
 
-        scheduler, optimizer = get_scheduler_optimizer(resnet_args.warmup_iterations, resnet_args.learning_rate, model, it_per_ep)  # TODO: find solution for it_per_ep
+        scheduler, optimizer = get_scheduler_optimizer(resnet_args.warmup_iterations, resnet_args.learning_rate, model, it_per_ep)
         model, cm, time_elapsed_epoch, best_acc, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals, accuracy_plot_x_vals = tvt.train_val_test_model(model, criterion, optimizer, scheduler,
                                                                                                                                                                    num_epochs=resnet_args.training_number_of_epochs,
                                                                                                                                                                    testloader=testloader, valloader=valloader,
@@ -122,10 +138,10 @@ def run_all():
         avg_time.append(time_elapsed_epoch)
 
     plots.plot_overview_all(train_accs, val_accs, test_accs, accuracy_plot_x_vals, best_test_accs, avg_time)
+    make_yaml(['rational_resnet20_cifar10', 'resnet20_cifar10', 'select_2_expert_groups_rational_resnet20'])
 
 
 def run_one():
-
     if resnet_args.model is 'rational_resnet20_cifar10':  # TODO: add rest of the models
         model = RRN20.rational_resnet20()
         num_rationals = 2
@@ -163,15 +179,17 @@ def run_one():
 
     criterion = nn.CrossEntropyLoss()
 
-    optimizer, scheduler = get_scheduler_optimizer(resnet_args.warmup_iterations, resnet_args.learning_rate, model, it_per_ep)
-    model, cm, avg_time, best_test_acc = tvt.train_val_test_model(model, criterion, optimizer, scheduler,
-                                                                  num_epochs=resnet_args.training_number_of_epochs,
-                                                                  testloader=testloader, valloader=valloader,
-                                                                  trainset=trainset, trainloader=trainloader,
-                                                                  testset=testset, valset=valset)
+    scheduler, optimizer = get_scheduler_optimizer(resnet_args.warmup_iterations, resnet_args.learning_rate, model, it_per_ep)
+    model, cm, avg_time, best_test_acc, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals, accuracy_plot_x_vals = tvt.train_val_test_model(model, criterion, optimizer=optimizer, scheduler=scheduler,
+                                                                                                                                                          num_epochs=resnet_args.training_number_of_epochs,
+                                                                                                                                                          testloader=testloader, valloader=valloader,
+                                                                                                                                                          trainset=trainset, trainloader=trainloader,
+                                                                                                                                                          testset=testset, valset=valset)
 
     plots.final_plot(cm, avg_time, best_test_acc, resnet_args.training_number_of_epochs, resnet_args.learning_rate,
                      num_rationals, resnet_args.dataset, resnet_args.model, resnet_args.batch_size)
+    models = [resnet_args.model]
+    make_yaml(models, 'test')
 
 
 if resnet_args.train_all:

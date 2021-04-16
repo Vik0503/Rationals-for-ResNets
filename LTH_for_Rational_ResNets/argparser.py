@@ -18,6 +18,7 @@ LTH_arg_parser.add_argument('-init_rationals', '--initialize_rationals',
 LTH_arg_parser.add_argument('--run_all', default=False, action='store_true',
                             help="Flag to perform all three experiments `original`, `univariate rational` and `mixture of experts` in a sequence and plot the results in one graph for further comparison.")
 LTH_arg_parser.add_argument('--prune_shortcuts', default=False, action='store_true', help='Flag to prune shortcuts.')
+LTH_arg_parser.add_argument('--save_res_csv', default=False, action='store_true', help='Flag to save the results of the experiment as csv')
 
 
 def get_argparser():
@@ -34,8 +35,8 @@ def get_argparser():
 
 LTH_args = LTH_arg_parser.parse_args(
     ['--model', 'select_2_expert_groups_rational_resnet20', '--dataset', 'SVHN', '--warmup_iterations', '7167',
-     '--test_accuracy_threshold', '0.90', '--training_number_of_epochs', '25',
-     '--stop_criteria', 'test_acc', '--run_all'])
+     '--iterative_pruning_epochs', '2', '--training_number_of_epochs', '2',
+     '--stop_criteria', 'num_prune_epochs'])
 
 
 def get_arguments():
