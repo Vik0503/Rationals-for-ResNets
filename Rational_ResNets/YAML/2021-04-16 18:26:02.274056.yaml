@@ -1,0 +1,8 @@
+- Date: [!!timestamp '2021-04-16 18:26:02.274056']
+- Model(s): [rational_resnet20_cifar10]
+- Dataset: [SVHN]
+- Batch Size: [128]
+- Learning Rate: [0.01]
+- Epochs: [3]
+- Warm-Up Iterations: [0]
+- CSV File: ['CSV/rational_resnet20_cifar10/2021-04-16 18:26:02.273789.csv']

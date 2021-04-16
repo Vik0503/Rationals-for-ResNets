@@ -33,6 +33,7 @@ from Rational_ResNets.ResNet_Models import ResNet20_CIFAR10 as RN20
 from Rational_ResNets.ResNet_Models import select_1_expert_group_rational_resnet as sel1exp
 from Rational_ResNets.ResNet_Models import Recurrent_Rational_ResNet20_CIFAR10 as RecRRN20
 from Rational_ResNets.ResNet_Models import select_2_expert_groups_rational_resnet as sel2exp
+from Rational_ResNets import write_read_csv
 
 resnet_args = argparser.get_args()
 
@@ -94,13 +95,13 @@ def get_scheduler_optimizer(num_warmup_it, lr, model, it_per_ep):  # TODO: allow
     return lr_scheduler.LambdaLR(optimizer, lr_lambda=lr_lambda), optimizer
 
 
-def make_yaml(models: list, csv=None):  # TODO: add Rational Init + One Shot Option
+def make_yaml(models: list, csv=None):  # TODO: add Rational Init
     time_stamp = datetime.now()
     yaml_data = [{'Date': [time_stamp]}, {'Model(s)': models}, {'Dataset': [resnet_args.dataset]}, {'Batch Size': [resnet_args.batch_size]},
                  {'Learning Rate': [resnet_args.learning_rate]}, {'Epochs': [resnet_args.training_number_of_epochs]}, {'Warm-Up Iterations': [resnet_args.warmup_iterations]}]
 
     if resnet_args.save_res_csv:
-        yaml_data.append({'CSV File': [csv]})
+        yaml_data.append({'CSV File(s)': [csv]})
 
     PATH = 'YAML/{}'.format(time_stamp) + '.yaml'
     with open(PATH, 'w') as file:
@@ -112,12 +113,14 @@ def run_all():
     num_rationals = len(rational_inits)
 
     models_run_all = [RRN20.rational_resnet20(), RN20.resnet20(), sel2exp.select_2_expert_groups_rational_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)]
+    model_names = ['rational_resnet20_cifar10', 'resnet20_cifar10', 'select_2_expert_groups_rational_resnet20']
     accuracy_plot_x_vals = []
     train_accs = []
     val_accs = []
     test_accs = []
     best_test_accs = []
     avg_time = []
+    PATHS = []
     for m in range(len(models_run_all)):
         model = models_run_all[m]
         num_ftrs = model.fc.in_features
@@ -131,6 +134,10 @@ def run_all():
                                                                                                                                                                    testloader=testloader, valloader=valloader,
                                                                                                                                                                    trainset=trainset, trainloader=trainloader,
                                                                                                                                                                    testset=testset, valset=valset)
+
+        if resnet_args.save_res_csv:
+            PATH = write_read_csv.make_csv(model_names[m], accuracy_plot_x_vals, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals)
+            PATHS.append(PATH)
         train_accs.append(train_acc_plot_y_vals)
         val_accs.append(val_acc_plot_y_vals)
         test_accs.append(test_acc_plot_y_vals)
@@ -138,7 +145,8 @@ def run_all():
         avg_time.append(time_elapsed_epoch)
 
     plots.plot_overview_all(train_accs, val_accs, test_accs, accuracy_plot_x_vals, best_test_accs, avg_time)
-    make_yaml(['rational_resnet20_cifar10', 'resnet20_cifar10', 'select_2_expert_groups_rational_resnet20'])
+    make_yaml(model_names, PATHS)
+
 
 
 def run_one():
@@ -189,7 +197,10 @@ def run_one():
     plots.final_plot(cm, avg_time, best_test_acc, resnet_args.training_number_of_epochs, resnet_args.learning_rate,
                      num_rationals, resnet_args.dataset, resnet_args.model, resnet_args.batch_size)
     models = [resnet_args.model]
-    make_yaml(models, 'test')
+    PATH = ''
+    if resnet_args.save_res_csv:
+        PATH = write_read_csv.make_csv(resnet_args.model, accuracy_plot_x_vals, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals)
+    make_yaml(models, PATH)
 
 
 if resnet_args.train_all:

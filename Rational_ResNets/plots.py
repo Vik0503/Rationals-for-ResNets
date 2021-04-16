@@ -40,7 +40,7 @@ def accuracy_plot(acc_x_vals: list, train_acc_y_vals: list, val_acc_y_vals: list
     plt.legend(['Train Accuracy', 'Validation Accuracy', 'Test Accuracy'])
 
 
-def final_plot(cm, epoch_time, test_acc: float, num_epochs: int, learning_rate: float, num_rationals: int, dataset: str, model: str, batch_size: int):
+def final_plot(cm, epoch_time, test_acc: float, num_epochs: int, learning_rate: float, num_rationals: int, dataset: str, model: str, batch_size: int):  # TODO: Update Legend
     """
     Plot the confusion matrix and add the description box.
 

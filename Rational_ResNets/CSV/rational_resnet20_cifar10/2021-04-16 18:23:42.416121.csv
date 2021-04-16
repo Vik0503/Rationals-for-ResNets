@@ -1,0 +1,4 @@
+Epoch,Train Accuracy,Validation Accuracy,Test Accuracy
+0,"tensor(30.1367, dtype=torch.float64)","tensor(51.0866, dtype=torch.float64)","tensor(51.2677, dtype=torch.float64)"
+1,"tensor(76.7341, dtype=torch.float64)","tensor(84.0013, dtype=torch.float64)","tensor(83.1630, dtype=torch.float64)"
+2,"tensor(86.5825, dtype=torch.float64)","tensor(86.8953, dtype=torch.float64)","tensor(86.2170, dtype=torch.float64)"
