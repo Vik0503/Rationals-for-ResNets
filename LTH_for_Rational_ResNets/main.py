@@ -32,6 +32,7 @@ from LTH_for_Rational_ResNets.LTH_Models import resnet18_imagenet as rn18
 from LTH_for_Rational_ResNets.LTH_Models import select_2_expert_groups_rational_resnet as sel2exp
 from LTH_for_Rational_ResNets.LTH_Models import select_1_expert_group_rational_resnet as sel1exp
 from LTH_for_Rational_ResNets.Mask import make_initial_mask
+from LTH_for_Rational_ResNets import LTH_write_read_csv
 
 LTH_args = argparser.get_arguments()
 
@@ -127,6 +128,8 @@ def run_all():  # TODO: Solve Problem with select
     test_accuracies = []
     sparsities = []
     num_epoch_list = []
+    PATHS = []
+    model_names = ['rational_resnet20_cifar10', 'resnet20_cifar10', 'select_2_expert_groups_rational_resnet20']
     criterion = nn.CrossEntropyLoss()
 
     for m in range(len(models_run_all)):
@@ -173,6 +176,10 @@ def run_all():  # TODO: Solve Problem with select
                                                        it_per_epoch=it_per_ep,
                                                        num_warmup_it=LTH_args.warmup_iterations)
 
+        if LTH_args.save_res_csv:
+            PATH = LTH_write_read_csv.make_csv(model_names[m], sparsities, test_accuracies)
+            PATHS.append(PATH)
+
         plt.plot(sparsities, test_accuracies, label=plot_labels[m], color=plot_colors[m])
         num_epoch_list.append(num_epochs)
 
@@ -193,7 +200,7 @@ def run_all():  # TODO: Solve Problem with select
     PATH = './Results/LTH_all_models' + '/' + '{}'.format(time_stamp) + '_' + '{}'.format(LTH_args.dataset) + '.svg'
     plt.savefig(PATH)
     plt.show()
-    make_yaml(['rational_resnet20_cifar10', 'resnet20_cifar10', 'select_2_expert_groups_rational_resnet20'])
+    make_yaml(model_names, PATHS)
 
 
 def run_one():
@@ -264,7 +271,11 @@ def run_one():
         plots.final_plot_LTH(LTH_args.model, LTH_args.dataset, LTH_args.batch_size, num_epochs,
                              LTH_args.training_number_of_epochs, LTH_args.learning_rate, LTH_args.pruning_percentage, LTH_args.warmup_iterations, prune_shortcuts)
 
-    make_yaml([LTH_args.model])
+    PATH = ''
+    if LTH_args.save_res_csv:
+        PATH = LTH_write_read_csv.make_csv(LTH_args.model, sparsities, test_accuracies)
+
+    make_yaml([LTH_args.model], PATH)
 
 
 if LTH_args.run_all:

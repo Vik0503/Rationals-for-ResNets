@@ -148,7 +148,6 @@ def run_all():
     make_yaml(model_names, PATHS)
 
 
-
 def run_one():
     if resnet_args.model is 'rational_resnet20_cifar10':  # TODO: add rest of the models
         model = RRN20.rational_resnet20()

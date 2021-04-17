@@ -10,7 +10,7 @@ def make_csv(model, epoch, train_acc: list, val_acc: list, test_acc: list):
     PATH = 'CSV/{}'.format(model) + '/{}'.format(time_stamp) + '.csv'
     with open(PATH, 'w', newline='') as csvfile:
         fieldnames = ['Epoch', 'Train Accuracy', 'Validation Accuracy', 'Test Accuracy']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames, dialect='excel')
 
         writer.writeheader()
         for i in range(len(train_acc)):
