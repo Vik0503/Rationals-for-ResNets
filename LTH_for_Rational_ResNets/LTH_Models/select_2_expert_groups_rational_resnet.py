@@ -18,7 +18,7 @@ from LTH_for_Rational_ResNets import argparser
 
 args = argparser.get_arguments()
 prune_shortcuts = args.prune_shortcuts
-print('selrr20: ', prune_shortcuts)
+
 
 if torch.cuda.is_available():
     cuda = True
@@ -57,8 +57,10 @@ class RationalBasicBlock(nn.Module):
         for n in range(self.num_rationals):
             self.expert_group_1.append(Rational(cuda=cuda, approx_func=self.rational_inits[n]))
             self.expert_group_2.append(Rational(cuda=cuda, approx_func=self.rational_inits[n]))
+
         self.rational_expert_group_1 = nn.Sequential(*self.expert_group_1)
         self.rational_expert_group_2 = nn.Sequential(*self.expert_group_2)
+
         data_alpha_1 = initialize_alpha(self.num_rationals)
         self.alpha_1 = torch.nn.parameter.Parameter(data_alpha_1, requires_grad=True)
 
