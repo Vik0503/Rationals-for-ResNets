@@ -22,7 +22,7 @@ else:
     device = 'cpu'
 
 
-class RationalBasicBlock(nn.Module):
+class RationalBasicBlock(nn.Module):  # TODO: Add Sequential
     """A Basic Block as described in the paper above, with Rationals as activation function instead of ReLu."""
     expansion = 1
 
@@ -94,23 +94,6 @@ class RationalBasicBlock(nn.Module):
 
         return out
 
-
-def reinit(model, mask: Mask, initial_state_model):
-    """
-    Reset pruned model's weights to the initial initialization.
-
-    Parameter
-    ---------
-    model: RationalResNet
-    mask: Mask
-          A mask with pruned weights.
-    initial_state_model: dict
-                         Initially saved state, before the model is trained.
-    """
-    for name, param in model.named_parameters():
-        if 'weight' not in name or 'batch_norm' in name or 'shortcut' in name or 'fc' in name:
-            continue
-        param.data = initial_state_model[name] * mask[name]
 
 
 class RationalResNet(nn.Module):
