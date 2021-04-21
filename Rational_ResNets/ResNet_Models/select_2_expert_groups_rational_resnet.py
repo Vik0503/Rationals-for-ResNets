@@ -21,7 +21,7 @@ else:
     device = 'cpu'
 
 
-class RationalBasicBlock(nn.Module):  # TODO: Update with sequential
+class RationalBasicBlock(nn.Module):
     """A Basic Block as described in the paper above, with Rationals as activation function instead of ReLu."""
     expansion = 1
 
@@ -134,6 +134,7 @@ class RationalResNet(nn.Module):
             self.expert_group.append(Rational(cuda=cuda, approx_func=self.rational_inits[n]))
 
         self.rational_expert_group = nn.Sequential(*self.expert_group)
+
         data = initialize_alpha(self.num_rationals)
         self.alpha = torch.nn.parameter.Parameter(data, requires_grad=True)
 
@@ -186,6 +187,7 @@ class RationalResNet(nn.Module):
         return nn.Sequential(*layers)
 
     def multi_rational(self, out: Tensor) -> Tensor:
+        print(self.alpha)
         out_tensor = torch.zeros_like(out)
         for n in range(self.num_rationals):
             rational = self.rational_expert_group[n]
@@ -233,19 +235,14 @@ def initialize_alpha(b: int = 4) -> torch.Tensor:
     Returns
     -------
     alpha : torch.Tensor
-            The tensor with inial values for alpha.
+            The tensor with initial values for alpha.
     """
-    alpha = []
-    while len(alpha) < b:
-        tmp = torch.rand(1)
-        if sum(alpha) + tmp <= 1.0:
-            alpha.append(tmp)
-    alpha = torch.tensor(alpha)
+    alpha = torch.rand(b)
     alpha /= alpha.sum()
     return alpha
 
 
-def _resnet(arch: str, block: Type[RationalBasicBlock], layers: List[int], rational_inits: List[str] ,num_rationals: int, **kwargs: Any) -> RationalResNet:
+def _resnet(arch: str, block: Type[RationalBasicBlock], layers: List[int], rational_inits: List[str], num_rationals: int, **kwargs: Any) -> RationalResNet:
     """
     The universal ResNet definition.
 

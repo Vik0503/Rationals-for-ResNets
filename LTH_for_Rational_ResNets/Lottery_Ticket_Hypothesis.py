@@ -8,6 +8,7 @@ from LTH_for_Rational_ResNets import Train_Val_Test as tvt
 from LTH_for_Rational_ResNets import utils
 from LTH_for_Rational_ResNets.Lottery_Ticket_Pruning import prune
 from LTH_for_Rational_ResNets.Mask import mask_sparsity, Mask
+import os
 
 if torch.cuda.is_available():
     device = 'cuda'
@@ -43,7 +44,7 @@ def get_scheduler_optimizer(num_warmup_it, lr, model, it_per_ep):  # TODO: allow
     return lr_scheduler.LambdaLR(optimizer, lr_lambda=lr_lambda), optimizer
 
 
-def checkpoint_save(optimizer, epoch: int, save_model, model_mask: Mask, test_accuracy: float, training_epochs: int, model_sparsity: float = 0):
+def checkpoint_save(path, optimizer, epoch: int, save_model, model_mask: Mask, test_accuracy: float, training_epochs: int, model_sparsity: float = 0):
     """
     Save a checkpoint.
 
@@ -60,7 +61,7 @@ def checkpoint_save(optimizer, epoch: int, save_model, model_mask: Mask, test_ac
                     The sparsity of the model.
     """
     time_stamp = datetime.now()
-    PATH = '/home/viktoria/Git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Saved_Models/{}_ep{}s{:.5f}_test{:.5f}.pth'.format(time_stamp, epoch, model_sparsity, test_accuracy)  # TODO: Update PATH + saved models names
+    PATH = '{}'.format(path) + '/{}_ep{}s{:.5f}_test{:.5f}.pth'.format(time_stamp, epoch, model_sparsity, test_accuracy)  # TODO: Update PATH + saved models names
     torch.save({
         'epoch': epoch,
         'model_state_dict': save_model.state_dict(),
@@ -70,6 +71,8 @@ def checkpoint_save(optimizer, epoch: int, save_model, model_mask: Mask, test_ac
         'test_accuracy': test_accuracy,
         'training_epochs': training_epochs,
     }, PATH)
+
+    return PATH
 
 
 def one_shot_pruning(prune_model, prune_mask: Mask, criterion, trainset, valset, trainloader, valloader, testset, testloader, pruning_percentage, training_number_of_epochs, lr: float, it_per_epoch: int, num_warmup_it: int):
@@ -118,9 +121,12 @@ def iterative_pruning_by_num(prune_model, prune_mask: Mask, epochs: int, criteri
     epochs: int
             Stopping criterion for the iterative pruning.
     """
+    time_stamp = datetime.now()
     sparsity = []
     test_accuracies = []
     initial_state = utils.initial_state(model=prune_model)
+    path = './Saved_Models/{}'.format(time_stamp)
+    os.makedirs(path)
 
     for epoch in range(epochs):
         prune_model.mask = Mask.cuda(prune_mask)
@@ -137,7 +143,7 @@ def iterative_pruning_by_num(prune_model, prune_mask: Mask, epochs: int, criteri
 
         utils.reinit(prune_model, prune_mask, initial_state)
 
-        checkpoint_save(optimizer, epoch, pruned_model, updated_mask, test_accuracy, training_number_of_epochs, mask_sparsity(prune_mask) * 100)
+        last_saved_checkpoint = checkpoint_save(path, optimizer, epoch, pruned_model, updated_mask, test_accuracy, training_number_of_epochs, mask_sparsity(prune_mask) * 100)
 
         print('Pruning Epoch {}/{}'.format(epoch, epochs - 1))
         print('+' * 18)
@@ -145,74 +151,14 @@ def iterative_pruning_by_num(prune_model, prune_mask: Mask, epochs: int, criteri
         print('at {} Training Iterations'.format(num_iterations))
         print('Sparsity of Pruned Mask: ', mask_sparsity(updated_mask))
 
-    return test_accuracies, sparsity
-
-
-def iterative_pruning_by_test_acc_2(prune_model, prune_mask: Mask, acc_threshold: float, criterion, trainset, valset, trainloader, valloader, testset, testloader, training_number_of_epochs,
-                                    pruning_percentage, lr: float, it_per_epoch: int, num_warmup_it: int):
-    """
-    Prune iteratively until the test accuracy is lower than the threshold. Save checkpoint after every pruning epoch.
-
-    Parameters
-    ----------
-    prune_model:
-                 Model that is going to be iteratively pruned.
-    prune_mask: Mask
-                The mask used to prune the model.
-    acc_threshold: float
-                   Stopping criterion for the iterative pruning.
-    """
-    sparsity = []
-    test_accuracies = []
-    num_pruning_epochs = 0
-    sparsity.append(0)
-    prune_model.mask = Mask.cuda(prune_mask)
-    initial_state = utils.initial_state(model=prune_model)
-
-    scheduler, optimizer = get_scheduler_optimizer(lr=lr, it_per_ep=it_per_epoch, model=prune_model, num_warmup_it=num_warmup_it)
-    prune_model, best_val_accuracy, num_iterations = tvt.train(prune_model, criterion, optimizer, scheduler, training_number_of_epochs, trainset, valset, trainloader, valloader)
-
-    test_accuracy = tvt.test(prune_model, testset, testloader)
-    test_accuracies.append(test_accuracy * 100)
-    print('test accuracy: ', test_accuracy)
-
-    checkpoint_save(optimizer, num_pruning_epochs, prune_model, prune_mask, test_accuracy, training_number_of_epochs)
-
-    while test_accuracy > acc_threshold:
-        num_pruning_epochs += 1
-
-        pruned_model, updated_mask = prune(pruning_percentage, prune_model, prune_mask)
-
-        prune_model = pruned_model
-        prune_mask = Mask.cuda(updated_mask)
-
-        if num_pruning_epochs == 1:
-            utils.reinit(prune_model, prune_mask, initial_state)
-
-        sparsity.append(mask_sparsity(prune_mask) * 100)
-
-        prune_model.mask = prune_mask
-        scheduler, optimizer = get_scheduler_optimizer(lr=lr, it_per_ep=it_per_epoch, model=prune_model, num_warmup_it=num_warmup_it)
-        prune_model, best_val_accuracy, num_iterations = tvt.train(prune_model, criterion, optimizer, scheduler, training_number_of_epochs, trainset, valset, trainloader, valloader)  # train
-
-        test_accuracy = tvt.test(prune_model, testset, testloader)  # test
-        test_accuracies.append(test_accuracy * 100)
-
-        utils.reinit(prune_model, prune_mask, initial_state)  # reinit
-
-        checkpoint_save(optimizer, num_pruning_epochs, prune_model, prune_mask, test_accuracy, training_number_of_epochs, mask_sparsity(prune_mask) * 100)  # save
-
-        print('Pruning Epoch {}'.format(num_pruning_epochs))
-        print('+' * 18)
-        print('Model Test Accuracy: ', test_accuracy)
-        print('at {} Training Iterations'.format(num_iterations))
-        print('Sparsity of Pruned Mask: ', mask_sparsity(updated_mask))
-
-    return num_pruning_epochs, test_accuracies, sparsity
+    return test_accuracies, sparsity, path, last_saved_checkpoint
 
 
 def iterative_pruning_by_test_acc(prune_model, prune_mask: Mask, acc_threshold: float, criterion, trainset, valset, trainloader, valloader, testset, testloader, training_number_of_epochs,
                                   pruning_percentage, lr: float, it_per_epoch: int, num_warmup_it: int):
+    time_stamp = datetime.now()
+    path = './Saved_Models/{}'.format(time_stamp)
+    os.makedirs(path)
     sparsity = []
     test_accuracies = []
     num_pruning_epochs = 0
@@ -231,6 +177,7 @@ def iterative_pruning_by_test_acc(prune_model, prune_mask: Mask, acc_threshold: 
     print('Before Pruning')
     print('+' * 18)
     print('Model Test Accuracy: ', test_accuracy)
+
     while test_accuracy > acc_threshold:
         num_pruning_epochs += 1
 
@@ -247,7 +194,7 @@ def iterative_pruning_by_test_acc(prune_model, prune_mask: Mask, acc_threshold: 
 
         utils.reinit(prune_model, prune_mask, initial_state)  # reinit
 
-        checkpoint_save(optimizer, num_pruning_epochs, prune_model, prune_mask, test_accuracy, training_number_of_epochs, mask_sparsity(prune_mask) * 100)  # save
+        last_saved_model_path = checkpoint_save(path, optimizer, num_pruning_epochs, prune_model, prune_mask, test_accuracy, training_number_of_epochs, mask_sparsity(prune_mask) * 100)  # save
 
         scheduler, optimizer = get_scheduler_optimizer(lr=lr, it_per_ep=it_per_epoch, model=prune_model, num_warmup_it=num_warmup_it)
         prune_model, best_val_accuracy, num_iterations = tvt.train(prune_model, criterion, optimizer, scheduler, training_number_of_epochs, trainset, valset, trainloader, valloader)  # train
@@ -257,4 +204,4 @@ def iterative_pruning_by_test_acc(prune_model, prune_mask: Mask, acc_threshold: 
 
         print('Model Test Accuracy: ', test_accuracy)
 
-    return num_pruning_epochs, test_accuracies, sparsity
+    return num_pruning_epochs, test_accuracies, sparsity, path, last_saved_model_path

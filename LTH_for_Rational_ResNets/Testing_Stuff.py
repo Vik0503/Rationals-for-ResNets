@@ -1,41 +1,36 @@
-import torch
-import numpy as np
-import matplotlib.pyplot as plt
 import pandas as pd
-from numpy.random import randn
+import torch
 from IPython.display import display
-from LTH_for_Rational_ResNets.LTH_Models import resnet20_cifar10 as rn20
-from LTH_for_Rational_ResNets.LTH_Models import select_2_expert_groups_rational_resnet as sel
-from LTH_for_Rational_ResNets.LTH_Models import rational_resnet20_cifar10 as rrn20
+
 from LTH_for_Rational_ResNets import Mask
-from LTH_for_Rational_ResNets import utils
-from copy import deepcopy
+from LTH_for_Rational_ResNets import argparser
+from LTH_for_Rational_ResNets.LTH_Models import resnet20_cifar10 as rn20
 
-models = [rrn20.rational_resnet20(), rn20.resnet20(), sel.select_2_expert_groups_rational_resnet20(['leaky_relu', 'gelu', 'swish', 'tanh', 'sigmoid'])]
-model = rrn20.rational_resnet20()
-mask: Mask
+args = argparser.get_arguments()
+prune_shortcuts = args.prune_shortcuts
 
-original_masks = []
-for mod in range(len(models)):
-    model = models[mod]
-    original_mask: Mask
-    original_mask = Mask.make_initial_mask(model)
-    original_masks.append(original_mask)
-univ_rat_PATH = './Saved_Models/no_shortcuts_14.4./2021-04-14 07:56:07.220106_ep25s99.62495_test0.90235.pth'
 original_PATH = './Saved_Models/no_shortcuts_14.4./2021-04-14 09:17:20.710430_ep20s98.84982_test0.91353.pth'
+univ_rat_PATH = './Saved_Models/no_shortcuts_14.4./2021-04-14 07:56:07.220106_ep25s99.62495_test0.90235.pth'
 multi_exp_PATH = './Saved_Models/no_shortcuts_14.4./2021-04-14 16:17:30.512244_ep23s99.41239_test0.90934.pth'
 
-all_PATHS = [univ_rat_PATH, original_PATH, multi_exp_PATH]
+"""original_PATH = './Saved_Models/shorcuts_14.4/2021-04-15 00:01:52.401491_ep20s98.84961_test0.90116.pth'
+univ_rat_PATH = './Saved_Models/shorcuts_14.4/2021-04-14 22:42:32.815381_ep21s99.08013_test0.91146.pth'
+multi_exp_PATH = './Saved_Models/shorcuts_14.4/2021-04-15 06:30:57.773067_ep22s99.26477_test0.90131.pth'"""
 
-masks = []
+all_PATHS = [original_PATH, univ_rat_PATH, multi_exp_PATH]
+model = rn20.resnet20()
+original_mask: Mask
+original_mask = Mask.make_initial_mask(model)
+
+masks = [original_mask]
 for p in range(len(all_PATHS)):
     PATH = all_PATHS[p]
     checkpoint = torch.load(PATH)
     mask = checkpoint['mask']
     masks.append(mask)
-    masks.append(original_masks[p])
 
 all_data = []
+
 for m in range(len(masks)):
     mask = masks[m]
     data = []
@@ -66,17 +61,23 @@ for m in range(len(masks)):
         print('y: ', y_counter)
     all_data.append(data)
 
-# all_data_tensor = torch.tensor(all_data)
 
-array_1 = ['Layer 0'] + ['BasicBlock 0', 'BasicBlock 0', 'BasicBlock 1', 'BasicBlock 1', 'BasicBlock 2', 'BasicBlock 2'] * 3
-array_2 = ['conv. 0'] + ['conv. 0', 'conv. 1'] * 9
-arrays = [array_1, array_2]
+if prune_shortcuts:
+    array_3_conv = ['conv. 0', 'conv. 1', 'conv. 2'] + ['conv. 0', 'conv. 1'] * 2
+    array_0 = ['Layer 0'] + ['Layer 1'] + [''] * 5 + ['Layer 2'] + [''] * 6 + ['Layer 3'] + [''] * 6
+    array_1 = [''] + ['BasicBlock 0', '', 'BasicBlock 1', '', '', 'BasicBlock 2', '', ''] * 3
+    array_2 = ['conv 0'] + ['conv. 0', 'conv. 1'] * 3 + array_3_conv * 6
+
+else:
+    array_0 = ['Layer 0'] + ['Layer 1'] + [''] * 5 + ['Layer 2'] + [''] * 5 + ['Layer 3'] + [''] * 5
+    array_1 = [''] + ['BasicBlock 0', '', 'BasicBlock 1', '', 'BasicBlock 2', ''] * 3
+    array_2 = ['conv. 0'] + ['conv. 0', 'conv. 1'] * 9
+
+arrays = [array_0, array_1, array_2]
 tuples = list(zip(*arrays))
 index = pd.MultiIndex.from_tuples(tuples)
-df = pd.DataFrame(all_data, index=['pruned univ. rational ResNet20', 'original univ. rational ResNet20', 'pruned ResNet20 Original', 'original ResNet20 Original', 'pruned mix. exp. ResNet20', 'original mix. exp. ResNet20'], columns=index)
+df = pd.DataFrame(all_data, index=['original Model', 'ReLU ResNet20', 'univ. rational ResNet20', 'mix. exp. ResNet20'], columns=index)
 
 display(df)
 compression_opts = dict(method='zip', archive_name='out.csv')
-df.to_csv('out_2.csv', index=True)
-
-# print(df)
+df.to_csv('./Results/Masks/all_models/all_LTH_no_shortcuts_2.csv', index=True)

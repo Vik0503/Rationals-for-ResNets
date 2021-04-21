@@ -79,6 +79,7 @@ class RationalBasicBlock(nn.Module):
 
     def multi_rational(self, out: Tensor, alphas: torch.Tensor, rationals) -> Tensor:
         out_tensor = torch.zeros_like(out)
+
         for n in range(self.num_rationals):
             rational = rationals[n]
             rational_out = rational(out.clone())

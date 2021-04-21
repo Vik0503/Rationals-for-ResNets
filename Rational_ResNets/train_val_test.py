@@ -34,7 +34,7 @@ def train_val_test_model(model, criterion, optimizer, scheduler, num_epochs, tra
     train_acc_plot_y_vals = []
     val_acc_plot_y_vals = []
     test_acc_plot_y_vals = []
-
+    step = 0
     for epoch in range(num_epochs):
         print('Epoch {}/{}'.format(epoch, num_epochs - 1))
         print('*' * 10)
@@ -58,6 +58,7 @@ def train_val_test_model(model, criterion, optimizer, scheduler, num_epochs, tra
                 dataloader = testloader
             # Iterate over data.
             for i, data in enumerate(dataloader, 0):
+                step += 1
                 inputs, labels = data
                 inputs = inputs.to(device)
                 labels = labels.to(device)
