@@ -92,7 +92,7 @@ elif LTH_args.dataset is 'SVHN':
     it_per_ep = SVHN.get_it_per_epoch(bs=LTH_args.batch_size)
 
 
-def make_yaml(models: list, saved_models, table=None, csv=None):  # TODO: add Rational Init + One Shot Option
+def make_yaml(models: list, saved_models, table=None, csv=None):  # TODO: add Rational Init + One Shot Option + saved models for run all + plot
     time_stamp = datetime.now()
     yaml_data = [{'Date': [time_stamp]}, {'Model(s)': models}, {'Dataset': [LTH_args.dataset]}, {'Batch Size': [LTH_args.batch_size]}, {'Pruning Percentage per Epoch': [LTH_args.pruning_percentage]},
                  {'Training Epochs per Pruning Epoch': [LTH_args.training_number_of_epochs]}, {'Learning Rate': [LTH_args.learning_rate]}, {'Warm-Up Iterations': [LTH_args.warmup_iterations]},
@@ -120,9 +120,9 @@ models_run_all = [rn20.resnet20(), rrn20.rational_resnet20(), sel2exp.select_2_e
 def run_all():  # TODO: Solve Problem with select
 
     since = time.time()
-    plot_labels = ['ReLU ResNet20', 'univ. rational ResNet20', 'mix. exp. ResNet20']
     plt.figure(figsize=(10, 6))
     plt.subplot(121)
+    ax = plt.gca()
     plt.xlabel('Percent of Pruned Weights')
     plt.ylabel('Test Accuracy in Percent')
     num_epochs = 0
@@ -182,12 +182,19 @@ def run_all():  # TODO: Solve Problem with select
             PATH = LTH_write_read_csv.make_csv(model_names[m], sparsities, test_accuracies)
             PATHS.append(PATH)
 
-        plt.plot(sparsities, test_accuracies, label=plot_labels[m])
+        ax.plot(sparsities, test_accuracies)
         num_epoch_list.append(num_epochs)
         checkpoints.append(last_checkpoint)
 
+    def forward(x):
+        return x ** 1.2
+
+    def inverse(x):
+        print('backward')
+        return x ** (1/1.2)
+    ax.set_yscale('function', functions=(forward, inverse))
     plt.subplots_adjust(bottom=0.3)
-    plt.legend(['ResNet20 univ. Rat.', 'ResNet20 Original', 'ResNet20 mixture of 5 univ. Rat.'], bbox_to_anchor=(0.5, -0.2), loc='upper center', ncol=1)
+    plt.legend(['ReLU ResNet20', 'univ. rational ResNet20', 'mix. exp. ResNet20'], bbox_to_anchor=(0.5, -0.2), loc='upper center', ncol=1)
 
     props = dict(boxstyle='round', facecolor='grey', alpha=0.5)
     text = 'dataset: {}, '.format(LTH_args.dataset) + 'batch size: {}, '.format(LTH_args.batch_size) + '\n' + '{} training epochs per pruning epoch, '.format(LTH_args.training_number_of_epochs) + '\n' + \

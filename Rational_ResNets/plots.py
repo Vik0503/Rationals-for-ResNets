@@ -84,7 +84,7 @@ def activation_function_plots(model):
             mod.show()
 
 
-def plot_overview_all(training_accs, val_accs, test_accs, x_vals, best_test_accs, avg_epoch):
+def plot_overview_all(training_accs, val_accs, test_accs, x_vals, best_test_accs, avg_epoch):  # TODO: Update order + names
     plot_labels = ['ResNet20 univ. Rat.', 'ResNet20 Original', 'ResNet20 mixture of 5 univ. Rat.']
     plot_colors = ['C1', 'C0', 'C2']
 

@@ -11,7 +11,7 @@ LTH_arg_parser.add_argument('-tnep', '--training_number_of_epochs', default=2, t
 LTH_arg_parser.add_argument('-pp', '--pruning_percentage', default=20.0, type=float)
 LTH_arg_parser.add_argument('-ipe', '--iterative_pruning_epochs', default=15, type=int)
 LTH_arg_parser.add_argument('-stop', '--stop_criteria', default='test_acc', type=str, choices=['test_acc', 'num_prune_epochs', 'one_shot'])
-LTH_arg_parser.add_argument('-test_acc', '--test_accuracy_threshold', default=0.89, type=float)
+LTH_arg_parser.add_argument('-test_acc', '--test_accuracy_threshold', default=0.9, type=float)
 LTH_arg_parser.add_argument('-init_rationals', '--initialize_rationals',
                             type=str, nargs='+', default=['leaky_relu', 'gelu', 'swish', 'tanh', 'sigmoid'], choices=['leaky_relu', 'gelu', 'swish', 'tanh', 'sigmoid'],
                             help='Examples: -init_rationals leaky_relu gelu, -init_rationals tanh')
@@ -35,8 +35,8 @@ def get_argparser():
 
 LTH_args = LTH_arg_parser.parse_args(
     ['--model', 'rational_resnet20_cifar10', '--dataset', 'SVHN', '--warmup_iterations', '7167',
-     '--iterative_pruning_epochs', '2', '--training_number_of_epochs', '2',
-     '--stop_criteria', 'num_prune_epochs', '--save_res_csv', '--run_all'])
+     '--iterative_pruning_epochs', '2', '--training_number_of_epochs', '25',
+     '--stop_criteria', 'test_acc', '--test_acc', '0.9', '--save_res_csv', '--run_all'])
 
 
 def get_arguments():
