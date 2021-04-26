@@ -19,7 +19,6 @@ import numpy as np
 
 np.random.seed(42)
 
-import time
 
 from LTH_for_Rational_ResNets import Lottery_Ticket_Hypothesis
 from LTH_for_Rational_ResNets import plots
@@ -92,7 +91,7 @@ elif LTH_args.dataset is 'SVHN':
     it_per_ep = SVHN.get_it_per_epoch(bs=LTH_args.batch_size)
 
 
-def make_yaml(models: list, saved_models, table=None, csv=None):  # TODO: add Rational Init + One Shot Option + saved models for run all + plot
+def make_yaml(models: list, saved_models, table=None, csv=None):  # TODO: add Rational Init + One Shot Option + saved models for run all + plot + maybe in utils?
     time_stamp = datetime.now()
     yaml_data = [{'Date': [time_stamp]}, {'Model(s)': models}, {'Dataset': [LTH_args.dataset]}, {'Batch Size': [LTH_args.batch_size]}, {'Pruning Percentage per Epoch': [LTH_args.pruning_percentage]},
                  {'Training Epochs per Pruning Epoch': [LTH_args.training_number_of_epochs]}, {'Learning Rate': [LTH_args.learning_rate]}, {'Warm-Up Iterations': [LTH_args.warmup_iterations]},
@@ -119,12 +118,6 @@ models_run_all = [rn20.resnet20(), rrn20.rational_resnet20(), sel2exp.select_2_e
 
 def run_all():  # TODO: Solve Problem with select
 
-    since = time.time()
-    plt.figure(figsize=(10, 6))
-    plt.subplot(121)
-    ax = plt.gca()
-    plt.xlabel('Percent of Pruned Weights')
-    plt.ylabel('Test Accuracy in Percent')
     num_epochs = 0
     test_accuracies = []
     sparsities = []
@@ -133,6 +126,9 @@ def run_all():  # TODO: Solve Problem with select
     model_names = ['resnet20_cifar10', 'rational_resnet20_cifar10', 'select_2_expert_groups_rational_resnet20']  # TODO: Update Model Names
     criterion = nn.CrossEntropyLoss()
     checkpoints = []
+    all_test_accuracies = []
+    all_sparsities = []
+    all_models = []
 
     for m in range(len(models_run_all)):
         model = models_run_all[m]
@@ -182,36 +178,15 @@ def run_all():  # TODO: Solve Problem with select
             PATH = LTH_write_read_csv.make_csv(model_names[m], sparsities, test_accuracies)
             PATHS.append(PATH)
 
-        ax.plot(sparsities, test_accuracies)
+        all_test_accuracies.append(test_accuracies)
+        all_sparsities.append(sparsities)
         num_epoch_list.append(num_epochs)
         checkpoints.append(last_checkpoint)
+        all_models.append(model)
 
-    def forward(x):
-        return x ** 1.2
-
-    def inverse(x):
-        print('backward')
-        return x ** (1/1.2)
-    ax.set_yscale('function', functions=(forward, inverse))
-    plt.subplots_adjust(bottom=0.3)
-    plt.legend(['ReLU ResNet20', 'univ. rational ResNet20', 'mix. exp. ResNet20'], bbox_to_anchor=(0.5, -0.2), loc='upper center', ncol=1)
-
-    props = dict(boxstyle='round', facecolor='grey', alpha=0.5)
-    text = 'dataset: {}, '.format(LTH_args.dataset) + 'batch size: {}, '.format(LTH_args.batch_size) + '\n' + '{} training epochs per pruning epoch, '.format(LTH_args.training_number_of_epochs) + '\n' + \
-           'learning rate: {}, '.format(0.03) + '{}% pruning per epoch, '.format(LTH_args.pruning_percentage) + '\n' + '{} warm-up iterations, '.format(LTH_args.warmup_iterations) + '\n' + 'shortcuts pruned: {}, '.format(prune_shortcuts) + \
-           '\n' + 'number of iterative pruning epochs: ' + '\n' + \
-           '- ResNet20 univ. Rat: {}'.format(num_epoch_list[0]) + '\n' + '- ResNet20 Original: {}'.format(num_epoch_list[1]) + '\n' + '- ResNet20 mixture of 5 univ. Rat: {}'.format(num_epoch_list[2])
-
-    plt.figtext(0.525, 0.5, text, bbox=props, size=9)
-    time_elapsed = time.time() - since
-    print('Experiments completed in {:.0f}m {:.0f}s'.format(
-        time_elapsed // 60, time_elapsed % 60))
-    time_stamp = datetime.now()
-    PATH = './Results/LTH_all_models' + '/' + '{}'.format(time_stamp) + '_' + '{}'.format(LTH_args.dataset) + '.svg'
-    plt.savefig(PATH)
-    plt.show()
-    mask_path = LTH_write_read_csv.make_mask_csv(checkpoints)
-    make_yaml(model_names, csv=PATHS, saved_models=path, table=mask_path)
+    plots.plot_all(test_accs=all_test_accuracies, sparsities=all_sparsities, num_epoch_list=num_epoch_list)
+    mask_path_dim, mask_path_weights = LTH_write_read_csv.make_mask_csv(all_models)
+    make_yaml(model_names, csv=PATHS, saved_models=path, table=[mask_path_dim, mask_path_weights])
 
 
 def run_one():

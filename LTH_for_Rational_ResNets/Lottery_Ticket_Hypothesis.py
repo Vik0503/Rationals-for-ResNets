@@ -61,7 +61,7 @@ def checkpoint_save(path, optimizer, epoch: int, save_model, model_mask: Mask, t
                     The sparsity of the model.
     """
     time_stamp = datetime.now()
-    PATH = '{}'.format(path) + '/{}_ep{}s{:.5f}_test{:.5f}.pth'.format(time_stamp, epoch, model_sparsity, test_accuracy)  # TODO: Update PATH + saved models names
+    PATH = '{}'.format(path) + '/{}_ep{}s{:.5f}_test{:.5f}.pth'.format(time_stamp, epoch, model_sparsity, test_accuracy)  # TODO: saved models names
     torch.save({
         'epoch': epoch,
         'model_state_dict': save_model.state_dict(),
@@ -192,9 +192,9 @@ def iterative_pruning_by_test_acc(prune_model, prune_mask: Mask, acc_threshold: 
 
         print('Sparsity of Pruned Mask: ', mask_sparsity(updated_mask))
 
-        utils.reinit(prune_model, prune_mask, initial_state)  # reinit
-
         last_saved_model_path = checkpoint_save(path, optimizer, num_pruning_epochs, prune_model, prune_mask, test_accuracy, training_number_of_epochs, mask_sparsity(prune_mask) * 100)  # save
+
+        utils.reinit(prune_model, prune_mask, initial_state)  # reinit
 
         scheduler, optimizer = get_scheduler_optimizer(lr=lr, it_per_ep=it_per_epoch, model=prune_model, num_warmup_it=num_warmup_it)
         prune_model, best_val_accuracy, num_iterations = tvt.train(prune_model, criterion, optimizer, scheduler, training_number_of_epochs, trainset, valset, trainloader, valloader)  # train

@@ -3,6 +3,7 @@ from datetime import datetime
 import matplotlib
 import matplotlib.pyplot as plt
 import seaborn as sns
+import torch
 from rational.torch import Rational
 import argparser
 
@@ -79,51 +80,154 @@ def final_plot(cm, epoch_time, test_acc: float, num_epochs: int, learning_rate: 
 
 def activation_function_plots(model):
     """ Plot all Rational Activation Functions. """
+    legend = []
     for mod in model.modules():
         if isinstance(mod, Rational):
-            mod.show()
+            x = mod.show(display=False)['line']['x']
+            y = mod.show(display=False)['line']['y']
+            plt.plot(x, y)
+            legend.append(mod)
+
+    plt.legend(legend, bbox_to_anchor=(0.5, -0.4), ncol=1, loc='center')
+    plt.tight_layout()
+    time_stamp = datetime.now()
+
+    PATH = './Results/activation_functions/{}'.format(time_stamp) + '_{}'.format(ResNet_args.dataset) + '.svg'
+    plt.savefig(PATH)
+    plt.show()
 
 
-def plot_overview_all(training_accs, val_accs, test_accs, x_vals, best_test_accs, avg_epoch):  # TODO: Update order + names
-    plot_labels = ['ResNet20 univ. Rat.', 'ResNet20 Original', 'ResNet20 mixture of 5 univ. Rat.']
-    plot_colors = ['C1', 'C0', 'C2']
+def plot_overview_all(training_accs, val_accs, test_accs, x_vals, best_test_accs, avg_epoch):  # TODO: double check order
+    plot_labels = ['ReLU ResNet20', 'univ. rational ResNet20', 'mix. exp. ResNet20']
 
     plt.figure(figsize=(20, 6))
     plt.subplots_adjust(bottom=0.3)
 
     plt.subplot(141)
     for i in range(len(training_accs)):
-        plt.plot(x_vals, training_accs[i], label=plot_labels[i], color=plot_colors[i])
+        plt.plot(x_vals, training_accs[i], label=plot_labels[i])
     plt.xlabel('Epochs')
     plt.ylabel('Training Accuracy in Percent')
-    # plt.legend(['ResNet20 univ. Rat.', 'ResNet20 Original', 'ResNet20 mixture of 5 univ. Rat.'], bbox_to_anchor=(0.5, -0.2), loc='upper center', ncol=1)
 
     plt.subplot(142)
     for i in range(len(val_accs)):
-        plt.plot(x_vals, val_accs[i], label=plot_labels[i], color=plot_colors[i])
+        plt.plot(x_vals, val_accs[i], label=plot_labels[i])
     plt.xlabel('Epochs')
     plt.ylabel('Validation Accuracy in Percent')
-    plt.legend(['ResNet20 univ. Rat.', 'ResNet20 Original', 'ResNet20 mixture of 5 univ. Rat.'], bbox_to_anchor=(0.5, -0.2), loc='upper center', ncol=3)
+    plt.legend(['ReLU ResNet20', 'univ. rational ResNet20', 'mix. exp. ResNet20'], bbox_to_anchor=(0.5, -0.2), loc='upper center', ncol=3)
 
     plt.subplot(143)
     for i in range(len(test_accs)):
-        plt.plot(x_vals, test_accs[i], label=plot_labels[i], color=plot_colors[i])
+        plt.plot(x_vals, test_accs[i], label=plot_labels[i])
     plt.xlabel('Epochs')
     plt.ylabel('Test Accuracy in Percent')
-    # plt.legend(['ResNet20 univ. Rat.', 'ResNet20 Original', 'ResNet20 mixture of 5 univ. Rat.'], bbox_to_anchor=(0.5, -0.2), loc='upper center', ncol=1)
 
     props = dict(boxstyle='round', facecolor='grey', alpha=0.5)
     text = 'dataset: {}, '.format(ResNet_args.dataset) + 'batch size: {}, '.format(ResNet_args.batch_size) + '\n' + '{} training epochs, '.format(ResNet_args.training_number_of_epochs) + '\n' + \
            'learning rate: {}, '.format(ResNet_args.learning_rate) + '{} warm-up iterations, '.format(ResNet_args.warmup_iterations) + '\n' + \
            'best test accuracy: ' + '\n' + \
-           '- ResNet20 univ. Rat: {:4f}'.format(best_test_accs[0]) + '\n' + '- ResNet20 Original: {:4f}'.format(best_test_accs[1]) + '\n' + '- ResNet20 mixture of 5 univ. Rat: {:4f}'.format(best_test_accs[2]) + '\n' + \
+           '- ReLU ResNet: {:4f}'.format(best_test_accs[0]) + '\n' + '- univ. rational ResNet20: {:4f}'.format(best_test_accs[1]) + '\n' + '- mix. exp. ResNet20: {:4f}'.format(best_test_accs[2]) + '\n' + \
            'average time per epoch: ' + '\n' + \
-           '- ResNet20 univ. Rat: {:.0f}m {:.0f}s, '.format(avg_epoch[0] // 60, avg_epoch[0] % 60) + '\n' + '- ResNet20 Original: {:.0f}m {:.0f}s, '.format(avg_epoch[1] // 60, avg_epoch[1] % 60) + '\n' \
-           + '- ResNet20 mixture of 5 univ. Rat: {:.0f}m {:.0f}s, '.format(avg_epoch[2] // 60, avg_epoch[2] % 60)
+           '- ReLU ResNet: {:.0f}m {:.0f}s, '.format(avg_epoch[0] // 60, avg_epoch[0] % 60) + '\n' + '- univ. rational ResNet20: {:.0f}m {:.0f}s, '.format(avg_epoch[1] // 60, avg_epoch[1] % 60) + '\n' \
+           + '- mix. exp. ResNet20: {:.0f}m {:.0f}s, '.format(avg_epoch[2] // 60, avg_epoch[2] % 60)
 
     plt.figtext(0.725, 0.5, text, bbox=props, size=9)
 
     time_stamp = datetime.now()
     PATH = './Results/all' + '/' + '{}'.format(time_stamp) + '_' + '{}'.format(ResNet_args.dataset) + '.svg'
+    plt.savefig(PATH)
+    plt.show()
+
+
+def calc_mixture_plot(alphas, rationals):
+    all_x = torch.zeros(5, 600)
+    for i in range(len(alphas)):
+        alpha_x = rationals[i].show(display=False)['line']['y'] * alphas[i].detach().numpy()
+        all_x[i] = torch.tensor(alpha_x)
+    return all_x.sum(dim=0), rationals[0].show(display=False)['line']['x']
+
+
+def plot_activation_func_overview(model, num_rat, inits):
+    c = 0
+    tmp = []
+    rat_groups = []
+    alphas = []
+    for m in model.modules():
+        if isinstance(m, Rational):
+            tmp.append(m)
+            c += 1
+        if c == num_rat:
+            rat_groups.append(tmp)
+            tmp = []
+            c = 0
+
+    for m, param in model.named_parameters():
+        if 'alpha' in m:
+            alphas.append(param)
+
+    layers = model.layers
+
+    plt.figure(figsize=(layers[0] * 8, len(layers) * 8))
+    model_1 = False  # TODO: catch model 1
+
+    plt_counter = 0
+    for r in range(1, len(layers) * layers[0] * 2 + layers[0] * 2 + 1):
+        show = True
+        plt.subplot(len(layers) + 2, layers[0] * 2, r)
+        if r == 1:
+            plt.title('Layer 0', loc='left', fontsize=16)
+        if layers[0] * 2 + 1 > r > 1:
+            ax = plt.gca()
+            ax.axis('off')
+            show = False
+        if r == layers[0] * 2 + 1:
+            plt.title('Layer 1 \nBasic Block 0', loc='left', fontsize=16)
+        if r == layers[0] * 2 + 3:
+            plt.title('Basic Block 1', loc='left', fontsize=16)
+        if r == layers[0] * 2 + 5:
+            plt.title('Basic Block 2', loc='left', fontsize=16)
+        if r == layers[0] * 4 + 1:
+            plt.title('Layer 2 \nBasic Block 0', loc='left', fontsize=16)
+        if model_1 and layers[0] * 4 + layers[0] * 2 - 2 < r < layers[0] * 4 + 2 * layers[0] + 1:
+            ax = plt.gca()
+            ax.axis('off')
+            show = False
+        elif r == layers[0] * 4 + 5:
+            plt.title('Basic Block 2', loc='left', fontsize=16)
+        if r == layers[0] * 4 + 3:
+            plt.title('Basic Block 1', loc='left', fontsize=16)
+        if r == layers[0] * 6 + 1:
+            plt.title('Layer 3 \nBasic Block 0', loc='left', fontsize=16)
+        if model_1 and layers[0] * 6 + layers[0] * 2 - 2 < r < layers[0] * 6 + 2 * layers[0] + 1:
+            ax = plt.gca()
+            ax.axis('off')
+            show = False
+        elif r == layers[0] * 6 + 5:
+            plt.title('Basic Block 2', loc='left', fontsize=16)
+        if r == layers[0] * 6 + 3:
+            plt.title('Basic Block 1', loc='left', fontsize=16)
+
+        if show:
+            colors = ['C0', 'C1', 'C2', 'C4', 'C6']
+            tmp = rat_groups[plt_counter]
+            alpha_tmp = alphas[plt_counter]
+            legend = []
+            y, x = calc_mixture_plot(alpha_tmp, tmp)
+            plt.plot(x, y, color='red')
+            legend.append('mixture')
+
+            for rational in range(len(tmp)):
+                x = tmp[rational].show(display=False)['line']['x']
+                y = tmp[rational].show(display=False)['line']['y']
+                plt.plot(x, y, color=colors[rational])
+                legend.append('\u03B1_{}: {:0.4f}, init.: {}, deg.: {}'.format(rational, alpha_tmp[rational], inits[rational], tmp[rational].degrees))
+
+            plt.legend(legend, bbox_to_anchor=(0.5, -0.4), ncol=1, loc='center')
+            plt_counter += 1
+
+    plt.tight_layout()
+    time_stamp = datetime.now()
+
+    PATH = './Results/activation_functions/{}'.format(time_stamp) + '_{}'.format(ResNet_args.dataset) + '.svg'
     plt.savefig(PATH)
     plt.show()

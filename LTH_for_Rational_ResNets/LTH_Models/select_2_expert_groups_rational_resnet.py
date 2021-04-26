@@ -129,7 +129,7 @@ class RationalResNet(nn.Module):
                      The number of different classes in a dataset.
         """
         super(RationalResNet, self).__init__()
-
+        self.layers = layers
         self.norm_layer = nn.BatchNorm2d
         self.planes_in = 16
         self.rational_inits = rational_inits

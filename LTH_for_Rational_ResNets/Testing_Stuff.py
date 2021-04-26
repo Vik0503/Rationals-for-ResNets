@@ -1,10 +1,13 @@
+import os
+
 import pandas as pd
 import torch
 from IPython.display import display
 
-from LTH_for_Rational_ResNets import Mask
+from LTH_for_Rational_ResNets import Mask, plots
 from LTH_for_Rational_ResNets import argparser
 from LTH_for_Rational_ResNets.LTH_Models import resnet20_cifar10 as rn20
+from LTH_for_Rational_ResNets.LTH_write_read_csv import make_csv
 
 args = argparser.get_arguments()
 prune_shortcuts = args.prune_shortcuts
@@ -81,3 +84,54 @@ df = pd.DataFrame(all_data, index=['original Model', 'ReLU ResNet20', 'univ. rat
 display(df)
 compression_opts = dict(method='zip', archive_name='out.csv')
 df.to_csv('./Results/Masks/all_models/all_LTH_no_shortcuts_2.csv', index=True)
+
+
+os.chdir('/home/viktoria/Git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Saved_Models/shortcuts_14.4')
+test_acc: float
+test_accs_1 = []
+test_accs_2 = []
+test_accs_3 = []
+
+
+sparsity: float
+sparsities_1 = [0]
+sparsities_2 = [0]
+sparsities_3 = [0]
+
+
+for file in sorted(os.listdir('/home/viktoria/Git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Saved_Models/shortcuts_14.4/resnet20')):
+    checkpoint = torch.load('/home/viktoria/Git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Saved_Models/shortcuts_14.4/resnet20/' + file)
+    test_acc = checkpoint['test_accuracy']
+    test_accs_1.append(test_acc * 100)
+    sparsity = checkpoint['sparsity']
+    sparsities_1.append(sparsity)
+
+for file in sorted(os.listdir('/home/viktoria/Git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Saved_Models/shortcuts_14.4/rational_resnet20')):
+    checkpoint = torch.load('/home/viktoria/Git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Saved_Models/shortcuts_14.4/rational_resnet20/' + file)
+    test_acc = checkpoint['test_accuracy']
+    test_accs_2.append(test_acc * 100)
+    sparsity = checkpoint['sparsity']
+    sparsities_2.append(sparsity)
+
+for file in sorted(os.listdir('/home/viktoria/Git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Saved_Models/shortcuts_14.4/mix_exp_resnet20')):
+    checkpoint = torch.load('/home/viktoria/Git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Saved_Models/shortcuts_14.4/mix_exp_resnet20/' + file)
+    test_acc = checkpoint['test_accuracy']
+    test_accs_3.append(test_acc * 100)
+    sparsity = checkpoint['sparsity']
+    sparsities_3.append(sparsity)
+
+print(test_accs_1)
+print(sparsities_1)
+print(test_accs_2)
+print(sparsities_2)
+print(test_accs_3)
+print(sparsities_3)
+
+all_test_accs = [test_accs_1, test_accs_2, test_accs_3]
+all_sparsities = [sparsities_1[:-1], sparsities_2[:-1], sparsities_3[:-1]]
+
+num_epochs = [20, 21, 22]
+
+plots.plot_all(all_test_accs, all_sparsities, num_epochs)
+
+make_csv('resnet20', sparsities_1[:-1], test_accs_1)

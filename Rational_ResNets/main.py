@@ -95,7 +95,7 @@ def get_scheduler_optimizer(num_warmup_it, lr, model, it_per_ep):  # TODO: allow
     return lr_scheduler.LambdaLR(optimizer, lr_lambda=lr_lambda), optimizer
 
 
-def make_yaml(models: list, csv=None):  # TODO: add Rational Init
+def make_yaml(models: list, csv=None):  # TODO: add Rational Init + plot PATH
     time_stamp = datetime.now()
     yaml_data = [{'Date': [time_stamp]}, {'Model(s)': models}, {'Dataset': [resnet_args.dataset]}, {'Batch Size': [resnet_args.batch_size]},
                  {'Learning Rate': [resnet_args.learning_rate]}, {'Epochs': [resnet_args.training_number_of_epochs]}, {'Warm-Up Iterations': [resnet_args.warmup_iterations]}]
@@ -112,8 +112,8 @@ def run_all():
     rational_inits = resnet_args.initialize_rationals  # TODO: catch exceptions
     num_rationals = len(rational_inits)
 
-    models_run_all = [RRN20.rational_resnet20(), RN20.resnet20(), sel2exp.select_2_expert_groups_rational_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)]
-    model_names = ['rational_resnet20_cifar10', 'resnet20_cifar10', 'select_2_expert_groups_rational_resnet20']
+    models_run_all = [RN20.resnet20(), RRN20.rational_resnet20(), sel2exp.select_2_expert_groups_rational_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)]
+    model_names = ['resnet20_cifar10', 'rational_resnet20_cifar10', 'select_2_expert_groups_rational_resnet20']
     accuracy_plot_x_vals = []
     train_accs = []
     val_accs = []
