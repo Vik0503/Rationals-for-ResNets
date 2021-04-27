@@ -51,14 +51,24 @@ class RationalBasicBlock(nn.Module):
             self.expert_group_1.append(Rational(cuda=cuda, approx_func=self.rational_inits[n]))
             self.expert_group_2.append(Rational(cuda=cuda, approx_func=self.rational_inits[n]))
 
+        p_0 = torch.randn(1)
+        p_1 = torch.randn(1)
+
+        self.pow_1 = torch.nn.parameter.Parameter(p_0, requires_grad=True)
+        self.pow_2 = torch.nn.parameter.Parameter(p_1, requires_grad=True)
+
         self.rational_expert_group_1 = nn.Sequential(*self.expert_group_1)
         self.rational_expert_group_2 = nn.Sequential(*self.expert_group_2)
 
         data_alpha_1 = initialize_alpha(self.num_rationals)
         self.alpha_1 = torch.nn.parameter.Parameter(data_alpha_1, requires_grad=True)
+        self.alpha_sum_1 = torch.nn.parameter.Parameter(data_alpha_1.sum(), requires_grad=True)
+        self.alpha_1 = torch.nn.parameter.Parameter(self.alpha_1 / self.alpha_sum_1, requires_grad=True)
 
         data_alpha_2 = initialize_alpha(self.num_rationals)
         self.alpha_2 = torch.nn.parameter.Parameter(data_alpha_2, requires_grad=True)
+        self.alpha_sum_2 = torch.nn.parameter.Parameter(data_alpha_2.sum(), requires_grad=True)
+        self.alpha_2 = torch.nn.parameter.Parameter(self.alpha_2 / self.alpha_sum_2, requires_grad=True)
 
         self.conv_layer_2 = nn.Conv2d(planes_out, planes_out, kernel_size=3, stride=1, padding=1, bias=False)
         self.batch_norm_2 = nn.BatchNorm2d(planes_out)
@@ -70,13 +80,25 @@ class RationalBasicBlock(nn.Module):
                 nn.BatchNorm2d(self.expansion * planes_out)
             )
 
-    def multi_rational(self, out: Tensor, alphas: torch.Tensor, rationals) -> Tensor:
+    def multi_rational(self, out: Tensor, alphas, rationals, sums) -> Tensor:
+        # alphas = torch.nn.parameter.Parameter(torch.tensor(alphas / sums, requires_grad=True))
         out_tensor = torch.zeros_like(out)
         for n in range(self.num_rationals):
             rational = rationals[n]
             rational_out = rational(out.clone())
             out_tensor = out_tensor.clone() + alphas[n].clone() * rational_out.clone()
         out = out_tensor.clone()
+        return out
+
+    def pow_multi_rational(self, out: Tensor, alphas: torch.Tensor, rationals, p) -> Tensor:
+        alphas = torch.nn.Parameter(alphas / alphas.sum(), requires_grad=True)
+        p = torch.nn.parameter.Parameter(abs(p), requires_grad=True)
+        out_tensor = torch.zeros_like(out)
+        for n in range(self.num_rationals):
+            rational = rationals[n]
+            rational_out = rational(out.clone())
+            out_tensor = out_tensor.clone() + alphas[n].clone() * rational_out.clone() ** p.clone()
+        out = out_tensor.clone() ** (1 / p.clone())
         return out
 
     def forward(self, x: Tensor) -> Tensor:
@@ -95,11 +117,11 @@ class RationalBasicBlock(nn.Module):
         """
         out = self.conv_layer_1(x)
         out = self.batch_norm_1(out)
-        out = self.multi_rational(out, self.alpha_1, self.rational_expert_group_1)
+        out = self.multi_rational(out, self.alpha_1, self.rational_expert_group_1, self.alpha_sum_1)
         out = self.conv_layer_2(out)
         out = self.batch_norm_2(out)
         out += self.shortcut(x)
-        out = self.multi_rational(out, self.alpha_2, self.rational_expert_group_2)
+        out = self.multi_rational(out, self.alpha_2, self.rational_expert_group_2, self.alpha_sum_2)
 
         return out
 
@@ -124,6 +146,7 @@ class RationalResNet(nn.Module):
 
         self.norm_layer = nn.BatchNorm2d
         self.planes_in = 16
+        self.layers = layers
         self.rational_inits = rational_inits
         self.conv_layer_1 = nn.Conv2d(3, self.planes_in, kernel_size=3, stride=1, padding=1, bias=False)
         self.batch_norm_1 = self.norm_layer(self.planes_in)
@@ -135,8 +158,12 @@ class RationalResNet(nn.Module):
 
         self.rational_expert_group = nn.Sequential(*self.expert_group)
 
+        p = torch.randn(1)
+        self.pow = torch.nn.parameter.Parameter(p, requires_grad=True)
         data = initialize_alpha(self.num_rationals)
         self.alpha = torch.nn.parameter.Parameter(data, requires_grad=True)
+        self.alpha_sum = torch.nn.parameter.Parameter(data.sum(), requires_grad=True)
+        self.alpha = torch.nn.parameter.Parameter(self.alpha / self.alpha_sum, requires_grad=True)
 
         self.layer1 = self.make_layer(block=block, planes_out=16, num_blocks=layers[0], stride=1)
         self.layer2 = self.make_layer(block=block, planes_out=32, num_blocks=layers[1], stride=2)
@@ -187,13 +214,26 @@ class RationalResNet(nn.Module):
         return nn.Sequential(*layers)
 
     def multi_rational(self, out: Tensor) -> Tensor:
-        print(self.alpha)
         out_tensor = torch.zeros_like(out)
+        # self.alpha = torch.nn.parameter.Parameter(torch.tensor(self.alpha / self.alpha_sum, requires_grad=True))
+        # print(self.alpha)
         for n in range(self.num_rationals):
             rational = self.rational_expert_group[n]
             rational_out = rational(out.clone())
             out_tensor = out_tensor.clone() + self.alpha[n].clone() * rational_out.clone()
         out = out_tensor.clone()
+        return out
+
+    def pow_multi_rational(self, out: Tensor) -> Tensor:
+        self.pow = torch.nn.parameter.Parameter(abs(self.pow), requires_grad=True)
+        out_tensor = torch.zeros_like(out)
+        # self.alpha = torch.nn.parameter.Parameter(self.alpha.clone() / self.alpha.sum(), requires_grad=True)
+        print(self.alpha)
+        for n in range(self.num_rationals):
+            rational = self.rational_expert_group[n]
+            rational_out = rational(out.clone())
+            out_tensor = out_tensor.clone() + self.alpha[n].clone() * rational_out.clone() ** self.pow.clone()
+        out = out_tensor.clone() ** (1 / self.pow.clone())
         return out
 
     def forward(self, out: Tensor):
@@ -237,8 +277,8 @@ def initialize_alpha(b: int = 4) -> torch.Tensor:
     alpha : torch.Tensor
             The tensor with initial values for alpha.
     """
-    alpha = torch.rand(b)
-    alpha /= alpha.sum()
+    alpha = torch.rand(b, requires_grad=True)
+    # alpha = alpha / alpha.sum()
     return alpha
 
 
@@ -259,7 +299,6 @@ def _resnet(arch: str, block: Type[RationalBasicBlock], layers: List[int], ratio
     -------
     model: RationalResNet
     """
-    print('inside def 2', num_rationals)
     model = RationalResNet(block, layers, rational_inits, num_rationals, **kwargs)
 
     return model

@@ -65,15 +65,15 @@ def final_plot(cm, epoch_time, test_acc: float, num_epochs: int, learning_rate: 
     plt.subplot(132)
     cm_1 = sns.heatmap(cm, linewidths=1, cmap='plasma')
     props = dict(boxstyle='round', facecolor='grey', alpha=0.5)
-    text = 'num epochs: {}, '.format(num_epochs) + \
+    text = '{} training epochs, '.format(num_epochs) + \
            'batch size: {}, '.format(batch_size) + 'lr: {}, '.format(learning_rate) + '\n' + \
-           'number of rationals per BasicBlock: {}, '.format(num_rationals) + '\n' + \
+           '{} rationals per BasicBlock, '.format(num_rationals) + '\n' + \
            'avg time per epoch: {:.0f}m {:.0f}s, '.format(epoch_time // 60, epoch_time % 60) + \
            'test accuracy: {:4f}, '.format(test_acc) + 'dataset: {}'.format(dataset)
     plt.text(15, 5, text, size=10, bbox=props)
 
     time_stamp = datetime.now()
-    PATH = './Results/{}'.format(model) + '/' + '{}'.format(time_stamp) + '_' + '{}'.format(model) + '_' + '{}'.format(dataset) + '.svg'
+    PATH = './Plots/{}'.format(model) + '/' + '{}'.format(time_stamp) + '_' + '{}'.format(model) + '_' + '{}'.format(dataset) + '.svg'
     plt.savefig(PATH)
     plt.show()
 
@@ -92,7 +92,7 @@ def activation_function_plots(model):
     plt.tight_layout()
     time_stamp = datetime.now()
 
-    PATH = './Results/activation_functions/{}'.format(time_stamp) + '_{}'.format(ResNet_args.dataset) + '.svg'
+    PATH = './Plots/activation_functions/{}'.format(time_stamp) + '_{}'.format(ResNet_args.dataset) + '.svg'
     plt.savefig(PATH)
     plt.show()
 
@@ -134,7 +134,7 @@ def plot_overview_all(training_accs, val_accs, test_accs, x_vals, best_test_accs
     plt.figtext(0.725, 0.5, text, bbox=props, size=9)
 
     time_stamp = datetime.now()
-    PATH = './Results/all' + '/' + '{}'.format(time_stamp) + '_' + '{}'.format(ResNet_args.dataset) + '.svg'
+    PATH = './Plots/all' + '/' + '{}'.format(time_stamp) + '_' + '{}'.format(ResNet_args.dataset) + '.svg'
     plt.savefig(PATH)
     plt.show()
 
@@ -142,7 +142,7 @@ def plot_overview_all(training_accs, val_accs, test_accs, x_vals, best_test_accs
 def calc_mixture_plot(alphas, rationals):
     all_x = torch.zeros(5, 600)
     for i in range(len(alphas)):
-        alpha_x = rationals[i].show(display=False)['line']['y'] * alphas[i].detach().numpy()
+        alpha_x = rationals[i].show(display=False)['line']['y'] * alphas[i].detach().cpu().numpy()
         all_x[i] = torch.tensor(alpha_x)
     return all_x.sum(dim=0), rationals[0].show(display=False)['line']['x']
 
@@ -228,6 +228,6 @@ def plot_activation_func_overview(model, num_rat, inits):
     plt.tight_layout()
     time_stamp = datetime.now()
 
-    PATH = './Results/activation_functions/{}'.format(time_stamp) + '_{}'.format(ResNet_args.dataset) + '.svg'
+    PATH = './Plots/activation_functions/{}'.format(time_stamp) + '_{}'.format(ResNet_args.dataset) + '.svg'
     plt.savefig(PATH)
     plt.show()

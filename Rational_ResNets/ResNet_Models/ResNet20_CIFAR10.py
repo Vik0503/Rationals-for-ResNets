@@ -93,6 +93,7 @@ class ResNet(nn.Module):
         self.norm_layer = nn.BatchNorm2d
 
         self.planes_in = 16
+        self.layers = layers
 
         self.conv_layer_1 = nn.Conv2d(3, self.planes_in, kernel_size=3, stride=1, padding=1, bias=False)
         self.batch_norm_1 = self.norm_layer(self.planes_in)

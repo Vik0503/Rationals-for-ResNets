@@ -33,7 +33,7 @@ from Rational_ResNets.ResNet_Models import ResNet20_CIFAR10 as RN20
 from Rational_ResNets.ResNet_Models import select_1_expert_group_rational_resnet as sel1exp
 from Rational_ResNets.ResNet_Models import Recurrent_Rational_ResNet20_CIFAR10 as RecRRN20
 from Rational_ResNets.ResNet_Models import select_2_expert_groups_rational_resnet as sel2exp
-from Rational_ResNets import write_read_csv
+from Rational_ResNets import utils
 
 resnet_args = argparser.get_args()
 
@@ -52,14 +52,14 @@ if torch.cuda.is_available():
 else:
     device = 'cpu'
 
-if resnet_args.dataset is 'cifar10':
+if resnet_args.dataset == 'cifar10':
     trainset, trainloader, it_per_ep = CIFAR10.get_train_data(aug=resnet_args.augment_data, bs=resnet_args.batch_size)
     valset, valloader = CIFAR10.get_validation_data(aug=resnet_args.augment_data, bs=resnet_args.batch_size)
     testset, testloader = CIFAR10.get_test_data(aug=resnet_args.augment_data, bs=resnet_args.batch_size)
     classes = CIFAR10.get_classes()
     num_classes = CIFAR10.get_num_classes()
 
-elif resnet_args.dataset is 'SVHN':
+elif resnet_args.dataset == 'SVHN':
     trainset, trainloader, it_per_ep = SVHN.get_train_data(aug=resnet_args.augment_data, bs=resnet_args.batch_size)
     valset, valloader = SVHN.get_validation_data(aug=resnet_args.augment_data, bs=resnet_args.batch_size)
     testset, testloader = SVHN.get_test_data(aug=resnet_args.augment_data, bs=resnet_args.batch_size)
@@ -67,51 +67,9 @@ elif resnet_args.dataset is 'SVHN':
     num_classes = SVHN.get_num_classes()
 
 
-def get_scheduler_optimizer(num_warmup_it, lr, model, it_per_ep):  # TODO: allow diff. milestones maybe in utils?
-    optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9, weight_decay=0.0001)
-
-    def lr_lambda(it):
-        if it < num_warmup_it:
-            if it % 500 == 0:
-                print('Warmup')
-            return min(1.0, it / num_warmup_it)
-        elif it < 10 * it_per_ep:
-            if it % 500 == 0:
-                print('MS 1')
-            return 1
-        elif 10 * it_per_ep <= it < 15 * it_per_ep:
-            if it % 500 == 0:
-                print('MS 2')
-            return 0.1
-        elif 15 * it_per_ep <= it < 20 * it_per_ep:
-            if it % 500 == 0:
-                print('MS 3')
-            return 0.01
-        elif it >= 20 * it_per_ep:
-            if it % 500 == 0:
-                print('After MS 3')
-            return 0.001
-
-    return lr_scheduler.LambdaLR(optimizer, lr_lambda=lr_lambda), optimizer
-
-
-def make_yaml(models: list, csv=None):  # TODO: add Rational Init + plot PATH
-    time_stamp = datetime.now()
-    yaml_data = [{'Date': [time_stamp]}, {'Model(s)': models}, {'Dataset': [resnet_args.dataset]}, {'Batch Size': [resnet_args.batch_size]},
-                 {'Learning Rate': [resnet_args.learning_rate]}, {'Epochs': [resnet_args.training_number_of_epochs]}, {'Warm-Up Iterations': [resnet_args.warmup_iterations]}]
-
-    if resnet_args.save_res_csv:
-        yaml_data.append({'CSV File(s)': [csv]})
-
-    PATH = 'YAML/{}'.format(time_stamp) + '.yaml'
-    with open(PATH, 'w') as file:
-        documents = yaml.dump(yaml_data, file)
-
-
 def run_all():
     rational_inits = resnet_args.initialize_rationals  # TODO: catch exceptions
     num_rationals = len(rational_inits)
-
     models_run_all = [RN20.resnet20(), RRN20.rational_resnet20(), sel2exp.select_2_expert_groups_rational_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)]
     model_names = ['resnet20_cifar10', 'rational_resnet20_cifar10', 'select_2_expert_groups_rational_resnet20']
     accuracy_plot_x_vals = []
@@ -128,7 +86,7 @@ def run_all():
         model = model.to(device)
         criterion = nn.CrossEntropyLoss()
 
-        scheduler, optimizer = get_scheduler_optimizer(resnet_args.warmup_iterations, resnet_args.learning_rate, model, it_per_ep)
+        scheduler, optimizer = utils.get_scheduler_optimizer(resnet_args.warmup_iterations, resnet_args.learning_rate, model, it_per_ep)
         model, cm, time_elapsed_epoch, best_acc, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals, accuracy_plot_x_vals = tvt.train_val_test_model(model, criterion, optimizer, scheduler,
                                                                                                                                                                    num_epochs=resnet_args.training_number_of_epochs,
                                                                                                                                                                    testloader=testloader, valloader=valloader,
@@ -136,7 +94,7 @@ def run_all():
                                                                                                                                                                    testset=testset, valset=valset)
 
         if resnet_args.save_res_csv:
-            PATH = write_read_csv.make_csv(model_names[m], accuracy_plot_x_vals, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals)
+            PATH = utils.make_csv(model_names[m], accuracy_plot_x_vals, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals)
             PATHS.append(PATH)
         train_accs.append(train_acc_plot_y_vals)
         val_accs.append(val_acc_plot_y_vals)
@@ -145,39 +103,39 @@ def run_all():
         avg_time.append(time_elapsed_epoch)
 
     plots.plot_overview_all(train_accs, val_accs, test_accs, accuracy_plot_x_vals, best_test_accs, avg_time)
-    make_yaml(model_names, PATHS)
+    utils.make_yaml(model_names, PATHS)
 
 
 def run_one():
-    if resnet_args.model is 'rational_resnet20_cifar10':  # TODO: add rest of the models
+    if resnet_args.model == 'rational_resnet20_cifar10':  # TODO: add rest of the models
         model = RRN20.rational_resnet20()
         num_rationals = 2
-    elif resnet_args.model is 'resnet20_cifar10':
+    elif resnet_args.model == 'resnet20_cifar10':
         model = RN20.resnet20()
         num_rationals = 0
-    elif resnet_args.model is 'rational_resnet18_imagenet':
+    elif resnet_args.model == 'rational_resnet18_imagenet':
         model = RRN18.rational_resnet18()
         num_rationals = 2
-    elif resnet_args.model is 'resnet18_imagenet':
+    elif resnet_args.model == 'resnet18_imagenet':
         model = RN18.resnet18()
         num_rationals = 0
-    elif resnet_args.model is 'pt':
+    elif resnet_args.model == 'pt':
         model = PT.resnet18()
         num_rationals = 2
-    elif resnet_args.model is 'recurrent_rational_resnet20_cifar10':
+    elif resnet_args.model == 'recurrent_rational_resnet20_cifar10':
         model = RecRRN20.rational_resnet20()
         num_rationals = 1
-    elif resnet_args.model is 'resnet110_cifar10':
+    elif resnet_args.model == 'resnet110_cifar10':
         model = RN20.resnet110()
         num_rationals = 0
-    elif resnet_args.model is 'rational_resnet110_cifar10':
+    elif resnet_args.model == 'rational_resnet110_cifar10':
         model = RRN20.rational_resnet110()
         num_rationals = 2
-    elif resnet_args.model is 'select_2_expert_groups_rational_resnet20':
+    elif resnet_args.model == 'select_2_expert_groups_rational_resnet20':
         rational_inits = resnet_args.initialize_rationals  # TODO: catch exceptions
         num_rationals = len(rational_inits)
         model = sel2exp.select_2_expert_groups_rational_resnet20(num_rationals=num_rationals, rational_inits=rational_inits)
-    elif resnet_args.model is 'select_1_expert_group_rational_resnet20':
+    elif resnet_args.model == 'select_1_expert_group_rational_resnet20':
         rational_inits = resnet_args.initialize_rationals  # TODO: catch exceptions
         num_rationals = len(rational_inits)
         model = sel1exp.select_1_expert_group_rational_resnet20(num_rationals=num_rationals, rational_inits=rational_inits)
@@ -186,7 +144,7 @@ def run_one():
 
     criterion = nn.CrossEntropyLoss()
 
-    scheduler, optimizer = get_scheduler_optimizer(resnet_args.warmup_iterations, resnet_args.learning_rate, model, it_per_ep)
+    scheduler, optimizer = utils.get_scheduler_optimizer(resnet_args.warmup_iterations, resnet_args.learning_rate, model, it_per_ep)
     model, cm, avg_time, best_test_acc, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals, accuracy_plot_x_vals = tvt.train_val_test_model(model, criterion, optimizer=optimizer, scheduler=scheduler,
                                                                                                                                                           num_epochs=resnet_args.training_number_of_epochs,
                                                                                                                                                           testloader=testloader, valloader=valloader,
@@ -195,11 +153,16 @@ def run_one():
 
     plots.final_plot(cm, avg_time, best_test_acc, resnet_args.training_number_of_epochs, resnet_args.learning_rate,
                      num_rationals, resnet_args.dataset, resnet_args.model, resnet_args.batch_size)
+    if resnet_args.model == 'select_2_expert_groups_rational_resnet20':
+        plots.plot_activation_func_overview(model, num_rationals, rational_inits)
     models = [resnet_args.model]
     PATH = ''
     if resnet_args.save_res_csv:
-        PATH = write_read_csv.make_csv(resnet_args.model, accuracy_plot_x_vals, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals)
-    make_yaml(models, PATH)
+        PATH = utils.make_csv(resnet_args.model, accuracy_plot_x_vals, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals)
+    utils.make_yaml(models, PATH)
+    time_stamp = datetime.now()
+    PATH = './Saved_Models/{}.pth'.format(time_stamp)
+    torch.save(model, PATH)
 
 
 if resnet_args.train_all:

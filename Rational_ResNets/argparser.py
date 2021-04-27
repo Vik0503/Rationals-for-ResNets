@@ -21,8 +21,8 @@ ResNet_arg_parser.add_argument('-wi', '--warmup_iterations', default=0, type=int
 ResNet_arg_parser.add_argument('--save_res_csv', default=False, action='store_true', help='Flag to save the results of the experiment as csv')
 
 resnet_args = ResNet_arg_parser.parse_args(
-    ['--model', 'select_2_expert_groups_rational_resnet20', '--dataset', 'SVHN', '--training_number_of_epochs', '3', '--augment_data', 'True', '--number_of_rationals_per_vector', '5', '--initialize_rationals', 'leaky_relu', 'gelu', 'swish', 'tanh',
-     'sigmoid', '--save_res_csv', '--learning_rate', '0.01'])
+    ['--model', 'select_2_expert_groups_rational_resnet20', '--dataset', 'SVHN', '--training_number_of_epochs', '25', '--augment_data', 'True', '--number_of_rationals_per_vector', '5', '--initialize_rationals', 'leaky_relu', 'gelu', 'swish', 'tanh',
+     'sigmoid', '--save_res_csv', '--learning_rate', '0.03'])
 
 
 def get_argparser() -> arg.ArgumentParser:
