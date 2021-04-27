@@ -83,7 +83,7 @@ df = pd.DataFrame(all_data, index=['original Model', 'ReLU ResNet20', 'univ. rat
 
 display(df)
 compression_opts = dict(method='zip', archive_name='out.csv')
-df.to_csv('./Results/Masks/all_models/all_LTH_no_shortcuts_2.csv', index=True)
+df.to_csv('./Plots/Masks/all_models/all_LTH_no_shortcuts_2.csv', index=True)
 
 
 os.chdir('/home/viktoria/Git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Saved_Models/shortcuts_14.4')

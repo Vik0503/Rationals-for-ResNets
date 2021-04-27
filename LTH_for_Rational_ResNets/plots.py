@@ -56,7 +56,7 @@ def final_plot_LTH(model, dataset, batch_size, num_pruning_epochs, training_numb
     plt.figtext(0.525, 0.5, text, bbox=props, size=9)
 
     time_stamp = datetime.now()
-    PATH = './Results/LTH_{}'.format(model) + '/' + '{}'.format(time_stamp) + '_' + '{}'.format(model) + '_' + '{}'.format(dataset) + '.svg'
+    PATH = './Plots/LTH_{}'.format(model) + '/' + '{}'.format(time_stamp) + '_' + '{}'.format(model) + '_' + '{}'.format(dataset) + '.svg'
     plt.savefig(PATH)
     plt.show()
 
@@ -104,7 +104,7 @@ def plot_all(test_accs, sparsities, num_epoch_list):
     plt.figtext(0.525, 0.5, text, bbox=props, size=9)
     time_stamp = datetime.now()
 
-    PATH = './Results/LTH_all_models/{}'.format(time_stamp) + '_{}'.format(LTH_args.dataset) + '.svg'
+    PATH = './Plots/LTH_all_models/{}'.format(time_stamp) + '_{}'.format(LTH_args.dataset) + '.svg'
     plt.savefig(PATH)
     plt.show()
 
@@ -123,7 +123,7 @@ def activation_function_plots(model):
     plt.tight_layout()
     time_stamp = datetime.now()
 
-    PATH = './Results/activation_functions/{}'.format(time_stamp) + '_{}'.format(LTH_args.dataset) + '.svg'
+    PATH = './Plots/activation_functions/{}'.format(time_stamp) + '_{}'.format(LTH_args.dataset) + '.svg'
     plt.savefig(PATH)
     plt.show()
 
@@ -145,7 +145,7 @@ def plot_activation_func_overview(model, num_rat, inits):
         if isinstance(m, Rational):
             tmp.append(m)
             c += 1
-        if c == num_rat:  # TODO: c to num_rats
+        if c == num_rat:
             rat_groups.append(tmp)
             tmp = []
             c = 0
@@ -217,7 +217,7 @@ def plot_activation_func_overview(model, num_rat, inits):
     plt.tight_layout()
     time_stamp = datetime.now()
 
-    PATH = './Results/activation_functions/{}'.format(time_stamp) + '_{}'.format(LTH_args.dataset) + '_all.svg'
+    PATH = './Plots/activation_functions/{}'.format(time_stamp) + '_{}'.format(LTH_args.dataset) + '_all.svg'
     plt.savefig(PATH)
     plt.show()
 

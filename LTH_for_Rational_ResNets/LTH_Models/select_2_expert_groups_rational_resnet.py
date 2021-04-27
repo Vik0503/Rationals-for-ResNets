@@ -266,14 +266,9 @@ def initialize_alpha(b: int = 4) -> torch.Tensor:
     Returns
     -------
     alpha : torch.Tensor
-            The tensor with inial values for alpha.
+            The tensor with initial values for alpha.
     """
-    alpha = []
-    while len(alpha) < b:
-        tmp = torch.rand(1)
-        if sum(alpha) + tmp <= 1.0:
-            alpha.append(tmp)
-    alpha = torch.tensor(alpha)
+    alpha = torch.rand(b)
     alpha /= alpha.sum()
     return alpha
 
