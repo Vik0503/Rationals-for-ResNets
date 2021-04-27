@@ -68,7 +68,7 @@ if LTH_args.prune_shortcuts:
 else:
     prune_shortcuts = False
 
-if LTH_args.dataset is 'cifar10':
+if LTH_args.dataset == 'cifar10':
     trainset = cifar10.get_trainset()
     valset = cifar10.get_validationset()
     testset = cifar10.get_testset()
@@ -79,7 +79,7 @@ if LTH_args.dataset is 'cifar10':
     num_classes = cifar10.get_num_classes()
     it_per_ep = cifar10.get_it_per_epoch(bs=LTH_args.batch_size)
 
-elif LTH_args.dataset is 'SVHN':
+elif LTH_args.dataset == 'SVHN':
     trainset = SVHN.get_trainset()
     valset = SVHN.get_validationset()
     testset = SVHN.get_testset()
@@ -185,23 +185,24 @@ def run_all():  # TODO: Solve Problem with select
         all_models.append(model)
 
     plots.plot_all(test_accs=all_test_accuracies, sparsities=all_sparsities, num_epoch_list=num_epoch_list)
+    plots.plot_activation_func_overview(all_models[2], LTH_args.init_rationals, num_rationals)
     mask_path_dim, mask_path_weights = LTH_write_read_csv.make_mask_csv(all_models)
     make_yaml(model_names, csv=PATHS, saved_models=path, table=[mask_path_dim, mask_path_weights])
 
 
 def run_one():
     global model
-    if LTH_args.model is 'rational_resnet20_cifar10':
+    if LTH_args.model == 'rational_resnet20_cifar10':
         model = rrn20.rational_resnet20()
-    elif LTH_args.model is 'resnet20_cifar10':
+    elif LTH_args.model == 'resnet20_cifar10':
         model = rn20.resnet20()
-    elif LTH_args.model is 'rational_resnet18_imagenet':
+    elif LTH_args.model == 'rational_resnet18_imagenet':
         model = rrn18.rational_resnet18()
-    elif LTH_args.model is 'resnet18_imagenet':
+    elif LTH_args.model == 'resnet18_imagenet':
         model = rn18.resnet18()
-    elif LTH_args.model is 'select_2_expert_groups_rational_resnet20':
+    elif LTH_args.model == 'select_2_expert_groups_rational_resnet20':
         model = sel2exp.select_2_expert_groups_rational_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)
-    elif LTH_args.model is 'select_1_expert_group_rational_resnet20':
+    elif LTH_args.model == 'select_1_expert_group_rational_resnet20':
         model = sel1exp.select_1_expert_group_rational_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)
 
     mask = make_initial_mask(model)

@@ -1,0 +1,7 @@
+,Layer 0,Layer 1,,,,,,Layer 2,,,,,,,Layer 3,,,,,,
+,,BasicBlock 0,,BasicBlock 1,,BasicBlock 2,,,BasicBlock 0,,BasicBlock 1,,BasicBlock 2,,,BasicBlock 0,,BasicBlock 1,,BasicBlock 2,
+,conv 0,conv. 0,conv. 1,conv. 0,conv. 1,conv. 0,conv. 1,conv. 0,conv. 1,conv. 2,conv. 0,conv. 1,conv. 0,conv. 1,conv. 0,conv. 1,conv. 2,conv. 0,conv. 1,conv. 0,conv. 1
+original Model,430,2302,2302,2302,2302,2302,2302,4606,9214,510,9214,9214,9214,9214,18430,36862,2046,36862,36862,36862,36862
+ReLU ResNet20,119,204,154,175,164,164,134,144,200,159,191,194,181,158,106,130,231,141,63,42,13
+univ. rational ResNet20,67,215,117,123,113,132,119,79,91,122,147,115,134,125,67,70,222,146,115,73,52
+mix. exp. ResNet20,70,168,89,102,104,97,78,55,59,102,107,117,103,105,32,34,199,128,118,47,31

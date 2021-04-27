@@ -1,4 +1,5 @@
 import csv
+import os
 
 import torch
 import pandas as pd
@@ -9,7 +10,7 @@ from datetime import datetime
 
 from LTH_for_Rational_ResNets import Mask
 from LTH_for_Rational_ResNets.LTH_Models import resnet20_cifar10 as rn20
-from LTH_for_Rational_ResNets.LTH_Models.resnet20_cifar10 import ResNet
+
 
 args = argparser.get_arguments()
 
@@ -28,11 +29,31 @@ def make_csv(model, prune_percent: list, test_acc: list):
     return PATH
 
 
-def make_mask_csv(models):
+def make_mask_csv(): # TODO: PATH or Model???
     time_stamp = datetime.now()
     args = argparser.get_arguments()
     prune_shortcuts = args.prune_shortcuts
-    model = models[0]
+    original_PATH = '/home/viktoria/Git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Saved_Models/no_shortcuts_14.4/resnet20/2021-04-14 09:17:20.710430_ep20s98.84982_test0.91353.pth'
+    univ_rat_PATH = '/home/viktoria/Git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Saved_Models/no_shortcuts_14.4/rational_resnet20/2021-04-14 07:56:07.220106_ep25s99.62495_test0.90235.pth'
+    multi_exp_PATH = '/home/viktoria/Git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Saved_Models/no_shortcuts_14.4/mix_exp_resnet20/2021-04-14 16:17:30.512244_ep23s99.41239_test0.90934.pth'
+
+    original_PATH = '/home/viktoria/Git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Saved_Models/shortcuts_14.4/resnet20/2021-04-15 00:01:52.401491_ep20s98.84961_test0.90116.pth'
+    univ_rat_PATH = '/home/viktoria/Git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Saved_Models/shortcuts_14.4/rational_resnet20/2021-04-14 22:42:32.815381_ep21s99.08013_test0.91146.pth'
+    multi_exp_PATH = '/home/viktoria/Git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Saved_Models/shortcuts_14.4/mix_exp_resnet20/2021-04-15 06:30:57.773067_ep22s99.26477_test0.90131.pth'
+
+    all_PATHS = [original_PATH, univ_rat_PATH, multi_exp_PATH]
+    model = rn20.resnet20()
+    original_mask: Mask
+    original_mask = Mask.make_initial_mask(model)
+
+    masks = [original_mask]
+    for p in range(len(all_PATHS)):
+        PATH = all_PATHS[p]
+        checkpoint = torch.load(PATH)
+        mask = checkpoint['mask']
+        masks.append(mask)
+
+    """model = models[0]
     original_mask: Mask
     original_mask = Mask.make_initial_mask(model)
 
@@ -40,7 +61,7 @@ def make_mask_csv(models):
     for m in range(len(models)):
         model = models[m]
         mask = model.mask
-        masks.append(mask)
+        masks.append(mask)"""
 
     all_data_dim = []
     all_data_weights = []
@@ -96,11 +117,11 @@ def make_mask_csv(models):
         if num_layers == 3:
             if num_bb == 3:
                 array_0 = ['Layer 0'] + ['Layer 1'] + [''] * 5 + ['Layer 2'] + [''] * 6 + ['Layer 3'] + [''] * 6
-                array_1 = [''] + ['BasicBlock 0', '', 'BasicBlock 1', '', '', 'BasicBlock 2', '', ''] * 3
+                array_1 = [''] + ['BasicBlock 0', '', 'BasicBlock 1', '', 'BasicBlock 2', ''] + ['BasicBlock 0', '', '', 'BasicBlock 1', '', 'BasicBlock 2', ''] * 2
                 array_2 = ['conv 0'] + ['conv. 0', 'conv. 1'] * 3 + array_3_conv * 6
             elif num_bb == 2:
                 array_0 = ['Layer 0'] + ['Layer 1'] + [''] * 5 + ['Layer 2'] + [''] * 4 + ['Layer 3'] + [''] * 4
-                array_1 = [''] + ['BasicBlock 0', '', 'BasicBlock 1', '', '', 'BasicBlock 2', '', ''] + ['BasicBlock 0', '', 'BasicBlock 1', '', ''] * 2
+                array_1 = [''] + ['BasicBlock 0', '', '', 'BasicBlock 1', '', 'BasicBlock 2', ''] + ['BasicBlock 0', '', 'BasicBlock 1', '', ''] * 2
                 array_2 = ['conv 0'] + ['conv. 0', 'conv. 1'] * 3 + array_3_conv_1 * 6
         elif num_layers == 2:
             array_0 = ['Layer 0'] + ['Layer 1'] + [''] * 5 + ['Layer 2'] + [''] * 5
@@ -142,8 +163,5 @@ def make_mask_csv(models):
     df_weights.to_csv(PATH_weights, index=True)
 
     return PATH_dim, PATH_weights
-
-
-
 
 
