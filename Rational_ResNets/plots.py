@@ -162,7 +162,7 @@ def plot_activation_func_overview(model, num_rat, inits):
             c = 0
 
     for m, param in model.named_parameters():
-        if 'alpha' in m:
+        if 'alpha' in m and 'sum' not in m:
             alphas.append(param)
 
     layers = model.layers
@@ -213,7 +213,7 @@ def plot_activation_func_overview(model, num_rat, inits):
             alpha_tmp = alphas[plt_counter]
             legend = []
             y, x = calc_mixture_plot(alpha_tmp, tmp)
-            plt.plot(x, y, color='red')
+            plt.plot(x, y, color='red', linewidth=1.5)
             legend.append('mixture')
 
             for rational in range(len(tmp)):

@@ -1,0 +1,8 @@
+- Date: [!!timestamp '2021-04-28 09:29:49.487409']
+- Model(s): [select_2_expert_groups_rational_resnet20]
+- Dataset: [SVHN]
+- Batch Size: [128]
+- Learning Rate: [0.03]
+- Epochs: [2]
+- Warm-Up Iterations: [0]
+- CSV File(s): ['CSV/select_2_expert_groups_rational_resnet20/2021-04-28 09:29:49.487085.csv']

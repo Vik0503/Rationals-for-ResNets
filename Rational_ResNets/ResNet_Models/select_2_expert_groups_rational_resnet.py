@@ -81,7 +81,7 @@ class RationalBasicBlock(nn.Module):
             )
 
     def multi_rational(self, out: Tensor, alphas, rationals, sums) -> Tensor:
-        # alphas = torch.nn.parameter.Parameter(torch.tensor(alphas / sums, requires_grad=True))
+        # sums = alphas.sum()
         out_tensor = torch.zeros_like(out)
         for n in range(self.num_rationals):
             rational = rationals[n]
@@ -117,10 +117,12 @@ class RationalBasicBlock(nn.Module):
         """
         out = self.conv_layer_1(x)
         out = self.batch_norm_1(out)
+        # self.alpha_sum_1 = torch.nn.parameter.Parameter(self.alpha_1.sum(), requires_grad=True)
         out = self.multi_rational(out, self.alpha_1, self.rational_expert_group_1, self.alpha_sum_1)
         out = self.conv_layer_2(out)
         out = self.batch_norm_2(out)
         out += self.shortcut(x)
+        # self.alpha_sum_2 = torch.nn.parameter.Parameter(self.alpha_2.sum(), requires_grad=True)
         out = self.multi_rational(out, self.alpha_2, self.rational_expert_group_2, self.alpha_sum_2)
 
         return out
@@ -215,7 +217,7 @@ class RationalResNet(nn.Module):
 
     def multi_rational(self, out: Tensor) -> Tensor:
         out_tensor = torch.zeros_like(out)
-        # self.alpha = torch.nn.parameter.Parameter(torch.tensor(self.alpha / self.alpha_sum, requires_grad=True))
+        # self.alpha_sum = self.alpha.sum()
         # print(self.alpha)
         for n in range(self.num_rationals):
             rational = self.rational_expert_group[n]
@@ -252,6 +254,7 @@ class RationalResNet(nn.Module):
         """
         out = self.conv_layer_1(out)
         out = self.batch_norm_1(out)
+        # self.alpha_sum = torch.nn.parameter.Parameter(self.alpha.sum(), requires_grad=True)
         out = self.multi_rational(out)
 
         out = self.layer1(out)
@@ -278,7 +281,7 @@ def initialize_alpha(b: int = 4) -> torch.Tensor:
             The tensor with initial values for alpha.
     """
     alpha = torch.rand(b, requires_grad=True)
-    # alpha = alpha / alpha.sum()
+    alpha = alpha / alpha.sum()
     return alpha
 
 

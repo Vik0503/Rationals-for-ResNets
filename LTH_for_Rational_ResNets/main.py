@@ -91,28 +91,6 @@ elif LTH_args.dataset == 'SVHN':
     it_per_ep = SVHN.get_it_per_epoch(bs=LTH_args.batch_size)
 
 
-def make_yaml(models: list, saved_models, table=None, csv=None):  # TODO: add Rational Init + One Shot Option + saved models for run all + plot + maybe in utils?
-    time_stamp = datetime.now()
-    yaml_data = [{'Date': [time_stamp]}, {'Model(s)': models}, {'Dataset': [LTH_args.dataset]}, {'Batch Size': [LTH_args.batch_size]}, {'Pruning Percentage per Epoch': [LTH_args.pruning_percentage]},
-                 {'Training Epochs per Pruning Epoch': [LTH_args.training_number_of_epochs]}, {'Learning Rate': [LTH_args.learning_rate]}, {'Warm-Up Iterations': [LTH_args.warmup_iterations]},
-                 {'Shortcuts pruned': [LTH_args.prune_shortcuts]}, {'Saved Models': [saved_models]}]
-
-    if LTH_args.stop_criteria is 'num_prune_epochs':
-        yaml_data.append({'Iterative Pruning Epochs': [LTH_args.iterative_pruning_epochs]})
-    elif LTH_args.stop_criteria is 'test_acc':
-        yaml_data.append({'Test Accuracy Threshold': [LTH_args.test_acc]})
-
-    if LTH_args.save_res_csv:
-        yaml_data.append({'CSV File': [csv]})
-
-    if table is not None:
-        yaml_data.append({'Mask CSV File': [table]})
-
-    PATH = 'YAML/{}'.format(time_stamp) + '.yaml'
-    with open(PATH, 'w') as file:
-        documents = yaml.dump(yaml_data, file)
-
-
 models_run_all = [rn20.resnet20(), rrn20.rational_resnet20(), sel2exp.select_2_expert_groups_rational_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)]
 
 
@@ -187,7 +165,7 @@ def run_all():  # TODO: Solve Problem with select
     plots.plot_all(test_accs=all_test_accuracies, sparsities=all_sparsities, num_epoch_list=num_epoch_list)
     plots.plot_activation_func_overview(all_models[2], LTH_args.init_rationals, num_rationals)
     mask_path_dim, mask_path_weights = LTH_write_read_csv.make_mask_csv(all_models)
-    make_yaml(model_names, csv=PATHS, saved_models=path, table=[mask_path_dim, mask_path_weights])
+    LTH_write_read_csv.make_yaml(model_names, csv=PATHS, saved_models=path, table=[mask_path_dim, mask_path_weights])
 
 
 def run_one():
@@ -262,7 +240,7 @@ def run_one():
     if LTH_args.save_res_csv:
         PATH = LTH_write_read_csv.make_csv(LTH_args.model, sparsities, test_accuracies)
 
-    make_yaml([LTH_args.model], csv=PATH, saved_models=path)
+    LTH_write_read_csv.make_yaml([LTH_args.model], csv=PATH, saved_models=path)
 
 
 if LTH_args.run_all:

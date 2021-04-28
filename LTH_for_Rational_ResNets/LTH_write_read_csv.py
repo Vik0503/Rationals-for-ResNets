@@ -3,6 +3,7 @@ import os
 
 import torch
 import pandas as pd
+import yaml
 from IPython.core.display import display
 
 import argparser
@@ -165,3 +166,24 @@ def make_mask_csv(): # TODO: PATH or Model???
     return PATH_dim, PATH_weights
 
 
+def make_yaml(models: list, saved_models, table=None, csv=None):  # TODO: add Rational Init + One Shot Option + saved models for run all + plot
+    LTH_args = argparser.get_arguments()
+    time_stamp = datetime.now()
+    yaml_data = [{'Date': [time_stamp]}, {'Model(s)': models}, {'Dataset': [LTH_args.dataset]}, {'Batch Size': [LTH_args.batch_size]}, {'Pruning Percentage per Epoch': [LTH_args.pruning_percentage]},
+                 {'Training Epochs per Pruning Epoch': [LTH_args.training_number_of_epochs]}, {'Learning Rate': [LTH_args.learning_rate]}, {'Warm-Up Iterations': [LTH_args.warmup_iterations]},
+                 {'Shortcuts pruned': [LTH_args.prune_shortcuts]}, {'Saved Models': [saved_models]}]
+
+    if LTH_args.stop_criteria is 'num_prune_epochs':
+        yaml_data.append({'Iterative Pruning Epochs': [LTH_args.iterative_pruning_epochs]})
+    elif LTH_args.stop_criteria is 'test_acc':
+        yaml_data.append({'Test Accuracy Threshold': [LTH_args.test_acc]})
+
+    if LTH_args.save_res_csv:
+        yaml_data.append({'CSV File': [csv]})
+
+    if table is not None:
+        yaml_data.append({'Mask CSV File': [table]})
+
+    PATH = 'YAML/{}'.format(time_stamp) + '.yaml'
+    with open(PATH, 'w') as file:
+        documents = yaml.dump(yaml_data, file)
