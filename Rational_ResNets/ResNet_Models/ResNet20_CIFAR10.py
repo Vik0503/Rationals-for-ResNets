@@ -97,14 +97,20 @@ class ResNet(nn.Module):
 
         self.conv_layer_1 = nn.Conv2d(3, self.planes_in, kernel_size=3, stride=1, padding=1, bias=False)
         self.batch_norm_1 = self.norm_layer(self.planes_in)
+
         self.relu = nn.ReLU(inplace=True)
 
         self.layer1 = self.make_layer(block=block, planes_out=16, num_blocks=layers[0], stride=1)
-        self.layer2 = self.make_layer(block=block, planes_out=32, num_blocks=layers[1], stride=2)
-        self.layer3 = self.make_layer(block=block, planes_out=64, num_blocks=layers[2], stride=2)
+        out_size = 16
+        if len(self.layers) > 1:
+            self.layer2 = self.make_layer(block=block, planes_out=32, num_blocks=layers[1], stride=2)
+            out_size = 32
+        if len(self.layeres) > 2:
+            self.layer3 = self.make_layer(block=block, planes_out=64, num_blocks=layers[2], stride=2)
+            out_size = 64
 
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
-        self.fc = nn.Linear(64, num_classes)
+        self.fc = nn.Linear(out_size, num_classes)
 
         for mod in self.modules():
             if isinstance(mod, nn.Conv2d):
@@ -163,8 +169,10 @@ class ResNet(nn.Module):
         out = self.relu(out)
 
         out = self.layer1(out)
-        out = self.layer2(out)
-        out = self.layer3(out)
+        if len(self.layers) > 1:
+            out = self.layer2(out)
+        if len(self.layers) > 2:
+            out = self.layer3(out)
 
         out = self.avgpool(out)
         out = torch.flatten(out, 1)

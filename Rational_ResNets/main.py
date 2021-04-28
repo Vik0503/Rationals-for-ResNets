@@ -1,8 +1,6 @@
+import inspect
 import os
 import sys
-import inspect
-
-import yaml
 
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
@@ -12,8 +10,6 @@ import torch
 
 torch.cuda.manual_seed_all(42)
 import torch.nn as nn
-from torch import optim
-from torch.optim import lr_scheduler
 
 import numpy as np
 

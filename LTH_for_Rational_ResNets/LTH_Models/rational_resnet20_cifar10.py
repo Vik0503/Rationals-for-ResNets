@@ -120,11 +120,16 @@ class RationalResNet(nn.Module):
         self.rational = Rational(cuda=cuda)
 
         self.layer1 = self.make_layer(block=block, planes_out=16, num_blocks=layers[0], stride=1)
-        self.layer2 = self.make_layer(block=block, planes_out=32, num_blocks=layers[1], stride=2)
-        self.layer3 = self.make_layer(block=block, planes_out=64, num_blocks=layers[2], stride=2)
+        out_size = 16
+        if len(self.layers) > 1:
+            self.layer2 = self.make_layer(block=block, planes_out=32, num_blocks=layers[1], stride=2)
+            out_size = 32
+        if len(self.layers) > 2:
+            self.layer3 = self.make_layer(block=block, planes_out=64, num_blocks=layers[2], stride=2)
+            out_size = 64
 
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
-        self.fc = nn.Linear(64, num_classes)
+        self.fc = nn.Linear(out_size, num_classes)
 
         for mod in self.modules():
             if isinstance(mod, nn.Conv2d):
@@ -182,7 +187,7 @@ class RationalResNet(nn.Module):
         if mask is not None:
             for name, param in self.named_parameters():
                 if prune_shortcuts:
-                    if 'weight' not in name or 'batch_norm' in name or 'fc' in name or 'shortcut.1.' in name:  # TODO: find better solution for shortcut.1 problem
+                    if 'weight' not in name or 'batch_norm' in name or 'fc' in name or 'shortcut.1.' in name:
                         continue
                     param.data *= mask[name]
                 else:
@@ -211,8 +216,10 @@ class RationalResNet(nn.Module):
         out = self.rational(out)
 
         out = self.layer1(out)
-        out = self.layer2(out)
-        out = self.layer3(out)
+        if len(self.layers) > 1:
+            out = self.layer2(out)
+        if len(self.layers) > 2:
+            out = self.layer3(out)
         out = self.avgpool(out)
         out = torch.flatten(out, 1)
         out = self.fc(out)
@@ -248,12 +255,16 @@ def rational_resnet20(mask: Mask = None, **kwargs: Any) -> RationalResNet:
     return _resnet('resnet20', RationalBasicBlock, [3, 3, 3], mask=mask, **kwargs)
 
 
-def prunable_layer_dict(model):  # shortcuts???
-    prune_dict = {}
-    for name, param in model.named_parameters():
-        if 'weight' not in name:
-            continue
+def rational_resnet20_2_BB(mask: Mask = None, **kwargs: Any) -> RationalResNet:
+    """ResNet for CIFAR10 as mentioned in the paper above"""
+    return _resnet('resnet20', RationalBasicBlock, [3, 2, 2], mask=mask, **kwargs)
 
-        prune_dict[name] = param
 
-    return prune_dict
+def rational_resnet20_2_layers(mask: Mask = None, **kwargs: Any) -> RationalResNet:
+    """ResNet for CIFAR10 as mentioned in the paper above"""
+    return _resnet('resnet20', RationalBasicBlock, [3, 3], mask=mask, **kwargs)
+
+
+def rational_resnet20_1_layer(mask: Mask = None, **kwargs: Any) -> RationalResNet:
+    """ResNet for CIFAR10 as mentioned in the paper above"""
+    return _resnet('resnet20', RationalBasicBlock, [3], mask=mask, **kwargs)

@@ -162,7 +162,7 @@ def plot_activation_func_overview(model, num_rat, inits):
             c = 0
 
     for m, param in model.named_parameters():
-        if 'alpha' in m and 'sum' not in m:
+        if 'alpha' in m:
             alphas.append(param)
 
     layers = model.layers

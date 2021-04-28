@@ -13,6 +13,10 @@ from rational.torch import Rational
 from torch import Tensor
 
 from LTH_for_Rational_ResNets.Mask import Mask
+from LTH_for_Rational_ResNets import argparser
+
+args = argparser.get_arguments()
+prune_shortcuts = args.prune_shortcuts
 
 if torch.cuda.is_available():
     cuda = True
@@ -22,7 +26,7 @@ else:
     device = 'cpu'
 
 
-class RationalBasicBlock(nn.Module):  # TODO: Add Sequential
+class RationalBasicBlock(nn.Module):
     """A Basic Block as described in the paper above, with Rationals as activation function instead of ReLu."""
     expansion = 1
 
@@ -45,9 +49,12 @@ class RationalBasicBlock(nn.Module):  # TODO: Add Sequential
         # use Rationals instead of reLu activation function
         self.rational_inits = rational_inits
         self.num_rationals = num_rationals
-        self.expert_group = []  # total num per BB or number per Vector???
+
+        self.expert_group = []
         for n in range(self.num_rationals):
             self.expert_group.append(Rational(cuda=cuda, approx_func=self.rational_inits[n]))
+
+        self.rational_expert_group = nn.Sequential(*self.expert_group)
         data_alpha = initialize_alpha(self.num_rationals)
         self.alpha = torch.nn.parameter.Parameter(data_alpha, requires_grad=True)
 
@@ -64,7 +71,7 @@ class RationalBasicBlock(nn.Module):  # TODO: Add Sequential
     def multi_rational(self, out: Tensor) -> Tensor:
         out_tensor = torch.zeros_like(out)
         for n in range(self.num_rationals):
-            rational = self.expert_group[n]
+            rational = self.rational_expert_group[n]
             rational_out = rational(out.clone())
             out_tensor = out_tensor.clone() + self.alpha[n].clone() * rational_out.clone()
         out = out_tensor.clone()
@@ -93,7 +100,6 @@ class RationalBasicBlock(nn.Module):  # TODO: Add Sequential
         out = self.multi_rational(out)
 
         return out
-
 
 
 class RationalResNet(nn.Module):
@@ -125,6 +131,7 @@ class RationalResNet(nn.Module):
         self.expert_group = []
         for n in range(self.num_rationals):
             self.expert_group.append(Rational(cuda=cuda, approx_func=self.rational_inits[n]))
+        self.rational_expert_group = nn.Sequential(*self.expert_group)
         data_alpha = initialize_alpha(self.num_rationals)
         self.alpha = torch.nn.parameter.Parameter(data_alpha, requires_grad=True)
 
@@ -190,14 +197,19 @@ class RationalResNet(nn.Module):
         """
         if mask is not None:
             for name, param in self.named_parameters():
-                if 'weight' not in name or 'batch_norm' in name or 'shortcut' in name or 'fc' in name:
-                    continue
-                param.data *= mask[name]
+                if prune_shortcuts:
+                    if 'weight' not in name or 'batch_norm' in name or 'fc' in name or 'shortcut.1.' in name:
+                        continue
+                    param.data *= mask[name]
+                else:
+                    if 'weight' not in name or 'batch_norm' in name or 'shortcut' in name or 'fc' in name:
+                        continue
+                    param.data *= mask[name]
 
     def multi_rational(self, out: Tensor) -> Tensor:
         out_tensor = torch.zeros_like(out)
         for n in range(self.num_rationals):
-            rational = self.expert_group[n]
+            rational = self.rational_expert_group[n]
             rational_out = rational(out.clone())
             out_tensor = out_tensor.clone() + self.alpha[n].clone() * rational_out.clone()
         out = out_tensor.clone()
@@ -260,15 +272,10 @@ def initialize_alpha(b: int = 4) -> torch.Tensor:
     Returns
     -------
     alpha : torch.Tensor
-            The tensor with inial values for alpha.
+            The tensor with initial values for alpha.
     """
-    alpha = []
-    while len(alpha) < b:
-        tmp = torch.rand(1)
-        if sum(alpha) + tmp <= 1.0:
-            alpha.append(tmp)
-    alpha = torch.tensor(alpha)
-    alpha /= alpha.sum()
+    alpha = torch.rand(b, requires_grad=True)
+    alpha = alpha / alpha.sum()
     return alpha
 
 

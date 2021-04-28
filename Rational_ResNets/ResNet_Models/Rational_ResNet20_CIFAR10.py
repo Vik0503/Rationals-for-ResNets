@@ -112,13 +112,16 @@ class RationalResNet(nn.Module):
         # self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
 
         self.layer1 = self.make_layer(block=block, planes_out=16, num_blocks=layers[0], stride=1)
+        out_size = 16
         if len(self.layers) > 1:
             self.layer2 = self.make_layer(block=block, planes_out=32, num_blocks=layers[1], stride=2)
+            out_size = 32
         if len(self.layers) > 2:
             self.layer3 = self.make_layer(block=block, planes_out=64, num_blocks=layers[2], stride=2)
+            out_size = 64
 
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
-        self.fc = nn.Linear(64, num_classes)
+        self.fc = nn.Linear(out_size, num_classes)
 
         for mod in self.modules():
             if isinstance(mod, nn.Conv2d):
@@ -216,6 +219,20 @@ def _resnet(arch: str, block: Type[RationalBasicBlock], layers: List[int], **kwa
 def rational_resnet20(**kwargs: Any) -> RationalResNet:
     """ResNet for CIFAR10 as mentioned in the paper above"""
     return _resnet('resnet20', RationalBasicBlock, [3, 3, 3], **kwargs)
+
+
+def rational_resnet20_2_BB(**kwargs: any) -> RationalResNet:
+    return _resnet('resnet20_2_BB', RationalBasicBlock, [3, 2, 2], **kwargs)
+
+
+def rational_resnet20_2_layers(**kwargs: Any) -> RationalResNet:
+    """ResNet for CIFAR10 as mentioned in the paper above"""
+    return _resnet('resnet20', RationalBasicBlock, [3, 3], **kwargs)
+
+
+def rational_resnet20_1_layer(**kwargs: Any) -> RationalResNet:
+    """ResNet for CIFAR10 as mentioned in the paper above"""
+    return _resnet('resnet20', RationalBasicBlock, [3], **kwargs)
 
 
 def rational_resnet32(**kwargs: Any) -> RationalResNet:

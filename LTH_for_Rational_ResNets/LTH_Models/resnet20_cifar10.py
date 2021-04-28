@@ -16,7 +16,7 @@ from LTH_for_Rational_ResNets import argparser
 
 args = argparser.get_arguments()
 prune_shortcuts = args.prune_shortcuts
-print('r20: ', prune_shortcuts)
+
 if torch.cuda.is_available():
     device = 'cuda'
 else:
@@ -108,12 +108,18 @@ class ResNet(nn.Module):
         self.batch_norm_1 = self.norm_layer(self.planes_in)
         self.relu = nn.ReLU(inplace=True)
 
+        out_size = 16
         self.layer1 = self.make_layer(block=block, planes_out=16, num_blocks=layers[0], stride=1)
-        self.layer2 = self.make_layer(block=block, planes_out=32, num_blocks=layers[1], stride=2)
-        self.layer3 = self.make_layer(block=block, planes_out=64, num_blocks=layers[2], stride=2)
+        if len(self.layers) > 1:
+            self.layer2 = self.make_layer(block=block, planes_out=32, num_blocks=layers[1], stride=2)
+            out_size = 32
+        if len(self.layers) > 2:
+            self.layer3 = self.make_layer(block=block, planes_out=64, num_blocks=layers[2], stride=2)
+            out_size = 64
 
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
-        self.fc = nn.Linear(64, num_classes)
+        self.fc = nn.Linear(out_size, num_classes)
+
         for mod in self.modules():
             if isinstance(mod, nn.Conv2d):
                 nn.init.kaiming_normal_(mod.weight, mode='fan_out', nonlinearity='relu')
@@ -167,7 +173,7 @@ class ResNet(nn.Module):
         if mask is not None:
             for name, param in self.named_parameters():
                 if prune_shortcuts:
-                    if 'weight' not in name or 'batch_norm' in name or 'fc' in name or 'shortcut.1.' in name:  # TODO: find better solution for shortcut.1 problem
+                    if 'weight' not in name or 'batch_norm' in name or 'fc' in name or 'shortcut.1.' in name:
                         continue
                     param.data *= mask[name]
                 else:
@@ -196,8 +202,10 @@ class ResNet(nn.Module):
         out = self.relu(out)
 
         out = self.layer1(out)
-        out = self.layer2(out)
-        out = self.layer3(out)
+        if len(self.layers) > 1:
+            out = self.layer2(out)
+        if len(self.layers) > 2:
+            out = self.layer3(out)
 
         out = self.avgpool(out)
         out = torch.flatten(out, 1)
@@ -250,3 +258,16 @@ def resnet20(mask: Mask = None, **kwargs: Any) -> ResNet:
     return _resnet('resnet20', BasicBlock, [3, 3, 3], mask=mask, **kwargs)
 
 
+def resnet20_2_BB(mask: Mask = None, **kwargs: Any) -> ResNet:
+    """ResNet for CIFAR10 as mentioned in the paper above."""
+    return _resnet('resnet20', BasicBlock, [3, 2, 2], mask=mask, **kwargs)
+
+
+def resnet20_2_layers(mask: Mask = None, **kwargs: Any) -> ResNet:
+    """ResNet for CIFAR10 as mentioned in the paper above."""
+    return _resnet('resnet20', BasicBlock, [3, 3], mask=mask, **kwargs)
+
+
+def resnet20_1_layer(mask: Mask = None, **kwargs: Any) -> ResNet:
+    """ResNet for CIFAR10 as mentioned in the paper above."""
+    return _resnet('resnet20', BasicBlock, [3], mask=mask, **kwargs)
