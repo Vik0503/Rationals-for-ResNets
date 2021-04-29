@@ -1,5 +1,6 @@
 from typing import List
 
+import torch
 from torch import nn
 
 from LTH_for_Rational_ResNets import argparser
@@ -8,7 +9,7 @@ args = argparser.get_arguments()
 prune_shortcuts = args.prune_shortcuts
 
 
-def reinit(model, mask, initial_state_model):  # TODO: Find better solution for shortcuts
+def reinit(model, mask, initial_state_model):
     """
     Reset pruned model's weights to the initial initialization.
 
@@ -57,3 +58,21 @@ def initial_state(model) -> dict:
         initial_state_model[name] = param.data.clone().detach()
 
     return initial_state_model
+
+
+def initialize_alpha(b: int = 4) -> torch.Tensor:
+    """Initialize the vector alpha.
+
+    Parameters
+    ----------
+    b : int
+        The length of the vector alpha.
+
+    Returns
+    -------
+    alpha : torch.Tensor
+            The tensor with initial values for alpha.
+    """
+    alpha = torch.rand(b, requires_grad=True)
+    alpha = alpha / alpha.sum()
+    return alpha

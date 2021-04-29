@@ -6,7 +6,7 @@ from IPython.display import display
 
 from LTH_for_Rational_ResNets import Mask, plots
 from LTH_for_Rational_ResNets import argparser
-from LTH_for_Rational_ResNets.LTH_Models import resnet20_cifar10 as rn20
+from LTH_for_Rational_ResNets.LTH_Models import relu_resnet_cifar10 as rn20
 from LTH_for_Rational_ResNets.LTH_write_read_csv import make_csv
 
 args = argparser.get_arguments()
@@ -21,7 +21,7 @@ univ_rat_PATH = './Saved_Models/shorcuts_14.4/2021-04-14 22:42:32.815381_ep21s99
 multi_exp_PATH = './Saved_Models/shorcuts_14.4/2021-04-15 06:30:57.773067_ep22s99.26477_test0.90131.pth'"""
 
 all_PATHS = [original_PATH, univ_rat_PATH, multi_exp_PATH]
-model = rn20.resnet20()
+model = rn20.relu_resnet20()
 original_mask: Mask
 original_mask = Mask.make_initial_mask(model)
 

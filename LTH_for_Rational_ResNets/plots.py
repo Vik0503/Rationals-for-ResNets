@@ -13,8 +13,8 @@ import argparser
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
-from LTH_for_Rational_ResNets.LTH_Models import select_2_expert_groups_rational_resnet as sel
-from LTH_for_Rational_ResNets.LTH_Models.select_2_expert_groups_rational_resnet import RationalBasicBlock
+from LTH_for_Rational_ResNets.LTH_Models import mix_experts_resnet_cifar10 as sel
+from LTH_for_Rational_ResNets.LTH_Models.mix_experts_resnet_cifar10 import RationalBasicBlock
 
 plt.style.use(["science", "grid"])
 matplotlib.rcParams.update({

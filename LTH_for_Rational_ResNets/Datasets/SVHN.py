@@ -112,4 +112,5 @@ def get_testloader(bs: int):
 
 
 def get_it_per_epoch(bs: int = 128) -> int:
+    """Return number of iterations per epoch."""
     return np.ceil(len(trainset) / bs).astype(int)

@@ -1,7 +1,7 @@
 """
-ResNet18 Model for CIFAR10 as originally described in: Deep Residual Learning for Image Recognition (arXiv:1512.03385)
+ResNet Model for CIFAR10 as originally described in: Deep Residual Learning for Image Recognition (arXiv:1512.03385)
 by Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun
-with Padè Activation Units as activation functions instead of reLu activation functions
+with Rational Activation Functions as activation functions instead of reLu activation functions
 """
 
 from __future__ import print_function, division
@@ -11,14 +11,12 @@ from typing import Type, Any, List
 import torch
 import torch.nn as nn
 from rational.torch import Rational
-from torch import Tensor
 
 from LTH_for_Rational_ResNets.Mask import Mask
 from LTH_for_Rational_ResNets import argparser
 
 args = argparser.get_arguments()
 prune_shortcuts = args.prune_shortcuts
-print('rr20: ', prune_shortcuts)
 
 if torch.cuda.is_available():
     cuda = True
@@ -63,18 +61,18 @@ class RationalBasicBlock(nn.Module):
                 nn.BatchNorm2d(self.expansion * planes_out)
             )
 
-    def forward(self, x: Tensor) -> Tensor:
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
         """
         Move input forward through the basic block.
 
         Parameters
         ----------
-        x: Tensor
+        x: torch.Tensor
            Training input value.
 
         Returns
         -------
-        out: Tensor
+        out: torch.Tensor
              Fed forward input value.
         """
         out = self.conv_layer_1(x)
@@ -89,7 +87,7 @@ class RationalBasicBlock(nn.Module):
 
 
 class RationalResNet(nn.Module):
-    """A ResNet as described in the paper above."""
+    """A ResNet as described in the paper above with Rationals as activation functions instead of ReLU."""
 
     def __init__(self, block: Type[RationalBasicBlock], layers: List[int], num_classes: int = 10, mask: Mask = None) -> None:
         """
@@ -119,18 +117,19 @@ class RationalResNet(nn.Module):
 
         self.rational = Rational(cuda=cuda)
 
-        self.layer1 = self.make_layer(block=block, planes_out=16, num_blocks=layers[0], stride=1)
+        self.layer1 = self.make_layer(block=block, planes_out=16, num_blocks=self.layers[0], stride=1)
         out_size = 16
         if len(self.layers) > 1:
-            self.layer2 = self.make_layer(block=block, planes_out=32, num_blocks=layers[1], stride=2)
+            self.layer2 = self.make_layer(block=block, planes_out=32, num_blocks=self.layers[1], stride=2)
             out_size = 32
         if len(self.layers) > 2:
-            self.layer3 = self.make_layer(block=block, planes_out=64, num_blocks=layers[2], stride=2)
+            self.layer3 = self.make_layer(block=block, planes_out=64, num_blocks=self.layers[2], stride=2)
             out_size = 64
 
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.fc = nn.Linear(out_size, num_classes)
 
+        # init model
         for mod in self.modules():
             if isinstance(mod, nn.Conv2d):
                 nn.init.kaiming_normal_(mod.weight, mode='fan_out', nonlinearity='relu')
@@ -138,6 +137,7 @@ class RationalResNet(nn.Module):
                 nn.init.constant_(mod.weight, 1)
                 nn.init.constant_(mod.bias, 0)
 
+        # apply mask
         self.mask = mask
         if self.mask is not None:
             self.apply_mask(mask=mask)
@@ -163,8 +163,7 @@ class RationalResNet(nn.Module):
         if stride != 1 or planes_out * block.expansion != self.planes_in:
             downsample = True
 
-        layers = []
-        layers.append(block(self.planes_in, planes_out, stride, downsample=downsample))
+        layers = [block(self.planes_in, planes_out, stride, downsample=downsample)]
 
         downsample = False
         stride = 1
@@ -178,7 +177,7 @@ class RationalResNet(nn.Module):
 
     def apply_mask(self, mask: Mask):
         """
-        Apply a new mask to a net.
+        Apply the net's mask.
 
         Parameters
         ----------
@@ -195,22 +194,24 @@ class RationalResNet(nn.Module):
                         continue
                     param.data *= mask[name]
 
-    def forward(self, out: Tensor) -> Tensor:
+    def forward(self, out: torch.Tensor) -> torch.Tensor:
         """
         Move input forward through the net.
 
         Parameters
         ----------
-        out: Tensor
+        out: torch.Tensor
              Training input value.
 
         Returns
         -------
-        out: Tensor
+        out: torch.Tensor
              Fed forward input value.
         """
+        # apply mask
         if self.mask is not None:
             self.apply_mask(mask=self.mask)
+
         out = self.conv_layer_1(out)
         out = self.batch_norm_1(out)
         out = self.rational(out)
@@ -250,21 +251,21 @@ def _resnet(arch: str, block: Type[RationalBasicBlock], layers: List[int], mask:
     return model
 
 
-def rational_resnet20(mask: Mask = None, **kwargs: Any) -> RationalResNet:
-    """ResNet for CIFAR10 as mentioned in the paper above"""
-    return _resnet('resnet20', RationalBasicBlock, [3, 3, 3], mask=mask, **kwargs)
+def univ_rational_resnet20(mask: Mask = None, **kwargs: Any) -> RationalResNet:
+    """ResNet20 for CIFAR10 as mentioned in the paper above with Rationals as activation function"""
+    return _resnet('rational_resnet20', RationalBasicBlock, [3, 3, 3], mask=mask, **kwargs)
 
 
-def rational_resnet20_2_BB(mask: Mask = None, **kwargs: Any) -> RationalResNet:
-    """ResNet for CIFAR10 as mentioned in the paper above"""
-    return _resnet('resnet20', RationalBasicBlock, [3, 2, 2], mask=mask, **kwargs)
+def univ_rational_resnet20_2_BB(mask: Mask = None, **kwargs: Any) -> RationalResNet:
+    """Smaller ResNet for CIFAR10 with only two BasicBlocks in layers 2 and 3."""
+    return _resnet('rational_resnet20_2_BB', RationalBasicBlock, [3, 2, 2], mask=mask, **kwargs)
 
 
-def rational_resnet20_2_layers(mask: Mask = None, **kwargs: Any) -> RationalResNet:
-    """ResNet for CIFAR10 as mentioned in the paper above"""
-    return _resnet('resnet20', RationalBasicBlock, [3, 3], mask=mask, **kwargs)
+def univ_rational_resnet20_2_layers(mask: Mask = None, **kwargs: Any) -> RationalResNet:
+    """Smaller ResNet for CIFAR10 with only two layers"""
+    return _resnet('rational_resnet20_2_layers', RationalBasicBlock, [3, 3], mask=mask, **kwargs)
 
 
-def rational_resnet20_1_layer(mask: Mask = None, **kwargs: Any) -> RationalResNet:
-    """ResNet for CIFAR10 as mentioned in the paper above"""
-    return _resnet('resnet20', RationalBasicBlock, [3], mask=mask, **kwargs)
+def univ_rational_resnet20_1_layer(mask: Mask = None, **kwargs: Any) -> RationalResNet:
+    """Smaller ResNet for CIFAR10 with only one layer."""
+    return _resnet('rational_resnet20_1_layer', RationalBasicBlock, [3], mask=mask, **kwargs)

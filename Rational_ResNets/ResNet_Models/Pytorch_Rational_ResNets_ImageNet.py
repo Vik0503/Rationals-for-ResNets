@@ -58,7 +58,6 @@ class BasicBlock(nn.Module):
         self.downsample = downsample
         self.stride = stride
 
-
     def forward(self, x: Tensor) -> Tensor:
         identity = x
 

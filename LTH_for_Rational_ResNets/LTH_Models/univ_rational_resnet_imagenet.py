@@ -1,7 +1,7 @@
 """
 ResNet18 Model for ImageNet as originally described in: Deep Residual Learning for Image Recognition (arXiv:1512.03385)
 by Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun
-with Padè Activation Units as activation functions instead of reLu activation functions
+with Rational Activation Functions as activation functions instead of reLu activation functions
 """
 
 from __future__ import print_function, division
@@ -9,11 +9,15 @@ from __future__ import print_function, division
 from typing import Type, Any, List
 
 import torch
+from torch import Tensor
 import torch.nn as nn
 from rational.torch import Rational
-from torch import Tensor
 
 from LTH_for_Rational_ResNets.Mask import Mask
+from LTH_for_Rational_ResNets import argparser
+
+args = argparser.get_arguments()
+prune_shortcuts = args.prune_shortcuts
 
 if torch.cuda.is_available():
     cuda = True
@@ -51,6 +55,7 @@ class RationalBasicBlock(nn.Module):
         self.batch_norm_2 = nn.BatchNorm2d(planes_out)
         self.rational_2 = Rational(cuda=cuda)
         self.shortcut = nn.Sequential()
+
         if downsample:
             self.shortcut = nn.Sequential(
                 nn.Conv2d(planes_in, self.expansion * planes_out, kernel_size=1, stride=stride, bias=False),
@@ -82,27 +87,9 @@ class RationalBasicBlock(nn.Module):
         return out
 
 
-def reinit(model, mask: Mask, initial_state_model):
-    """
-    Reset pruned model's weights to the initial initialization.
-
-    Parameter
-    ---------
-    model: RationalResNet
-    mask: Mask
-          A mask with pruned weights.
-    initial_state_model: dict
-                         Initially saved state, before the model is trained.
-    """
-    for name, param in model.named_parameters():
-        if 'weight' not in name or 'batch_norm' in name or 'shortcut' in name or 'fc' in name:
-            continue
-        param.data = initial_state_model[name].cpu() * mask[name]
-
-
 class RationalResNet(nn.Module):
-    """A ResNet as described in the paper above."""
-    def __init__(self, block: Type[RationalBasicBlock], layers: List[int], num_classes: int = 10, mask: Mask = None) -> None:
+    """A ResNet as described in the paper above with Rationals as activation functions instead of ReLU."""
+    def __init__(self, block: Type[RationalBasicBlock], layers: List[int], num_classes: int = 1000, mask: Mask = None) -> None:
         """
         Initialize parameters of the ResNet.
 
@@ -121,24 +108,32 @@ class RationalResNet(nn.Module):
 
         self.norm_layer = nn.BatchNorm2d
 
-        self.planes_in = 16
+        self.planes_in = 64
+        self.layers = layers
 
-        self.conv_layer_1 = nn.Conv2d(3, self.planes_in, kernel_size=3, stride=1, padding=1, bias=False)
+        self.conv_layer_1 = nn.Conv2d(3, self.planes_in, kernel_size=7, stride=2, padding=3, bias=False)
         self.batch_norm_1 = self.norm_layer(self.planes_in)
 
         self.rational = Rational(cuda=cuda)
-        print(self.rational)
 
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
 
-        self.layer1 = self.make_layer(block=block, planes_out=64, num_blocks=layers[0], stride=1)
-        self.layer2 = self.make_layer(block=block, planes_out=128, num_blocks=layers[1], stride=2)
-        self.layer3 = self.make_layer(block=block, planes_out=256, num_blocks=layers[2], stride=2)
-        self.layer4 = self.make_layer(block=block, planes_out=512, num_blocks=layers[3], stride=2)
+        self.layer1 = self.make_layer(block=block, planes_out=64, num_blocks=self.layers[0], stride=1)
+        out_size = 64
+        if len(self.layers) > 1:
+            self.layer2 = self.make_layer(block=block, planes_out=128, num_blocks=self.layers[1], stride=2)
+            out_size = 128
+        if len(self.layers) > 2:
+            self.layer3 = self.make_layer(block=block, planes_out=256, num_blocks=self.layers[2], stride=2)
+            out_size = 256
+        if len(self.layers) > 3:
+            self.layer4 = self.make_layer(block=block, planes_out=512, num_blocks=self.layers[3], stride=2)
+            out_size = 512
 
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
-        self.fc = nn.Linear(64, num_classes)
+        self.fc = nn.Linear(out_size, num_classes)
 
+        # init model
         for mod in self.modules():
             if isinstance(mod, nn.Conv2d):
                 nn.init.kaiming_normal_(mod.weight, mode='fan_out', nonlinearity='relu')
@@ -146,6 +141,7 @@ class RationalResNet(nn.Module):
                 nn.init.constant_(mod.weight, 1)
                 nn.init.constant_(mod.bias, 0)
 
+        # apply mask
         self.mask = mask
         if self.mask is not None:
             self.apply_mask(mask=mask)
@@ -171,8 +167,7 @@ class RationalResNet(nn.Module):
         if stride != 1 or planes_out != self.planes_in:
             downsample = True
 
-        layers = []
-        layers.append(block(self.planes_in, planes_out, stride, downsample=downsample))
+        layers = [block(self.planes_in, planes_out, stride, downsample=downsample)]
 
         downsample = False
         stride = 1
@@ -194,9 +189,14 @@ class RationalResNet(nn.Module):
         """
         if mask is not None:
             for name, param in self.named_parameters():
-                if 'weight' not in name or 'batch_norm' in name or 'shortcut' in name or 'fc' in name:
-                    continue
-                param.data *= mask[name]
+                if prune_shortcuts:
+                    if 'weight' not in name or 'batch_norm' in name or 'fc' in name or 'shortcut.1.' in name:
+                        continue
+                    param.data *= mask[name]
+                else:
+                    if 'weight' not in name or 'batch_norm' in name or 'shortcut' in name or 'fc' in name:
+                        continue
+                    param.data *= mask[name]
 
     def forward(self, out: Tensor):
         """
@@ -212,42 +212,31 @@ class RationalResNet(nn.Module):
         out: Tensor
              Fed forward input value.
         """
+        # apply mask
         if self.mask is not None:
             self.apply_mask(mask=self.mask)
+
         out = self.conv_layer_1(out)
         out = self.batch_norm_1(out)
         out = self.rational(out)
 
         out = self.layer1(out)
-        out = self.layer2(out)
-        out = self.layer3(out)
-        out = self.layer4(out)
+        if len(self.layers) > 1:
+            out = self.layer2(out)
+        if len(self.layers) > 2:
+            out = self.layer3(out)
+        if len(self.layers) > 3:
+            out = self.layer4(out)
         out = self.avgpool(out)
         out = torch.flatten(out, 1)
         out = self.fc(out)
 
         return out
 
-    def prunable_layers(self) -> List:
-        """
-        Return all layers that are prunable.
-
-        Returns
-        -------
-        prunable_layer_list: List
-                            A list with all layers that are prunable.
-        """
-        prunable_layer_list = []
-        for n, module in self.named_modules():
-            if isinstance(module, nn.Conv2d) and 'shortcut' not in n:
-                prunable_layer_list.append(n + '.weight')
-
-        return prunable_layer_list
-
 
 def _resnet(arch: str, block: Type[RationalBasicBlock], layers: List[int], mask: Mask, **kwargs: Any) -> RationalResNet:
     """
-    The universal ResNet definition
+    The universal ResNet definition.
 
     Parameters
     ----------
@@ -273,12 +262,17 @@ def rational_resnet18(mask: Mask = None, **kwargs: Any) -> RationalResNet:
     return _resnet('resnet18', RationalBasicBlock, [2, 2, 2, 2], mask=mask, **kwargs)
 
 
-def prunable_layer_dict(model) -> dict:
-    prune_dict = {}
-    for name, param in model.named_parameters():
-        if 'weight' not in name:
-            continue
+def rational_resnet18_2_BB(mask: Mask = None, **kwargs: Any) -> RationalResNet:
+    """ResNet for ImageNet as mentioned in the paper above"""
+    return _resnet('resnet18', RationalBasicBlock, [2, 2, 2, 2], mask=mask, **kwargs)
 
-        prune_dict[name] = param
 
-    return prune_dict
+def rational_resnet18_2_layers(mask: Mask = None, **kwargs: Any) -> RationalResNet:
+    """ResNet for ImageNet as mentioned in the paper above"""
+    return _resnet('resnet18', RationalBasicBlock, [2, 2, 2, 2], mask=mask, **kwargs)
+
+
+def rational_resnet18_1_layer(mask: Mask = None, **kwargs: Any) -> RationalResNet:
+    """ResNet for ImageNet as mentioned in the paper above"""
+    return _resnet('resnet18', RationalBasicBlock, [2, 2, 2, 2], mask=mask, **kwargs)
+

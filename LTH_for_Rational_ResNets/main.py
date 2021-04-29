@@ -1,11 +1,9 @@
 import inspect
 import os
 import sys
-from datetime import datetime
 
 import matplotlib
 import matplotlib.pyplot as plt
-import yaml
 
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
@@ -25,10 +23,10 @@ from LTH_for_Rational_ResNets import plots
 from LTH_for_Rational_ResNets import argparser
 from LTH_for_Rational_ResNets.Datasets import CIFAR10 as cifar10
 from LTH_for_Rational_ResNets.Datasets import SVHN
-from LTH_for_Rational_ResNets.LTH_Models import rational_resnet18_imagenet as rrn18, resnet20_cifar10 as rn20
-from LTH_for_Rational_ResNets.LTH_Models import rational_resnet20_cifar10 as rrn20
-from LTH_for_Rational_ResNets.LTH_Models import resnet18_imagenet as rn18
-from LTH_for_Rational_ResNets.LTH_Models import select_2_expert_groups_rational_resnet as sel2exp
+from LTH_for_Rational_ResNets.LTH_Models import univ_rational_resnet_imagenet as rrn18, relu_resnet_cifar10 as rn20
+from LTH_for_Rational_ResNets.LTH_Models import univ_rational_resnet_cifar10 as rrn20
+from LTH_for_Rational_ResNets.LTH_Models import relu_resnet_imagenet as rn18
+from LTH_for_Rational_ResNets.LTH_Models import mix_experts_resnet_cifar10 as sel2exp
 from LTH_for_Rational_ResNets.LTH_Models import select_1_expert_group_rational_resnet as sel1exp
 from LTH_for_Rational_ResNets.Mask import make_initial_mask
 from LTH_for_Rational_ResNets import LTH_write_read_csv
@@ -53,15 +51,9 @@ if torch.cuda.is_available():
 else:
     device = 'cpu'
 
-plt.style.use(["science", "grid"])
-matplotlib.rcParams.update({
-    "font.family": "serif",
-    "text.usetex": False,
-})
 
-if LTH_args.initialize_rationals:
-    rational_inits = LTH_args.initialize_rationals  # TODO: catch exceptions
-    num_rationals = len(rational_inits)
+rational_inits = LTH_args.initialize_rationals
+num_rationals = len(rational_inits)
 
 if LTH_args.prune_shortcuts:
     prune_shortcuts = True
@@ -91,17 +83,26 @@ elif LTH_args.dataset == 'SVHN':
     it_per_ep = SVHN.get_it_per_epoch(bs=LTH_args.batch_size)
 
 
-models_run_all = [rn20.resnet20(), rrn20.rational_resnet20(), sel2exp.select_2_expert_groups_rational_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)]
-
-
-def run_all():  # TODO: Solve Problem with select
+def run_all():
 
     num_epochs = 0
     test_accuracies = []
     sparsities = []
     num_epoch_list = []
     PATHS = []
-    model_names = ['resnet20_cifar10', 'rational_resnet20_cifar10', 'select_2_expert_groups_rational_resnet20']  # TODO: Update Model Names
+    if LTH_args.run_all_classic:
+        model_names = ['relu_resnet20', 'univ_rational_resnet20', 'mix_experts_resnet20']
+        models_run_all = [rn20.relu_resnet20(), rrn20.univ_rational_resnet20(), sel2exp.mix_exp_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)]
+    elif LTH_args.run_all_two_BB:
+        model_names = ['relu_resnet20_2_BB', 'univ_rational_resnet20_2_BB', 'mix_experts_resnet20_2_BB']
+        models_run_all = [rn20.relu_resnet20_2_BB(), rrn20.univ_rational_resnet20_2_BB(), sel2exp.mix_exp_resnet20_2_BB(rational_inits=rational_inits, num_rationals=num_rationals)]
+    elif LTH_args.run_all_two_layers:
+        model_names = ['relu_resnet20_2_layers', 'univ_rational_resnet20_2_layers', 'mix_experts_resnet20_2_layers']
+        models_run_all = [rn20.relu_resnet20_2_layers(), rrn20.univ_rational_resnet20_2_layers(), sel2exp.mix_exp_resnet20_2_layers(rational_inits=rational_inits, num_rationals=num_rationals)]
+    else:
+        model_names = ['relu_resnet20_1_layer', 'univ_rational_resnet20_1_layer', 'mix_experts_resnet20_1_layer']
+        models_run_all = [rn20.relu_resnet20_1_layer(), rrn20.univ_rational_resnet20_1_layer(), sel2exp.mix_exp_resnet20_1_layer(rational_inits=rational_inits, num_rationals=num_rationals)]
+
     criterion = nn.CrossEntropyLoss()
     checkpoints = []
     all_test_accuracies = []
@@ -170,17 +171,40 @@ def run_all():  # TODO: Solve Problem with select
 
 def run_one():
     global model
-    if LTH_args.model == 'rational_resnet20_cifar10':
-        model = rrn20.rational_resnet20()
-    elif LTH_args.model == 'resnet20_cifar10':
-        model = rn20.resnet20()
+
+    if LTH_args.model == 'relu_resnet20':
+        model = rn20.relu_resnet20()
+    elif LTH_args.model == 'relu_resnet20_2_BB':
+        model = rn20.relu_resnet20_2_BB()
+    elif LTH_args.model == 'relu_resnet20_2_layers':
+        model = rn20.relu_resnet20_2_layers()
+    elif LTH_args.model == 'relu_resnet20_1_layer':
+        model = rn20.relu_resnet20_1_layer()
+
+    elif LTH_args.model == 'univ_rational_resnet20':
+        model = rrn20.univ_rational_resnet20()
+    elif LTH_args.model == 'univ_rational_resnet20_2_BB':
+        model = rrn20.univ_rational_resnet20_2_BB()
+    elif LTH_args.model == 'univ_rational_resnet20_2_layers':
+        model = rrn20.univ_rational_resnet20_2_layers()
+    elif LTH_args.model == 'univ_rational_resnet20_1_layer':
+        model = rrn20.univ_rational_resnet20_1_layer()
+
+    elif LTH_args.model == 'mix_experts_resnet20':
+        model = sel2exp.mix_exp_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)
+    elif LTH_args.model == 'mix_experts_resnet20_2_BB':
+        model = sel2exp.mix_exp_resnet20_2_BB(rational_inits=rational_inits, num_rationals=num_rationals)
+    elif LTH_args.model == 'mix_experts_resnet20_2_layers':
+        model = sel2exp.mix_exp_resnet20_2_layers(rational_inits=rational_inits, num_rationals=num_rationals)
+    elif LTH_args.model == 'mix_experts_resnet20_1_layer':
+        model = sel2exp.mix_exp_resnet20_1_layer(rational_inits=rational_inits, num_rationals=num_rationals)
+
     elif LTH_args.model == 'rational_resnet18_imagenet':
         model = rrn18.rational_resnet18()
     elif LTH_args.model == 'resnet18_imagenet':
-        model = rn18.resnet18()
-    elif LTH_args.model == 'select_2_expert_groups_rational_resnet20':
-        model = sel2exp.select_2_expert_groups_rational_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)
-    elif LTH_args.model == 'select_1_expert_group_rational_resnet20':
+        model = rn18.relu_resnet18()
+
+    else:
         model = sel1exp.select_1_expert_group_rational_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)
 
     mask = make_initial_mask(model)
@@ -243,7 +267,7 @@ def run_one():
     LTH_write_read_csv.make_yaml([LTH_args.model], csv=PATH, saved_models=path)
 
 
-if LTH_args.run_all:
+if LTH_args.run_all_classic or LTH_args.run_all_two_BB or LTH_args.run_all_two_layers or LTH_args.run_all_one_layer:
     run_all()
 else:
     run_one()

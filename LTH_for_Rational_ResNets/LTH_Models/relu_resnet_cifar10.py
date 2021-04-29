@@ -1,5 +1,5 @@
 """
-ResNet18 Model for CIFAR10 as originally described in: Deep Residual Learning for Image Recognition (arXiv:1512.03385)
+ResNet Model for CIFAR10 as originally described in: Deep Residual Learning for Image Recognition (arXiv:1512.03385)
 by Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun
 """
 
@@ -24,7 +24,7 @@ else:
 
 
 class BasicBlock(nn.Module):
-    """A Basic Block as described in the paper above, with ReLu as activation function"""
+    """A Basic Block as described in the paper above, with ReLu as activation function."""
     expansion = 1
 
     def __init__(self, planes_in, planes_out, stride=1, downsample=False):
@@ -55,18 +55,18 @@ class BasicBlock(nn.Module):
                 nn.BatchNorm2d(self.expansion * planes_out)
             )
 
-    def forward(self, x: Tensor) -> Tensor:
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
         """
         Move input forward through the basic block.
 
         Parameters
         ----------
-        x: Tensor
+        x: torch.Tensor
              Training input value.
 
         Returns
         -------
-        out: Tensor
+        out: torch.Tensor
              Fed forward input value.
         """
         out = self.conv_layer_1(x)
@@ -109,17 +109,18 @@ class ResNet(nn.Module):
         self.relu = nn.ReLU(inplace=True)
 
         out_size = 16
-        self.layer1 = self.make_layer(block=block, planes_out=16, num_blocks=layers[0], stride=1)
+        self.layer1 = self.make_layer(block=block, planes_out=16, num_blocks=self.layers[0], stride=1)
         if len(self.layers) > 1:
-            self.layer2 = self.make_layer(block=block, planes_out=32, num_blocks=layers[1], stride=2)
+            self.layer2 = self.make_layer(block=block, planes_out=32, num_blocks=self.layers[1], stride=2)
             out_size = 32
         if len(self.layers) > 2:
-            self.layer3 = self.make_layer(block=block, planes_out=64, num_blocks=layers[2], stride=2)
+            self.layer3 = self.make_layer(block=block, planes_out=64, num_blocks=self.layers[2], stride=2)
             out_size = 64
 
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.fc = nn.Linear(out_size, num_classes)
 
+        # init model
         for mod in self.modules():
             if isinstance(mod, nn.Conv2d):
                 nn.init.kaiming_normal_(mod.weight, mode='fan_out', nonlinearity='relu')
@@ -151,11 +152,13 @@ class ResNet(nn.Module):
         downsample = False
         if stride != 1 or planes_out != self.planes_in:
             downsample = True
-        layers = []
-        layers.append(block(self.planes_in, planes_out, stride, downsample=downsample))
+
+        layers = [block(self.planes_in, planes_out, stride, downsample=downsample)]
+
         downsample = False
         stride = 1
         self.planes_in = planes_out * block.expansion
+
         for _ in range(1, num_blocks):
             layers.append(block(self.planes_in, planes_out, stride, downsample=downsample))
         print(nn.Sequential(*layers))
@@ -164,7 +167,7 @@ class ResNet(nn.Module):
 
     def apply_mask(self, mask: Mask):
         """
-        Apply a new mask to a net.
+        Apply the net's mask.
 
         Parameters
         ----------
@@ -195,8 +198,10 @@ class ResNet(nn.Module):
         out: Tensor
              Fed forward input value.
         """
+        # apply mask
         if self.mask is not None:
             self.apply_mask(mask=self.mask)
+
         out = self.conv_layer_1(out)
         out = self.batch_norm_1(out)
         out = self.relu(out)
@@ -212,22 +217,6 @@ class ResNet(nn.Module):
         out = self.fc(out)
 
         return out
-
-    def prunable_layers(self) -> List:
-        """
-        Return all layers that are prunable.
-
-        Returns
-        -------
-        prunable_layer_list: List
-                            A list with all layers that are prunable.
-        """
-        prunable_layer_list = []
-        for n, module in self.named_modules():
-            if isinstance(module, nn.Conv2d) and 'shortcut' not in n:
-                prunable_layer_list.append(n + '.weight')
-
-        return prunable_layer_list
 
 
 def _resnet(arch: str, block: Type[BasicBlock], layers: List[int], mask: Mask, **kwargs: Any) -> ResNet:
@@ -253,21 +242,21 @@ def _resnet(arch: str, block: Type[BasicBlock], layers: List[int], mask: Mask, *
     return model
 
 
-def resnet20(mask: Mask = None, **kwargs: Any) -> ResNet:
-    """ResNet for CIFAR10 as mentioned in the paper above."""
+def relu_resnet20(mask: Mask = None, **kwargs: Any) -> ResNet:
+    """ResNet20 for CIFAR10 as mentioned in the paper above."""
     return _resnet('resnet20', BasicBlock, [3, 3, 3], mask=mask, **kwargs)
 
 
-def resnet20_2_BB(mask: Mask = None, **kwargs: Any) -> ResNet:
-    """ResNet for CIFAR10 as mentioned in the paper above."""
-    return _resnet('resnet20', BasicBlock, [3, 2, 2], mask=mask, **kwargs)
+def relu_resnet20_2_BB(mask: Mask = None, **kwargs: Any) -> ResNet:
+    """Smaller ResNet for CIFAR10 with only two BasicBlocks in layers 2 and 3."""
+    return _resnet('resnet20_2_BB', BasicBlock, [3, 2, 2], mask=mask, **kwargs)
 
 
-def resnet20_2_layers(mask: Mask = None, **kwargs: Any) -> ResNet:
-    """ResNet for CIFAR10 as mentioned in the paper above."""
-    return _resnet('resnet20', BasicBlock, [3, 3], mask=mask, **kwargs)
+def relu_resnet20_2_layers(mask: Mask = None, **kwargs: Any) -> ResNet:
+    """Smaller ResNet for CIFAR10 with only two layers."""
+    return _resnet('resnet20_2_layers', BasicBlock, [3, 3], mask=mask, **kwargs)
 
 
-def resnet20_1_layer(mask: Mask = None, **kwargs: Any) -> ResNet:
-    """ResNet for CIFAR10 as mentioned in the paper above."""
+def relu_resnet20_1_layer(mask: Mask = None, **kwargs: Any) -> ResNet:
+    """Smaller ResNet for CIFAR10 with only one layer."""
     return _resnet('resnet20', BasicBlock, [3], mask=mask, **kwargs)
