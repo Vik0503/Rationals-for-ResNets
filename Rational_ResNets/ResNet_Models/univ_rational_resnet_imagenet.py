@@ -208,7 +208,17 @@ def _resnet(arch: str, block: Type[RationalBasicBlock], layers: List[int], **kwa
     return model
 
 
-def rational_resnet18(**kwargs: Any) -> RationalResNet:
+def univ_rational_resnet18(**kwargs: Any) -> RationalResNet:
     """ResNet for ImageNet as mentioned in the paper above"""
     return _resnet('resnet18', RationalBasicBlock, [2, 2, 2, 2], **kwargs)
+
+
+def univ_rational_resnet18_2_layers(**kwargs: Any) -> RationalResNet:
+    """ResNet for ImageNet as mentioned in the paper above"""
+    return _resnet('resnet18', RationalBasicBlock, [2, 2], **kwargs)
+
+
+def univ_rational_resnet18_1_layer(**kwargs: Any) -> RationalResNet:
+    """ResNet for ImageNet as mentioned in the paper above"""
+    return _resnet('resnet18', RationalBasicBlock, [2], **kwargs)
 

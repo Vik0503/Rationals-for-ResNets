@@ -2,25 +2,22 @@ import inspect
 import os
 import sys
 
-import matplotlib
-import matplotlib.pyplot as plt
-
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
 
 import torch
-
-torch.cuda.manual_seed_all(42)
+from LTH_for_Rational_ResNets import argparser
+LTH_args = argparser.get_arguments()
+torch.cuda.manual_seed_all(LTH_args.data_seeds)
 from torch import nn
 import numpy as np
 
-np.random.seed(42)
+np.random.seed(LTH_args.data_seeds)
 
 
 from LTH_for_Rational_ResNets import Lottery_Ticket_Hypothesis
 from LTH_for_Rational_ResNets import plots
-from LTH_for_Rational_ResNets import argparser
 from LTH_for_Rational_ResNets.Datasets import CIFAR10 as cifar10
 from LTH_for_Rational_ResNets.Datasets import SVHN
 from LTH_for_Rational_ResNets.LTH_Models import univ_rational_resnet_imagenet as univ_rat_imagenet, univ_rational_resnet_cifar10 as univ_rat_cifar
@@ -29,8 +26,6 @@ from LTH_for_Rational_ResNets.LTH_Models import mix_experts_resnet_cifar10 as mi
 from LTH_for_Rational_ResNets.LTH_Models import select_1_expert_group_rational_resnet as sel1exp
 from LTH_for_Rational_ResNets.Mask import make_initial_mask
 from LTH_for_Rational_ResNets import LTH_write_read_csv
-
-LTH_args = argparser.get_arguments()
 
 global trainset
 global valset
@@ -231,7 +226,6 @@ def run_one():
         model = mix_exp_imagenet.mix_exp_resnet18_2_layers(rational_inits=rational_inits, num_rationals=num_rationals)
     elif LTH_args.model == 'mix_experts_resnet18_1_layer':
         model = mix_exp_imagenet.mix_exp_resnet18_1_layer(rational_inits=rational_inits, num_rationals=num_rationals)
-
 
     else:
         model = sel1exp.select_1_expert_group_rational_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)

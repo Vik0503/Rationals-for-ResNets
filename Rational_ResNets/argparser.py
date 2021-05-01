@@ -4,25 +4,36 @@ ResNet_arg_parser = arg.ArgumentParser()
 ResNet_arg_parser.add_argument('-bs', '--batch_size', default=128, type=int)
 ResNet_arg_parser.add_argument('-lr', '--learning_rate', default=0.01, type=float)
 ResNet_arg_parser.add_argument('-m', '--model', default='univ_rational_resnet20', type=str,
-                               choices=['univ_rational_resnet20', 'relu_resnet20', 'rational_resnet18_imagenet', 'resnet18_imagenet',
-                                        'pt', 'recurrent_rational_resnet20_cifar10', 'resnet110_cifar10',
-                                        'rational_resnet110_cifar10', 'mix_experts_resnet20',
-                                        'select_1_expert_group_rational_resnet20'])  # pt is the original ResNet18 model from Pytorch with Rationals TODO: bigger models
-ResNet_arg_parser.add_argument('-ds', '--dataset', default='cifar10', type=str, choices=['cifar10', 'SVHN'])
+                               choices=['univ_rational_resnet20', 'univ_rational_resnet20_2_BB', 'univ_rational_resnet20_2_layers', 'univ_rational_resnet20_1_layer',
+                                        'relu_resnet20', 'relu_resnet20_2_BB', 'relu_resnet20_2_layers', 'relu_resnet20_1_layer',
+                                        'mix_experts_resnet20', 'mix_experts_resnet20_2_BB', 'mix_experts_resnet20_2_layers', 'mix_experts_resnet20_1_layer',
+                                        'univ_rational_resnet18', 'univ_rational_resnet18_2_layers', 'univ_rational_resnet18_1_layer',
+                                        'relu_resnet18', 'relu_resnet18_2_layers', 'relu_resnet18_1_layer',
+                                        'mix_experts_resnet18', 'mix_experts_resnet18_2_layers', 'mix_experts_resnet18_1_layer',
+                                        'select_1_expert_group_rational_resnet20'])
+ResNet_arg_parser.add_argument('-ds', '--dataset', default='cifar10', type=str, choices=['cifar10', 'SVHN', 'ImageNet'])
 ResNet_arg_parser.add_argument('-aug', '--augment_data', default=False, type=bool)
 ResNet_arg_parser.add_argument('-epochs', '--training_number_of_epochs', default=25, type=int)
 ResNet_arg_parser.add_argument('-num_rat', '--number_of_rationals_per_vector', default=1, type=int)
 ResNet_arg_parser.add_argument('-init_rationals', '--initialize_rationals',
                                type=str, nargs='+', default=['leaky_relu', 'gelu', 'swish', 'tanh', 'sigmoid'], choices=['leaky_relu', 'gelu', 'swish', 'tanh', 'sigmoid'],
                                help="Examples: -init_rationals leaky_relu gelu, -init_rationals tanh")
-ResNet_arg_parser.add_argument('--train_all', default=False, action='store_true',
-                               help="Flag to perform all three experiments `original`, `univariate rational` and `mixture of experts` in a sequence and plot the results in one graph for further comparison.")
 ResNet_arg_parser.add_argument('-wi', '--warmup_iterations', default=0, type=int)
 ResNet_arg_parser.add_argument('--save_res_csv', default=False, action='store_true', help='Flag to save the results of the experiment as csv')
-
-resnet_args = ResNet_arg_parser.parse_args(
-    ['--model', 'mix_experts_resnet20', '--dataset', 'SVHN', '--training_number_of_epochs', '2', '--augment_data', 'True', '--number_of_rationals_per_vector', '5', '--initialize_rationals', 'leaky_relu', 'gelu', 'swish', 'tanh',
-     'sigmoid', '--save_res_csv', '--learning_rate', '0.03'])
+ResNet_arg_parser.add_argument('-seed', '--data_seeds', default=42, type=int)
+run_all_groups = ResNet_arg_parser.add_mutually_exclusive_group()
+run_all_groups.add_argument('--run_all_classic', default=False, action='store_true',
+                            help="Flag to perform all three experiments `original`, `univariate rational` and `mixture of experts` in a sequence and plot the results in one graph for further comparison.")
+run_all_groups.add_argument('--run_all_two_BB', default=False, action='store_true',
+                            help="Flag to perform all three experiments `original`, `univariate rational` and `mixture of experts` with a smaller architecture (in layers 2 and 3 only 2 BasicBlocks)"
+                                 " in a sequence and plot the results in one graph for further comparison.")
+run_all_groups.add_argument('--run_all_two_layers', default=False, action='store_true',
+                            help="Flag to perform all three experiments `original`, `univariate rational` and `mixture of experts` with a smaller architecture (only two full layers) "
+                                 "in a sequence and plot the results in one graph for further comparison.")
+run_all_groups.add_argument('--run_all_one_layer', default=False, action='store_true',
+                            help="Flag to perform all three experiments `original`, `univariate rational` and `mixture of experts` with a smaller architecture (only one full layer)"
+                                 "in a sequence and plot the results in one graph for further comparison.")
+ResNet_arg_parser.add_argument('--arch_for_run_all', default='CIFAR10', choices=['CIFAR10', 'ImageNet'])
 
 
 def get_argparser() -> arg.ArgumentParser:
@@ -38,4 +49,11 @@ def get_argparser() -> arg.ArgumentParser:
 
 
 def get_args():
+    resnet_args = ResNet_arg_parser.parse_args()
+    if resnet_args.arch_for_run_all == 'ImageNet' and resnet_args.run_all_two_BB:
+        print('This option is not available for ResNet18.')
+        exit()
+    if (resnet_args.run_all_classic or resnet_args.run_all_two_bb or resnet_args.run_all_two_layers or resnet_args.run_all_one_layer) and not resnet_args.arch_for_run_all:
+        print('Please choose architecture for command run_all.')
+        exit()
     return resnet_args

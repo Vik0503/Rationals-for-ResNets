@@ -7,31 +7,25 @@ parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
 
 import torch
+from Rational_ResNets import argparser
 
-torch.cuda.manual_seed_all(42)
+resnet_args = argparser.get_args()
+torch.cuda.manual_seed_all(resnet_args.data_seeds)
 import torch.nn as nn
 
 import numpy as np
 
-np.random.seed(42)
+np.random.seed(resnet_args.data_seeds)
 
 from datetime import datetime
 
-from Rational_ResNets import argparser
 from Rational_ResNets import train_val_test as tvt
 from Rational_ResNets import plots
 from Rational_ResNets.ResNet_Datasets import CIFAR10, SVHN
-from Rational_ResNets.ResNet_Models import Pytorch_Rational_ResNets_ImageNet as PT
-from Rational_ResNets.ResNet_Models import Rational_ResNet18_ImageNet as RRN18
-from Rational_ResNets.ResNet_Models import Rational_ResNet20_CIFAR10 as RRN20
-from Rational_ResNets.ResNet_Models import ResNet18_ImageNet as RN18
-from Rational_ResNets.ResNet_Models import ResNet20_CIFAR10 as RN20
-from Rational_ResNets.ResNet_Models import select_1_expert_group_rational_resnet as sel1exp
-from Rational_ResNets.ResNet_Models import Recurrent_Rational_ResNet20_CIFAR10 as RecRRN20
-from Rational_ResNets.ResNet_Models import select_2_expert_groups_rational_resnet as sel2exp
+from Rational_ResNets.ResNet_Models import univ_rational_resnet_imagenet as univ_rat_imagenet, univ_rational_resnet_cifar10 as univ_rat_cifar
+from Rational_ResNets.ResNet_Models import relu_resnet_imagenet as relu_imagenet, relu_resnet_cifar10 as relu_cifar
+from Rational_ResNets.ResNet_Models import mix_experts_resnet_cifar10 as mix_exp_cifar, mix_experts_resnet_imagenet as mix_exp_imagenet
 from Rational_ResNets import utils
-
-resnet_args = argparser.get_args()
 
 global trainset
 global valset
@@ -66,8 +60,31 @@ elif resnet_args.dataset == 'SVHN':
 def run_all():
     rational_inits = resnet_args.initialize_rationals  # TODO: catch exceptions
     num_rationals = len(rational_inits)
-    models_run_all = [RN20.resnet20(), RRN20.rational_resnet20(), sel2exp.select_2_expert_groups_rational_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)]
-    model_names = ['relu_resnet20', 'univ_rational_resnet20', 'mix_experts_resnet20']
+    if resnet_args.run_all_classic and resnet_args.run_all_architecture == 'CIFAR10':
+        model_names = ['relu_resnet20', 'univ_rational_resnet20', 'mix_experts_resnet20']
+        models_run_all = [relu_cifar.relu_resnet20(), univ_rat_cifar.univ_rational_resnet20(), mix_exp_cifar.mix_exp_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)]
+    elif resnet_args.run_all_classic and resnet_args.run_all_architecture == 'ImageNet':
+        model_names = ['relu_resnet18', 'univ_rational_resnet18', 'mix_experts_resnet18']
+        models_run_all = [relu_imagenet.relu_resnet18(), univ_rat_imagenet.univ_rational_resnet18(), mix_exp_imagenet.mix_exp_resnet18(rational_inits=rational_inits, num_rationals=num_rationals)]
+
+    elif resnet_args.run_all_two_BB:
+        model_names = ['relu_resnet20_2_BB', 'univ_rational_resnet20_2_BB', 'mix_experts_resnet20_2_BB']
+        models_run_all = [relu_cifar.relu_resnet20_2_BB(), univ_rat_cifar.univ_rational_resnet20_2_BB(), mix_exp_cifar.mix_exp_resnet20_2_BB(rational_inits=rational_inits, num_rationals=num_rationals)]
+
+    elif resnet_args.run_all_two_layers and resnet_args.run_all_architecture == 'CIFAR10':
+        model_names = ['relu_resnet20_2_layers', 'univ_rational_resnet20_2_layers', 'mix_experts_resnet20_2_layers']
+        models_run_all = [relu_cifar.relu_resnet20_2_layers(), univ_rat_cifar.univ_rational_resnet20_2_layers(), mix_exp_cifar.mix_exp_resnet20_2_layers(rational_inits=rational_inits, num_rationals=num_rationals)]
+    elif resnet_args.run_all_two_layers and resnet_args.run_all_architecture == 'ImageNet':
+        model_names = ['relu_resnet18_2_layers', 'univ_rational_resnet18_2_layers', 'mix_experts_resnet18_2_layers']
+        models_run_all = [relu_imagenet.relu_resnet18_2_layers(), univ_rat_imagenet.univ_rational_resnet18_2_layers(), mix_exp_imagenet.mix_exp_resnet18_2_layers(rational_inits=rational_inits, num_rationals=num_rationals)]
+
+    elif resnet_args.run_all_one_layer and resnet_args.run_all_architecture == 'CIFAR10':
+        model_names = ['relu_resnet20_1_layer', 'univ_rational_resnet20_1_layer', 'mix_experts_resnet20_1_layer']
+        models_run_all = [relu_cifar.relu_resnet20_1_layer(), univ_rat_cifar.univ_rational_resnet20_1_layer(), mix_exp_cifar.mix_exp_resnet20_1_layer(rational_inits=rational_inits, num_rationals=num_rationals)]
+    else:
+        model_names = ['relu_resnet18_1_layer', 'univ_rational_resnet18_1_layer', 'mix_experts_resnet18_1_layer']
+        models_run_all = [relu_imagenet.relu_resnet18_1_layer(), univ_rat_imagenet.univ_rational_resnet18_1_layer(), mix_exp_imagenet.mix_exp_resnet18_1_layer(rational_inits=rational_inits, num_rationals=num_rationals)]
+
     accuracy_plot_x_vals = []
     train_accs = []
     val_accs = []
@@ -103,38 +120,69 @@ def run_all():
 
 
 def run_one():
-    if resnet_args.model == 'univ_rational_resnet20':  # TODO: add rest of the models
-        model = RRN20.rational_resnet20()
+    rational_inits = resnet_args.initialize_rationals  # TODO: catch exceptions
+    num_rationals = 0
+    if resnet_args.model == 'relu_resnet20':
+        model = relu_cifar.relu_resnet20()
+    elif resnet_args.model == 'relu_resnet20_2_BB':
+        model = relu_cifar.relu_resnet20_2_BB()
+    elif resnet_args.model == 'relu_resnet20_2_layers':
+        model = relu_cifar.relu_resnet20_2_layers()
+    elif resnet_args.model == 'relu_resnet20_1_layer':
+        model = relu_cifar.relu_resnet20_1_layer()
+
+    elif resnet_args.model == 'univ_rational_resnet20':
+        model = univ_rat_cifar.univ_rational_resnet20()
         num_rationals = 2
-    elif resnet_args.model == 'relu_resnet20':
-        model = RN20.resnet20()
-        num_rationals = 0
-    elif resnet_args.model == 'rational_resnet18_imagenet':
-        model = RRN18.rational_resnet18()
+    elif resnet_args.model == 'univ_rational_resnet20_2_BB':
+        model = univ_rat_cifar.univ_rational_resnet20_2_BB()
         num_rationals = 2
-    elif resnet_args.model == 'resnet18_imagenet':
-        model = RN18.resnet18()
-        num_rationals = 0
-    elif resnet_args.model == 'pt':
-        model = PT.resnet18()
+    elif resnet_args.model == 'univ_rational_resnet20_2_layers':
+        model = univ_rat_cifar.univ_rational_resnet20_2_layers()
         num_rationals = 2
-    elif resnet_args.model == 'recurrent_rational_resnet20_cifar10':
-        model = RecRRN20.rational_resnet20()
-        num_rationals = 1
-    elif resnet_args.model == 'resnet110_cifar10':
-        model = RN20.resnet110()
-        num_rationals = 0
-    elif resnet_args.model == 'rational_resnet110_cifar10':
-        model = RRN20.rational_resnet110()
+    elif resnet_args.model == 'univ_rational_resnet20_1_layer':
+        model = univ_rat_cifar.univ_rational_resnet20_1_layer()
         num_rationals = 2
+
     elif resnet_args.model == 'mix_experts_resnet20':
-        rational_inits = resnet_args.initialize_rationals  # TODO: catch exceptions
-        num_rationals = len(rational_inits)
-        model = sel2exp.select_2_expert_groups_rational_resnet20(num_rationals=num_rationals, rational_inits=rational_inits)
-    elif resnet_args.model == 'select_1_expert_group_rational_resnet20':
-        rational_inits = resnet_args.initialize_rationals  # TODO: catch exceptions
-        num_rationals = len(rational_inits)
-        model = sel1exp.select_1_expert_group_rational_resnet20(num_rationals=num_rationals, rational_inits=rational_inits)
+        model = mix_exp_cifar.mix_exp_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)
+        num_rationals = len(rational_inits) * 2
+    elif resnet_args.model == 'mix_experts_resnet20_2_BB':
+        model = mix_exp_cifar.mix_exp_resnet20_2_BB(rational_inits=rational_inits, num_rationals=num_rationals)
+        num_rationals = len(rational_inits) * 2
+    elif resnet_args.model == 'mix_experts_resnet20_2_layers':
+        model = mix_exp_cifar.mix_exp_resnet20_2_layers(rational_inits=rational_inits, num_rationals=num_rationals)
+        num_rationals = len(rational_inits) * 2
+    elif resnet_args.model == 'mix_experts_resnet20_1_layer':
+        model = mix_exp_cifar.mix_exp_resnet20_1_layer(rational_inits=rational_inits, num_rationals=num_rationals)
+        num_rationals = len(rational_inits) * 2
+
+    elif resnet_args.model == 'relu_resnet18':
+        model = relu_imagenet.relu_resnet18()
+    elif resnet_args.model == 'relu_resnet18_2_layers':
+        model = relu_imagenet.relu_resnet18_2_layers()
+    elif resnet_args.model == 'relu_resnet20_1_layer':
+        model = relu_imagenet.relu_resnet18_1_layer()
+
+    elif resnet_args.model == 'univ_rational_resnet18':
+        model = univ_rat_imagenet.univ_rational_resnet18()
+        num_rationals = 2
+    elif resnet_args.model == 'univ_rational_resnet18_2_layers':
+        model = univ_rat_imagenet.univ_rational_resnet18_2_layers()
+        num_rationals = 2
+    elif resnet_args.model == 'univ_rational_resnet18_1_layer':
+        model = univ_rat_imagenet.univ_rational_resnet18_1_layer()
+        num_rationals = 2
+
+    elif resnet_args.model == 'mix_experts_resnet18':
+        model = mix_exp_imagenet.mix_exp_resnet18(rational_inits=rational_inits, num_rationals=num_rationals)
+        num_rationals = len(rational_inits) * 2
+    elif resnet_args.model == 'mix_experts_resnet18_2_layers':
+        model = mix_exp_imagenet.mix_exp_resnet18_2_layers(rational_inits=rational_inits, num_rationals=num_rationals)
+        num_rationals = len(rational_inits) * 2
+    else:
+        model = mix_exp_imagenet.mix_exp_resnet18_1_layer(rational_inits=rational_inits, num_rationals=num_rationals)
+        num_rationals = len(rational_inits) * 2
 
     model = model.to(device)
 

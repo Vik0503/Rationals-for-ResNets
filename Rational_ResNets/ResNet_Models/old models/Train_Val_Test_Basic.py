@@ -14,17 +14,17 @@ from torch.optim import lr_scheduler
 from torch.utils.tensorboard import SummaryWriter
 
 from Rational_ResNets.ResNet_Datasets import CIFAR10, SVHN
-from Rational_ResNets.ResNet_Models import Rational_ResNet18_ImageNet as RRN18
-from Rational_ResNets.ResNet_Models import Rational_ResNet20_CIFAR10 as RRN20
-from Rational_ResNets.ResNet_Models import ResNet18_ImageNet as RN18
-from Rational_ResNets.ResNet_Models import ResNet20_CIFAR10 as RN20
+from Rational_ResNets.ResNet_Models import univ_rational_resnet_imagenet as RRN18
+from Rational_ResNets.ResNet_Models import univ_rational_resnet_cifar10 as RRN20
+from Rational_ResNets.ResNet_Models import relu_resnet_imagenet as RN18
+from Rational_ResNets.ResNet_Models import relu_resnet_cifar10 as RN20
 from Rational_ResNets.ResNet_Models import Pytorch_Rational_ResNets_ImageNet as PT
 
 ResNet_arg_parser = arg.ArgumentParser()
 ResNet_arg_parser.add_argument('-bs', '--batch_size', default=128, type=int)
 ResNet_arg_parser.add_argument('-lr', '--learning_rate', default=0.01, type=float)
 ResNet_arg_parser.add_argument('-m', '--model', default='univ_rational_resnet20', type=str,
-                               choices=['univ_rational_resnet20', 'relu_resnet20', 'rational_resnet18_imagenet', 'resnet18_imagenet', 'multi_rational_resnet20_cifar10',
+                               choices=['univ_rational_resnet20', 'relu_resnet20', 'univ_rational_resnet18', 'relu_resnet18', 'multi_rational_resnet20_cifar10',
                                         'pt'])  # pt is the original ResNet18 model from Pytorch with Rationals
 ResNet_arg_parser.add_argument('-ds', '--dataset', default='cifar10', type=str, choices=['cifar10', 'SVHN'])
 ResNet_arg_parser.add_argument('-tnep', '--training_number_of_epochs', default=2, type=int)
@@ -68,15 +68,15 @@ elif ResNet_args.dataset is 'SVHN':
     num_classes = SVHN.get_num_classes()
 
 if ResNet_args.model is 'univ_rational_resnet20':
-    model = RRN20.rational_resnet20()
+    model = RRN20.univ_rational_resnet20()
     model_type = RRN20
 elif ResNet_args.model is 'relu_resnet20':
-    model = RN20.resnet20()
+    model = RN20.relu_resnet20()
     model_type = RN20
-elif ResNet_args.model is 'rational_resnet18_imagenet':
-    model = RRN18.rational_resnet18()
+elif ResNet_args.model is 'univ_rational_resnet18':
+    model = RRN18.univ_rational_resnet18()
     model_type = RRN18
-elif ResNet_args.model is 'resnet18_imagenet':
+elif ResNet_args.model is 'relu_resnet18':
     model = RN18.resnet18()
     model_type = RN18
 elif ResNet_args.model is 'multi_rational_resnet20_cifar10':
