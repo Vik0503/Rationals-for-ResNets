@@ -1,5 +1,5 @@
 - Date: [!!timestamp '2021-04-16 17:48:54.988813']
-- Model(s): [select_2_expert_groups_rational_resnet20]
+- Model(s): [mix_experts_resnet20]
 - Dataset: [SVHN]
 - Batch Size: [128]
 - Pruning Percentage per Epoch: [20.0]

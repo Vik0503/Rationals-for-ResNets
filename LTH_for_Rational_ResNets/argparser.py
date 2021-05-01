@@ -6,34 +6,37 @@ LTH_arg_parser.add_argument('-lr', '--learning_rate', default=0.03, type=float)
 LTH_arg_parser.add_argument('-m', '--model', default='univ_rational_resnet20_cifar10', type=str, choices=['univ_rational_resnet20', 'univ_rational_resnet20_2_BB', 'univ_rational_resnet20_2_layers', 'univ_rational_resnet20_1_layer',
                                                                                                           'relu_resnet20', 'relu_resnet20_2_BB', 'relu_resnet20_2_layers', 'relu_resnet20_1_layer',
                                                                                                           'mix_experts_resnet20', 'mix_experts_resnet20_2_BB', 'mix_experts_resnet20_2_layers', 'mix_experts_resnet20_1_layer',
-                                                                                                          'univ_rational_resnet18', 'univ_rational_resnet18_2_BB', 'univ_rational_resnet18_2_layers', 'univ_rational_resnet18_1_layer',
-                                                                                                          'relu_resnet18', 'relu_resnet18_2_BB', 'relu_resnet18_2_layers', 'relu_resnet18_1_layer',
-                                                                                                          'mix_experts_resnet18', 'mix_experts_resnet18_2_BB', 'mix_experts_resnet18_2_layers', 'mix_experts_resnet18_1_layer',
+                                                                                                          'univ_rational_resnet18', 'univ_rational_resnet18_2_layers', 'univ_rational_resnet18_1_layer',
+                                                                                                          'relu_resnet18', 'relu_resnet18_2_layers', 'relu_resnet18_1_layer',
+                                                                                                          'mix_experts_resnet18', 'mix_experts_resnet18_2_layers', 'mix_experts_resnet18_1_layer',
                                                                                                           'select_1_expert_group_rational_resnet20'])
-LTH_arg_parser.add_argument('-ds', '--dataset', default='cifar10', type=str, choices=['cifar10', 'SVHN'])
+LTH_arg_parser.add_argument('-ds', '--dataset', default='cifar10', type=str, choices=['cifar10', 'SVHN', 'ImageNet'])
 LTH_arg_parser.add_argument('-wi', '--warmup_iterations', default=0, type=int)
 LTH_arg_parser.add_argument('-tnep', '--training_number_of_epochs', default=2, type=int)
 LTH_arg_parser.add_argument('-pp', '--pruning_percentage', default=20.0, type=float)
-LTH_arg_parser.add_argument('-ipe', '--iterative_pruning_epochs', default=15, type=int)
+stop_group = LTH_arg_parser.add_mutually_exclusive_group()
+stop_group.add_argument('-ipe', '--iterative_pruning_epochs', default=15, type=int)
 LTH_arg_parser.add_argument('-stop', '--stop_criteria', default='test_acc', type=str, choices=['test_acc', 'num_prune_epochs', 'one_shot'])
-LTH_arg_parser.add_argument('-test_acc', '--test_accuracy_threshold', default=0.9, type=float)
+stop_group.add_argument('-test_acc', '--test_accuracy_threshold', default=0.9, type=float)
 LTH_arg_parser.add_argument('-init_rationals', '--initialize_rationals',
                             type=str, nargs='+', default=['leaky_relu', 'gelu', 'swish', 'tanh', 'sigmoid'], choices=['leaky_relu', 'gelu', 'swish', 'tanh', 'sigmoid', 'relu'],
                             help='Examples: -init_rationals leaky_relu gelu, -init_rationals tanh')
-LTH_arg_parser.add_argument('--run_all_classic', default=False, action='store_true',
+run_all_groups = LTH_arg_parser.add_mutually_exclusive_group()
+run_all_groups.add_argument('--run_all_classic', default=False, action='store_true',
                             help="Flag to perform all three experiments `original`, `univariate rational` and `mixture of experts` in a sequence and plot the results in one graph for further comparison.")
-LTH_arg_parser.add_argument('--run_all_two_BB', default=False, action='store_true',
+run_all_groups.add_argument('--run_all_two_BB', default=False, action='store_true',
                             help="Flag to perform all three experiments `original`, `univariate rational` and `mixture of experts` with a smaller architecture (in layers 2 and 3 only 2 BasicBlocks)"
                                  " in a sequence and plot the results in one graph for further comparison.")
-LTH_arg_parser.add_argument('--run_all_two_layers', default=False, action='store_true',
+run_all_groups.add_argument('--run_all_two_layers', default=False, action='store_true',
                             help="Flag to perform all three experiments `original`, `univariate rational` and `mixture of experts` with a smaller architecture (only two full layers) "
                                  "in a sequence and plot the results in one graph for further comparison.")
-LTH_arg_parser.add_argument('--run_all_one_layer', default=False, action='store_true',
+run_all_groups.add_argument('--run_all_one_layer', default=False, action='store_true',
                             help="Flag to perform all three experiments `original`, `univariate rational` and `mixture of experts` with a smaller architecture (only one full layer)"
                                  "in a sequence and plot the results in one graph for further comparison.")
 LTH_arg_parser.add_argument('--prune_shortcuts', default=False, action='store_true', help='Flag to prune shortcuts.')
 LTH_arg_parser.add_argument('--save_res_csv', default=False, action='store_true', help='Flag to save the results of the experiment as csv')
 LTH_arg_parser.add_argument('-seed', '--data_seeds', default=42, type=int)
+LTH_arg_parser.add_argument('--arch_for_run_all', default='CIFAR10', choices=['CIFAR10', 'ImageNet'])
 
 
 def get_argparser():
@@ -48,7 +51,7 @@ def get_argparser():
     return LTH_arg_parser
 
 
-"""'--model', 'rational_resnet20_cifar10', '--dataset', 'SVHN', '--warmup_iterations', '7167',
+"""'--model', 'univ_rational_resnet20', '--dataset', 'SVHN', '--warmup_iterations', '7167',
      '--iterative_pruning_epochs', '2', '--training_number_of_epochs', '2',
      '--stop_criteria', 'num_prune_epochs', '--save_res_csv', '--prune_shortcuts'"""
 
@@ -59,8 +62,10 @@ def get_arguments():
     """
 
     LTH_args = LTH_arg_parser.parse_args()
-    if LTH_args.run_all_classic and (LTH_args.run_all_two_BB or LTH_args.run_all_two_layers or LTH_args.run_all_one_layer) or LTH_args.run_all_two_BB and (LTH_args.run_all_two_layers or LTH_args.run_all_one_layer) or \
-            LTH_args.run_all_two_layers and LTH_args.run_all_one_layer:
-        print('Please set only one flag to run all experiments!')
+    if LTH_args.arch_for_run_all == 'ImageNet' and LTH_args.run_all_two_BB:
+        print('This option is not available for ResNet18.')
+        exit()
+    if (LTH_args.run_all_classic or LTH_args.run_all_two_bb or LTH_args.run_all_two_layers or LTH_args.run_all_one_layer) and not LTH_args.arch_for_run_all:
+        print('Please choose architecture for command run_all.')
         exit()
     return LTH_args

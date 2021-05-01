@@ -1,5 +1,5 @@
 - Date: [!!timestamp '2021-04-24 16:27:08.974687']
-- Model(s): [resnet20_cifar10, rational_resnet20_cifar10, select_2_expert_groups_rational_resnet20]
+- Model(s): [relu_resnet20, univ_rational_resnet20, mix_experts_resnet20]
 - Dataset: [SVHN]
 - Batch Size: [128]
 - Pruning Percentage per Epoch: [20.0]
@@ -10,7 +10,7 @@
 - Saved Models: ['./Saved_Models/2021-04-24 16:13:39.200194']
 - Iterative Pruning Epochs: [2]
 - CSV File:
-  - ['CSV/resnet20_cifar10/2021-04-24 16:12:47.545790.csv', 'CSV/rational_resnet20_cifar10/2021-04-24
-      16:13:39.181908.csv', 'CSV/select_2_expert_groups_rational_resnet20/2021-04-24
+  - ['CSV/relu_resnet20/2021-04-24 16:12:47.545790.csv', 'CSV/univ_rational_resnet20/2021-04-24
+      16:13:39.181908.csv', 'CSV/mix_experts_resnet20/2021-04-24
       16:16:36.662704.csv']
 - Mask CSV File: ['./CSV/Masks/all_models/2021-04-24 16:16:37.068931.csv']

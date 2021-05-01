@@ -254,18 +254,13 @@ def relu_resnet18(mask: Mask = None, **kwargs: Any) -> ResNet:
     return _resnet('resnet18', BasicBlock, [2, 2, 2, 2], mask=mask, **kwargs)
 
 
-def relu_resnet18_2_BB(mask: Mask = None, **kwargs: Any) -> ResNet:
-    """ResNet for ImageNet as mentioned in the paper above"""
-    return _resnet('resnet18', BasicBlock, [2, 2, 2, 2], mask=mask, **kwargs)
-
-
 def relu_resnet18_2_layers(mask: Mask = None, **kwargs: Any) -> ResNet:
     """ResNet for ImageNet as mentioned in the paper above"""
-    return _resnet('resnet18', BasicBlock, [2, 2, 2, 2], mask=mask, **kwargs)
+    return _resnet('resnet18', BasicBlock, [2, 2], mask=mask, **kwargs)
 
 
 def relu_resnet18_1_layer(mask: Mask = None, **kwargs: Any) -> ResNet:
     """ResNet for ImageNet as mentioned in the paper above"""
-    return _resnet('resnet18', BasicBlock, [2, 2, 2, 2], mask=mask, **kwargs)
+    return _resnet('resnet18', BasicBlock, [2], mask=mask, **kwargs)
 
 

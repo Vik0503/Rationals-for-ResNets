@@ -1,5 +1,5 @@
 - Date: [!!timestamp '2021-04-17 11:40:19.165685']
-- Model(s): [rational_resnet20_cifar10]
+- Model(s): [univ_rational_resnet20]
 - Dataset: [SVHN]
 - Batch Size: [128]
 - Pruning Percentage per Epoch: [20.0]
@@ -8,4 +8,4 @@
 - Warm-Up Iterations: [7167]
 - Shortcuts pruned: [false]
 - Iterative Pruning Epochs: [2]
-- CSV File: ['CSV/rational_resnet20_cifar10/2021-04-17 11:40:19.164997.csv']
+- CSV File: ['CSV/univ_rational_resnet20/2021-04-17 11:40:19.164997.csv']

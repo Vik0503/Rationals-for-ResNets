@@ -67,7 +67,7 @@ def run_all():
     rational_inits = resnet_args.initialize_rationals  # TODO: catch exceptions
     num_rationals = len(rational_inits)
     models_run_all = [RN20.resnet20(), RRN20.rational_resnet20(), sel2exp.select_2_expert_groups_rational_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)]
-    model_names = ['resnet20_cifar10', 'rational_resnet20_cifar10', 'select_2_expert_groups_rational_resnet20']
+    model_names = ['relu_resnet20', 'univ_rational_resnet20', 'mix_experts_resnet20']
     accuracy_plot_x_vals = []
     train_accs = []
     val_accs = []
@@ -103,10 +103,10 @@ def run_all():
 
 
 def run_one():
-    if resnet_args.model == 'rational_resnet20_cifar10':  # TODO: add rest of the models
+    if resnet_args.model == 'univ_rational_resnet20':  # TODO: add rest of the models
         model = RRN20.rational_resnet20()
         num_rationals = 2
-    elif resnet_args.model == 'resnet20_cifar10':
+    elif resnet_args.model == 'relu_resnet20':
         model = RN20.resnet20()
         num_rationals = 0
     elif resnet_args.model == 'rational_resnet18_imagenet':
@@ -127,7 +127,7 @@ def run_one():
     elif resnet_args.model == 'rational_resnet110_cifar10':
         model = RRN20.rational_resnet110()
         num_rationals = 2
-    elif resnet_args.model == 'select_2_expert_groups_rational_resnet20':
+    elif resnet_args.model == 'mix_experts_resnet20':
         rational_inits = resnet_args.initialize_rationals  # TODO: catch exceptions
         num_rationals = len(rational_inits)
         model = sel2exp.select_2_expert_groups_rational_resnet20(num_rationals=num_rationals, rational_inits=rational_inits)
@@ -149,7 +149,7 @@ def run_one():
 
     plots.final_plot(cm, avg_time, best_test_acc, resnet_args.training_number_of_epochs, resnet_args.learning_rate,
                      num_rationals, resnet_args.dataset, resnet_args.model, resnet_args.batch_size)
-    if resnet_args.model == 'select_2_expert_groups_rational_resnet20':
+    if resnet_args.model == 'mix_experts_resnet20':
         plots.plot_activation_func_overview(model, num_rationals, rational_inits)
     models = [resnet_args.model]
     PATH = ''

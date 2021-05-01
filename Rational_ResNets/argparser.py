@@ -3,10 +3,10 @@ import argparse as arg
 ResNet_arg_parser = arg.ArgumentParser()
 ResNet_arg_parser.add_argument('-bs', '--batch_size', default=128, type=int)
 ResNet_arg_parser.add_argument('-lr', '--learning_rate', default=0.01, type=float)
-ResNet_arg_parser.add_argument('-m', '--model', default='rational_resnet20_cifar10', type=str,
-                               choices=['rational_resnet20_cifar10', 'resnet20_cifar10', 'rational_resnet18_imagenet', 'resnet18_imagenet',
+ResNet_arg_parser.add_argument('-m', '--model', default='univ_rational_resnet20', type=str,
+                               choices=['univ_rational_resnet20', 'relu_resnet20', 'rational_resnet18_imagenet', 'resnet18_imagenet',
                                         'pt', 'recurrent_rational_resnet20_cifar10', 'resnet110_cifar10',
-                                        'rational_resnet110_cifar10', 'select_2_expert_groups_rational_resnet20',
+                                        'rational_resnet110_cifar10', 'mix_experts_resnet20',
                                         'select_1_expert_group_rational_resnet20'])  # pt is the original ResNet18 model from Pytorch with Rationals TODO: bigger models
 ResNet_arg_parser.add_argument('-ds', '--dataset', default='cifar10', type=str, choices=['cifar10', 'SVHN'])
 ResNet_arg_parser.add_argument('-aug', '--augment_data', default=False, type=bool)
@@ -21,7 +21,7 @@ ResNet_arg_parser.add_argument('-wi', '--warmup_iterations', default=0, type=int
 ResNet_arg_parser.add_argument('--save_res_csv', default=False, action='store_true', help='Flag to save the results of the experiment as csv')
 
 resnet_args = ResNet_arg_parser.parse_args(
-    ['--model', 'select_2_expert_groups_rational_resnet20', '--dataset', 'SVHN', '--training_number_of_epochs', '2', '--augment_data', 'True', '--number_of_rationals_per_vector', '5', '--initialize_rationals', 'leaky_relu', 'gelu', 'swish', 'tanh',
+    ['--model', 'mix_experts_resnet20', '--dataset', 'SVHN', '--training_number_of_epochs', '2', '--augment_data', 'True', '--number_of_rationals_per_vector', '5', '--initialize_rationals', 'leaky_relu', 'gelu', 'swish', 'tanh',
      'sigmoid', '--save_res_csv', '--learning_rate', '0.03'])
 
 

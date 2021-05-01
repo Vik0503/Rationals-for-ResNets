@@ -114,7 +114,7 @@ for file in sorted(os.listdir('/home/viktoria/Git/Rationals-for-ResNets/LTH_for_
     sparsities_2.append(sparsity)
 
 for file in sorted(os.listdir('/home/viktoria/Git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Saved_Models/shortcuts_14.4/mix_exp_resnet20')):
-    checkpoint = torch.load('/home/viktoria/Git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Saved_Models/shortcuts_14.4/mix_exp_resnet20/' + file)
+    checkpoint = torch.load('/home/viktoria/Git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Saved_Models/shortcuts_14.4/mix_experts_resnet20/' + file)
     test_acc = checkpoint['test_accuracy']
     test_accs_3.append(test_acc * 100)
     sparsity = checkpoint['sparsity']
