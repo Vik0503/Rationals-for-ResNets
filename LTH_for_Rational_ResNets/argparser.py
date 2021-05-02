@@ -65,7 +65,7 @@ def get_arguments():
     if LTH_args.arch_for_run_all == 'ImageNet' and LTH_args.run_all_two_BB:
         print('This option is not available for ResNet18.')
         exit()
-    if (LTH_args.run_all_classic or LTH_args.run_all_two_bb or LTH_args.run_all_two_layers or LTH_args.run_all_one_layer) and not LTH_args.arch_for_run_all:
+    if (LTH_args.run_all_classic or LTH_args.run_all_two_BB or LTH_args.run_all_two_layers or LTH_args.run_all_one_layer) and not LTH_args.arch_for_run_all:
         print('Please choose architecture for command run_all.')
         exit()
     return LTH_args

@@ -142,8 +142,6 @@ class RationalResNet(nn.Module):
                 The list with the number of layers, and the number of blocks in each layer.
         num_classes: int
                      The number of different classes in a dataset.
-        mask: Mask
-              The mask that is used for the Lottery Ticket Hypothesis. It sets the pruned weights to zero.
         """
         super(RationalResNet, self).__init__()
 
