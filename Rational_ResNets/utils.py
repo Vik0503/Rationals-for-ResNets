@@ -1,5 +1,6 @@
 import csv
 
+import torch
 import yaml
 from torch import optim
 from torch.optim import lr_scheduler
@@ -7,7 +8,7 @@ from torch.optim import lr_scheduler
 import argparser
 from datetime import datetime
 
-args = argparser.get_args()
+args = argparser.get_arguments()
 
 
 def make_csv(model, epoch, train_acc: list, val_acc: list, test_acc: list):
@@ -24,7 +25,7 @@ def make_csv(model, epoch, train_acc: list, val_acc: list, test_acc: list):
     return PATH
 
 
-def get_scheduler_optimizer(num_warmup_it, lr, model, it_per_ep):  # TODO: allow diff. milestones maybe in utils?
+def get_scheduler_optimizer(num_warmup_it, lr, model, it_per_ep):  # TODO: allow diff. milestones
     optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9, weight_decay=0.0001)
 
     def lr_lambda(it):
@@ -53,7 +54,7 @@ def get_scheduler_optimizer(num_warmup_it, lr, model, it_per_ep):  # TODO: allow
 
 
 def make_yaml(models: list, csv=None):  # TODO: add Rational Init + plot PATH
-    resnet_args = argparser.get_args()
+    resnet_args = argparser.get_arguments()
     time_stamp = datetime.now()
     yaml_data = [{'Date': [time_stamp]}, {'Model(s)': models}, {'Dataset': [resnet_args.dataset]}, {'Batch Size': [resnet_args.batch_size]},
                  {'Learning Rate': [resnet_args.learning_rate]}, {'Epochs': [resnet_args.training_number_of_epochs]}, {'Warm-Up Iterations': [resnet_args.warmup_iterations]}]
@@ -64,3 +65,21 @@ def make_yaml(models: list, csv=None):  # TODO: add Rational Init + plot PATH
     PATH = 'YAML/{}'.format(time_stamp) + '.yaml'
     with open(PATH, 'w') as file:
         documents = yaml.dump(yaml_data, file)
+
+
+def initialize_alpha(b: int = 4) -> torch.Tensor:
+    """Initialize the vector alpha.
+
+    Parameters
+    ----------
+    b : int
+        The length of the vector alpha.
+
+    Returns
+    -------
+    alpha : torch.Tensor
+            The tensor with initial values for alpha.
+    """
+    alpha = torch.rand(b, requires_grad=True)
+    alpha = alpha / alpha.sum()
+    return alpha

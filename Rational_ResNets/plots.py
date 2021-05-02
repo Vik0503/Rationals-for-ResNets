@@ -13,7 +13,7 @@ matplotlib.rcParams.update({
     "text.usetex": False,
 })
 
-ResNet_args = argparser.get_args()
+ResNet_args = argparser.get_arguments()
 
 
 def accuracy_plot(acc_x_vals: list, train_acc_y_vals: list, val_acc_y_vals: list, test_acc_y_vals: list):  # TODO: reduce size

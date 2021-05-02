@@ -12,6 +12,7 @@ import torch
 import torch.nn as nn
 from rational.torch import Rational
 from torch import Tensor
+from Rational_ResNets import utils
 
 if torch.cuda.is_available():
     cuda = True
@@ -60,9 +61,9 @@ class RationalBasicBlock(nn.Module):
         self.rational_expert_group_1 = nn.Sequential(*self.expert_group_1)
         self.rational_expert_group_2 = nn.Sequential(*self.expert_group_2)
 
-        data_alpha_1 = initialize_alpha(self.num_rationals)
+        data_alpha_1 = utils.initialize_alpha(self.num_rationals)
         self.alpha_1 = torch.nn.parameter.Parameter(data_alpha_1, requires_grad=True)
-        data_alpha_2 = initialize_alpha(self.num_rationals)
+        data_alpha_2 = utils.initialize_alpha(self.num_rationals)
         self.alpha_2 = torch.nn.parameter.Parameter(data_alpha_2, requires_grad=True)
 
         self.conv_layer_2 = nn.Conv2d(planes_out, planes_out, kernel_size=3, stride=1, padding=1, bias=False)
@@ -155,7 +156,7 @@ class RationalResNet(nn.Module):
 
         p = torch.randn(1)
         self.pow = torch.nn.parameter.Parameter(p, requires_grad=True)
-        data = initialize_alpha(self.num_rationals)
+        data = utils.initialize_alpha(self.num_rationals)
         self.alpha = torch.nn.parameter.Parameter(data, requires_grad=True)
 
         out_size = 16
@@ -198,8 +199,7 @@ class RationalResNet(nn.Module):
         if stride != 1 or planes_out * block.expansion != self.planes_in:
             downsample = True
 
-        layers = []
-        layers.append(block(self.planes_in, planes_out, self.rational_inits, self.num_rationals, stride, downsample=downsample))
+        layers = [block(self.planes_in, planes_out, self.rational_inits, self.num_rationals, stride, downsample=downsample)]
 
         downsample = False
         stride = 1
@@ -260,24 +260,6 @@ class RationalResNet(nn.Module):
         out = self.fc(out)
 
         return out
-
-
-def initialize_alpha(b: int = 4) -> torch.Tensor:
-    """Initialize the vector alpha.
-
-    Parameters
-    ----------
-    b : int
-        The length of the vector alpha.
-
-    Returns
-    -------
-    alpha : torch.Tensor
-            The tensor with initial values for alpha.
-    """
-    alpha = torch.rand(b, requires_grad=True)
-    alpha = alpha / alpha.sum()
-    return alpha
 
 
 def _resnet(arch: str, block: Type[RationalBasicBlock], layers: List[int], rational_inits: List[str], num_rationals: int, **kwargs: Any) -> RationalResNet:

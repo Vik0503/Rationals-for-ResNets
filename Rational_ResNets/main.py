@@ -9,7 +9,7 @@ sys.path.insert(0, parent_dir)
 import torch
 from Rational_ResNets import argparser
 
-resnet_args = argparser.get_args()
+resnet_args = argparser.get_arguments()
 torch.cuda.manual_seed_all(resnet_args.data_seeds)
 import torch.nn as nn
 

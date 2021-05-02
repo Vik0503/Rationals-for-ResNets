@@ -21,7 +21,7 @@ class BasicBlock(nn.Module):
     """A Basic Block as described in the paper above."""
     expansion = 1
 
-    def __init__(self, planes_in, planes_out, stride=1, downsample=False):
+    def __init__(self, planes_in, planes_out, stride=1, downsample=False) -> None:
         """
         Initialize the Basic Block.
 
@@ -35,6 +35,7 @@ class BasicBlock(nn.Module):
         downsample: bool
         """
         super(BasicBlock, self).__init__()
+
         self.conv_layer_1 = nn.Conv2d(planes_in, planes_out, kernel_size=3, stride=stride, padding=1, bias=False)
         self.batch_norm_1 = nn.BatchNorm2d(planes_out)
         self.relu = nn.ReLU(inplace=True)

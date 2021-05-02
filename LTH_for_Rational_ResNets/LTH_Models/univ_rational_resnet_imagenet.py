@@ -54,8 +54,8 @@ class RationalBasicBlock(nn.Module):
         self.conv_layer_2 = nn.Conv2d(planes_out, planes_out, kernel_size=3, stride=1, padding=1, bias=False)
         self.batch_norm_2 = nn.BatchNorm2d(planes_out)
         self.rational_2 = Rational(cuda=cuda)
-        self.shortcut = nn.Sequential()
 
+        self.shortcut = nn.Sequential()
         if downsample:
             self.shortcut = nn.Sequential(
                 nn.Conv2d(planes_in, self.expansion * planes_out, kernel_size=1, stride=stride, bias=False),
@@ -164,7 +164,7 @@ class RationalResNet(nn.Module):
                      A layer build with RationalBasicBlocks.
         """
         downsample = False
-        if stride != 1 or planes_out != self.planes_in:
+        if stride != 1 or planes_out * block.expansion != self.planes_in:
             downsample = True
 
         layers = [block(self.planes_in, planes_out, stride, downsample=downsample)]
@@ -219,6 +219,7 @@ class RationalResNet(nn.Module):
         out = self.conv_layer_1(out)
         out = self.batch_norm_1(out)
         out = self.rational(out)
+        out = self.maxpool(out)
 
         out = self.layer1(out)
         if len(self.layers) > 1:

@@ -48,6 +48,7 @@ class RationalBasicBlock(nn.Module):
         self.batch_norm_2 = nn.BatchNorm2d(planes_out)
         self.rational_2 = Rational(cuda=cuda)
         self.shortcut = nn.Sequential()
+
         if downsample:
             self.shortcut = nn.Sequential(
                 nn.Conv2d(planes_in, self.expansion * planes_out, kernel_size=1, stride=stride, bias=False),
@@ -99,22 +100,31 @@ class RationalResNet(nn.Module):
         self.norm_layer = nn.BatchNorm2d
 
         self.planes_in = 64
+        self.layers = layers
 
-        self.conv_layer_1 = nn.Conv2d(3, self.planes_in, kernel_size=3, stride=1, padding=1, bias=False)
+        self.conv_layer_1 = nn.Conv2d(3, self.planes_in, kernel_size=7, stride=2, padding=3, bias=False)
         self.batch_norm_1 = self.norm_layer(self.planes_in)
 
         self.rational = Rational(cuda=cuda)
 
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
 
-        self.layer1 = self.make_layer(block=block, planes_out=64, num_blocks=layers[0], stride=1)
-        self.layer2 = self.make_layer(block=block, planes_out=128, num_blocks=layers[1], stride=2)
-        self.layer3 = self.make_layer(block=block, planes_out=256, num_blocks=layers[2], stride=2)
-        self.layer4 = self.make_layer(block=block, planes_out=512, num_blocks=layers[3], stride=2)
+        self.layer1 = self.make_layer(block=block, planes_out=64, num_blocks=self.layers[0], stride=1)
+        out_size = 64
+        if len(self.layers) > 1:
+            self.layer2 = self.make_layer(block=block, planes_out=128, num_blocks=self.layers[1], stride=2)
+            out_size = 128
+        if len(self.layers) > 2:
+            self.layer3 = self.make_layer(block=block, planes_out=256, num_blocks=self.layers[2], stride=2)
+            out_size = 256
+        if len(self.layers) > 3:
+            self.layer4 = self.make_layer(block=block, planes_out=512, num_blocks=self.layers[3], stride=2)
+            out_size = 512
 
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
-        self.fc = nn.Linear(512, num_classes)
+        self.fc = nn.Linear(out_size, num_classes)
 
+        # Init model
         for mod in self.modules():
             if isinstance(mod, nn.Conv2d):
                 nn.init.kaiming_normal_(mod.weight, mode='fan_out', nonlinearity='relu')
@@ -122,7 +132,7 @@ class RationalResNet(nn.Module):
                 nn.init.constant_(mod.weight, 1)
                 nn.init.constant_(mod.bias, 0)
 
-    def make_layer(self, block: Type[RationalBasicBlock], planes_out: int, num_blocks: int, stride: int):
+    def make_layer(self, block: Type[RationalBasicBlock], planes_out: int, num_blocks: int, stride: int) -> nn.Sequential:
         """
         Build ResNet's layers. Each layer contains a number of Basic Blocks.
 
@@ -140,11 +150,10 @@ class RationalResNet(nn.Module):
                      A layer build with RationalBasicBlocks.
         """
         downsample = False
-        if stride != 1 or planes_out != self.planes_in:
+        if stride != 1 or planes_out * block.expansion != self.planes_in:
             downsample = True
 
-        layers = []
-        layers.append(block(self.planes_in, planes_out, stride, downsample=downsample))
+        layers = [block(self.planes_in, planes_out, stride, downsample=downsample)]
 
         downsample = False
         stride = 1
@@ -170,15 +179,18 @@ class RationalResNet(nn.Module):
         out: Tensor
              Fed forward input value.
         """
-        out = out.to(device)
         out = self.conv_layer_1(out)
         out = self.batch_norm_1(out)
         out = self.rational(out)
+        out = self.maxpool(out)
 
         out = self.layer1(out)
-        out = self.layer2(out)
-        out = self.layer3(out)
-        out = self.layer4(out)
+        if len(self.layers) > 1:
+            out = self.layer2(out)
+        if len(self.layers) > 2:
+            out = self.layer3(out)
+        if len(self.layers) > 3:
+            out = self.layer4(out)
         out = self.avgpool(out)
         out = torch.flatten(out, 1)
         out = self.fc(out)

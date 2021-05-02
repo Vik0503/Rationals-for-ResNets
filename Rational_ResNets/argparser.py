@@ -48,7 +48,7 @@ def get_argparser() -> arg.ArgumentParser:
     return ResNet_arg_parser
 
 
-def get_args():
+def get_arguments():
     resnet_args = ResNet_arg_parser.parse_args()
     if resnet_args.arch_for_run_all == 'ImageNet' and resnet_args.run_all_two_BB:
         print('This option is not available for ResNet18.')

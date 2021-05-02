@@ -218,7 +218,7 @@ class RationalResNet(nn.Module):
                      A layer build with RationalBasicBlocks.
         """
         downsample = False
-        if stride != 1 or planes_out != self.planes_in:
+        if stride != 1 or planes_out * block.expansion != self.planes_in:
             downsample = True
 
         layers = [block(self.planes_in, planes_out, self.rational_inits, self.num_rationals, stride, downsample=downsample)]
@@ -293,6 +293,7 @@ class RationalResNet(nn.Module):
         out = self.conv_layer_1(out)
         out = self.batch_norm_1(out)
         out = self.multi_rational(out)
+        out = self.maxpool(out)
 
         out = self.layer1(out)
         if len(self.layers) > 1:

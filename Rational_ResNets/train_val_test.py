@@ -20,7 +20,7 @@ if torch.cuda.is_available():
 else:
     device = 'cpu'
 
-resnet_args = argparser.get_args()
+resnet_args = argparser.get_arguments()
 
 
 def train_val_test_model(model, criterion, optimizer, scheduler, num_epochs, trainloader, valloader, testloader, trainset, valset, testset):
