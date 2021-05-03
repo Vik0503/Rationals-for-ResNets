@@ -10,6 +10,7 @@ import torch
 from rational.torch import Rational
 
 import argparser
+
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
@@ -131,12 +132,13 @@ def activation_function_plots(model):
 def calc_mixture_plot(alphas, rationals):
     all_x = torch.zeros(5, 600)
     for i in range(len(alphas)):
-        alpha_x = rationals[i].show(display=False)['line']['y'] * alphas[i].detach().numpy()
+        alpha_x = rationals[i].show(display=False)['line']['y'] * alphas[i].cpu().detach().numpy()
         all_x[i] = torch.tensor(alpha_x)
     return all_x.sum(dim=0), rationals[0].show(display=False)['line']['x']
 
 
 def plot_activation_func_overview(model, num_rat, inits):
+    print(num_rat)
     c = 0
     tmp = []
     rat_groups = []
@@ -156,6 +158,20 @@ def plot_activation_func_overview(model, num_rat, inits):
 
     layers = model.layers
 
+    if True:
+        resnet18_plot(layers, rat_groups, alphas, inits)
+    else:
+        resnet18_plot(layers, rat_groups, alphas, inits)
+
+    plt.tight_layout()
+    time_stamp = datetime.now()
+
+    PATH = './Plots/activation_functions/{}'.format(time_stamp) + '_{}'.format(LTH_args.dataset) + '_all.svg'
+    plt.savefig(PATH)
+    plt.show()
+
+
+def resnet20_plot(layers, rat_groups, alphas, inits):
     plt.figure(figsize=(layers[0] * 8, len(layers) * 8))
     model_1 = False  # TODO: catch model 1
 
@@ -202,7 +218,7 @@ def plot_activation_func_overview(model, num_rat, inits):
             alpha_tmp = alphas[plt_counter]
             legend = []
             y, x = calc_mixture_plot(alpha_tmp, tmp)
-            plt.plot(x, y, color='red')
+            plt.plot(x, y, color='C3', linewidth=1.75)
             legend.append('mixture')
 
             for rational in range(len(tmp)):
@@ -214,12 +230,51 @@ def plot_activation_func_overview(model, num_rat, inits):
             plt.legend(legend, bbox_to_anchor=(0.5, -0.4), ncol=1, loc='center')
             plt_counter += 1
 
-    plt.tight_layout()
-    time_stamp = datetime.now()
 
-    PATH = './Plots/activation_functions/{}'.format(time_stamp) + '_{}'.format(LTH_args.dataset) + '_all.svg'
-    plt.savefig(PATH)
-    plt.show()
+def resnet18_plot(layers, rat_groups, alphas, inits):
+    plt.figure(figsize=(layers[0] * 8, len(layers) * 8))
 
+    plt_counter = 0
+    for r in range(1, len(layers) * layers[0] * 2 + layers[0] * 2 + 1):
+        show = True
+        plt.subplot(len(layers) + 2, layers[0] * 2, r)
+        if r == 1:
+            plt.title('Layer 0', loc='left', fontsize=16)
+        if layers[0] * 2 + 1 > r > 1:
+            ax = plt.gca()
+            ax.axis('off')
+            show = False
+        if r == layers[0] * 2 + 1:
+            plt.title('Layer 1 \nBasic Block 0', loc='left', fontsize=16)
+        if r == layers[0] * 3 + 1:
+            plt.title('Basic Block 1', loc='left', fontsize=16)
+        if r == layers[0] * 4 + 1:
+            plt.title('Layer 2 \nBasic Block 0', loc='left', fontsize=16)
+        if r == layers[0] * 5 + 1:
+            plt.title('Basic Block 1', loc='left', fontsize=16)
+        if r == layers[0] * 6 + 1:
+            plt.title('Layer 3 \nBasic Block 0', loc='left', fontsize=16)
+        if r == layers[0] * 7 + 1:
+            plt.title('Basic Block 1', loc='left', fontsize=16)
+        if r == layers[0] * 8 + 1:
+            plt.title('Layer 4 \nBasic Block 0', loc='left', fontsize=16)
+        if r == layers[0] * 9 + 1:
+            plt.title('Basic Block 1', loc='left', fontsize=16)
 
+        if show:
+            colors = ['C0', 'C1', 'C2', 'C4', 'C6']
+            tmp = rat_groups[plt_counter]
+            alpha_tmp = alphas[plt_counter]
+            legend = []
+            y, x = calc_mixture_plot(alpha_tmp, tmp)
+            plt.plot(x, y, color='C3', linewidth=1.75)
+            legend.append('mixture')
 
+            for rational in range(len(tmp)):
+                x = tmp[rational].show(display=False)['line']['x']
+                y = tmp[rational].show(display=False)['line']['y']
+                plt.plot(x, y, color=colors[rational])
+                legend.append('\u03B1_{}: {:0.4f}, init.: {}, deg.: {}'.format(rational, alpha_tmp[rational], inits[rational], tmp[rational].degrees))
+
+            plt.legend(legend, bbox_to_anchor=(0.5, -0.4), ncol=1, loc='center')
+            plt_counter += 1

@@ -29,19 +29,10 @@ def make_csv(model, prune_percent: list, test_acc: list):
     return PATH
 
 
-def make_mask_csv():  # TODO: PATH
+def make_mask_csv(all_PATHS):
     time_stamp = datetime.now()
     args = argparser.get_arguments()
 
-    original_PATH = '/home/viktoria/Git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Saved_Models/no_shortcuts_14.4/resnet20/2021-04-14 09:17:20.710430_ep20s98.84982_test0.91353.pth'
-    univ_rat_PATH = '/home/viktoria/Git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Saved_Models/no_shortcuts_14.4/rational_resnet20/2021-04-14 07:56:07.220106_ep25s99.62495_test0.90235.pth'
-    multi_exp_PATH = '/home/viktoria/Git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Saved_Models/no_shortcuts_14.4/mix_exp_resnet20/2021-04-14 16:17:30.512244_ep23s99.41239_test0.90934.pth'
-
-    """original_PATH = '/home/viktoria/Git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Saved_Models/shortcuts_14.4/resnet20/2021-04-15 00:01:52.401491_ep20s98.84961_test0.90116.pth'
-    univ_rat_PATH = '/home/viktoria/Git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Saved_Models/shortcuts_14.4/rational_resnet20/2021-04-14 22:42:32.815381_ep21s99.08013_test0.91146.pth'
-    multi_exp_PATH = '/home/viktoria/Git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Saved_Models/shortcuts_14.4/mix_exp_resnet20/2021-04-15 06:30:57.773067_ep22s99.26477_test0.90131.pth'"""
-
-    all_PATHS = [original_PATH, univ_rat_PATH, multi_exp_PATH]
     model = rn20.relu_resnet20()
     original_mask: Mask
     original_mask = Mask.make_initial_mask(model)
@@ -52,16 +43,6 @@ def make_mask_csv():  # TODO: PATH
         checkpoint = torch.load(PATH)
         mask = checkpoint['mask']
         masks.append(mask)
-
-    """model = models[0]
-    original_mask: Mask
-    original_mask = Mask.make_initial_mask(model)
-
-    masks = [original_mask]
-    for m in range(len(models)):
-        model = models[m]
-        mask = model.mask
-        masks.append(mask)"""
 
     all_data_dim = []
     all_data_weights = []
@@ -74,21 +55,19 @@ def make_mask_csv():  # TODO: PATH
         data_weights = []
         data_percent = []
         j = 0
-        print(m)
         for key, values in mask.items():
             print(key)
             x = torch.nonzero(values)
             num_weights = len(x) - 2
             data_weights.append(num_weights)
+
             if m == 0:
                 control_weights.append(num_weights)
-                print(control_weights)
             else:
                 data_percent.append((num_weights * 100) / control_weights[j])
                 print((num_weights * 100) / control_weights[j])
                 j += 1
-            print('i: ', j)
-            print('m: ', m)
+
             x_indices = []
             x_counter = 0
 
@@ -113,14 +92,12 @@ def make_mask_csv():  # TODO: PATH
         all_data_weights.append(data_weights)
         if m != 0:
             all_data_percent.append(data_percent)
-            print('Inside')
 
     if args.arch_for_run_all == 'CIFAR10':
         tuples, names = csv_cifar_models(model)
     else:
         tuples, names = csv_imagenet_models(model)
     index = pd.MultiIndex.from_tuples(tuples)
-    print(all_data_percent)
     df_dim = pd.DataFrame(all_data_dim, index=names, columns=index)
     df_weights = pd.DataFrame(all_data_weights, index=names, columns=index)
     df_percent = pd.DataFrame(all_data_percent, index=names[1:], columns=index)
@@ -135,7 +112,7 @@ def make_mask_csv():  # TODO: PATH
     df_weights.to_csv(PATH_weights, index=True)
     df_percent.to_csv(PATH_percent, index=True)
 
-    return PATH_dim, PATH_weights
+    return PATH_dim, PATH_weights, PATH_percent
 
 
 def csv_imagenet_models(model):
@@ -269,5 +246,3 @@ def make_yaml(models: list, saved_models, table=None, csv=None):  # TODO: add Ra
     with open(PATH, 'w') as file:
         documents = yaml.dump(yaml_data, file)
 
-
-make_mask_csv()

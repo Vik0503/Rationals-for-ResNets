@@ -61,7 +61,9 @@ def get_arguments():
     Return parsed arguments.
     """
 
-    LTH_args = LTH_arg_parser.parse_args()
+    LTH_args = LTH_arg_parser.parse_args(['--model', 'mix_experts_resnet18', '--dataset', 'SVHN', '--warmup_iterations', '7167',
+                                          '--iterative_pruning_epochs', '1', '--training_number_of_epochs', '1',
+                                          '--stop_criteria', 'num_prune_epochs', ])
     if LTH_args.arch_for_run_all == 'ImageNet' and LTH_args.run_all_two_BB:
         print('This option is not available for ResNet18.')
         exit()

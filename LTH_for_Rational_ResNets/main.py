@@ -8,13 +8,13 @@ sys.path.insert(0, parent_dir)
 
 import torch
 from LTH_for_Rational_ResNets import argparser
+
 LTH_args = argparser.get_arguments()
 torch.cuda.manual_seed_all(LTH_args.data_seeds)
 from torch import nn
 import numpy as np
 
 np.random.seed(LTH_args.data_seeds)
-
 
 from LTH_for_Rational_ResNets import Lottery_Ticket_Hypothesis
 from LTH_for_Rational_ResNets import plots
@@ -44,7 +44,6 @@ if torch.cuda.is_available():
     device = 'cuda'
 else:
     device = 'cpu'
-
 
 rational_inits = LTH_args.initialize_rationals
 num_rationals = len(rational_inits)
@@ -78,7 +77,6 @@ elif LTH_args.dataset == 'SVHN':
 
 
 def run_all():
-
     global path, last_checkpoint
     num_epochs = 0
     test_accuracies = []
@@ -171,9 +169,9 @@ def run_all():
         all_models.append(model)
 
     plots.plot_all(test_accs=all_test_accuracies, sparsities=all_sparsities, num_epoch_list=num_epoch_list)
-    plots.plot_activation_func_overview(all_models[2], LTH_args.init_rationals, num_rationals)
-    mask_path_dim, mask_path_weights = LTH_write_read_csv.make_mask_csv(all_models)
-    LTH_write_read_csv.make_yaml(model_names, csv=PATHS, saved_models=path, table=[mask_path_dim, mask_path_weights])
+    plots.plot_activation_func_overview(all_models[2], num_rationals, LTH_args.initialize_rationals)
+    mask_path_dim, mask_path_weights, mask_path_percent = LTH_write_read_csv.make_mask_csv(checkpoints)
+    LTH_write_read_csv.make_yaml(model_names, csv=PATHS, saved_models=path, table=[mask_path_dim, mask_path_weights, mask_path_percent])
 
 
 def run_one():
@@ -243,7 +241,7 @@ def run_one():
     sparsities = []
 
     if LTH_args.stop_criteria is 'test_acc':
-        num_epochs, test_accuracies, sparsities, path = Lottery_Ticket_Hypothesis.iterative_pruning_by_test_acc(model, mask,
+        num_epochs, test_accuracies, sparsities, path, last_checkpoint = Lottery_Ticket_Hypothesis.iterative_pruning_by_test_acc(model, mask,
                                                                                                                 LTH_args.test_accuracy_threshold,
                                                                                                                 criterion=criterion,
                                                                                                                 testset=testset, testloader=testloader,
@@ -257,15 +255,15 @@ def run_one():
                                                                                                                 num_warmup_it=LTH_args.warmup_iterations)
 
     elif LTH_args.stop_criteria is 'num_prune_epochs':
-        test_accuracies, sparsities = Lottery_Ticket_Hypothesis.iterative_pruning_by_num(model, mask, LTH_args.iterative_pruning_epochs, criterion=criterion,
-                                                                                         testset=testset,
-                                                                                         testloader=testloader, trainset=trainset,
-                                                                                         trainloader=trainloader, valloader=valloader, valset=valset,
-                                                                                         pruning_percentage=LTH_args.pruning_percentage,
-                                                                                         training_number_of_epochs=LTH_args.training_number_of_epochs,
-                                                                                         lr=LTH_args.learning_rate,
-                                                                                         it_per_epoch=it_per_ep,
-                                                                                         num_warmup_it=LTH_args.warmup_iterations)
+        test_accuracies, sparsities, path, last_checkpoint = Lottery_Ticket_Hypothesis.iterative_pruning_by_num(model, mask, LTH_args.iterative_pruning_epochs, criterion=criterion,
+                                                                                                                testset=testset,
+                                                                                                                testloader=testloader, trainset=trainset,
+                                                                                                                trainloader=trainloader, valloader=valloader, valset=valset,
+                                                                                                                pruning_percentage=LTH_args.pruning_percentage,
+                                                                                                                training_number_of_epochs=LTH_args.training_number_of_epochs,
+                                                                                                                lr=LTH_args.learning_rate,
+                                                                                                                it_per_epoch=it_per_ep,
+                                                                                                                num_warmup_it=LTH_args.warmup_iterations)
         num_epochs = LTH_args.iterative_pruning_epochs
 
     elif LTH_args.stop_criteria is 'one_shot':
@@ -287,6 +285,7 @@ def run_one():
     if LTH_args.save_res_csv:
         PATH = LTH_write_read_csv.make_csv(LTH_args.model, sparsities, test_accuracies)
 
+    plots.plot_activation_func_overview(model, num_rationals, LTH_args.initialize_rationals)
     LTH_write_read_csv.make_yaml([LTH_args.model], csv=PATH, saved_models=path)
 
 
