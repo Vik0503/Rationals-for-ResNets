@@ -34,6 +34,9 @@ run_all_groups.add_argument('--run_all_one_layer', default=False, action='store_
                             help="Flag to perform all three experiments `original`, `univariate rational` and `mixture of experts` with a smaller architecture (only one full layer)"
                                  "in a sequence and plot the results in one graph for further comparison.")
 ResNet_arg_parser.add_argument('--arch_for_run_all', default='CIFAR10', choices=['CIFAR10', 'ImageNet'])
+ResNet_arg_parser.add_argument('--milestones',
+                               type=str, nargs='+', default=[10, 15, 20],
+                               help='Examples: --milestones 20 30, -milestones 5')
 
 
 def get_argparser() -> arg.ArgumentParser:

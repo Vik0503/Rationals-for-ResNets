@@ -1,7 +1,8 @@
 from typing import List
 
 import torch
-from torch import nn
+from torch import nn, optim
+from torch.optim import lr_scheduler
 
 from LTH_for_Rational_ResNets import argparser
 
@@ -76,3 +77,46 @@ def initialize_alpha(b: int = 4) -> torch.Tensor:
     alpha = torch.rand(b, requires_grad=True)
     alpha = alpha / alpha.sum()
     return alpha
+
+
+def get_scheduler_optimizer(num_warmup_it: int, lr: float, model, it_per_ep: int):
+    """
+    Return scheduler with custom milestones and optimizer
+
+    Parameters
+    ----------
+    num_warmup_it: int
+                   The number of warmup iterations.
+    lr: float
+        The learning rate.
+    model
+    it_per_ep: int
+               The number of iterations per epoch
+
+    Returns
+    -------
+    torch.optim.lr_scheduler.LambdaLR
+    optimizer: torch.optim.SGD
+    """
+    optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9, weight_decay=0.0001)
+    milestones = args.milestones
+    milestones = list(map(int, milestones))
+    milestones.sort()
+    print(milestones)
+
+    def lr_lambda(it):
+        if it < num_warmup_it:
+            if it % 430 == 0:
+                print('Warmup')
+            return min(1.0, it / num_warmup_it)
+        else:
+            for m in range(len(milestones)):
+                if it < milestones[m] * it_per_ep:
+                    if it % 430 == 0:
+                        print('Milestone {}: {}'.format(m, 1 * 10 ** -m))
+                    return 1 * 10 ** -m
+            if it % 430 == 0:
+                print('Milestone {}: {}'.format(len(milestones), 1 * 10 ** -(len(milestones))))
+            return 1 * 10 ** -(len(milestones))
+
+    return lr_scheduler.LambdaLR(optimizer, lr_lambda=lr_lambda), optimizer

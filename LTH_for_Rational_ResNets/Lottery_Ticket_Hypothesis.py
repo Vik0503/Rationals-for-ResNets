@@ -2,7 +2,7 @@ from datetime import datetime
 
 import torch
 from torch import optim
-from torch.optim import lr_scheduler
+
 
 from LTH_for_Rational_ResNets import Train_Val_Test as tvt
 from LTH_for_Rational_ResNets import utils
@@ -14,34 +14,6 @@ if torch.cuda.is_available():
     device = 'cuda'
 else:
     device = 'cpu'
-
-
-def get_scheduler_optimizer(num_warmup_it, lr, model, it_per_ep):  # TODO: allow diff. milestones maybe in utils?
-    optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9, weight_decay=0.0001)
-
-    def lr_lambda(it):
-        if it < num_warmup_it:
-            if it % 500 == 0:
-                print('Warmup')
-            return min(1.0, it / num_warmup_it)
-        elif it < 10 * it_per_ep:
-            if it % 500 == 0:
-                print('MS 1')
-            return 1
-        elif 10 * it_per_ep <= it < 15 * it_per_ep:
-            if it % 500 == 0:
-                print('MS 2')
-            return 0.1
-        elif 15 * it_per_ep <= it < 20 * it_per_ep:
-            if it % 500 == 0:
-                print('MS 3')
-            return 0.01
-        elif it >= 20 * it_per_ep:
-            if it % 500 == 0:
-                print('After MS 3')
-            return 0.001
-
-    return lr_scheduler.LambdaLR(optimizer, lr_lambda=lr_lambda), optimizer
 
 
 def checkpoint_save(path, optimizer, epoch: int, save_model, model_mask: Mask, test_accuracy: float, training_epochs: int, model_sparsity: float = 0):
@@ -89,7 +61,7 @@ def one_shot_pruning(prune_model, prune_mask: Mask, criterion, trainset, valset,
     prune_model.mask = Mask.cuda(prune_mask)
 
     initial_state = utils.initial_state(model=prune_model)
-    scheduler, optimizer = get_scheduler_optimizer(lr=lr, it_per_ep=it_per_epoch, model=prune_model, num_warmup_it=num_warmup_it)
+    scheduler, optimizer = utils.get_scheduler_optimizer(lr=lr, it_per_ep=it_per_epoch, model=prune_model, num_warmup_it=num_warmup_it)
     prune_model, best_val_accuracy, num_iterations = tvt.train(prune_model, criterion, optimizer, scheduler, training_number_of_epochs, trainset, valset, trainloader, valloader)
 
     test_accuracy = tvt.test(prune_model, testset, testloader)
@@ -130,7 +102,7 @@ def iterative_pruning_by_num(prune_model, prune_mask: Mask, epochs: int, criteri
 
     for epoch in range(epochs):
         prune_model.mask = Mask.cuda(prune_mask)
-        scheduler, optimizer = get_scheduler_optimizer(lr=lr, it_per_ep=it_per_epoch, model=prune_model, num_warmup_it=num_warmup_it)
+        scheduler, optimizer = utils.get_scheduler_optimizer(lr=lr, it_per_ep=it_per_epoch, model=prune_model, num_warmup_it=num_warmup_it)
         prune_model, best_val_accuracy, num_iterations = tvt.train(prune_model, criterion, optimizer, scheduler, training_number_of_epochs, trainset, valset, trainloader, valloader)
 
         test_accuracy = tvt.test(prune_model, testset, testloader)
@@ -168,7 +140,7 @@ def iterative_pruning_by_test_acc(prune_model, prune_mask: Mask, acc_threshold: 
 
     initial_state = utils.initial_state(model=prune_model)
 
-    scheduler, optimizer = get_scheduler_optimizer(lr=lr, it_per_ep=it_per_epoch, model=prune_model, num_warmup_it=num_warmup_it)
+    scheduler, optimizer = utils.get_scheduler_optimizer(lr=lr, it_per_ep=it_per_epoch, model=prune_model, num_warmup_it=num_warmup_it)
 
     prune_model, best_val_accuracy, num_iterations = tvt.train(prune_model, criterion, optimizer, scheduler, training_number_of_epochs, trainset, valset, trainloader, valloader)
 
@@ -196,7 +168,7 @@ def iterative_pruning_by_test_acc(prune_model, prune_mask: Mask, acc_threshold: 
 
         utils.reinit(prune_model, prune_mask, initial_state)  # reinit
 
-        scheduler, optimizer = get_scheduler_optimizer(lr=lr, it_per_ep=it_per_epoch, model=prune_model, num_warmup_it=num_warmup_it)
+        scheduler, optimizer = utils.get_scheduler_optimizer(lr=lr, it_per_ep=it_per_epoch, model=prune_model, num_warmup_it=num_warmup_it)
         prune_model, best_val_accuracy, num_iterations = tvt.train(prune_model, criterion, optimizer, scheduler, training_number_of_epochs, trainset, valset, trainloader, valloader)  # train
 
         test_accuracy = tvt.test(prune_model, testset, testloader)  # test
