@@ -38,6 +38,10 @@ ResNet_arg_parser.add_argument('--milestones',
                                type=str, nargs='+', default=[10, 15, 20],
                                help='Examples: --milestones 20 30, -milestones 5')
 
+"""'--model', 'univ_rational_resnet20', '--dataset', 'SVHN', '--warmup_iterations', '7167',
+     '--iterative_pruning_epochs', '2', '--training_number_of_epochs', '10',
+     '--stop_criteria', 'num_prune_epochs', '--save_res_csv', '--prune_shortcuts'"""
+
 
 def get_argparser() -> arg.ArgumentParser:
     """
@@ -52,11 +56,11 @@ def get_argparser() -> arg.ArgumentParser:
 
 
 def get_arguments():
-    resnet_args = ResNet_arg_parser.parse_args()
+    resnet_args = ResNet_arg_parser.parse_args(['--model', 'mix_experts_resnet20', '--training_number_of_epochs', '1'])
     if resnet_args.arch_for_run_all == 'ImageNet' and resnet_args.run_all_two_BB:
         print('This option is not available for ResNet18.')
         exit()
-    if (resnet_args.run_all_classic or resnet_args.run_all_two_bb or resnet_args.run_all_two_layers or resnet_args.run_all_one_layer) and not resnet_args.arch_for_run_all:
+    if (resnet_args.run_all_classic or resnet_args.run_all_two_BB or resnet_args.run_all_two_layers or resnet_args.run_all_one_layer) and not resnet_args.arch_for_run_all:
         print('Please choose architecture for command run_all.')
         exit()
     return resnet_args

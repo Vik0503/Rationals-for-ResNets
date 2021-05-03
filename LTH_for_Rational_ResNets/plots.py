@@ -158,8 +158,8 @@ def plot_activation_func_overview(model, num_rat, inits):
 
     layers = model.layers
 
-    if True:
-        resnet18_plot(layers, rat_groups, alphas, inits)
+    if LTH_args.model == 'mix_experts_resnet20':
+        resnet20_plot(layers, rat_groups, alphas, inits)
     else:
         resnet18_plot(layers, rat_groups, alphas, inits)
 
@@ -173,7 +173,10 @@ def plot_activation_func_overview(model, num_rat, inits):
 
 def resnet20_plot(layers, rat_groups, alphas, inits):
     plt.figure(figsize=(layers[0] * 8, len(layers) * 8))
-    model_1 = False  # TODO: catch model 1
+    model_1 = False
+
+    if LTH_args.model == 'mix_experts_resnet20_2_BB':
+        model_1 = True
 
     plt_counter = 0
     for r in range(1, len(layers) * layers[0] * 2 + layers[0] * 2 + 1):

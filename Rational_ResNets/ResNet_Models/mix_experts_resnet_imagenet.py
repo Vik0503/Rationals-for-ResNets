@@ -16,7 +16,6 @@ from rational.torch import Rational
 from Rational_ResNets import argparser, utils
 
 args = argparser.get_arguments()
-prune_shortcuts = args.prune_shortcuts
 
 if torch.cuda.is_available():
     cuda = True

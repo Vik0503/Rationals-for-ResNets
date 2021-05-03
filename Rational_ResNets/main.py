@@ -8,6 +8,7 @@ sys.path.insert(0, parent_dir)
 
 import torch
 from Rational_ResNets import argparser
+from rational.torch import Rational
 
 resnet_args = argparser.get_arguments()
 torch.cuda.manual_seed_all(resnet_args.data_seeds)
@@ -145,15 +146,19 @@ def run_one():
         num_rationals = 2
 
     elif resnet_args.model == 'mix_experts_resnet20':
+        num_rationals = len(rational_inits)
         model = mix_exp_cifar.mix_exp_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)
         num_rationals = len(rational_inits) * 2
     elif resnet_args.model == 'mix_experts_resnet20_2_BB':
+        num_rationals = len(rational_inits)
         model = mix_exp_cifar.mix_exp_resnet20_2_BB(rational_inits=rational_inits, num_rationals=num_rationals)
         num_rationals = len(rational_inits) * 2
     elif resnet_args.model == 'mix_experts_resnet20_2_layers':
+        num_rationals = len(rational_inits)
         model = mix_exp_cifar.mix_exp_resnet20_2_layers(rational_inits=rational_inits, num_rationals=num_rationals)
         num_rationals = len(rational_inits) * 2
     elif resnet_args.model == 'mix_experts_resnet20_1_layer':
+        num_rationals = len(rational_inits)
         model = mix_exp_cifar.mix_exp_resnet20_1_layer(rational_inits=rational_inits, num_rationals=num_rationals)
         num_rationals = len(rational_inits) * 2
 
@@ -175,12 +180,15 @@ def run_one():
         num_rationals = 2
 
     elif resnet_args.model == 'mix_experts_resnet18':
+        num_rationals = len(rational_inits)
         model = mix_exp_imagenet.mix_exp_resnet18(rational_inits=rational_inits, num_rationals=num_rationals)
         num_rationals = len(rational_inits) * 2
     elif resnet_args.model == 'mix_experts_resnet18_2_layers':
+        num_rationals = len(rational_inits)
         model = mix_exp_imagenet.mix_exp_resnet18_2_layers(rational_inits=rational_inits, num_rationals=num_rationals)
         num_rationals = len(rational_inits) * 2
     else:
+        num_rationals = len(rational_inits)
         model = mix_exp_imagenet.mix_exp_resnet18_1_layer(rational_inits=rational_inits, num_rationals=num_rationals)
         num_rationals = len(rational_inits) * 2
 
@@ -197,8 +205,8 @@ def run_one():
 
     plots.final_plot(cm, avg_time, best_test_acc, resnet_args.training_number_of_epochs, resnet_args.learning_rate,
                      num_rationals, resnet_args.dataset, resnet_args.model, resnet_args.batch_size)
-    if resnet_args.model == 'mix_experts_resnet20':
-        plots.plot_activation_func_overview(model, num_rationals, rational_inits)
+    if resnet_args.model == 'mix_experts_resnet20' or resnet_args.model == 'mix_experts_resnet18':
+        plots.plot_activation_func_overview(model, num_rationals / 2, rational_inits)
     models = [resnet_args.model]
     PATH = ''
     if resnet_args.save_res_csv:
@@ -209,7 +217,7 @@ def run_one():
     torch.save(model, PATH)
 
 
-if resnet_args.train_all:
+if resnet_args.run_all_classic:
     run_all()
 else:
     run_one()

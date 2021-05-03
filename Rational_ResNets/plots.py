@@ -13,7 +13,7 @@ matplotlib.rcParams.update({
     "text.usetex": False,
 })
 
-ResNet_args = argparser.get_arguments()
+resnet_args = argparser.get_arguments()
 
 
 def accuracy_plot(acc_x_vals: list, train_acc_y_vals: list, val_acc_y_vals: list, test_acc_y_vals: list):  # TODO: reduce size
@@ -92,7 +92,7 @@ def activation_function_plots(model):
     plt.tight_layout()
     time_stamp = datetime.now()
 
-    PATH = './Plots/activation_functions/{}'.format(time_stamp) + '_{}'.format(ResNet_args.dataset) + '.svg'
+    PATH = './Plots/activation_functions/{}'.format(time_stamp) + '_{}'.format(resnet_args.dataset) + '.svg'
     plt.savefig(PATH)
     plt.show()
 
@@ -123,8 +123,8 @@ def plot_overview_all(training_accs, val_accs, test_accs, x_vals, best_test_accs
     plt.ylabel('Test Accuracy in Percent')
 
     props = dict(boxstyle='round', facecolor='grey', alpha=0.5)
-    text = 'dataset: {}, '.format(ResNet_args.dataset) + 'batch size: {}, '.format(ResNet_args.batch_size) + '\n' + '{} training epochs, '.format(ResNet_args.training_number_of_epochs) + '\n' + \
-           'learning rate: {}, '.format(ResNet_args.learning_rate) + '{} warm-up iterations, '.format(ResNet_args.warmup_iterations) + '\n' + \
+    text = 'dataset: {}, '.format(resnet_args.dataset) + 'batch size: {}, '.format(resnet_args.batch_size) + '\n' + '{} training epochs, '.format(resnet_args.training_number_of_epochs) + '\n' + \
+           'learning rate: {}, '.format(resnet_args.learning_rate) + '{} warm-up iterations, '.format(resnet_args.warmup_iterations) + '\n' + \
            'best test accuracy: ' + '\n' + \
            '- ReLU ResNet: {:4f}'.format(best_test_accs[0]) + '\n' + '- univ. rational ResNet20: {:4f}'.format(best_test_accs[1]) + '\n' + '- mix. exp. ResNet20: {:4f}'.format(best_test_accs[2]) + '\n' + \
            'average time per epoch: ' + '\n' + \
@@ -134,20 +134,43 @@ def plot_overview_all(training_accs, val_accs, test_accs, x_vals, best_test_accs
     plt.figtext(0.725, 0.5, text, bbox=props, size=9)
 
     time_stamp = datetime.now()
-    PATH = './Plots/all' + '/' + '{}'.format(time_stamp) + '_' + '{}'.format(ResNet_args.dataset) + '.svg'
+    PATH = './Plots/all' + '/' + '{}'.format(time_stamp) + '_' + '{}'.format(resnet_args.dataset) + '.svg'
     plt.savefig(PATH)
     plt.show()
 
 
 def calc_mixture_plot(alphas, rationals):
-    all_x = torch.zeros(5, 600)
+    shape = rationals[0].show(display=False)['line']['y'].shape[0]
+    all_x = torch.zeros(len(alphas), shape)
+
     for i in range(len(alphas)):
         alpha_x = rationals[i].show(display=False)['line']['y'] * alphas[i].detach().cpu().numpy()
         all_x[i] = torch.tensor(alpha_x)
     return all_x.sum(dim=0), rationals[0].show(display=False)['line']['x']
 
 
+def calc_mixture_plot_2(alphas, rationals):
+    all_y = []
+    smallest_shape = 90000
+    j = 0
+    for i in range(len(alphas)):
+        # rationals[i].show()
+        if rationals[i].show(display=False)['line']['y'].shape[0] < smallest_shape:
+            print('HERE')
+            smallest_shape = rationals[i].show(display=False)['line']['y'].shape[0]
+            j = i
+        print(rationals[i].show(display=False)['line']['y'].shape)
+        alpha_x = rationals[i].show(display=False)['line']['y'] * alphas[i].detach().cpu().numpy()
+        all_y.append(alpha_x)
+    all_y_tensor = torch.zeros(len(alphas), smallest_shape)
+
+    for i in range(len(all_y)):
+        all_y_tensor[i] = torch.tensor(all_y[i][:smallest_shape])
+    return all_y_tensor.sum(dim=0), rationals[j].show(display=False)['line']['x']
+
+
 def plot_activation_func_overview(model, num_rat, inits):
+    print(num_rat)
     c = 0
     tmp = []
     rat_groups = []
@@ -167,8 +190,25 @@ def plot_activation_func_overview(model, num_rat, inits):
 
     layers = model.layers
 
+    if resnet_args.model == 'mix_experts_resnet20':
+        resnet20_plot(layers, rat_groups, alphas, inits)
+    else:
+        resnet18_plot(layers, rat_groups, alphas, inits)
+
+    plt.tight_layout()
+    time_stamp = datetime.now()
+
+    PATH = './Plots/activation_functions/{}'.format(time_stamp) + '_{}'.format(resnet_args.dataset) + '_all.svg'
+    plt.savefig(PATH)
+    plt.show()
+
+
+def resnet20_plot(layers, rat_groups, alphas, inits):
     plt.figure(figsize=(layers[0] * 8, len(layers) * 8))
-    model_1 = False  # TODO: catch model 1
+    model_1 = False
+
+    if resnet_args.model == 'mix_experts_resnet20_2_BB':
+        model_1 = True
 
     plt_counter = 0
     for r in range(1, len(layers) * layers[0] * 2 + layers[0] * 2 + 1):
@@ -208,12 +248,67 @@ def plot_activation_func_overview(model, num_rat, inits):
             plt.title('Basic Block 1', loc='left', fontsize=16)
 
         if show:
+            colors = ['C0', 'C1', 'C2', 'C4', 'lightgreen']
+            tmp = rat_groups[plt_counter]
+            alpha_tmp = alphas[plt_counter]
+            legend = []
+            y, x = calc_mixture_plot(alpha_tmp, tmp)
+            plt.plot(x, y, color='C3', linewidth=1.75)
+            legend.append('mixture')
+
+            for rational in range(len(tmp)):
+                x = tmp[rational].show(display=False)['line']['x']
+                y = tmp[rational].show(display=False)['line']['y']
+                plt.plot(x, y, color=colors[rational])
+                legend.append('\u03B1_{}: {:0.4f}, init.: {}, deg.: {}'.format(rational, alpha_tmp[rational], inits[rational], tmp[rational].degrees))
+
+            plt.legend(legend, bbox_to_anchor=(0.5, -0.4), ncol=1, loc='center')
+            bins = tmp[0].show(display=False)['hist']['bins']
+            freq = tmp[0].show(display=False)['hist']['freq']
+            ax = plt.gca()
+            ax2 = ax.twinx()
+            ax2.set_yticks([])
+            ax2.bar(bins, freq, width=bins[1] - bins[0], color='grey', edgecolor='grey', alpha=0.3)
+            plt_counter += 1
+
+
+def resnet18_plot(layers, rat_groups, alphas, inits):
+    plt.figure(figsize=(layers[0] * 8, len(layers) * 8))
+
+    plt_counter = 0
+    for r in range(1, len(layers) * layers[0] * 2 + layers[0] * 2 + 1):
+        show = True
+        plt.subplot(len(layers) + 2, layers[0] * 2, r)
+        if r == 1:
+            plt.title('Layer 0', loc='left', fontsize=16)
+        if layers[0] * 2 + 1 > r > 1:
+            ax = plt.gca()
+            ax.axis('off')
+            show = False
+        if r == layers[0] * 2 + 1:
+            plt.title('Layer 1 \nBasic Block 0', loc='left', fontsize=16)
+        if r == layers[0] * 3 + 1:
+            plt.title('Basic Block 1', loc='left', fontsize=16)
+        if r == layers[0] * 4 + 1:
+            plt.title('Layer 2 \nBasic Block 0', loc='left', fontsize=16)
+        if r == layers[0] * 5 + 1:
+            plt.title('Basic Block 1', loc='left', fontsize=16)
+        if r == layers[0] * 6 + 1:
+            plt.title('Layer 3 \nBasic Block 0', loc='left', fontsize=16)
+        if r == layers[0] * 7 + 1:
+            plt.title('Basic Block 1', loc='left', fontsize=16)
+        if r == layers[0] * 8 + 1:
+            plt.title('Layer 4 \nBasic Block 0', loc='left', fontsize=16)
+        if r == layers[0] * 9 + 1:
+            plt.title('Basic Block 1', loc='left', fontsize=16)
+
+        if show:
             colors = ['C0', 'C1', 'C2', 'C4', 'C6']
             tmp = rat_groups[plt_counter]
             alpha_tmp = alphas[plt_counter]
             legend = []
             y, x = calc_mixture_plot(alpha_tmp, tmp)
-            plt.plot(x, y, color='red', linewidth=1.5)
+            plt.plot(x, y, color='C3', linewidth=1.75)
             legend.append('mixture')
 
             for rational in range(len(tmp)):
@@ -224,10 +319,3 @@ def plot_activation_func_overview(model, num_rat, inits):
 
             plt.legend(legend, bbox_to_anchor=(0.5, -0.4), ncol=1, loc='center')
             plt_counter += 1
-
-    plt.tight_layout()
-    time_stamp = datetime.now()
-
-    PATH = './Plots/activation_functions/{}'.format(time_stamp) + '_{}'.format(ResNet_args.dataset) + '.svg'
-    plt.savefig(PATH)
-    plt.show()
