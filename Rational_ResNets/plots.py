@@ -137,6 +137,7 @@ def plot_overview_all(training_accs, val_accs, test_accs, x_vals, best_test_accs
     PATH = './Plots/all' + '/' + '{}'.format(time_stamp) + '_' + '{}'.format(resnet_args.dataset) + '.svg'
     plt.savefig(PATH)
     plt.show()
+    return PATH
 
 
 def calc_mixture_plot(alphas, rationals):
@@ -201,6 +202,7 @@ def plot_activation_func_overview(model, num_rat, inits):
     PATH = './Plots/activation_functions/{}'.format(time_stamp) + '_{}'.format(resnet_args.dataset) + '_all.svg'
     plt.savefig(PATH)
     plt.show()
+    return PATH
 
 
 def resnet20_plot(layers, rat_groups, alphas, inits):

@@ -1,6 +1,7 @@
 import inspect
 import os
 import sys
+from datetime import datetime
 
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
@@ -26,6 +27,10 @@ from LTH_for_Rational_ResNets.LTH_Models import mix_experts_resnet_cifar10 as mi
 from LTH_for_Rational_ResNets.LTH_Models import select_1_expert_group_rational_resnet as sel1exp
 from LTH_for_Rational_ResNets.Mask import make_initial_mask
 from LTH_for_Rational_ResNets import LTH_write_read_csv
+
+time_stamp = datetime.now()
+print_PATH = './Print_Logs/{}.txt'.format(time_stamp)
+sys.stdout = open(print_PATH, 'wt')
 
 global trainset
 global valset
@@ -77,12 +82,12 @@ elif LTH_args.dataset == 'SVHN':
 
 
 def run_all():
-    global path, last_checkpoint
+    global model_PATH, last_checkpoint, csv_PATH
     num_epochs = 0
     test_accuracies = []
     sparsities = []
     num_epoch_list = []
-    PATHS = []
+    saved_model_PATHS = []
     if LTH_args.run_all_classic and LTH_args.run_all_architecture == 'CIFAR10':
         model_names = ['relu_resnet20', 'univ_rational_resnet20', 'mix_experts_resnet20']
         models_run_all = [relu_cifar.relu_resnet20(), univ_rat_cifar.univ_rational_resnet20(), mix_exp_cifar.mix_exp_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)]
@@ -123,29 +128,29 @@ def run_all():
         mask = mask.cuda()
 
         if LTH_args.stop_criteria is 'test_acc':
-            num_epochs, test_accuracies, sparsities, path, last_checkpoint = Lottery_Ticket_Hypothesis.iterative_pruning_by_test_acc(model, mask,
-                                                                                                                                     LTH_args.test_accuracy_threshold,
-                                                                                                                                     criterion=criterion,
-                                                                                                                                     testset=testset, testloader=testloader,
-                                                                                                                                     trainset=trainset,
-                                                                                                                                     trainloader=trainloader,
-                                                                                                                                     valloader=valloader, valset=valset,
-                                                                                                                                     pruning_percentage=LTH_args.pruning_percentage,
-                                                                                                                                     training_number_of_epochs=LTH_args.training_number_of_epochs,
-                                                                                                                                     lr=LTH_args.learning_rate,
-                                                                                                                                     it_per_epoch=it_per_ep,
-                                                                                                                                     num_warmup_it=LTH_args.warmup_iterations)
+            num_epochs, test_accuracies, sparsities, model_PATH, last_checkpoint = Lottery_Ticket_Hypothesis.iterative_pruning_by_test_acc(model, mask,
+                                                                                                                                           LTH_args.test_accuracy_threshold,
+                                                                                                                                           criterion=criterion,
+                                                                                                                                           testset=testset, testloader=testloader,
+                                                                                                                                           trainset=trainset,
+                                                                                                                                           trainloader=trainloader,
+                                                                                                                                           valloader=valloader, valset=valset,
+                                                                                                                                           pruning_percentage=LTH_args.pruning_percentage,
+                                                                                                                                           training_number_of_epochs=LTH_args.training_number_of_epochs,
+                                                                                                                                           lr=LTH_args.learning_rate,
+                                                                                                                                           it_per_epoch=it_per_ep,
+                                                                                                                                           num_warmup_it=LTH_args.warmup_iterations)
 
         elif LTH_args.stop_criteria is 'num_prune_epochs':
-            test_accuracies, sparsities, path, last_checkpoint = Lottery_Ticket_Hypothesis.iterative_pruning_by_num(model, mask, LTH_args.iterative_pruning_epochs, criterion=criterion,
-                                                                                                                    testset=testset,
-                                                                                                                    testloader=testloader, trainset=trainset,
-                                                                                                                    trainloader=trainloader, valloader=valloader, valset=valset,
-                                                                                                                    pruning_percentage=LTH_args.pruning_percentage,
-                                                                                                                    training_number_of_epochs=LTH_args.training_number_of_epochs,
-                                                                                                                    lr=LTH_args.learning_rate,
-                                                                                                                    it_per_epoch=it_per_ep,
-                                                                                                                    num_warmup_it=LTH_args.warmup_iterations)
+            test_accuracies, sparsities, model_PATH, last_checkpoint = Lottery_Ticket_Hypothesis.iterative_pruning_by_num(model, mask, LTH_args.iterative_pruning_epochs, criterion=criterion,
+                                                                                                                          testset=testset,
+                                                                                                                          testloader=testloader, trainset=trainset,
+                                                                                                                          trainloader=trainloader, valloader=valloader, valset=valset,
+                                                                                                                          pruning_percentage=LTH_args.pruning_percentage,
+                                                                                                                          training_number_of_epochs=LTH_args.training_number_of_epochs,
+                                                                                                                          lr=LTH_args.learning_rate,
+                                                                                                                          it_per_epoch=it_per_ep,
+                                                                                                                          num_warmup_it=LTH_args.warmup_iterations)
             num_epochs = LTH_args.iterative_pruning_epochs
 
         elif LTH_args.stop_criteria is 'one_shot':
@@ -159,23 +164,23 @@ def run_all():
                                                        num_warmup_it=LTH_args.warmup_iterations)
 
         if LTH_args.save_res_csv:
-            PATH = LTH_write_read_csv.make_csv(model_names[m], sparsities, test_accuracies)
-            PATHS.append(PATH)
+            csv_PATH = LTH_write_read_csv.make_csv(model_names[m], sparsities, test_accuracies)
 
+        saved_model_PATHS.append(model_PATH)
         all_test_accuracies.append(test_accuracies)
         all_sparsities.append(sparsities)
         num_epoch_list.append(num_epochs)
         checkpoints.append(last_checkpoint)
         all_models.append(model)
 
-    plots.plot_all(test_accs=all_test_accuracies, sparsities=all_sparsities, num_epoch_list=num_epoch_list)
-    plots.plot_activation_func_overview(all_models[2], num_rationals, LTH_args.initialize_rationals)
+    plot_PATH = plots.plot_all(test_accs=all_test_accuracies, sparsities=all_sparsities, num_epoch_list=num_epoch_list)
+    act_func_plot_PATH = plots.plot_activation_func_overview(all_models[2], num_rationals, LTH_args.initialize_rationals)
     mask_path_dim, mask_path_weights, mask_path_percent = LTH_write_read_csv.make_mask_csv(checkpoints)
-    LTH_write_read_csv.make_yaml(model_names, csv=PATHS, saved_models=path, table=[mask_path_dim, mask_path_weights, mask_path_percent])
+    LTH_write_read_csv.make_yaml(model_names, csv=[csv_PATH], saved_models=saved_model_PATHS, table=[mask_path_dim, mask_path_weights, mask_path_percent], plot=[plot_PATH], act_func_plot=[act_func_plot_PATH], print_log=[print_PATH])
 
 
 def run_one():
-    global model, path
+    global model, model_PATH
 
     if LTH_args.model == 'relu_resnet20':
         model = relu_cifar.relu_resnet20()
@@ -241,29 +246,29 @@ def run_one():
     sparsities = []
 
     if LTH_args.stop_criteria is 'test_acc':
-        num_epochs, test_accuracies, sparsities, path, last_checkpoint = Lottery_Ticket_Hypothesis.iterative_pruning_by_test_acc(model, mask,
-                                                                                                                LTH_args.test_accuracy_threshold,
-                                                                                                                criterion=criterion,
-                                                                                                                testset=testset, testloader=testloader,
-                                                                                                                trainset=trainset,
-                                                                                                                trainloader=trainloader,
-                                                                                                                valloader=valloader, valset=valset,
-                                                                                                                pruning_percentage=LTH_args.pruning_percentage,
-                                                                                                                training_number_of_epochs=LTH_args.training_number_of_epochs,
-                                                                                                                lr=LTH_args.learning_rate,
-                                                                                                                it_per_epoch=it_per_ep,
-                                                                                                                num_warmup_it=LTH_args.warmup_iterations)
+        num_epochs, test_accuracies, sparsities, model_PATH, last_checkpoint = Lottery_Ticket_Hypothesis.iterative_pruning_by_test_acc(model, mask,
+                                                                                                                                       LTH_args.test_accuracy_threshold,
+                                                                                                                                       criterion=criterion,
+                                                                                                                                       testset=testset, testloader=testloader,
+                                                                                                                                       trainset=trainset,
+                                                                                                                                       trainloader=trainloader,
+                                                                                                                                       valloader=valloader, valset=valset,
+                                                                                                                                       pruning_percentage=LTH_args.pruning_percentage,
+                                                                                                                                       training_number_of_epochs=LTH_args.training_number_of_epochs,
+                                                                                                                                       lr=LTH_args.learning_rate,
+                                                                                                                                       it_per_epoch=it_per_ep,
+                                                                                                                                       num_warmup_it=LTH_args.warmup_iterations)
 
     elif LTH_args.stop_criteria is 'num_prune_epochs':
-        test_accuracies, sparsities, path, last_checkpoint = Lottery_Ticket_Hypothesis.iterative_pruning_by_num(model, mask, LTH_args.iterative_pruning_epochs, criterion=criterion,
-                                                                                                                testset=testset,
-                                                                                                                testloader=testloader, trainset=trainset,
-                                                                                                                trainloader=trainloader, valloader=valloader, valset=valset,
-                                                                                                                pruning_percentage=LTH_args.pruning_percentage,
-                                                                                                                training_number_of_epochs=LTH_args.training_number_of_epochs,
-                                                                                                                lr=LTH_args.learning_rate,
-                                                                                                                it_per_epoch=it_per_ep,
-                                                                                                                num_warmup_it=LTH_args.warmup_iterations)
+        test_accuracies, sparsities, model_PATH, last_checkpoint = Lottery_Ticket_Hypothesis.iterative_pruning_by_num(model, mask, LTH_args.iterative_pruning_epochs, criterion=criterion,
+                                                                                                                      testset=testset,
+                                                                                                                      testloader=testloader, trainset=trainset,
+                                                                                                                      trainloader=trainloader, valloader=valloader, valset=valset,
+                                                                                                                      pruning_percentage=LTH_args.pruning_percentage,
+                                                                                                                      training_number_of_epochs=LTH_args.training_number_of_epochs,
+                                                                                                                      lr=LTH_args.learning_rate,
+                                                                                                                      it_per_epoch=it_per_ep,
+                                                                                                                      num_warmup_it=LTH_args.warmup_iterations)
         num_epochs = LTH_args.iterative_pruning_epochs
 
     elif LTH_args.stop_criteria is 'one_shot':
@@ -285,8 +290,8 @@ def run_one():
     if LTH_args.save_res_csv:
         PATH = LTH_write_read_csv.make_csv(LTH_args.model, sparsities, test_accuracies)
 
-    plots.plot_activation_func_overview(model, num_rationals, LTH_args.initialize_rationals)
-    LTH_write_read_csv.make_yaml([LTH_args.model], csv=PATH, saved_models=path)
+    act_func_plot = plots.plot_activation_func_overview(model, num_rationals, LTH_args.initialize_rationals)
+    LTH_write_read_csv.make_yaml([LTH_args.model], csv=PATH, saved_models=model_PATH, print_log=print_PATH, act_func_plot=act_func_plot)
 
 
 if LTH_args.run_all_classic or LTH_args.run_all_two_BB or LTH_args.run_all_two_layers or LTH_args.run_all_one_layer:

@@ -224,12 +224,12 @@ def csv_cifar_models(model):
     return tuples, ['original Model', 'ReLU ResNet20', 'univ. rational ResNet20', 'mix. exp. ResNet20']
 
 
-def make_yaml(models: list, saved_models, table=None, csv=None):  # TODO: add Rational Init + One Shot Option + saved models for run all + plot
+def make_yaml(models: list, saved_models, print_log, table=None, csv=None, act_func_plot=None, plot=None):  # TODO: add Rational Init + One Shot Option + saved models for run all + plot
     LTH_args = argparser.get_arguments()
     time_stamp = datetime.now()
     yaml_data = [{'Date': [time_stamp]}, {'Model(s)': models}, {'Dataset': [LTH_args.dataset]}, {'Batch Size': [LTH_args.batch_size]}, {'Pruning Percentage per Epoch': [LTH_args.pruning_percentage]},
                  {'Training Epochs per Pruning Epoch': [LTH_args.training_number_of_epochs]}, {'Learning Rate': [LTH_args.learning_rate]}, {'Warm-Up Iterations': [LTH_args.warmup_iterations]},
-                 {'Shortcuts pruned': [LTH_args.prune_shortcuts]}, {'Saved Models': [saved_models]}]
+                 {'Shortcuts pruned': [LTH_args.prune_shortcuts]}, {'Rational Inits': [LTH_args.initialize_rationals]}, {'Saved Models': [saved_models]}, {'Print Log': [print_log]}]
 
     if LTH_args.stop_criteria is 'num_prune_epochs':
         yaml_data.append({'Iterative Pruning Epochs': [LTH_args.iterative_pruning_epochs]})
@@ -241,6 +241,12 @@ def make_yaml(models: list, saved_models, table=None, csv=None):  # TODO: add Ra
 
     if table is not None:
         yaml_data.append({'Mask CSV File': [table]})
+
+    if act_func_plot is not None:
+        yaml_data.append({'Activation Function Plot': [act_func_plot]})
+
+    if act_func_plot is not None:
+        yaml_data.append({'Plot': [plot]})
 
     PATH = 'YAML/{}'.format(time_stamp) + '.yaml'
     with open(PATH, 'w') as file:

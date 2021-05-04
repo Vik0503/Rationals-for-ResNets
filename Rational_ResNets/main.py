@@ -17,7 +17,6 @@ import torch.nn as nn
 import numpy as np
 
 np.random.seed(resnet_args.data_seeds)
-
 from datetime import datetime
 
 from Rational_ResNets import train_val_test as tvt
@@ -27,6 +26,10 @@ from Rational_ResNets.ResNet_Models import univ_rational_resnet_imagenet as univ
 from Rational_ResNets.ResNet_Models import relu_resnet_imagenet as relu_imagenet, relu_resnet_cifar10 as relu_cifar
 from Rational_ResNets.ResNet_Models import mix_experts_resnet_cifar10 as mix_exp_cifar, mix_experts_resnet_imagenet as mix_exp_imagenet
 from Rational_ResNets import utils
+
+time_stamp = datetime.now()
+print_PATH = './Print_Logs/{}.txt'.format(time_stamp)
+sys.stdout = open(print_PATH, 'wt')
 
 global trainset
 global valset
@@ -92,7 +95,9 @@ def run_all():
     test_accs = []
     best_test_accs = []
     avg_time = []
-    PATHS = []
+    csv_PATHS = []
+    saved_models_PATHS = []
+
     for m in range(len(models_run_all)):
         model = models_run_all[m]
         num_ftrs = model.fc.in_features
@@ -109,15 +114,21 @@ def run_all():
 
         if resnet_args.save_res_csv:
             PATH = utils.make_csv(model_names[m], accuracy_plot_x_vals, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals)
-            PATHS.append(PATH)
+            csv_PATHS.append(PATH)
         train_accs.append(train_acc_plot_y_vals)
         val_accs.append(val_acc_plot_y_vals)
         test_accs.append(test_acc_plot_y_vals)
         best_test_accs.append(best_acc)
         avg_time.append(time_elapsed_epoch)
 
-    plots.plot_overview_all(train_accs, val_accs, test_accs, accuracy_plot_x_vals, best_test_accs, avg_time)
-    utils.make_yaml(model_names, PATHS)
+        time_stamp = datetime.now()
+        saved_model_PATH = './Saved_Models/{}.pth'.format(time_stamp)
+        torch.save(model, saved_model_PATH)
+        saved_models_PATHS.append(saved_model_PATH)
+
+    plot_PATH = plots.plot_overview_all(train_accs, val_accs, test_accs, accuracy_plot_x_vals, best_test_accs, avg_time)
+    act_func_PATH = plots.plot_activation_func_overview(models_run_all[2], num_rationals, rational_inits)
+    utils.make_yaml(model_names, csv=csv_PATHS, print_log=print_PATH, plot=plot_PATH, act_func_plot=act_func_PATH, saved_models=saved_models_PATHS)
 
 
 def run_one():
@@ -203,18 +214,19 @@ def run_one():
                                                                                                                                                           trainset=trainset, trainloader=trainloader,
                                                                                                                                                           testset=testset, valset=valset)
 
-    plots.final_plot(cm, avg_time, best_test_acc, resnet_args.training_number_of_epochs, resnet_args.learning_rate,
+    plot_PATH = plots.final_plot(cm, avg_time, best_test_acc, resnet_args.training_number_of_epochs, resnet_args.learning_rate,
                      num_rationals, resnet_args.dataset, resnet_args.model, resnet_args.batch_size)
     if resnet_args.model == 'mix_experts_resnet20' or resnet_args.model == 'mix_experts_resnet18':
-        plots.plot_activation_func_overview(model, num_rationals / 2, rational_inits)
+        act_func_PATH = plots.plot_activation_func_overview(model, num_rationals / 2, rational_inits)
     models = [resnet_args.model]
-    PATH = ''
+    csv_PATH = ''
     if resnet_args.save_res_csv:
-        PATH = utils.make_csv(resnet_args.model, accuracy_plot_x_vals, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals)
-    utils.make_yaml(models, PATH)
+        csv_PATH = utils.make_csv(resnet_args.model, accuracy_plot_x_vals, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals)
     time_stamp = datetime.now()
-    PATH = './Saved_Models/{}.pth'.format(time_stamp)
-    torch.save(model, PATH)
+    saved_model_PATH = './Saved_Models/{}.pth'.format(time_stamp)
+    torch.save(model, saved_model_PATH)
+    utils.make_yaml(models, csv=csv_PATH, saved_models=saved_model_PATH, print_log=print_PATH)
+
 
 
 if resnet_args.run_all_classic:

@@ -68,14 +68,21 @@ def get_scheduler_optimizer(num_warmup_it: int, lr: float, model, it_per_ep: int
     return lr_scheduler.LambdaLR(optimizer, lr_lambda=lr_lambda), optimizer
 
 
-def make_yaml(models: list, csv=None):  # TODO: add Rational Init + plot PATH
+def make_yaml(models: list, saved_models, print_log, csv=None, act_func_plot=None, plot=None):  # TODO: add Rational Init + plot PATH
     resnet_args = argparser.get_arguments()
     time_stamp = datetime.now()
     yaml_data = [{'Date': [time_stamp]}, {'Model(s)': models}, {'Dataset': [resnet_args.dataset]}, {'Batch Size': [resnet_args.batch_size]},
-                 {'Learning Rate': [resnet_args.learning_rate]}, {'Epochs': [resnet_args.training_number_of_epochs]}, {'Warm-Up Iterations': [resnet_args.warmup_iterations]}]
+                 {'Learning Rate': [resnet_args.learning_rate]}, {'Epochs': [resnet_args.training_number_of_epochs]}, {'Warm-Up Iterations': [resnet_args.warmup_iterations]},
+                 {'Rational Inits': [resnet_args.initialize_rationals]}, {'Saved Model(s)': [saved_models]}, {'Print Log': [print_log]}]
 
     if resnet_args.save_res_csv:
         yaml_data.append({'CSV File(s)': [csv]})
+
+    if act_func_plot is not None:
+        yaml_data.append({'Activation Function Plot': [act_func_plot]})
+
+    if act_func_plot is not None:
+        yaml_data.append({'Plot': [plot]})
 
     PATH = 'YAML/{}'.format(time_stamp) + '.yaml'
     with open(PATH, 'w') as file:

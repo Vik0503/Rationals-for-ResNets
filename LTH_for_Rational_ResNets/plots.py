@@ -60,6 +60,7 @@ def final_plot_LTH(model, dataset, batch_size, num_pruning_epochs, training_numb
     PATH = './Plots/{}'.format(model) + '/' + '{}'.format(time_stamp) + '_' + '{}'.format(model) + '_' + '{}'.format(dataset) + '.svg'
     plt.savefig(PATH)
     plt.show()
+    return PATH
 
 
 def plot_all(test_accs, sparsities, num_epoch_list):
@@ -108,6 +109,7 @@ def plot_all(test_accs, sparsities, num_epoch_list):
     PATH = './Plots/LTH_all_models/{}'.format(time_stamp) + '_{}'.format(LTH_args.dataset) + '.svg'
     plt.savefig(PATH)
     plt.show()
+    return PATH
 
 
 def activation_function_plots(model):
@@ -171,6 +173,7 @@ def plot_activation_func_overview(model, num_rat, inits):
     PATH = './Plots/activation_functions/{}'.format(time_stamp) + '_{}'.format(LTH_args.dataset) + '_all.svg'
     plt.savefig(PATH)
     plt.show()
+    return PATH
 
 
 def resnet20_plot(layers, rat_groups, alphas, inits):
