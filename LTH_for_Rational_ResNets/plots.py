@@ -2,9 +2,10 @@ import inspect
 import os
 import sys
 from datetime import datetime
+from typing import List
 
-import matplotlib.pyplot as plt
 import matplotlib
+import matplotlib.pyplot as plt
 import numpy as np
 import torch
 from rational.torch import Rational
@@ -14,8 +15,6 @@ import argparser
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
-from LTH_for_Rational_ResNets.LTH_Models import mix_experts_resnet_cifar10 as sel
-from LTH_for_Rational_ResNets.LTH_Models.mix_experts_resnet_cifar10 import RationalBasicBlock
 
 plt.style.use(["science", "grid"])
 matplotlib.rcParams.update({
@@ -26,9 +25,9 @@ matplotlib.rcParams.update({
 LTH_args = argparser.get_arguments()
 
 
-def make_LTH_test_acc_plot(test_accuracies: list, sparsity: list):
+def final_plot_LTH(test_accuracies: list, sparsity: list, num_pruning_epochs: int):
     """
-    Plot test accuracy for each pruning epoch.
+    Plot test accuracy for each pruning epoch and a small legend.
 
     Parameters
     ----------
@@ -36,6 +35,12 @@ def make_LTH_test_acc_plot(test_accuracies: list, sparsity: list):
                      A list containing the test accuracies after every pruning epoch.
     sparsity: list
               A list containing the different sparsity for each pruning epoch.
+    num_pruning_epochs: int
+                        Number of pruning epochs.
+
+    Returns
+    -------
+    PATH:   The path to the saved plot.
     """
 
     plt.figure(figsize=(10, 6))
@@ -45,25 +50,39 @@ def make_LTH_test_acc_plot(test_accuracies: list, sparsity: list):
     plt.ylabel('Test Accuracy in Percent')
     plt.subplots_adjust(bottom=0.3)
     plt.legend(['Test Accuracy'], bbox_to_anchor=(0.5, -0.2), loc='upper center', ncol=1)
-    return plt
 
-
-def final_plot_LTH(model, dataset, batch_size, num_pruning_epochs, training_number_of_epochs, learning_rate, pruning_percentage, warmup_iterations, prune_shortcuts):  # TODO: Use argparser
     props = dict(boxstyle='round', facecolor='grey', alpha=0.5)
-    text = 'model: {}, '.format(model) + 'dataset: {}, '.format(dataset) + '\n' + 'batch size: {}, '.format(batch_size) + '{} iterative pruning epochs, '.format(num_pruning_epochs) \
-           + '\n' + '{} training epochs per pruning epoch, '.format(training_number_of_epochs) + '\n' + \
-           'learning rate: {}, '.format(learning_rate) + '{}% pruning per epoch, '.format(pruning_percentage) + '\n' + '{} warm-up iterations, '.format(warmup_iterations) + 'shortcuts pruned: {}'.format(prune_shortcuts)
+    text = 'model: {}, '.format(LTH_args.model) + 'dataset: {}, '.format(LTH_args.dataset) + '\n' + 'batch size: {}, '.format(LTH_args.batch_size) + '{} iterative pruning epochs, '.format(num_pruning_epochs) \
+           + '\n' + '{} training epochs per pruning epoch, '.format(LTH_args.training_number_of_epochs) + '\n' + \
+           'learning rate: {}, '.format(LTH_args.learning_rate) + '{}% pruning per epoch, '.format(LTH_args.pruning_percentage) + '\n' + '{} warm-up iterations, '.format(LTH_args.warmup_iterations) + \
+           'shortcuts pruned: {}'.format(LTH_args.prune_shortcuts)
 
     plt.figtext(0.525, 0.5, text, bbox=props, size=9)
 
     time_stamp = datetime.now()
-    PATH = './Plots/{}'.format(model) + '/' + '{}'.format(time_stamp) + '_' + '{}'.format(model) + '_' + '{}'.format(dataset) + '.svg'
+    PATH = './Plots/{}'.format(LTH_args.model) + '/' + '{}'.format(time_stamp) + '_' + '{}'.format(LTH_args.model) + '_' + '{}'.format(LTH_args.dataset) + '.svg'
     plt.savefig(PATH)
     plt.show()
     return PATH
 
 
-def plot_all(test_accs, sparsities, num_epoch_list):
+def plot_all(test_accs, sparsities, num_epoch_list: list):
+    """
+    Plot results of all three experiments in one graph for further comparison.
+
+    Parameters
+    ----------
+    test_accs:
+                A list of lists with all test accuracies for all three models
+    sparsities:
+                A list of lists with all sparsities for all three models
+    num_epoch_list: list
+                    A list with the pruning epoch each experiment terminated at.
+
+    Returns
+    -------
+    PATH:   The path to the saved plot.
+    """
     plt.figure(figsize=(10, 6))
     plt.subplot(121)
     ax = plt.gca()
@@ -132,6 +151,21 @@ def activation_function_plots(model):
 
 
 def calc_mixture_plot(alphas, rationals):
+    """
+    Calculate the mixture of experts.
+
+    Parameters
+    ----------
+    alphas:     torch.nn.parameter.Parameter
+                The weights of the different experts for the weighted sum of experts.
+    rationals:  List[Rational]
+                The expert group.
+
+    Returns
+    -------
+    torch.Tensor
+    torch.Tensor
+    """
     shape = rationals[0].show(display=False)['line']['y'].shape[0]
     all_x = torch.zeros(len(alphas), shape)
 
@@ -141,7 +175,22 @@ def calc_mixture_plot(alphas, rationals):
     return all_x.sum(dim=0), rationals[0].show(display=False)['line']['x']
 
 
-def plot_activation_func_overview(model, num_rat, inits):
+def plot_activation_func_overview(model, num_rat: int, inits: List[str]):
+    """
+    Plot a graph with all Rational Activation Functions of the mixture of experts models.
+
+    Parameters
+    ----------
+    model
+    num_rat:    int
+                Number of experts per expert group
+    inits:  List[str]
+            The Rational Activation Functions' initializations.
+
+    Returns
+    -------
+    PATH:   The path to the saved plot.
+    """
     print(num_rat)
     c = 0
     tmp = []
@@ -176,7 +225,20 @@ def plot_activation_func_overview(model, num_rat, inits):
     return PATH
 
 
-def resnet20_plot(layers, rat_groups, alphas, inits):
+def resnet20_plot(layers: List[int], rat_groups, alphas, inits: List[str]):
+    """
+    Method to plot activation function overview for CIFAR10 ResNet.
+
+    Parameters
+    ----------
+    layers:     List[int]
+    rat_groups:
+                All expert groups grouped together.
+    alphas:
+            All alphas (weights for weighted sum) grouped together.
+    inits:     List[str]
+               The Rational Activation Functions' initializations.
+    """
     plt.figure(figsize=(layers[0] * 8, len(layers) * 8))
     model_1 = False
 
@@ -246,6 +308,19 @@ def resnet20_plot(layers, rat_groups, alphas, inits):
 
 
 def resnet18_plot(layers, rat_groups, alphas, inits):
+    """
+    Method to plot activation function overview for ImageNet ResNet.
+
+    Parameters
+    ----------
+    layers:     List[int]
+    rat_groups:
+                All expert groups grouped together.
+    alphas:
+            All alphas (weights for weighted sum) grouped together.
+    inits:     List[str]
+               The Rational Activation Functions' initializations.
+    """
     plt.figure(figsize=(layers[0] * 8, len(layers) * 8))
 
     plt_counter = 0

@@ -16,12 +16,18 @@ matplotlib.rcParams.update({
 resnet_args = argparser.get_arguments()
 
 
-def accuracy_plot(acc_x_vals: list, train_acc_y_vals: list, val_acc_y_vals: list, test_acc_y_vals: list):  # TODO: reduce size
+def final_plot(cm, epoch_time, best_test_acc: float, acc_x_vals: list, train_acc_y_vals: list, val_acc_y_vals: list, test_acc_y_vals: list, num_rationals):
     """
-    Plot the train-, validation- and test accuracy.
+    Plot the train-, validation- and test accuracy and a small legend.
 
     Parameters
     ----------
+    cm: Tensor
+        Tensor with confusion matrix.
+    epoch_time:
+                Average time per epoch
+    test_acc: float
+              Best test accuracy.
     acc_x_vals: list
                 A list with the x values for the plot.
     train_acc_y_vals: list
@@ -30,6 +36,13 @@ def accuracy_plot(acc_x_vals: list, train_acc_y_vals: list, val_acc_y_vals: list
                     A list with all validation accuracies.
     test_acc_y_vals: list
                      A list with all test accuracies.
+
+    num_rationals: int
+                   Number of Rational Activation Functions per BasicBlock
+
+    Returns
+    -------
+    PATH:   The path to the saved plot.
     """
     plt.figure(figsize=(20, 5))
     plt.subplot(131)
@@ -40,42 +53,22 @@ def accuracy_plot(acc_x_vals: list, train_acc_y_vals: list, val_acc_y_vals: list
     plt.ylabel('Accuracy')
     plt.legend(['Train Accuracy', 'Validation Accuracy', 'Test Accuracy'])
 
-
-def final_plot(cm, epoch_time, test_acc: float, num_epochs: int, learning_rate: float, num_rationals: int, dataset: str, model: str, batch_size: int):  # TODO: Update Legend
-    """
-    Plot the confusion matrix and add the description box.
-
-    Parameters
-    ----------
-    cm: Tensor
-        Tensor with confusion matrix.
-    epoch_time:
-                Average time per epoch
-    test_acc: float
-              Best test accuracy.
-    num_epochs: int
-                Number of training epochs.
-    learning_rate: float
-    num_rationals: int
-                   Number of Rational Activation Functions per BasicBlock
-    dataset: str
-    model: str
-    batch_size: int
-    """
     plt.subplot(132)
     cm_1 = sns.heatmap(cm, linewidths=1, cmap='plasma')
     props = dict(boxstyle='round', facecolor='grey', alpha=0.5)
-    text = '{} training epochs, '.format(num_epochs) + \
-           'batch size: {}, '.format(batch_size) + 'lr: {}, '.format(learning_rate) + '\n' + \
+    text = '{} training epochs, '.format(resnet_args.training_number_of_epochs) + \
+           'batch size: {}, '.format(resnet_args.batch_size) + 'lr: {}, '.format(resnet_args.learning_rate) + '\n' + \
            '{} rationals per BasicBlock, '.format(num_rationals) + '\n' + \
            'avg time per epoch: {:.0f}m {:.0f}s, '.format(epoch_time // 60, epoch_time % 60) + \
-           'test accuracy: {:4f}, '.format(test_acc) + 'dataset: {}'.format(dataset)
+           'test accuracy: {:4f}, '.format(best_test_acc) + 'dataset: {}'.format(resnet_args.dataset)
     plt.text(15, 5, text, size=10, bbox=props)
 
     time_stamp = datetime.now()
-    PATH = './Plots/{}'.format(model) + '/' + '{}'.format(time_stamp) + '_' + '{}'.format(model) + '_' + '{}'.format(dataset) + '.svg'
+    PATH = './Plots/{}'.format(resnet_args.model) + '/' + '{}'.format(time_stamp) + '_' + '{}'.format(resnet_args.model) + '_' + '{}'.format(resnet_args.dataset) + '.svg'
     plt.savefig(PATH)
     plt.show()
+
+    return PATH
 
 
 def activation_function_plots(model):
@@ -97,7 +90,7 @@ def activation_function_plots(model):
     plt.show()
 
 
-def plot_overview_all(training_accs, val_accs, test_accs, x_vals, best_test_accs, avg_epoch):  # TODO: double check order
+def plot_overview_all(training_accs, val_accs, test_accs, x_vals, best_test_accs, avg_epoch):  # TODO: allow diff. plot legend names + Doc
     plot_labels = ['ReLU ResNet20', 'univ. rational ResNet20', 'mix. exp. ResNet20']
 
     plt.figure(figsize=(20, 6))
@@ -141,6 +134,21 @@ def plot_overview_all(training_accs, val_accs, test_accs, x_vals, best_test_accs
 
 
 def calc_mixture_plot(alphas, rationals):
+    """
+    Calculate the mixture of experts.
+
+    Parameters
+    ----------
+    alphas:     torch.nn.parameter.Parameter
+                The weights of the different experts for the weighted sum of experts.
+    rationals:  List[Rational]
+                The expert group.
+
+    Returns
+    -------
+    torch.Tensor
+    torch.Tensor
+    """
     shape = rationals[0].show(display=False)['line']['y'].shape[0]
     all_x = torch.zeros(len(alphas), shape)
 
@@ -150,27 +158,22 @@ def calc_mixture_plot(alphas, rationals):
     return all_x.sum(dim=0), rationals[0].show(display=False)['line']['x']
 
 
-def calc_mixture_plot_2(alphas, rationals):
-    all_y = []
-    smallest_shape = 90000
-    j = 0
-    for i in range(len(alphas)):
-        # rationals[i].show()
-        if rationals[i].show(display=False)['line']['y'].shape[0] < smallest_shape:
-            print('HERE')
-            smallest_shape = rationals[i].show(display=False)['line']['y'].shape[0]
-            j = i
-        print(rationals[i].show(display=False)['line']['y'].shape)
-        alpha_x = rationals[i].show(display=False)['line']['y'] * alphas[i].detach().cpu().numpy()
-        all_y.append(alpha_x)
-    all_y_tensor = torch.zeros(len(alphas), smallest_shape)
-
-    for i in range(len(all_y)):
-        all_y_tensor[i] = torch.tensor(all_y[i][:smallest_shape])
-    return all_y_tensor.sum(dim=0), rationals[j].show(display=False)['line']['x']
-
-
 def plot_activation_func_overview(model, num_rat, inits):
+    """
+    Plot a graph with all Rational Activation Functions of the mixture of experts models.
+
+    Parameters
+    ----------
+    model
+    num_rat:    int
+                Number of experts per expert group
+    inits:  List[str]
+            The Rational Activation Functions' initializations.
+
+    Returns
+    -------
+    PATH:   The path to the saved plot.
+    """
     print(num_rat)
     c = 0
     tmp = []
@@ -206,6 +209,19 @@ def plot_activation_func_overview(model, num_rat, inits):
 
 
 def resnet20_plot(layers, rat_groups, alphas, inits):
+    """
+    Method to plot activation function overview for CIFAR10 ResNet.
+
+    Parameters
+    ----------
+    layers:     List[int]
+    rat_groups:
+                All expert groups grouped together.
+    alphas:
+            All alphas (weights for weighted sum) grouped together.
+    inits:     List[str]
+               The Rational Activation Functions' initializations.
+    """
     plt.figure(figsize=(layers[0] * 8, len(layers) * 8))
     model_1 = False
 
@@ -275,6 +291,19 @@ def resnet20_plot(layers, rat_groups, alphas, inits):
 
 
 def resnet18_plot(layers, rat_groups, alphas, inits):
+    """
+    Method to plot activation function overview for ImageNet ResNet.
+
+    Parameters
+    ----------
+    layers:     List[int]
+    rat_groups:
+                All expert groups grouped together.
+    alphas:
+            All alphas (weights for weighted sum) grouped together.
+    inits:     List[str]
+               The Rational Activation Functions' initializations.
+    """
     plt.figure(figsize=(layers[0] * 8, len(layers) * 8))
 
     plt_counter = 0

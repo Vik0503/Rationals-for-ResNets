@@ -132,6 +132,7 @@ def run_all():
 
 
 def run_one():
+    global act_func_PATH
     rational_inits = resnet_args.initialize_rationals  # TODO: catch exceptions
     num_rationals = 0
     if resnet_args.model == 'relu_resnet20':
@@ -214,10 +215,10 @@ def run_one():
                                                                                                                                                           trainset=trainset, trainloader=trainloader,
                                                                                                                                                           testset=testset, valset=valset)
 
-    plot_PATH = plots.final_plot(cm, avg_time, best_test_acc, resnet_args.training_number_of_epochs, resnet_args.learning_rate,
-                     num_rationals, resnet_args.dataset, resnet_args.model, resnet_args.batch_size)
+    plot_PATH = plots.final_plot(cm=cm, epoch_time=avg_time, best_test_acc=best_test_acc, num_rationals=num_rationals, test_acc_y_vals=test_acc_plot_y_vals, train_acc_y_vals=train_acc_plot_y_vals, acc_x_vals=accuracy_plot_x_vals,
+                                 val_acc_y_vals=val_acc_plot_y_vals)
     if resnet_args.model == 'mix_experts_resnet20' or resnet_args.model == 'mix_experts_resnet18':
-        act_func_PATH = plots.plot_activation_func_overview(model, num_rationals / 2, rational_inits)
+        act_func_PATH = plots.plot_activation_func_overview(model, int(num_rationals / 2), rational_inits)
     models = [resnet_args.model]
     csv_PATH = ''
     if resnet_args.save_res_csv:
@@ -225,11 +226,10 @@ def run_one():
     time_stamp = datetime.now()
     saved_model_PATH = './Saved_Models/{}.pth'.format(time_stamp)
     torch.save(model, saved_model_PATH)
-    utils.make_yaml(models, csv=csv_PATH, saved_models=saved_model_PATH, print_log=print_PATH)
+    utils.make_yaml(models, csv=csv_PATH, saved_models=saved_model_PATH, print_log=print_PATH, plot=plot_PATH, act_func_plot=act_func_PATH)
 
 
-
-if resnet_args.run_all_classic:
+if resnet_args.run_all_classic:  # TODO: add other running options
     run_all()
 else:
     run_one()

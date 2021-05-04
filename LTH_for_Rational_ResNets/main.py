@@ -180,7 +180,7 @@ def run_all():
 
 
 def run_one():
-    global model, model_PATH
+    global model, model_PATH, plot_PATH
 
     if LTH_args.model == 'relu_resnet20':
         model = relu_cifar.relu_resnet20()
@@ -282,16 +282,14 @@ def run_one():
                                                    num_warmup_it=LTH_args.warmup_iterations)
         num_epochs = 1
     if LTH_args.stop_criteria is not 'one_shot':
-        plots.make_LTH_test_acc_plot(test_accuracies, sparsities)
-        plots.final_plot_LTH(LTH_args.model, LTH_args.dataset, LTH_args.batch_size, num_epochs,
-                             LTH_args.training_number_of_epochs, LTH_args.learning_rate, LTH_args.pruning_percentage, LTH_args.warmup_iterations, prune_shortcuts)
+        plot_PATH = plots.final_plot_LTH(test_accuracies, sparsities, num_epochs)
 
     PATH = ''
     if LTH_args.save_res_csv:
         PATH = LTH_write_read_csv.make_csv(LTH_args.model, sparsities, test_accuracies)
 
     act_func_plot = plots.plot_activation_func_overview(model, num_rationals, LTH_args.initialize_rationals)
-    LTH_write_read_csv.make_yaml([LTH_args.model], csv=PATH, saved_models=model_PATH, print_log=print_PATH, act_func_plot=act_func_plot)
+    LTH_write_read_csv.make_yaml([LTH_args.model], csv=PATH, saved_models=model_PATH, print_log=print_PATH, act_func_plot=act_func_plot, plot=plot_PATH)
 
 
 if LTH_args.run_all_classic or LTH_args.run_all_two_BB or LTH_args.run_all_two_layers or LTH_args.run_all_one_layer:

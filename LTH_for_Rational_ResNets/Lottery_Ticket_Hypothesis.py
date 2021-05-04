@@ -33,7 +33,7 @@ def checkpoint_save(path, optimizer, epoch: int, save_model, model_mask: Mask, t
                     The sparsity of the model.
     """
     time_stamp = datetime.now()
-    PATH = '{}'.format(path) + '/{}_ep{}s{:.5f}_test{:.5f}.pth'.format(time_stamp, epoch, model_sparsity, test_accuracy)  # TODO: saved models names
+    PATH = '{}'.format(path) + '/{}_ep{}s{:.5f}_test{:.5f}.pth'.format(time_stamp, epoch, model_sparsity, test_accuracy)
     torch.save({
         'epoch': epoch,
         'model_state_dict': save_model.state_dict(),
