@@ -80,7 +80,6 @@ def one_shot_pruning(prune_model, prune_mask: Mask, criterion, trainset, valset,
 
 def iterative_pruning_by_num(prune_model, prune_mask: Mask, epochs: int, criterion, trainset, valset, trainloader, valloader, testset, testloader, pruning_percentage, training_number_of_epochs,
                              lr: float, it_per_epoch: int, num_warmup_it: int):
-    # TODO: update order
     """
     Prune iteratively for a number of epochs. Save checkpoint after every pruning epoch.
 
@@ -93,41 +92,59 @@ def iterative_pruning_by_num(prune_model, prune_mask: Mask, epochs: int, criteri
     epochs: int
             Stopping criterion for the iterative pruning.
     """
+    global last_saved_checkpoint
     time_stamp = datetime.now()
+    path = './Saved_Models/{}'.format(time_stamp)
+    os.makedirs(path)
     sparsity = []
     test_accuracies = []
     initial_state = utils.initial_state(model=prune_model)
-    path = './Saved_Models/{}'.format(time_stamp)
-    os.makedirs(path)
 
-    for epoch in range(epochs):
-        prune_model.mask = Mask.cuda(prune_mask)
-        scheduler, optimizer = utils.get_scheduler_optimizer(lr=lr, it_per_ep=it_per_epoch, model=prune_model, num_warmup_it=num_warmup_it)
-        prune_model, best_val_accuracy, num_iterations = tvt.train(prune_model, criterion, optimizer, scheduler, training_number_of_epochs, trainset, valset, trainloader, valloader)
+    prune_model.mask = Mask.cuda(prune_mask)
 
-        test_accuracy = tvt.test(prune_model, testset, testloader)
-        test_accuracies.append(test_accuracy * 100)
-        sparsity.append(mask_sparsity(prune_mask) * 100)
+    initial_state = utils.initial_state(model=prune_model)
+
+    scheduler, optimizer = utils.get_scheduler_optimizer(lr=lr, it_per_ep=it_per_epoch, model=prune_model, num_warmup_it=num_warmup_it)
+
+    prune_model, best_val_accuracy, num_iterations = tvt.train(prune_model, criterion, optimizer, scheduler, training_number_of_epochs, trainset, valset, trainloader, valloader)
+
+    test_accuracy = tvt.test(prune_model, testset, testloader)
+    test_accuracies.append(test_accuracy * 100)
+    print('Before Pruning')
+    print('+' * 18)
+    print('Model Test Accuracy: ', test_accuracy)
+
+    for epoch in range(1, epochs + 1):
+
+        print('Pruning Epoch {}'.format(epoch))
+        print('+' * 18)
+
         pruned_model, updated_mask = prune(pruning_percentage, prune_model, prune_mask)
+        sparsity.append(mask_sparsity(prune_mask) * 100)
 
         prune_model = pruned_model
         prune_mask = Mask.cuda(updated_mask)
 
-        utils.reinit(prune_model, prune_mask, initial_state)
-
-        last_saved_checkpoint = checkpoint_save(path, optimizer, epoch, pruned_model, updated_mask, test_accuracy, training_number_of_epochs, mask_sparsity(prune_mask) * 100)
-
-        print('Pruning Epoch {}/{}'.format(epoch, epochs - 1))
-        print('+' * 18)
-        print('Model Test Accuracy: ', test_accuracy)
-        print('at {} Training Iterations'.format(num_iterations))
         print('Sparsity of Pruned Mask: ', mask_sparsity(updated_mask))
+
+        last_saved_checkpoint = checkpoint_save(path, optimizer, epoch, prune_model, prune_mask, test_accuracy, training_number_of_epochs, mask_sparsity(prune_mask) * 100)  # save
+
+        utils.reinit(prune_model, prune_mask, initial_state)  # reinit
+
+        scheduler, optimizer = utils.get_scheduler_optimizer(lr=lr, it_per_ep=it_per_epoch, model=prune_model, num_warmup_it=num_warmup_it)
+        prune_model, best_val_accuracy, num_iterations = tvt.train(prune_model, criterion, optimizer, scheduler, training_number_of_epochs, trainset, valset, trainloader, valloader)  # train
+
+        test_accuracy = tvt.test(prune_model, testset, testloader)  # test
+        test_accuracies.append(test_accuracy * 100)
+
+        print('Model Test Accuracy: ', test_accuracy)
 
     return test_accuracies, sparsity, path, last_saved_checkpoint
 
 
 def iterative_pruning_by_test_acc(prune_model, prune_mask: Mask, acc_threshold: float, criterion, trainset, valset, trainloader, valloader, testset, testloader, training_number_of_epochs,
                                   pruning_percentage, lr: float, it_per_epoch: int, num_warmup_it: int):
+    global last_saved_model_path
     time_stamp = datetime.now()
     path = './Saved_Models/{}'.format(time_stamp)
     os.makedirs(path)

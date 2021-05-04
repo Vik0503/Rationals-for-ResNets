@@ -68,7 +68,7 @@ def get_scheduler_optimizer(num_warmup_it: int, lr: float, model, it_per_ep: int
     return lr_scheduler.LambdaLR(optimizer, lr_lambda=lr_lambda), optimizer
 
 
-def make_yaml(models: list, saved_models, print_log, csv=None, act_func_plot=None, plot=None):  # TODO: add Rational Init + plot PATH
+def make_yaml(models: list, saved_models, print_log, csv=None, act_func_plot=None, plot=None):
     resnet_args = argparser.get_arguments()
     time_stamp = datetime.now()
     yaml_data = [{'Date': [time_stamp]}, {'Model(s)': models}, {'Dataset': [resnet_args.dataset]}, {'Batch Size': [resnet_args.batch_size]},

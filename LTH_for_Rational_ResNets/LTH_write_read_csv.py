@@ -224,7 +224,7 @@ def csv_cifar_models(model):
     return tuples, ['original Model', 'ReLU ResNet20', 'univ. rational ResNet20', 'mix. exp. ResNet20']
 
 
-def make_yaml(models: list, saved_models, print_log, table=None, csv=None, act_func_plot=None, plot=None):  # TODO: add Rational Init + One Shot Option + saved models for run all + plot
+def make_yaml(models: list, saved_models, print_log, table=None, csv=None, act_func_plot=None, plot=None):  # TODO: One Shot Option
     LTH_args = argparser.get_arguments()
     time_stamp = datetime.now()
     yaml_data = [{'Date': [time_stamp]}, {'Model(s)': models}, {'Dataset': [LTH_args.dataset]}, {'Batch Size': [LTH_args.batch_size]}, {'Pruning Percentage per Epoch': [LTH_args.pruning_percentage]},
