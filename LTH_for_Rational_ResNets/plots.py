@@ -130,9 +130,11 @@ def activation_function_plots(model):
 
 
 def calc_mixture_plot(alphas, rationals):
-    all_x = torch.zeros(5, 600)
+    shape = rationals[0].show(display=False)['line']['y'].shape[0]
+    all_x = torch.zeros(len(alphas), shape)
+
     for i in range(len(alphas)):
-        alpha_x = rationals[i].show(display=False)['line']['y'] * alphas[i].cpu().detach().numpy()
+        alpha_x = rationals[i].show(display=False)['line']['y'] * alphas[i].detach().cpu().numpy()
         all_x[i] = torch.tensor(alpha_x)
     return all_x.sum(dim=0), rationals[0].show(display=False)['line']['x']
 
@@ -231,6 +233,12 @@ def resnet20_plot(layers, rat_groups, alphas, inits):
                 legend.append('\u03B1_{}: {:0.4f}, init.: {}, deg.: {}'.format(rational, alpha_tmp[rational], inits[rational], tmp[rational].degrees))
 
             plt.legend(legend, bbox_to_anchor=(0.5, -0.4), ncol=1, loc='center')
+            bins = tmp[0].show(display=False)['hist']['bins']
+            freq = tmp[0].show(display=False)['hist']['freq']
+            ax = plt.gca()
+            ax2 = ax.twinx()
+            ax2.set_yticks([])
+            ax2.bar(bins, freq, width=bins[1] - bins[0], color='grey', edgecolor='grey', alpha=0.3)
             plt_counter += 1
 
 
@@ -280,4 +288,10 @@ def resnet18_plot(layers, rat_groups, alphas, inits):
                 legend.append('\u03B1_{}: {:0.4f}, init.: {}, deg.: {}'.format(rational, alpha_tmp[rational], inits[rational], tmp[rational].degrees))
 
             plt.legend(legend, bbox_to_anchor=(0.5, -0.4), ncol=1, loc='center')
+            bins = tmp[0].show(display=False)['hist']['bins']
+            freq = tmp[0].show(display=False)['hist']['freq']
+            ax = plt.gca()
+            ax2 = ax.twinx()
+            ax2.set_yticks([])
+            ax2.bar(bins, freq, width=bins[1] - bins[0], color='grey', edgecolor='grey', alpha=0.3)
             plt_counter += 1

@@ -62,9 +62,11 @@ class RationalBasicBlock(nn.Module):
         self.rational_expert_group_2 = nn.Sequential(*self.expert_group_2)
 
         data_alpha_1 = utils.initialize_alpha(self.num_rationals)
-        self.alpha_1 = torch.nn.parameter.Parameter(data_alpha_1, requires_grad=True)
+        self.alpha_1 = torch.nn.parameter.Parameter(data_alpha_1.softmax(dim=0), requires_grad=True)
         data_alpha_2 = utils.initialize_alpha(self.num_rationals)
-        self.alpha_2 = torch.nn.parameter.Parameter(data_alpha_2, requires_grad=True)
+        self.alpha_2 = torch.nn.parameter.Parameter(data_alpha_2.softmax(dim=0), requires_grad=True)
+
+        self.softmax = torch.nn.Softmax(dim=0)
 
         self.conv_layer_2 = nn.Conv2d(planes_out, planes_out, kernel_size=3, stride=1, padding=1, bias=False)
         self.batch_norm_2 = nn.BatchNorm2d(planes_out)
@@ -157,7 +159,10 @@ class RationalResNet(nn.Module):
         p = torch.randn(1)
         self.pow = torch.nn.parameter.Parameter(p, requires_grad=True)
         data = utils.initialize_alpha(self.num_rationals)
-        self.alpha = torch.nn.parameter.Parameter(data, requires_grad=True)
+        # self.softmax = torch.nn.Softmax(dim=0)
+        self.alpha = torch.nn.parameter.Parameter(data.softmax(dim=0), requires_grad=True)
+
+        # self.soft_alpha = self.softmax(self.alpha)
 
         out_size = 16
         self.layer1 = self.make_layer(block=block, planes_out=16, num_blocks=layers[0], stride=1)
@@ -178,7 +183,7 @@ class RationalResNet(nn.Module):
                 nn.init.constant_(mod.weight, 1)
                 nn.init.constant_(mod.bias, 0)
             elif isinstance(mod, Rational):
-                mod.input_retrieve_mode(max_saves=10)
+                mod.input_retrieve_mode(max_saves=1)
 
     def make_layer(self, block: Type[RationalBasicBlock], planes_out: int, num_blocks: int, stride: int):
         """
@@ -215,6 +220,7 @@ class RationalResNet(nn.Module):
 
     def multi_rational(self, out: Tensor) -> Tensor:
         out_tensor = torch.zeros_like(out)
+        # print(self.soft_alpha)
         for n in range(self.num_rationals):
             rational = self.rational_expert_group[n]
             rational_out = rational(out.clone())
@@ -226,7 +232,6 @@ class RationalResNet(nn.Module):
         self.pow = torch.nn.parameter.Parameter(abs(self.pow), requires_grad=True)
         out_tensor = torch.zeros_like(out)
         # self.alpha = torch.nn.parameter.Parameter(self.alpha.clone() / self.alpha.sum(), requires_grad=True)
-        print(self.alpha)
         for n in range(self.num_rationals):
             rational = self.rational_expert_group[n]
             rational_out = rational(out.clone())

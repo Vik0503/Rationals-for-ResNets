@@ -248,7 +248,7 @@ def resnet20_plot(layers, rat_groups, alphas, inits):
             plt.title('Basic Block 1', loc='left', fontsize=16)
 
         if show:
-            colors = ['C0', 'C1', 'C2', 'C4', 'lightgreen']
+            colors = ['C0', 'C1', 'C2', 'C4', 'C6']
             tmp = rat_groups[plt_counter]
             alpha_tmp = alphas[plt_counter]
             legend = []
@@ -318,4 +318,10 @@ def resnet18_plot(layers, rat_groups, alphas, inits):
                 legend.append('\u03B1_{}: {:0.4f}, init.: {}, deg.: {}'.format(rational, alpha_tmp[rational], inits[rational], tmp[rational].degrees))
 
             plt.legend(legend, bbox_to_anchor=(0.5, -0.4), ncol=1, loc='center')
+            bins = tmp[0].show(display=False)['hist']['bins']
+            freq = tmp[0].show(display=False)['hist']['freq']
+            ax = plt.gca()
+            ax2 = ax.twinx()
+            ax2.set_yticks([])
+            ax2.bar(bins, freq, width=bins[1] - bins[0], color='grey', edgecolor='grey', alpha=0.3)
             plt_counter += 1

@@ -56,7 +56,7 @@ def get_argparser() -> arg.ArgumentParser:
 
 
 def get_arguments():
-    resnet_args = ResNet_arg_parser.parse_args(['--model', 'mix_experts_resnet20', '--training_number_of_epochs', '1'])
+    resnet_args = ResNet_arg_parser.parse_args(['--model', 'mix_experts_resnet20', '--training_number_of_epochs', '5'])
     if resnet_args.arch_for_run_all == 'ImageNet' and resnet_args.run_all_two_BB:
         print('This option is not available for ResNet18.')
         exit()
