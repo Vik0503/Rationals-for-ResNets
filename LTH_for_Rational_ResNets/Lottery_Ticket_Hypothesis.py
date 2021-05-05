@@ -24,7 +24,10 @@ def checkpoint_save(path, optimizer, epoch: int, save_model, model_mask: Mask, t
 
     Parameters
     ----------
+    path: str
+          Path to directory to save checkpoint in.
     epoch: int
+    optimizer
     save_model:
                 Model to be saved.
     model_mask: Mask
@@ -33,6 +36,11 @@ def checkpoint_save(path, optimizer, epoch: int, save_model, model_mask: Mask, t
                      The number of training epochs per pruning epoch.
     model_sparsity: float
                     The sparsity of the model.
+
+    Returns
+    -------
+    PATH:   str
+            Path to the saved checkpoint.
     """
     time_stamp = datetime.now()
     PATH = '{}'.format(path) + '/{}_ep{}s{:.5f}_test{:.5f}.pth'.format(time_stamp, epoch, model_sparsity, test_accuracy)
@@ -49,7 +57,7 @@ def checkpoint_save(path, optimizer, epoch: int, save_model, model_mask: Mask, t
     return PATH
 
 
-def one_shot_pruning(model):  # TODO: it per epoch in utils?
+def one_shot_pruning(model):
     """
     Prune trained model once and reinitialize and test it.
 
@@ -89,11 +97,22 @@ def iterative_pruning_by_num(prune_model):
     ----------
     prune_model:
                  Model that is going to be iteratively pruned.
+
+    Returns
+    -------
+    test_accuracies: List[float]
+                     A list with the test accuracies after each pruning epoch.
+    sparsity: List[float]
+              A list with the sparsity of the mask after each pruning epoch.
+    saved_models_PATH: str
+                       The path to the directory with the current experiments checkpoints.
+    last_saved_checkpoint_PATH: str
+                                The path to the last checkpoint of the current experiment.
     """
     last_saved_checkpoint_PATH = ''
     time_stamp = datetime.now()
-    path = './Saved_Models/{}'.format(time_stamp)
-    os.makedirs(path)
+    saved_models_PATH = './Saved_Models/{}'.format(time_stamp)
+    os.makedirs(saved_models_PATH)
     sparsity = [0]
     test_accuracies = []
 
@@ -124,7 +143,7 @@ def iterative_pruning_by_num(prune_model):
 
         print('Sparsity of Pruned Mask: ', mask_sparsity(mask))
 
-        last_saved_checkpoint_PATH = checkpoint_save(path, optimizer, epoch, model, mask, test_accuracy, LTH_args.training_number_of_epochs, mask_sparsity(mask) * 100)  # save
+        last_saved_checkpoint_PATH = checkpoint_save(saved_models_PATH, optimizer, epoch, model, mask, test_accuracy, LTH_args.training_number_of_epochs, mask_sparsity(mask) * 100)  # save
 
         utils.reinit(model, mask, initial_state)  # reinit
 
@@ -137,10 +156,31 @@ def iterative_pruning_by_num(prune_model):
 
         print('Model Test Accuracy: ', test_accuracy)
 
-    return test_accuracies, sparsity, path, last_saved_checkpoint_PATH
+    return test_accuracies, sparsity, saved_models_PATH, last_saved_checkpoint_PATH
 
 
 def iterative_pruning_by_test_acc(prune_model):
+    """
+    Prune iteratively until the test accuracy is lower than the threshold. Save checkpoint after every pruning epoch.
+
+    Parameters
+    ----------
+    prune_model:
+                 Model that is going to be iteratively pruned.
+
+    Returns
+    -------
+    num_pruning_epochs:     int
+                            The number of iterative pruning epochs.
+    test_accuracies: List[float]
+                     A list with the test accuracies after each pruning epoch.
+    sparsity: List[float]
+              A list with the sparsity of the mask after each pruning epoch.
+    saved_models_PATH: str
+                       The path to the directory with the current experiments checkpoints.
+    last_saved_checkpoint_PATH: str
+                                The path to the last checkpoint of the current experiment.
+    """
     last_saved_model_PATH = ''
     time_stamp = datetime.now()
     saved_models_PATH = './Saved_Models/{}'.format(time_stamp)

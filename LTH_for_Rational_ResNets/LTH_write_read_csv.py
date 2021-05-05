@@ -1,21 +1,36 @@
 import csv
-import os
+from datetime import datetime
+from typing import List
 
-import torch
 import pandas as pd
+import torch
 import yaml
 from IPython.core.display import display
 
-import argparser
-from datetime import datetime
-
 from LTH_for_Rational_ResNets import Mask
+from LTH_for_Rational_ResNets import argparser
 from LTH_for_Rational_ResNets.LTH_Models import relu_resnet_cifar10 as rn20
 
 args = argparser.get_arguments()
 
 
-def make_csv(model, prune_percent: list, test_acc: list):
+def make_csv(model, prune_percent: List[float], test_acc: List[float]):
+    """
+    Save results of LTH experiments as csv files.
+
+    Parameters
+    ----------
+    model
+    prune_percent:  List[float]
+                    A list with the percentage of weights that where pruned.
+    test_acc:   List[float]
+                A list with the test accuracies of all pruning epochs.
+
+    Returns
+    -------
+    PATH:   str
+            The path to the saved csv file.
+    """
     time_stamp = datetime.now()
     PATH = 'CSV/{}'.format(model) + '/{}'.format(time_stamp) + '.csv'
     with open(PATH, 'w', newline='') as csvfile:
@@ -163,7 +178,7 @@ def csv_imagenet_models(model):
     return tuples, ['original Model', 'ReLU ResNet18', 'univ. rational ResNet18', 'mix. exp. ResNet18']
 
 
-def csv_cifar_models(model):
+def csv_cifar_models(model):  # TODO: delete option for BBs
     num_layers = len(model.layers)
     args = argparser.get_arguments()
     prune_shortcuts = args.prune_shortcuts

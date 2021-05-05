@@ -257,15 +257,15 @@ def univ_rational_resnet20(mask: Mask = None, **kwargs: Any) -> RationalResNet:
 
 
 def univ_rational_resnet20_2_BB(mask: Mask = None, **kwargs: Any) -> RationalResNet:
-    """Smaller ResNet for CIFAR10 with only two BasicBlocks in layers 2 and 3."""
-    return _resnet('rational_resnet20_2_BB', RationalBasicBlock, [3, 2, 2], mask=mask, **kwargs)
+    """Smaller ResNet for CIFAR10 with only two BasicBlocks and Rationals as activation function."""
+    return _resnet('rational_resnet20_2_BB', RationalBasicBlock, [2, 2, 2], mask=mask, **kwargs)
 
 
 def univ_rational_resnet20_2_layers(mask: Mask = None, **kwargs: Any) -> RationalResNet:
-    """Smaller ResNet for CIFAR10 with only two layers"""
+    """Smaller ResNet for CIFAR10 with only two layers and Rationals as activation function."""
     return _resnet('rational_resnet20_2_layers', RationalBasicBlock, [3, 3], mask=mask, **kwargs)
 
 
 def univ_rational_resnet20_1_layer(mask: Mask = None, **kwargs: Any) -> RationalResNet:
-    """Smaller ResNet for CIFAR10 with only one layer."""
+    """Smaller ResNet for CIFAR10 with only one layer and Rationals as activation function."""
     return _resnet('rational_resnet20_1_layer', RationalBasicBlock, [3], mask=mask, **kwargs)

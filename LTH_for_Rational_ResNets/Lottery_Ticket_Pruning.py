@@ -1,7 +1,6 @@
 import random
 from typing import List, Dict
 
-import numpy as np
 import torch
 
 from LTH_for_Rational_ResNets import utils

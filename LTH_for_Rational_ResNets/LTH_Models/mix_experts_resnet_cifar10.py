@@ -326,7 +326,7 @@ def mix_exp_resnet20(rational_inits: List[str], num_rationals: int = 4, mask: Ma
 
 def mix_exp_resnet20_2_BB(rational_inits: List[str], num_rationals: int = 4, mask: Mask = None, **kwargs: Any) -> RationalResNet:
     """ResNet for CIFAR10 as mentioned in the paper above"""
-    return _resnet('mix_exp_resnet20_2_BB', RationalBasicBlock, [3, 2, 2], rational_inits=rational_inits, num_rationals=num_rationals, mask=mask, **kwargs)
+    return _resnet('mix_exp_resnet20_2_BB', RationalBasicBlock, [2, 2, 2], rational_inits=rational_inits, num_rationals=num_rationals, mask=mask, **kwargs)
 
 
 def mix_exp_resnet20_2_layers(rational_inits: List[str], num_rationals: int = 4, mask: Mask = None, **kwargs: Any) -> RationalResNet:

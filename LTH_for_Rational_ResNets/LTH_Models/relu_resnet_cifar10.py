@@ -248,8 +248,8 @@ def relu_resnet20(mask: Mask = None, **kwargs: Any) -> ResNet:
 
 
 def relu_resnet20_2_BB(mask: Mask = None, **kwargs: Any) -> ResNet:
-    """Smaller ResNet for CIFAR10 with only two BasicBlocks in layers 2 and 3."""
-    return _resnet('resnet20_2_BB', BasicBlock, [3, 2, 2], mask=mask, **kwargs)
+    """Smaller ResNet for CIFAR10 with only two BasicBlocks."""
+    return _resnet('resnet20_2_BB', BasicBlock, [2, 2, 2], mask=mask, **kwargs)
 
 
 def relu_resnet20_2_layers(mask: Mask = None, **kwargs: Any) -> ResNet:
