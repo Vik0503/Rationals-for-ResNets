@@ -1,17 +1,49 @@
 import time
 
 import torch
+from LTH_for_Rational_ResNets import argparser
+from LTH_for_Rational_ResNets.Datasets import CIFAR10 as cifar10
+from LTH_for_Rational_ResNets.Datasets import SVHN
+
+LTH_args = argparser.get_arguments()
 
 if torch.cuda.is_available():
     device = 'cuda'
-    print(device)
 else:
     device = 'cpu'
 
+if LTH_args.dataset == 'cifar10':
+    trainset = cifar10.get_trainset()
+    valset = cifar10.get_validationset()
+    testset = cifar10.get_testset()
+    trainloader = cifar10.get_trainloader(bs=LTH_args.batch_size)
+    valloader = cifar10.get_valloader(bs=LTH_args.batch_size)
+    testloader = cifar10.get_testloader(bs=LTH_args.batch_size)
+    classes = cifar10.get_classes()
+    num_classes = cifar10.get_num_classes()
+    it_per_ep = cifar10.get_it_per_epoch(bs=LTH_args.batch_size)
 
-def train(model, criterion, optimizer, scheduler, num_epochs, trainset, valset, trainloader, valloader):
+elif LTH_args.dataset == 'SVHN':
+    trainset = SVHN.get_trainset()
+    valset = SVHN.get_validationset()
+    testset = SVHN.get_testset()
+    trainloader = SVHN.get_trainloader(bs=LTH_args.batch_size)
+    valloader = SVHN.get_valloader(bs=LTH_args.batch_size)
+    testloader = SVHN.get_testloader(bs=LTH_args.batch_size)
+    classes = SVHN.get_classes()
+    num_classes = SVHN.get_num_classes()
+    it_per_ep = SVHN.get_it_per_epoch(bs=LTH_args.batch_size)
+
+criterion = torch.nn.CrossEntropyLoss()
+
+
+def train(model, optimizer, scheduler):
     """Train and validate a model"""
+    epoch_loss = 0
+    epoch_acc = 0
     step = 0
+    best_acc = 0
+    num_epochs = LTH_args.training_number_of_epochs
     for epoch in range(num_epochs):
         print('Training Epoch {}/{}'.format(epoch, num_epochs - 1))
         print('*' * 20)
@@ -65,10 +97,10 @@ def train(model, criterion, optimizer, scheduler, num_epochs, trainset, valset, 
 
             print('{} Loss: {:.4f} Acc: {:.4f}'.format(phase, epoch_loss, epoch_acc))
         print('Epoch finished in {:.0f}m {:.0f}s'.format(time_elapsed_epoch // 60, time_elapsed_epoch % 60))
-    return model, best_acc, step
+    return best_acc
 
 
-def train_til_val_acc(model, criterion, optimizer, scheduler, trainset, valset, trainloader, valloader):
+def train_til_val_acc(model, criterion, optimizer, scheduler):
     """Train a model until it reaches a certain validation accuracy. WARNING: might lead to endless loop"""
     validation_accuracy = 0
     number_epochs = 0
@@ -121,7 +153,7 @@ def train_til_val_acc(model, criterion, optimizer, scheduler, trainset, valset, 
     return model, validation_accuracy, number_epochs
 
 
-def test(model, testset, testloader):
+def test(model):
     """Test a model on a given test set."""
     corrects = 0
     model = model.eval()
@@ -139,5 +171,3 @@ def test(model, testset, testloader):
 
     test_accuracy = corrects.double() / len(testset)
     return test_accuracy.cpu().numpy()
-
-

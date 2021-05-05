@@ -5,7 +5,7 @@ import numpy as np
 import torch
 
 from LTH_for_Rational_ResNets import utils
-from LTH_for_Rational_ResNets.Mask import Mask, make_new_mask, get_number_of_unpruned_weights, get_number_of_weights
+from LTH_for_Rational_ResNets.Mask import Mask, make_new_mask, get_number_of_unpruned_weights
 
 
 def make_pruning_global(mask) -> Mask:
@@ -26,33 +26,6 @@ def make_pruning_global(mask) -> Mask:
     mask_new = tensor_to_dict(weights_tensor, mask)
 
     return Mask(mask_new)
-
-
-def prune_layerwise(pruning_frac: float, model_prune, mask: Mask = None):  # needed???
-    """
-    Prune every layer with the same percentage.
-
-    Parameters
-    ----------
-    pruning_frac: float
-                  Fracture of the model's weights that will be pruned.
-    model_prune:
-                 Model whose weights will be pruned.
-    mask: Mask
-
-    Returns
-    -------
-    model_prune:
-                 Model with pruned weights.
-    mask: Mask
-    """
-    for name, param in model_prune.prunable_layer_dict():
-        data = param.data.cpu().numpy()[mask[name].cpu().numpy() > 0.5]
-        threshold = np.percentile(np.abs(data), pruning_frac)
-        mask[name][torch.abs(param.data) < threshold] = 0
-        model_prune.apply_mask(mask)
-
-    return model_prune, mask
 
 
 def dict_to_list(dictionary) -> List:
@@ -110,7 +83,6 @@ def tensor_to_dict(tensor: torch.Tensor, ref_dict: Dict[str, torch.Tensor]) -> D
 
 def get_unpruned_weights(model_weights, mask: Mask):
     unpruned_weight_item = torch.cat([values[mask[key] == 1] for key, values in model_weights.items()])
-    print(unpruned_weight_item.shape)
     return unpruned_weight_item
 
 
@@ -129,6 +101,7 @@ def prune(pruning_frac: float, model, mask: Mask):
     print('number of weights to prune: ', num_prune_weights.item())
     sorted_weights, _ = torch.sort(torch.abs(weights_unpruned))
     upper_prune_limit = sorted_weights[int(num_prune_weights.item())]
-    updated_mask = make_new_mask(upper_limit=upper_prune_limit, mask=mask, weights=model_weights)
-    model.apply_mask(updated_mask)
-    return model, updated_mask
+    mask = make_new_mask(upper_limit=upper_prune_limit, mask=mask, weights=model_weights)
+    mask = Mask.cuda(mask)
+    model.apply_mask(mask)
+    model.mask = mask

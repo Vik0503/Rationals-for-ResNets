@@ -5,9 +5,17 @@ from torch import nn, optim
 from torch.optim import lr_scheduler
 
 from LTH_for_Rational_ResNets import argparser
+from LTH_for_Rational_ResNets.Datasets import CIFAR10 as cifar10
+from LTH_for_Rational_ResNets.Datasets import SVHN
 
-args = argparser.get_arguments()
-prune_shortcuts = args.prune_shortcuts
+LTH_args = argparser.get_arguments()
+prune_shortcuts = LTH_args.prune_shortcuts
+
+if LTH_args.dataset == 'cifar10':
+    it_per_ep = cifar10.get_it_per_epoch(bs=LTH_args.batch_size)
+
+elif LTH_args.dataset == 'SVHN':
+    it_per_ep = SVHN.get_it_per_epoch(bs=LTH_args.batch_size)
 
 
 def reinit(model, mask, initial_state_model):
@@ -79,36 +87,30 @@ def initialize_alpha(b: int = 4) -> torch.Tensor:
     return alpha
 
 
-def get_scheduler_optimizer(num_warmup_it: int, lr: float, model, it_per_ep: int):
+def get_scheduler_optimizer(model):
     """
     Return scheduler with custom milestones and optimizer
 
     Parameters
     ----------
-    num_warmup_it: int
-                   The number of warmup iterations.
-    lr: float
-        The learning rate.
     model
-    it_per_ep: int
-               The number of iterations per epoch
 
     Returns
     -------
     torch.optim.lr_scheduler.LambdaLR
     optimizer: torch.optim.SGD
     """
-    optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9, weight_decay=0.0001)
-    milestones = args.milestones
+    optimizer = optim.SGD(model.parameters(), lr=LTH_args.learning_rate, momentum=0.9, weight_decay=0.0001)
+    milestones = LTH_args.milestones
     milestones = list(map(int, milestones))
     milestones.sort()
     print(milestones)
 
     def lr_lambda(it):
-        if it < num_warmup_it:
+        if it < LTH_args.warmup_iterations:
             if it % 430 == 0:
                 print('Warmup')
-            return min(1.0, it / num_warmup_it)
+            return min(1.0, it / LTH_args.warmup_iterations)
         else:
             for m in range(len(milestones)):
                 if it < milestones[m] * it_per_ep:

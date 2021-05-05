@@ -10,7 +10,7 @@ LTH_arg_parser.add_argument('-m', '--model', default='univ_rational_resnet20_cif
                                                                                                           'relu_resnet18', 'relu_resnet18_2_layers', 'relu_resnet18_1_layer',
                                                                                                           'mix_experts_resnet18', 'mix_experts_resnet18_2_layers', 'mix_experts_resnet18_1_layer',
                                                                                                           'select_1_expert_group_rational_resnet20'])
-LTH_arg_parser.add_argument('-ds', '--dataset', default='cifar10', type=str, choices=['cifar10', 'SVHN', 'ImageNet'])
+LTH_arg_parser.add_argument('-ds', '--dataset', default='SVHN', type=str, choices=['cifar10', 'SVHN', 'ImageNet'])
 LTH_arg_parser.add_argument('-wi', '--warmup_iterations', default=0, type=int)
 LTH_arg_parser.add_argument('-tnep', '--training_number_of_epochs', default=2, type=int)
 LTH_arg_parser.add_argument('-pp', '--pruning_percentage', default=20.0, type=float)
@@ -37,8 +37,7 @@ LTH_arg_parser.add_argument('--prune_shortcuts', default=False, action='store_tr
 LTH_arg_parser.add_argument('--save_res_csv', default=False, action='store_true', help='Flag to save the results of the experiment as csv')
 LTH_arg_parser.add_argument('-seed', '--data_seeds', default=42, type=int)
 LTH_arg_parser.add_argument('--arch_for_run_all', default='CIFAR10', choices=['CIFAR10', 'ImageNet'])
-LTH_arg_parser.add_argument('--milestones',
-                            type=str, nargs='+', default=[10, 15, 20],
+LTH_arg_parser.add_argument('--milestones', type=str, nargs='+', default=[10, 15, 20],
                             help='Examples: --milestones 20 30, -milestones 5')
 
 
@@ -64,9 +63,11 @@ def get_arguments():
     Return parsed arguments.
     """
 
-    LTH_args = LTH_arg_parser.parse_args(['--model', 'mix_experts_resnet18', '--dataset', 'SVHN', '--warmup_iterations', '1',
+    """['--model', 'mix_experts_resnet18', '--dataset', 'SVHN', '--warmup_iterations', '1',
                                           '--iterative_pruning_epochs', '1', '--training_number_of_epochs', '5',
-                                          '--stop_criteria', 'num_prune_epochs', '--milestones', '2', '3'])
+                                          '--stop_criteria', 'num_prune_epochs', '--milestones', '2', '3']"""
+
+    LTH_args = LTH_arg_parser.parse_args()
     if LTH_args.arch_for_run_all == 'ImageNet' and LTH_args.run_all_two_BB:
         print('This option is not available for ResNet18.')
         exit()
