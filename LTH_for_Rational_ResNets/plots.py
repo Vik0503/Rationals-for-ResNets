@@ -211,7 +211,7 @@ def plot_activation_func_overview(model, num_rat: int, inits: List[str]):
 
     layers = model.layers
 
-    if LTH_args.model == 'mix_experts_resnet20':
+    if 'mix_experts_resnet20' in LTH_args.model:
         resnet20_plot(layers, rat_groups, alphas, inits)
     else:
         resnet18_plot(layers, rat_groups, alphas, inits)

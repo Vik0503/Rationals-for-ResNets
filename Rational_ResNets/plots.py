@@ -194,7 +194,7 @@ def plot_activation_func_overview(model, num_rat, inits):
 
     layers = model.layers
 
-    if resnet_args.model == 'mix_experts_resnet20':
+    if 'mix_experts_resnet20' in resnet_args.model:
         resnet20_plot(layers, rat_groups, alphas, inits)
     else:
         resnet18_plot(layers, rat_groups, alphas, inits)
