@@ -25,7 +25,6 @@ from LTH_for_Rational_ResNets.LTH_Models import univ_rational_resnet_imagenet as
 from LTH_for_Rational_ResNets.LTH_Models import relu_resnet_imagenet as relu_imagenet, relu_resnet_cifar10 as relu_cifar
 from LTH_for_Rational_ResNets.LTH_Models import mix_experts_resnet_cifar10 as mix_exp_cifar, mix_experts_resnet_imagenet as mix_exp_imagenet
 from LTH_for_Rational_ResNets.LTH_Models import select_1_expert_group_rational_resnet as sel1exp
-from LTH_for_Rational_ResNets.Mask import make_initial_mask
 from LTH_for_Rational_ResNets import LTH_write_read_csv
 
 time_stamp = datetime.now()
@@ -105,15 +104,14 @@ def run_all():
         model = model.to(device)
 
         if LTH_args.stop_criteria is 'test_acc':
-            num_epochs, test_accuracies, sparsities, model_PATH, last_checkpoint = Lottery_Ticket_Hypothesis.iterative_pruning_by_test_acc(prune_model=model, it_per_epoch=it_per_ep)
+            num_epochs, test_accuracies, sparsities, model_PATH, last_checkpoint = Lottery_Ticket_Hypothesis.iterative_pruning_by_test_acc(prune_model=model)
 
         elif LTH_args.stop_criteria is 'num_prune_epochs':
-            test_accuracies, sparsities, model_PATH, last_checkpoint = Lottery_Ticket_Hypothesis.iterative_pruning_by_num(prune_model=model, it_per_epoch=it_per_ep)
+            test_accuracies, sparsities, model_PATH, last_checkpoint = Lottery_Ticket_Hypothesis.iterative_pruning_by_num(prune_model=model)
             num_epochs = LTH_args.iterative_pruning_epochs
 
         elif LTH_args.stop_criteria is 'one_shot':
-            Lottery_Ticket_Hypothesis.one_shot_pruning(model,
-                                                       it_per_epoch=it_per_ep)
+            Lottery_Ticket_Hypothesis.one_shot_pruning(model)
 
         if LTH_args.save_res_csv:
             csv_PATH = LTH_write_read_csv.make_csv(model_names[m], sparsities, test_accuracies)
@@ -194,15 +192,14 @@ def run_one():  # TODO: Model name str for plots + yaml
     sparsities = []
 
     if LTH_args.stop_criteria is 'test_acc':
-        num_epochs, test_accuracies, sparsities, model_PATH, last_checkpoint = Lottery_Ticket_Hypothesis.iterative_pruning_by_test_acc(prune_model=model, it_per_epoch=it_per_ep)
+        num_epochs, test_accuracies, sparsities, model_PATH, last_checkpoint = Lottery_Ticket_Hypothesis.iterative_pruning_by_test_acc(prune_model=model)
 
     elif LTH_args.stop_criteria is 'num_prune_epochs':
-        test_accuracies, sparsities, model_PATH, last_checkpoint = Lottery_Ticket_Hypothesis.iterative_pruning_by_num(prune_model=model, it_per_epoch=it_per_ep)
+        test_accuracies, sparsities, model_PATH, last_checkpoint = Lottery_Ticket_Hypothesis.iterative_pruning_by_num(prune_model=model)
         num_epochs = LTH_args.iterative_pruning_epochs
 
     elif LTH_args.stop_criteria is 'one_shot':
-        Lottery_Ticket_Hypothesis.one_shot_pruning(model,
-                                                   it_per_epoch=it_per_ep)
+        Lottery_Ticket_Hypothesis.one_shot_pruning(model)
         num_epochs = 1
     if LTH_args.stop_criteria is not 'one_shot':
         plot_PATH = plots.final_plot_LTH(test_accuracies, sparsities, num_epochs)
