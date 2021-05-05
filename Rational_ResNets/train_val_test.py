@@ -5,6 +5,8 @@ import time
 
 import torch
 
+from Rational_ResNets.ResNet_Datasets import CIFAR10, SVHN
+
 torch.cuda.manual_seed_all(42)
 
 import numpy as np
@@ -12,7 +14,6 @@ np.random.seed(42)
 
 from sklearn.metrics import confusion_matrix
 
-from Rational_ResNets import plots
 import argparser
 
 if torch.cuda.is_available():
@@ -23,7 +24,23 @@ else:
 resnet_args = argparser.get_arguments()
 
 
-def train_val_test_model(model, criterion, optimizer, scheduler, num_epochs, trainloader, valloader, testloader, trainset, valset, testset):
+if resnet_args.dataset == 'cifar10':
+    trainset, trainloader, _ = CIFAR10.get_train_data(aug=resnet_args.augment_data, bs=resnet_args.batch_size)
+    valset, valloader = CIFAR10.get_validation_data(aug=resnet_args.augment_data, bs=resnet_args.batch_size)
+    testset, testloader = CIFAR10.get_test_data(aug=resnet_args.augment_data, bs=resnet_args.batch_size)
+    classes = CIFAR10.get_classes()
+    num_classes = CIFAR10.get_num_classes()
+
+elif resnet_args.dataset == 'SVHN':
+    trainset, trainloader, _ = SVHN.get_train_data(aug=resnet_args.augment_data, bs=resnet_args.batch_size)
+    valset, valloader = SVHN.get_validation_data(aug=resnet_args.augment_data, bs=resnet_args.batch_size)
+    testset, testloader = SVHN.get_test_data(aug=resnet_args.augment_data, bs=resnet_args.batch_size)
+    classes = SVHN.get_classes()
+    num_classes = SVHN.get_num_classes()
+
+
+def train_val_test_model(model, optimizer, scheduler):
+    criterion = nn.CrossEntropyLoss()
     best_model = copy.deepcopy(model.state_dict())
     since = time.time()
     avg_epoch_time = []
@@ -35,8 +52,8 @@ def train_val_test_model(model, criterion, optimizer, scheduler, num_epochs, tra
     val_acc_plot_y_vals = []
     test_acc_plot_y_vals = []
     step = 0
-    for epoch in range(num_epochs):
-        print('Epoch {}/{}'.format(epoch, num_epochs - 1))
+    for epoch in range(resnet_args.training_number_of_epochs):
+        print('Epoch {}/{}'.format(epoch, resnet_args.training_number_of_epochs - 1))
         print('*' * 10)
         since_epoch = time.time()
 
@@ -119,8 +136,6 @@ def train_val_test_model(model, criterion, optimizer, scheduler, num_epochs, tra
         print('Epoch finished in {:.0f}m {:.0f}s'.format(time_elapsed_epoch // 60, time_elapsed_epoch % 60))
 
     time_elapsed_epoch = average_epoch_time(avg_epoch_time)
-
-    plots.accuracy_plot(acc_x_vals=accuracy_plot_x_vals, train_acc_y_vals=train_acc_plot_y_vals, val_acc_y_vals=val_acc_plot_y_vals, test_acc_y_vals=test_acc_plot_y_vals)
 
     time_elapsed = time.time() - since
     print('Training complete in {:.0f}m {:.0f}s'.format(

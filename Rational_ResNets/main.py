@@ -8,7 +8,6 @@ sys.path.insert(0, parent_dir)
 
 import torch
 from Rational_ResNets import argparser
-from rational.torch import Rational
 
 resnet_args = argparser.get_arguments()
 torch.cuda.manual_seed_all(resnet_args.data_seeds)
@@ -31,12 +30,6 @@ time_stamp = datetime.now()
 print_PATH = './Print_Logs/{}.txt'.format(time_stamp)
 sys.stdout = open(print_PATH, 'wt')
 
-global trainset
-global valset
-global testset
-global trainloader
-global valloader
-global testloader
 global classes
 global num_classes
 global it_per_ep
@@ -47,16 +40,12 @@ else:
     device = 'cpu'
 
 if resnet_args.dataset == 'cifar10':
-    trainset, trainloader, it_per_ep = CIFAR10.get_train_data(aug=resnet_args.augment_data, bs=resnet_args.batch_size)
-    valset, valloader = CIFAR10.get_validation_data(aug=resnet_args.augment_data, bs=resnet_args.batch_size)
-    testset, testloader = CIFAR10.get_test_data(aug=resnet_args.augment_data, bs=resnet_args.batch_size)
+    _, _, it_per_ep = CIFAR10.get_train_data(aug=resnet_args.augment_data, bs=resnet_args.batch_size)
     classes = CIFAR10.get_classes()
     num_classes = CIFAR10.get_num_classes()
 
 elif resnet_args.dataset == 'SVHN':
-    trainset, trainloader, it_per_ep = SVHN.get_train_data(aug=resnet_args.augment_data, bs=resnet_args.batch_size)
-    valset, valloader = SVHN.get_validation_data(aug=resnet_args.augment_data, bs=resnet_args.batch_size)
-    testset, testloader = SVHN.get_test_data(aug=resnet_args.augment_data, bs=resnet_args.batch_size)
+    _, _, it_per_ep = SVHN.get_train_data(aug=resnet_args.augment_data, bs=resnet_args.batch_size)
     classes = SVHN.get_classes()
     num_classes = SVHN.get_num_classes()
 
@@ -103,14 +92,9 @@ def run_all():
         num_ftrs = model.fc.in_features
         model.fc = nn.Linear(num_ftrs, num_classes)
         model = model.to(device)
-        criterion = nn.CrossEntropyLoss()
 
-        scheduler, optimizer = utils.get_scheduler_optimizer(resnet_args.warmup_iterations, resnet_args.learning_rate, model, it_per_ep)
-        model, cm, time_elapsed_epoch, best_acc, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals, accuracy_plot_x_vals = tvt.train_val_test_model(model, criterion, optimizer, scheduler,
-                                                                                                                                                                   num_epochs=resnet_args.training_number_of_epochs,
-                                                                                                                                                                   testloader=testloader, valloader=valloader,
-                                                                                                                                                                   trainset=trainset, trainloader=trainloader,
-                                                                                                                                                                   testset=testset, valset=valset)
+        scheduler, optimizer = utils.get_scheduler_optimizer(model, it_per_ep)
+        model, cm, time_elapsed_epoch, best_acc, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals, accuracy_plot_x_vals = tvt.train_val_test_model(model, optimizer, scheduler)
 
         if resnet_args.save_res_csv:
             PATH = utils.make_csv(model_names[m], accuracy_plot_x_vals, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals)
@@ -132,7 +116,7 @@ def run_all():
 
 
 def run_one():
-    global act_func_PATH
+    act_func_PATH = ''
     rational_inits = resnet_args.initialize_rationals  # TODO: catch exceptions
     num_rationals = 0
     if resnet_args.model == 'relu_resnet20':
@@ -206,14 +190,8 @@ def run_one():
 
     model = model.to(device)
 
-    criterion = nn.CrossEntropyLoss()
-
-    scheduler, optimizer = utils.get_scheduler_optimizer(resnet_args.warmup_iterations, resnet_args.learning_rate, model, it_per_ep)
-    model, cm, avg_time, best_test_acc, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals, accuracy_plot_x_vals = tvt.train_val_test_model(model, criterion, optimizer=optimizer, scheduler=scheduler,
-                                                                                                                                                          num_epochs=resnet_args.training_number_of_epochs,
-                                                                                                                                                          testloader=testloader, valloader=valloader,
-                                                                                                                                                          trainset=trainset, trainloader=trainloader,
-                                                                                                                                                          testset=testset, valset=valset)
+    scheduler, optimizer = utils.get_scheduler_optimizer(model, it_per_ep)
+    model, cm, avg_time, best_test_acc, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals, accuracy_plot_x_vals = tvt.train_val_test_model(model, optimizer=optimizer, scheduler=scheduler)
 
     plot_PATH = plots.final_plot(cm=cm, epoch_time=avg_time, best_test_acc=best_test_acc, num_rationals=num_rationals, test_acc_y_vals=test_acc_plot_y_vals, train_acc_y_vals=train_acc_plot_y_vals, acc_x_vals=accuracy_plot_x_vals,
                                  val_acc_y_vals=val_acc_plot_y_vals)
@@ -229,7 +207,7 @@ def run_one():
     utils.make_yaml(models, csv=csv_PATH, saved_models=saved_model_PATH, print_log=print_PATH, plot=plot_PATH, act_func_plot=act_func_PATH)
 
 
-if resnet_args.run_all_classic:  # TODO: add other running options
+if resnet_args.run_all_classic or resnet_args.run_all_two_BB or resnet_args.run_all_two_layers or resnet_args.run_all_one_layer:
     run_all()
 else:
     run_one()

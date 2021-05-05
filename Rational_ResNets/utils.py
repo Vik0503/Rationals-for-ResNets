@@ -25,16 +25,12 @@ def make_csv(model, epoch, train_acc: list, val_acc: list, test_acc: list):
     return PATH
 
 
-def get_scheduler_optimizer(num_warmup_it: int, lr: float, model, it_per_ep: int):
+def get_scheduler_optimizer(model, it_per_ep: int):
     """
-    Return scheduler with custom milestones and optimizer
+    Return scheduler with custom milestones and optimizer.
 
     Parameters
     ----------
-    num_warmup_it: int
-                   The number of warmup iterations.
-    lr: float
-        The learning rate.
     model
     it_per_ep: int
                The number of iterations per epoch
@@ -44,17 +40,17 @@ def get_scheduler_optimizer(num_warmup_it: int, lr: float, model, it_per_ep: int
     torch.optim.lr_scheduler.LambdaLR
     optimizer: torch.optim.SGD
     """
-    optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9, weight_decay=0.0001)
+    optimizer = optim.SGD(model.parameters(), lr=args.learning_rate, momentum=0.9, weight_decay=0.0001)
     milestones = args.milestones
     milestones = list(map(int, milestones))
     milestones.sort()
     print(milestones)
 
     def lr_lambda(it):
-        if it < num_warmup_it:
+        if it < args.warmup_iterations:
             if it % 430 == 0:
                 print('Warmup')
-            return min(1.0, it / num_warmup_it)
+            return min(1.0, it / args.warmup_iterations)
         else:
             for m in range(len(milestones)):
                 if it < milestones[m] * it_per_ep:
