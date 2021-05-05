@@ -53,7 +53,7 @@ def get_num_classes() -> int:
     return len(classes)
 
 
-def get_train_data(aug: bool = False, bs: int = 128):
+def get_train_data(aug: bool = False, bs: int = 128):  # TODO: is split a problem???
     """
     Parameters
     ----------
@@ -70,10 +70,8 @@ def get_train_data(aug: bool = False, bs: int = 128):
     """
     if aug:
         data_transform = aug_transform
-        print('here')
     else:
         data_transform = transform
-        print('HERE')
 
     train_val_set = torchvision.datasets.SVHN(root='../data/SVHN', split='train', download=True, transform=data_transform)
     trainset, _ = torch.utils.data.random_split(train_val_set, [54943, 18314])
