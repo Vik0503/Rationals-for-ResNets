@@ -206,21 +206,21 @@ def _resnet(arch: str, block: Type[BasicBlock], layers: List[int], **kwargs: Any
 
 def relu_resnet20(**kwargs: Any) -> ResNet:
     """ResNet for CIFAR10 as mentioned in the paper above"""
-    return _resnet('resnet20', BasicBlock, [3, 3, 3], **kwargs)
+    return _resnet('relu_resnet20', BasicBlock, [3, 3, 3], **kwargs)
 
 
-def relu_resnet20_2_BB(**kwargs: any) -> ResNet:
-    return _resnet('resnet20_2_BB', BasicBlock, [2, 2, 2], **kwargs)
+def relu_resnet14_A(**kwargs: any) -> ResNet:
+    return _resnet('relu_resnet14_A', BasicBlock, [2, 2, 2], **kwargs)
 
 
-def relu_resnet20_2_layers(**kwargs: Any) -> ResNet:
+def relu_resnet14_B(**kwargs: Any) -> ResNet:
     """ResNet for CIFAR10 as mentioned in the paper above"""
-    return _resnet('resnet20', BasicBlock, [3, 3], **kwargs)
+    return _resnet('relu_resnet14_B', BasicBlock, [3, 3], **kwargs)
 
 
-def relu_resnet20_1_layer(**kwargs: Any) -> ResNet:
+def relu_resnet8(**kwargs: Any) -> ResNet:
     """ResNet for CIFAR10 as mentioned in the paper above"""
-    return _resnet('resnet20', BasicBlock, [3], **kwargs)
+    return _resnet('relu_resnet8', BasicBlock, [3], **kwargs)
 
 
 def resnet32(**kwargs: Any) -> ResNet:

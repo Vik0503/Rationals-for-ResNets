@@ -3,13 +3,13 @@ import argparse as arg
 LTH_arg_parser = arg.ArgumentParser()
 LTH_arg_parser.add_argument('-bs', '--batch_size', default=128, type=int)
 LTH_arg_parser.add_argument('-lr', '--learning_rate', default=0.03, type=float)
-LTH_arg_parser.add_argument('-m', '--model', default='univ_rational_resnet20_cifar10', type=str, choices=['univ_rational_resnet20', 'univ_rational_resnet20_2_BB', 'univ_rational_resnet20_2_layers', 'univ_rational_resnet20_1_layer',
-                                                                                                          'relu_resnet20', 'relu_resnet20_2_BB', 'relu_resnet20_2_layers', 'relu_resnet20_1_layer',
-                                                                                                          'mix_experts_resnet20', 'mix_experts_resnet20_2_BB', 'mix_experts_resnet20_2_layers', 'mix_experts_resnet20_1_layer',
-                                                                                                          'univ_rational_resnet18', 'univ_rational_resnet18_2_layers', 'univ_rational_resnet18_1_layer',
-                                                                                                          'relu_resnet18', 'relu_resnet18_2_layers', 'relu_resnet18_1_layer',
-                                                                                                          'mix_experts_resnet18', 'mix_experts_resnet18_2_layers', 'mix_experts_resnet18_1_layer',
-                                                                                                          'select_1_expert_group_rational_resnet20'])
+LTH_arg_parser.add_argument('-m', '--model', default='univ_rational_resnet20', type=str, choices=['univ_rational_resnet20', 'univ_rational_resnet14_A', 'univ_rational_resnet14_B', 'univ_rational_resnet8',
+                                                                                                  'relu_resnet20', 'relu_resnet14_A', 'relu_resnet14_B', 'relu_resnet8',
+                                                                                                  'mix_experts_resnet20', 'mix_experts_resnet14_A', 'mix_experts_resnet14_B', 'mix_experts_resnet8',
+                                                                                                  'univ_rational_resnet18', 'univ_rational_resnet18_2_layers', 'univ_rational_resnet18_1_layer',
+                                                                                                  'relu_resnet18', 'relu_resnet18_2_layers', 'relu_resnet18_1_layer',
+                                                                                                  'mix_experts_resnet18', 'mix_experts_resnet18_2_layers', 'mix_experts_resnet18_1_layer',
+                                                                                                  'select_1_expert_group_rational_resnet20'])
 LTH_arg_parser.add_argument('-ds', '--dataset', default='SVHN', type=str, choices=['cifar10', 'SVHN', 'ImageNet'])
 LTH_arg_parser.add_argument('-wi', '--warmup_iterations', default=0, type=int)
 LTH_arg_parser.add_argument('-tnep', '--training_number_of_epochs', default=2, type=int)

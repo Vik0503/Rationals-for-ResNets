@@ -44,7 +44,7 @@ def make_csv(model, prune_percent: List[float], test_acc: List[float]):
     return PATH
 
 
-def make_mask_csv(all_PATHS: List[str]):
+def make_mask_csv(all_PATHS: List[str], model_names: List[str]):
     """
     Visualize the masks resulting from the LTH experiments.
 
@@ -52,6 +52,7 @@ def make_mask_csv(all_PATHS: List[str]):
     ----------
     all_PATHS:  List[str]
                 A list with the paths to the last saved checkpoints.
+    model_names:  List[str]
 
     Returns
     -------
@@ -126,13 +127,13 @@ def make_mask_csv(all_PATHS: List[str]):
             all_data_percent.append(data_percent)
 
     if args.arch_for_run_all == 'CIFAR10':
-        tuples, names = csv_cifar_models(model)
+        tuples= csv_cifar_models(model)
     else:
-        tuples, names = csv_imagenet_models(model)
+        tuples= csv_imagenet_models(model)
     index = pd.MultiIndex.from_tuples(tuples)
-    df_dim = pd.DataFrame(all_data_dim, index=names, columns=index)
-    df_weights = pd.DataFrame(all_data_weights, index=names, columns=index)
-    df_percent = pd.DataFrame(all_data_percent, index=names[1:], columns=index)
+    df_dim = pd.DataFrame(all_data_dim, index=['Original Model'] + model_names, columns=index)
+    df_weights = pd.DataFrame(all_data_weights, index=['Original Model'] + model_names, columns=index)
+    df_percent = pd.DataFrame(all_data_percent, index=['Original Model'] + model_names, columns=index)
 
     display(df_dim)
     display(df_weights)
@@ -159,9 +160,6 @@ def csv_imagenet_models(model):
     -------
     tuples:     List[Tuple[str]]
                 Tuples for the data frame.
-
-    List[str]:
-                List with model names.
     """
     args = argparser.get_arguments()
     prune_shortcuts = args.prune_shortcuts
@@ -207,10 +205,10 @@ def csv_imagenet_models(model):
     arrays = [array_0, array_1, array_2]
     tuples = list(zip(*arrays))
 
-    return tuples, ['original Model', 'ReLU ResNet18', 'univ. rational ResNet18', 'mix. exp. ResNet18']
+    return tuples
 
 
-def csv_cifar_models(model):  # TODO: diff. names
+def csv_cifar_models(model):
     """
     Visualize masks for cifar models.
 
@@ -222,9 +220,6 @@ def csv_cifar_models(model):  # TODO: diff. names
     -------
     tuples:     List[Tuple[str]]
                 Tuples for the data frame.
-
-    List[str]:
-                List with model names.
     """
     num_layers = len(model.layers)
     args = argparser.get_arguments()
@@ -283,7 +278,7 @@ def csv_cifar_models(model):  # TODO: diff. names
             array_2 = ['conv. 0'] + ['conv. 0', 'conv. 1'] * 6
     arrays = [array_0, array_1, array_2]
     tuples = list(zip(*arrays))
-    return tuples, ['original Model', 'ReLU ResNet20', 'univ. rational ResNet20', 'mix. exp. ResNet20']
+    return tuples
 
 
 def make_yaml(models: List[str], saved_models: List[str], print_log: str, table: List[str] = None, csv: List[str] = None, act_func_plot: str = None, plot: List[str] = None):

@@ -244,19 +244,19 @@ def _resnet(arch: str, block: Type[BasicBlock], layers: List[int], mask: Mask, *
 
 def relu_resnet20(mask: Mask = None, **kwargs: Any) -> ResNet:
     """ResNet20 for CIFAR10 as mentioned in the paper above."""
-    return _resnet('resnet20', BasicBlock, [3, 3, 3], mask=mask, **kwargs)
+    return _resnet('relu_resnet20', BasicBlock, [3, 3, 3], mask=mask, **kwargs)
 
 
-def relu_resnet20_2_BB(mask: Mask = None, **kwargs: Any) -> ResNet:
+def relu_resnet14_A(mask: Mask = None, **kwargs: Any) -> ResNet:
     """Smaller ResNet for CIFAR10 with only two BasicBlocks."""
-    return _resnet('resnet20_2_BB', BasicBlock, [2, 2, 2], mask=mask, **kwargs)
+    return _resnet('relu_resnet14_A', BasicBlock, [2, 2, 2], mask=mask, **kwargs)
 
 
-def relu_resnet20_2_layers(mask: Mask = None, **kwargs: Any) -> ResNet:
+def relu_resnet14_B(mask: Mask = None, **kwargs: Any) -> ResNet:
     """Smaller ResNet for CIFAR10 with only two layers."""
-    return _resnet('resnet20_2_layers', BasicBlock, [3, 3], mask=mask, **kwargs)
+    return _resnet('relu_resnet14_B', BasicBlock, [3, 3], mask=mask, **kwargs)
 
 
-def relu_resnet20_1_layer(mask: Mask = None, **kwargs: Any) -> ResNet:
+def relu_resnet8(mask: Mask = None, **kwargs: Any) -> ResNet:
     """Smaller ResNet for CIFAR10 with only one layer."""
-    return _resnet('resnet20', BasicBlock, [3], mask=mask, **kwargs)
+    return _resnet('relu_resnet8', BasicBlock, [3], mask=mask, **kwargs)

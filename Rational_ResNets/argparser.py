@@ -4,9 +4,9 @@ ResNet_arg_parser = arg.ArgumentParser()
 ResNet_arg_parser.add_argument('-bs', '--batch_size', default=128, type=int)
 ResNet_arg_parser.add_argument('-lr', '--learning_rate', default=0.01, type=float)
 ResNet_arg_parser.add_argument('-m', '--model', default='univ_rational_resnet20', type=str,
-                               choices=['univ_rational_resnet20', 'univ_rational_resnet20_2_BB', 'univ_rational_resnet20_2_layers', 'univ_rational_resnet20_1_layer',
-                                        'relu_resnet20', 'relu_resnet20_2_BB', 'relu_resnet20_2_layers', 'relu_resnet20_1_layer',
-                                        'mix_experts_resnet20', 'mix_experts_resnet20_2_BB', 'mix_experts_resnet20_2_layers', 'mix_experts_resnet20_1_layer',
+                               choices=['univ_rational_resnet20', 'univ_rational_resnet14_A', 'univ_rational_resnet14_B', 'univ_rational_resnet8',
+                                        'relu_resnet20', 'relu_resnet14_A', 'relu_resnet14_B', 'relu_resnet8',
+                                        'mix_experts_resnet20', 'mix_experts_resnet14_A', 'mix_experts_resnet14_B', 'mix_experts_resnet8',
                                         'univ_rational_resnet18', 'univ_rational_resnet18_2_layers', 'univ_rational_resnet18_1_layer',
                                         'relu_resnet18', 'relu_resnet18_2_layers', 'relu_resnet18_1_layer',
                                         'mix_experts_resnet18', 'mix_experts_resnet18_2_layers', 'mix_experts_resnet18_1_layer',

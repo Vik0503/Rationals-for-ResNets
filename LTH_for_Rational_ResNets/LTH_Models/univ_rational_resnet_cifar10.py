@@ -256,16 +256,16 @@ def univ_rational_resnet20(mask: Mask = None, **kwargs: Any) -> RationalResNet:
     return _resnet('rational_resnet20', RationalBasicBlock, [3, 3, 3], mask=mask, **kwargs)
 
 
-def univ_rational_resnet20_2_BB(mask: Mask = None, **kwargs: Any) -> RationalResNet:
+def univ_rational_resnet14_A(mask: Mask = None, **kwargs: Any) -> RationalResNet:
     """Smaller ResNet for CIFAR10 with only two BasicBlocks and Rationals as activation function."""
-    return _resnet('rational_resnet20_2_BB', RationalBasicBlock, [2, 2, 2], mask=mask, **kwargs)
+    return _resnet('rational_resnet14_A', RationalBasicBlock, [2, 2, 2], mask=mask, **kwargs)
 
 
-def univ_rational_resnet20_2_layers(mask: Mask = None, **kwargs: Any) -> RationalResNet:
+def univ_rational_resnet14_B(mask: Mask = None, **kwargs: Any) -> RationalResNet:
     """Smaller ResNet for CIFAR10 with only two layers and Rationals as activation function."""
-    return _resnet('rational_resnet20_2_layers', RationalBasicBlock, [3, 3], mask=mask, **kwargs)
+    return _resnet('rational_resnet14_B', RationalBasicBlock, [3, 3], mask=mask, **kwargs)
 
 
-def univ_rational_resnet20_1_layer(mask: Mask = None, **kwargs: Any) -> RationalResNet:
+def univ_rational_resnet8(mask: Mask = None, **kwargs: Any) -> RationalResNet:
     """Smaller ResNet for CIFAR10 with only one layer and Rationals as activation function."""
-    return _resnet('rational_resnet20_1_layer', RationalBasicBlock, [3], mask=mask, **kwargs)
+    return _resnet('rational_resnet8', RationalBasicBlock, [3], mask=mask, **kwargs)

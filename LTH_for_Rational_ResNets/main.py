@@ -68,26 +68,26 @@ def run_all():
     num_epoch_list = []
     saved_model_PATHS = []
     if LTH_args.run_all_classic and LTH_args.arch_for_run_all == 'CIFAR10':
-        model_names = ['relu_resnet20', 'univ_rational_resnet20', 'mix_experts_resnet20']
+        model_names = ['ReLU ResNet20', 'univ. rational ResNet20', 'mix. exp. ResNet20']
         models_run_all = [relu_cifar.relu_resnet20(), univ_rat_cifar.univ_rational_resnet20(), mix_exp_cifar.mix_exp_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)]
     elif LTH_args.run_all_classic and LTH_args.arch_for_run_all == 'ImageNet':
-        model_names = ['relu_resnet18', 'univ_rational_resnet18', 'mix_experts_resnet18']
+        model_names = ['ReLU ResNet18', 'univ. rational ResNet18', 'mix. exp. ResNet18']
         models_run_all = [relu_imagenet.relu_resnet18(), univ_rat_imagenet.univ_rational_resnet18(), mix_exp_imagenet.mix_exp_resnet18(rational_inits=rational_inits, num_rationals=num_rationals)]
 
     elif LTH_args.run_all_two_BB:
-        model_names = ['relu_resnet20_2_BB', 'univ_rational_resnet20_2_BB', 'mix_experts_resnet20_2_BB']
-        models_run_all = [relu_cifar.relu_resnet20_2_BB(), univ_rat_cifar.univ_rational_resnet20_2_BB(), mix_exp_cifar.mix_exp_resnet20_2_BB(rational_inits=rational_inits, num_rationals=num_rationals)]
+        model_names = ['ReLU ResNet14_A', 'univ. rational ResNet14_A', 'mix. exp. ResNet14_A']
+        models_run_all = [relu_cifar.relu_resnet14_A(), univ_rat_cifar.univ_rational_resnet14_A(), mix_exp_cifar.mix_exp_resnet14_A(rational_inits=rational_inits, num_rationals=num_rationals)]
 
     elif LTH_args.run_all_two_layers and LTH_args.arch_for_run_all == 'CIFAR10':
-        model_names = ['relu_resnet20_2_layers', 'univ_rational_resnet20_2_layers', 'mix_experts_resnet20_2_layers']
-        models_run_all = [relu_cifar.relu_resnet20_2_layers(), univ_rat_cifar.univ_rational_resnet20_2_layers(), mix_exp_cifar.mix_exp_resnet20_2_layers(rational_inits=rational_inits, num_rationals=num_rationals)]
+        model_names = ['ReLU ResNet14_B', 'univ. rational ResNet14_B', 'mix. exp. ResNet14_B']
+        models_run_all = [relu_cifar.relu_resnet14_B(), univ_rat_cifar.univ_rational_resnet14_B(), mix_exp_cifar.mix_exp_resnet14_B(rational_inits=rational_inits, num_rationals=num_rationals)]
     elif LTH_args.run_all_two_layers and LTH_args.arch_for_run_all == 'ImageNet':
         model_names = ['relu_resnet18_2_layers', 'univ_rational_resnet18_2_layers', 'mix_experts_resnet18_2_layers']
         models_run_all = [relu_imagenet.relu_resnet18_2_layers(), univ_rat_imagenet.univ_rational_resnet18_2_layers(), mix_exp_imagenet.mix_exp_resnet18_2_layers(rational_inits=rational_inits, num_rationals=num_rationals)]
 
     elif LTH_args.run_all_one_layer and LTH_args.arch_for_run_all == 'CIFAR10':
-        model_names = ['relu_resnet20_1_layer', 'univ_rational_resnet20_1_layer', 'mix_experts_resnet20_1_layer']
-        models_run_all = [relu_cifar.relu_resnet20_1_layer(), univ_rat_cifar.univ_rational_resnet20_1_layer(), mix_exp_cifar.mix_exp_resnet20_1_layer(rational_inits=rational_inits, num_rationals=num_rationals)]
+        model_names = ['ReLU ResNet8', 'univ. rational ResNet8', 'mix. exp. ResNet8']
+        models_run_all = [relu_cifar.relu_resnet8(), univ_rat_cifar.univ_rational_resnet8(), mix_exp_cifar.mix_exp_resnet8(rational_inits=rational_inits, num_rationals=num_rationals)]
     else:
         model_names = ['relu_resnet18_1_layer', 'univ_rational_resnet18_1_layer', 'mix_experts_resnet18_1_layer']
         models_run_all = [relu_imagenet.relu_resnet18_1_layer(), univ_rat_imagenet.univ_rational_resnet18_1_layer(), mix_exp_imagenet.mix_exp_resnet18_1_layer(rational_inits=rational_inits, num_rationals=num_rationals)]
@@ -123,47 +123,59 @@ def run_all():
         checkpoints.append(last_checkpoint)
         all_models.append(model)
 
-    plot_PATH = plots.plot_all(test_accs=all_test_accuracies, sparsities=all_sparsities, num_epoch_list=num_epoch_list)
+    plot_PATH = plots.plot_all(test_accs=all_test_accuracies, sparsities=all_sparsities, num_epoch_list=num_epoch_list, model_names=model_names)
     act_func_plot_PATH = plots.plot_activation_func_overview(all_models[2], num_rationals, LTH_args.initialize_rationals)
-    mask_path_dim, mask_path_weights, mask_path_percent = LTH_write_read_csv.make_mask_csv(checkpoints)
+    mask_path_dim, mask_path_weights, mask_path_percent = LTH_write_read_csv.make_mask_csv(checkpoints, model_names)
     LTH_write_read_csv.make_yaml(model_names, csv=[csv_PATH], saved_models=saved_model_PATHS, table=[mask_path_dim, mask_path_weights, mask_path_percent], plot=[plot_PATH], act_func_plot=act_func_plot_PATH, print_log=print_PATH)
 
 
-def run_one():  # TODO: Model name str for plots + yaml
+def run_one():  # TODO: Model name 18 str for plots + yaml
     global model, model_PATH, plot_PATH
 
     if LTH_args.model == 'relu_resnet20':
         model = relu_cifar.relu_resnet20()
-    elif LTH_args.model == 'relu_resnet20_2_BB':
-        model = relu_cifar.relu_resnet20_2_BB()
-    elif LTH_args.model == 'relu_resnet20_2_layers':
-        model = relu_cifar.relu_resnet20_2_layers()
-    elif LTH_args.model == 'relu_resnet20_1_layer':
-        model = relu_cifar.relu_resnet20_1_layer()
+        model_name = 'ReLU ResNet20'
+    elif LTH_args.model == 'relu_resnet14_A':
+        model = relu_cifar.relu_resnet14_A()
+        model_name = 'ReLU ResNet14_A'
+    elif LTH_args.model == 'relu_resnet14_B':
+        model = relu_cifar.relu_resnet14_B()
+        model_name = 'ReLU ResNet14_B'
+    elif LTH_args.model == 'relu_resnet8':
+        model = relu_cifar.relu_resnet8()
+        model_name = 'ReLU ResNet8'
 
     elif LTH_args.model == 'univ_rational_resnet20':
         model = univ_rat_cifar.univ_rational_resnet20()
-    elif LTH_args.model == 'univ_rational_resnet20_2_BB':
-        model = univ_rat_cifar.univ_rational_resnet20_2_BB()
-    elif LTH_args.model == 'univ_rational_resnet20_2_layers':
-        model = univ_rat_cifar.univ_rational_resnet20_2_layers()
-    elif LTH_args.model == 'univ_rational_resnet20_1_layer':
-        model = univ_rat_cifar.univ_rational_resnet20_1_layer()
+        model_name = 'univ. rational ResNet20'
+    elif LTH_args.model == 'univ_rational_resnet14_A':
+        model = univ_rat_cifar.univ_rational_resnet14_A()
+        model_name = 'univ. rational ResNet14_A'
+    elif LTH_args.model == 'univ_rational_resnet14_B':
+        model = univ_rat_cifar.univ_rational_resnet14_B()
+        model_name = 'univ. rational ResNet14_B'
+    elif LTH_args.model == 'univ_rational_resnet8':
+        model = univ_rat_cifar.univ_rational_resnet8()
+        model_name = 'univ. rational ResNet8'
 
     elif LTH_args.model == 'mix_experts_resnet20':
         model = mix_exp_cifar.mix_exp_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)
-    elif LTH_args.model == 'mix_experts_resnet20_2_BB':
-        model = mix_exp_cifar.mix_exp_resnet20_2_BB(rational_inits=rational_inits, num_rationals=num_rationals)
-    elif LTH_args.model == 'mix_experts_resnet20_2_layers':
-        model = mix_exp_cifar.mix_exp_resnet20_2_layers(rational_inits=rational_inits, num_rationals=num_rationals)
-    elif LTH_args.model == 'mix_experts_resnet20_1_layer':
-        model = mix_exp_cifar.mix_exp_resnet20_1_layer(rational_inits=rational_inits, num_rationals=num_rationals)
+        model_name = 'mix. exp. ResNet20'
+    elif LTH_args.model == 'mix_experts_resnet14_A':
+        model = mix_exp_cifar.mix_exp_resnet14_A(rational_inits=rational_inits, num_rationals=num_rationals)
+        model_name = 'mix. exp. ResNet14_A'
+    elif LTH_args.model == 'mix_experts_resnet14_B':
+        model = mix_exp_cifar.mix_exp_resnet14_B(rational_inits=rational_inits, num_rationals=num_rationals)
+        model_name = 'mix. exp. ResNet14_B'
+    elif LTH_args.model == 'mix_experts_resnet8':
+        model = mix_exp_cifar.mix_exp_resnet8(rational_inits=rational_inits, num_rationals=num_rationals)
+        model_name = 'mix. exp. ResNet8'
 
     elif LTH_args.model == 'relu_resnet18':
         model = relu_imagenet.relu_resnet18()
     elif LTH_args.model == 'relu_resnet18_2_layers':
         model = relu_imagenet.relu_resnet18_2_layers()
-    elif LTH_args.model == 'relu_resnet20_1_layer':
+    elif LTH_args.model == 'relu_resnet8':
         model = relu_imagenet.relu_resnet18_1_layer()
 
     elif LTH_args.model == 'univ_rational_resnet18':
@@ -201,8 +213,9 @@ def run_one():  # TODO: Model name str for plots + yaml
     elif LTH_args.stop_criteria is 'one_shot':
         Lottery_Ticket_Hypothesis.one_shot_pruning(model)
         num_epochs = 1
+
     if LTH_args.stop_criteria is not 'one_shot':
-        plot_PATH = plots.final_plot_LTH(test_accuracies, sparsities, num_epochs)
+        plot_PATH = plots.final_plot_LTH(test_accuracies, sparsities, num_epochs, model_name)
 
     PATH = ''
     if LTH_args.save_res_csv:

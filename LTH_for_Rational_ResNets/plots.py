@@ -25,7 +25,7 @@ matplotlib.rcParams.update({
 LTH_args = argparser.get_arguments()
 
 
-def final_plot_LTH(test_accuracies: list, sparsity: list, num_pruning_epochs: int):
+def final_plot_LTH(test_accuracies: list, sparsity: list, num_pruning_epochs: int, model_name: str):
     """
     Plot test accuracy for each pruning epoch and a small legend.
 
@@ -37,6 +37,7 @@ def final_plot_LTH(test_accuracies: list, sparsity: list, num_pruning_epochs: in
               A list containing the different sparsity for each pruning epoch.
     num_pruning_epochs: int
                         Number of pruning epochs.
+    model_name: str
 
     Returns
     -------
@@ -52,7 +53,7 @@ def final_plot_LTH(test_accuracies: list, sparsity: list, num_pruning_epochs: in
     plt.legend(['Test Accuracy'], bbox_to_anchor=(0.5, -0.2), loc='upper center', ncol=1)
 
     props = dict(boxstyle='round', facecolor='grey', alpha=0.5)
-    text = 'model: {}, '.format(LTH_args.model) + 'dataset: {}, '.format(LTH_args.dataset) + '\n' + 'batch size: {}, '.format(LTH_args.batch_size) + '{} iterative pruning epochs, '.format(num_pruning_epochs) \
+    text = 'model: {}, '.format(model_name) + 'dataset: {}, '.format(LTH_args.dataset) + '\n' + 'batch size: {}, '.format(LTH_args.batch_size) + '{} iterative pruning epochs, '.format(num_pruning_epochs) \
            + '\n' + '{} training epochs per pruning epoch, '.format(LTH_args.training_number_of_epochs) + '\n' + \
            'learning rate: {}, '.format(LTH_args.learning_rate) + '{}% pruning per epoch, '.format(LTH_args.pruning_percentage) + '\n' + '{} warm-up iterations, '.format(LTH_args.warmup_iterations) + \
            'shortcuts pruned: {}'.format(LTH_args.prune_shortcuts)
@@ -66,7 +67,7 @@ def final_plot_LTH(test_accuracies: list, sparsity: list, num_pruning_epochs: in
     return PATH
 
 
-def plot_all(test_accs, sparsities, num_epoch_list: list):
+def plot_all(test_accs, sparsities, num_epoch_list: list, model_names: List[str]):
     """
     Plot results of all three experiments in one graph for further comparison.
 
@@ -78,6 +79,7 @@ def plot_all(test_accs, sparsities, num_epoch_list: list):
                 A list of lists with all sparsities for all three models
     num_epoch_list: list
                     A list with the pruning epoch each experiment terminated at.
+    model_names:    List[str]
 
     Returns
     -------
@@ -109,7 +111,7 @@ def plot_all(test_accs, sparsities, num_epoch_list: list):
     ax.set_yscale('function', functions=(forward, inverse))
 
     plt.subplots_adjust(bottom=0.3)
-    plt.legend(['ReLU ResNet20', 'univ. rational ResNet20', 'mix. exp. ResNet20'], bbox_to_anchor=(0.5, -0.2), loc='upper center', ncol=1)
+    plt.legend([model_names[0], model_names[1], model_names[2]], bbox_to_anchor=(0.5, -0.2), loc='upper center', ncol=1)
 
     props = dict(boxstyle='round', facecolor='grey', alpha=0.5)
 
@@ -120,7 +122,7 @@ def plot_all(test_accs, sparsities, num_epoch_list: list):
     text = 'dataset: {}, '.format(LTH_args.dataset) + 'batch size: {}, '.format(LTH_args.batch_size) + '\n' + '{} training epochs per pruning epoch, '.format(LTH_args.training_number_of_epochs) + '\n' + \
            'learning rate: {}, '.format(0.03) + '{}% pruning per epoch, '.format(LTH_args.pruning_percentage) + '\n' + '{} warm-up iterations, '.format(LTH_args.warmup_iterations) + '\n' + \
            'shortcuts pruned: {}, '.format(LTH_args.prune_shortcuts) + '\n' + 'number of iterative pruning epochs: ' + '\n' + \
-           '- ReLU ResNet20: {}'.format(num_epoch_list[0]) + '\n' + '- univ. rational ResNet20: {}'.format(num_epoch_list[1]) + '\n' + '- mix. exp. ResNet20: {}'.format(num_epoch_list[2]) + '\n' + stop_criterion
+           '- {}: {}'.format(model_names[0], num_epoch_list[0]) + '\n' + '- {}: {}'.format(model_names[1], num_epoch_list[1]) + '\n' + '- {}: {}'.format(model_names[2], num_epoch_list[2]) + '\n' + stop_criterion
 
     plt.figtext(0.525, 0.5, text, bbox=props, size=9)
     time_stamp = datetime.now()
@@ -242,7 +244,7 @@ def resnet20_plot(layers: List[int], rat_groups, alphas, inits: List[str]):
     plt.figure(figsize=(layers[0] * 8, len(layers) * 8))
     model_1 = False
 
-    if LTH_args.model == 'mix_experts_resnet20_2_BB':
+    if LTH_args.model == 'mix_experts_resnet14_A':
         model_1 = True
 
     plt_counter = 0

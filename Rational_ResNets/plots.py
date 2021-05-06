@@ -225,7 +225,7 @@ def resnet20_plot(layers, rat_groups, alphas, inits):
     plt.figure(figsize=(layers[0] * 8, len(layers) * 8))
     model_1 = False
 
-    if resnet_args.model == 'mix_experts_resnet20_2_BB':
+    if resnet_args.model == 'mix_experts_resnet14_A':
         model_1 = True
 
     plt_counter = 0
