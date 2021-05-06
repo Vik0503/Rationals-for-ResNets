@@ -126,7 +126,7 @@ def run_all():
     plot_PATH = plots.plot_all(test_accs=all_test_accuracies, sparsities=all_sparsities, num_epoch_list=num_epoch_list)
     act_func_plot_PATH = plots.plot_activation_func_overview(all_models[2], num_rationals, LTH_args.initialize_rationals)
     mask_path_dim, mask_path_weights, mask_path_percent = LTH_write_read_csv.make_mask_csv(checkpoints)
-    LTH_write_read_csv.make_yaml(model_names, csv=[csv_PATH], saved_models=saved_model_PATHS, table=[mask_path_dim, mask_path_weights, mask_path_percent], plot=[plot_PATH], act_func_plot=[act_func_plot_PATH], print_log=[print_PATH])
+    LTH_write_read_csv.make_yaml(model_names, csv=[csv_PATH], saved_models=saved_model_PATHS, table=[mask_path_dim, mask_path_weights, mask_path_percent], plot=[plot_PATH], act_func_plot=act_func_plot_PATH, print_log=print_PATH)
 
 
 def run_one():  # TODO: Model name str for plots + yaml
@@ -209,7 +209,7 @@ def run_one():  # TODO: Model name str for plots + yaml
         PATH = LTH_write_read_csv.make_csv(LTH_args.model, sparsities, test_accuracies)
 
     act_func_plot = plots.plot_activation_func_overview(model, num_rationals, LTH_args.initialize_rationals)
-    LTH_write_read_csv.make_yaml([LTH_args.model], csv=PATH, saved_models=model_PATH, print_log=print_PATH, act_func_plot=act_func_plot, plot=plot_PATH)
+    LTH_write_read_csv.make_yaml([LTH_args.model], csv=[PATH], saved_models=model_PATH, print_log=print_PATH, act_func_plot=act_func_plot, plot=plot_PATH)
 
 
 if LTH_args.run_all_classic or LTH_args.run_all_two_BB or LTH_args.run_all_two_layers or LTH_args.run_all_one_layer:

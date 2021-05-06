@@ -44,7 +44,24 @@ def make_csv(model, prune_percent: List[float], test_acc: List[float]):
     return PATH
 
 
-def make_mask_csv(all_PATHS):
+def make_mask_csv(all_PATHS: List[str]):
+    """
+    Visualize the masks resulting from the LTH experiments.
+
+    Parameters
+    ----------
+    all_PATHS:  List[str]
+                A list with the paths to the last saved checkpoints.
+
+    Returns
+    -------
+    PATH_dim:   str
+                Path to the csv file which shows the reduction of the convolutional layers dimensions.
+    PATH_weights:   str
+                    Path to the csv file which shows the absolute number of pruned weights.
+    PATH_percent:   str
+                    Path to the csv file which shows the relative number of pruned weights in percent.
+    """
     time_stamp = datetime.now()
     args = argparser.get_arguments()
 
@@ -131,6 +148,21 @@ def make_mask_csv(all_PATHS):
 
 
 def csv_imagenet_models(model):
+    """
+    Visualize masks for ImageNet models.
+
+    Parameters
+    ----------
+    model
+
+    Returns
+    -------
+    tuples:     List[Tuple[str]]
+                Tuples for the data frame.
+
+    List[str]:
+                List with model names.
+    """
     args = argparser.get_arguments()
     prune_shortcuts = args.prune_shortcuts
 
@@ -178,7 +210,22 @@ def csv_imagenet_models(model):
     return tuples, ['original Model', 'ReLU ResNet18', 'univ. rational ResNet18', 'mix. exp. ResNet18']
 
 
-def csv_cifar_models(model):  # TODO: delete option for BBs
+def csv_cifar_models(model):  # TODO: diff. names
+    """
+    Visualize masks for cifar models.
+
+    Parameters
+    ----------
+    model
+
+    Returns
+    -------
+    tuples:     List[Tuple[str]]
+                Tuples for the data frame.
+
+    List[str]:
+                List with model names.
+    """
     num_layers = len(model.layers)
     args = argparser.get_arguments()
     prune_shortcuts = args.prune_shortcuts
@@ -203,9 +250,9 @@ def csv_cifar_models(model):  # TODO: delete option for BBs
                 array_1 = [''] + ['BasicBlock 0', '', 'BasicBlock 1', '', 'BasicBlock 2', ''] + ['BasicBlock 0', '', '', 'BasicBlock 1', '', 'BasicBlock 2', ''] * 2
                 array_2 = ['conv 0'] + ['conv. 0', 'conv. 1'] * 3 + array_3_conv * 2
             elif num_bb == 2:
-                array_0 = ['Layer 0'] + ['Layer 1'] + [''] * 5 + ['Layer 2'] + [''] * 4 + ['Layer 3'] + [''] * 4
-                array_1 = [''] + ['BasicBlock 0', '', '', 'BasicBlock 1', '', 'BasicBlock 2', ''] + ['BasicBlock 0', '', '', 'BasicBlock 1', ''] * 2
-                array_2 = ['conv 0'] + ['conv. 0', 'conv. 1'] * 3 + array_3_conv_1 * 2
+                array_0 = ['Layer 0'] + ['Layer 1'] + [''] * 4 + ['Layer 2'] + [''] * 4 + ['Layer 3'] + [''] * 4
+                array_1 = [''] + ['BasicBlock 0', '', 'BasicBlock 1', ''] + ['BasicBlock 0', '', '', 'BasicBlock 1', ''] * 2
+                array_2 = ['conv. 0'] + ['conv. 0', 'conv. 1'] * 2 + array_3_conv_1 * 2
 
         elif num_layers == 2:
             array_0 = ['Layer 0'] + ['Layer 1'] + [''] * 5 + ['Layer 2'] + [''] * 5
@@ -239,12 +286,32 @@ def csv_cifar_models(model):  # TODO: delete option for BBs
     return tuples, ['original Model', 'ReLU ResNet20', 'univ. rational ResNet20', 'mix. exp. ResNet20']
 
 
-def make_yaml(models: list, saved_models, print_log, table=None, csv=None, act_func_plot=None, plot=None):  # TODO: One Shot Option
+def make_yaml(models: List[str], saved_models: List[str], print_log: str, table: List[str] = None, csv: List[str] = None, act_func_plot: str = None, plot: List[str] = None):
+    """
+    Make YAML file for experiment (series).
+
+    Parameters
+    ----------
+    models: List[str]
+            A list with the model name(s).
+    saved_models: List[str]
+                  A list with the path(s) to the directory with the saved models.
+    print_log: str
+               The path to the print log.
+    table:  List[str]
+            The paths to the three different mask tables.
+    csv:    List[str]
+            The path(s) to the csv file(s).
+    act_func_plot: str
+                   The path to the activation function overview plot.
+    plot:   List[str]
+            The path(s) to the plot(s).
+    """
     LTH_args = argparser.get_arguments()
     time_stamp = datetime.now()
     yaml_data = [{'Date': [time_stamp]}, {'Model(s)': models}, {'Dataset': [LTH_args.dataset]}, {'Batch Size': [LTH_args.batch_size]}, {'Pruning Percentage per Epoch': [LTH_args.pruning_percentage]},
                  {'Training Epochs per Pruning Epoch': [LTH_args.training_number_of_epochs]}, {'Learning Rate': [LTH_args.learning_rate]}, {'Warm-Up Iterations': [LTH_args.warmup_iterations]},
-                 {'Shortcuts pruned': [LTH_args.prune_shortcuts]}, {'Rational Inits': [LTH_args.initialize_rationals]}, {'Saved Models': [saved_models]}, {'Print Log': [print_log]}]
+                 {'Shortcuts pruned': [LTH_args.prune_shortcuts]}, {'Rational Inits': [LTH_args.initialize_rationals]}, {'Data Seed': [LTH_args.data_seeds]}, {'Saved Models': [saved_models]}, {'Print Log': [print_log]}]
 
     if LTH_args.stop_criteria is 'num_prune_epochs':
         yaml_data.append({'Iterative Pruning Epochs': [LTH_args.iterative_pruning_epochs]})
@@ -266,4 +333,3 @@ def make_yaml(models: list, saved_models, print_log, table=None, csv=None, act_f
     PATH = 'YAML/{}'.format(time_stamp) + '.yaml'
     with open(PATH, 'w') as file:
         documents = yaml.dump(yaml_data, file)
-
