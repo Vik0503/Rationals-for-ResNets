@@ -1,0 +1,4 @@
+Percentage of Weights pruned,Test Accuracy
+0,46.139366933005526
+tensor(20.0007),66.9061155500922
+tensor(36.0010),77.1857713583282

@@ -69,6 +69,7 @@ def run_all():
     saved_model_PATHS = []
     if LTH_args.run_all_classic and LTH_args.arch_for_run_all == 'CIFAR10':
         model_names = ['ReLU ResNet20', 'univ. rational ResNet20', 'mix. exp. ResNet20']
+        model_names_dir = ['relu_resnet20', 'univ_rational_resnet20', 'mix_experts_resnet20']
         models_run_all = [relu_cifar.relu_resnet20(), univ_rat_cifar.univ_rational_resnet20(), mix_exp_cifar.mix_exp_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)]
     elif LTH_args.run_all_classic and LTH_args.arch_for_run_all == 'ImageNet':
         model_names = ['ReLU ResNet18', 'univ. rational ResNet18', 'mix. exp. ResNet18']
@@ -76,10 +77,12 @@ def run_all():
 
     elif LTH_args.run_all_two_BB:
         model_names = ['ReLU ResNet14_A', 'univ. rational ResNet14_A', 'mix. exp. ResNet14_A']
+        model_names_dir = ['relu_resnet14_A', 'univ_rational_resnet14_A', 'mix_experts_resnet14_A']
         models_run_all = [relu_cifar.relu_resnet14_A(), univ_rat_cifar.univ_rational_resnet14_A(), mix_exp_cifar.mix_exp_resnet14_A(rational_inits=rational_inits, num_rationals=num_rationals)]
 
     elif LTH_args.run_all_two_layers and LTH_args.arch_for_run_all == 'CIFAR10':
         model_names = ['ReLU ResNet14_B', 'univ. rational ResNet14_B', 'mix. exp. ResNet14_B']
+        model_names_dir = ['relu_resnet14_B', 'univ_rational_resnet14_B', 'mix_experts_resnet14_B']
         models_run_all = [relu_cifar.relu_resnet14_B(), univ_rat_cifar.univ_rational_resnet14_B(), mix_exp_cifar.mix_exp_resnet14_B(rational_inits=rational_inits, num_rationals=num_rationals)]
     elif LTH_args.run_all_two_layers and LTH_args.arch_for_run_all == 'ImageNet':
         model_names = ['relu_resnet18_2_layers', 'univ_rational_resnet18_2_layers', 'mix_experts_resnet18_2_layers']
@@ -87,6 +90,7 @@ def run_all():
 
     elif LTH_args.run_all_one_layer and LTH_args.arch_for_run_all == 'CIFAR10':
         model_names = ['ReLU ResNet8', 'univ. rational ResNet8', 'mix. exp. ResNet8']
+        model_names_dir = ['relu_resnet8', 'univ_rational_resnet8', 'mix_experts_resnet8']
         models_run_all = [relu_cifar.relu_resnet8(), univ_rat_cifar.univ_rational_resnet8(), mix_exp_cifar.mix_exp_resnet8(rational_inits=rational_inits, num_rationals=num_rationals)]
     else:
         model_names = ['relu_resnet18_1_layer', 'univ_rational_resnet18_1_layer', 'mix_experts_resnet18_1_layer']
@@ -114,7 +118,7 @@ def run_all():
             Lottery_Ticket_Hypothesis.one_shot_pruning(model)
 
         if LTH_args.save_res_csv:
-            csv_PATH = LTH_write_read_csv.make_csv(model_names[m], sparsities, test_accuracies)
+            csv_PATH = LTH_write_read_csv.make_csv(model_names_dir[m], sparsities, test_accuracies)
 
         saved_model_PATHS.append(model_PATH)
         all_test_accuracies.append(test_accuracies)
@@ -222,7 +226,7 @@ def run_one():  # TODO: Model name 18 str for plots + yaml
         PATH = LTH_write_read_csv.make_csv(LTH_args.model, sparsities, test_accuracies)
 
     act_func_plot = plots.plot_activation_func_overview(model, num_rationals, LTH_args.initialize_rationals)
-    LTH_write_read_csv.make_yaml([LTH_args.model], csv=[PATH], saved_models=model_PATH, print_log=print_PATH, act_func_plot=act_func_plot, plot=plot_PATH)
+    LTH_write_read_csv.make_yaml([model_name], csv=[PATH], saved_models=model_PATH, print_log=print_PATH, act_func_plot=act_func_plot, plot=plot_PATH)
 
 
 if LTH_args.run_all_classic or LTH_args.run_all_two_BB or LTH_args.run_all_two_layers or LTH_args.run_all_one_layer:

@@ -80,12 +80,36 @@ def tensor_to_dict(tensor: torch.Tensor, ref_dict: Dict[str, torch.Tensor]) -> D
     return tensor_dict
 
 
-def get_unpruned_weights(model_weights, mask: Mask):
+def get_unpruned_weights(model_weights: dict, mask: Mask):
+    """
+    Return unpruned weights.
+
+    Parameters
+    ----------
+    model_weights:  dict
+                    All prunable weights of the model
+    mask:   Mask
+
+    Returns
+    -------
+    unpruned_weight_item: Tensor
+                          All unpruned weights in one tensor.
+    """
     unpruned_weight_item = torch.cat([values[mask[key] == 1] for key, values in model_weights.items()])
     return unpruned_weight_item
 
 
 def prune(pruning_frac: float, model, mask: Mask):
+    """
+    Prune model by updating the model's mask and by applying it.
+
+    Parameters
+    ----------
+    pruning_frac:   float
+                    The percentage of weights that are pruned.
+    model
+    mask:   Mask
+    """
     prunable_layers = set(utils.prunable_layers(model))
 
     model_weights = {}

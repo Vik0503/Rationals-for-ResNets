@@ -1,3 +1,9 @@
+"""
+Implementation of the Lottery Ticket Hypothesis for ResNets.
+The Lottery Ticket Hypothesis: Finding Sparse, Trainable Neural Networks
+Jonathan Frankle, Michael Carbin arXiv:1803.03635,
+"""
+
 import os
 from datetime import datetime
 
@@ -125,7 +131,7 @@ def iterative_pruning_by_num(prune_model):
     scheduler, optimizer = utils.get_scheduler_optimizer(model=model)
 
     best_val_accuracy = tvt.train(model, optimizer, scheduler)
-    print('Best validation accuracy: {}'.format_map(best_val_accuracy))
+    print('Best validation accuracy: {}'.format(best_val_accuracy))
 
     test_accuracy = tvt.test(model)
     test_accuracies.append(test_accuracy * 100)
@@ -139,6 +145,7 @@ def iterative_pruning_by_num(prune_model):
         print('+' * 18)
 
         prune(LTH_args.pruning_percentage, model, mask)
+        mask = Mask.cuda(mask)
         sparsity.append(mask_sparsity(mask) * 100)
 
         print('Sparsity of Pruned Mask: ', mask_sparsity(mask))
@@ -149,7 +156,7 @@ def iterative_pruning_by_num(prune_model):
 
         scheduler, optimizer = utils.get_scheduler_optimizer(model=model)
         best_val_accuracy = tvt.train(model, optimizer, scheduler)  # train
-        print('Best validation accuracy: {}'.format_map(best_val_accuracy))
+        print('Best validation accuracy: {}'.format(best_val_accuracy))
 
         test_accuracy = tvt.test(model)  # test
         test_accuracies.append(test_accuracy * 100)

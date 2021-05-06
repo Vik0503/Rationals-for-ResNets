@@ -67,7 +67,9 @@ def get_arguments():
                                           '--iterative_pruning_epochs', '1', '--training_number_of_epochs', '5',
                                           '--stop_criteria', 'num_prune_epochs', '--milestones', '2', '3']"""
 
-    LTH_args = LTH_arg_parser.parse_args()
+    LTH_args = LTH_arg_parser.parse_args(['--dataset', 'SVHN', '--warmup_iterations', '7167',
+                                          '--iterative_pruning_epochs', '2', '--training_number_of_epochs', '3',
+                                          '--stop_criteria', 'num_prune_epochs', '--save_res_csv', '--prune_shortcuts', '--run_all_classic', '--arch_for_run_all', 'CIFAR10', '--pruning_percentage', '50'])
     if LTH_args.arch_for_run_all == 'ImageNet' and LTH_args.run_all_two_BB:
         print('This option is not available for ResNet18.')
         exit()

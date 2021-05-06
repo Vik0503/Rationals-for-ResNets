@@ -103,7 +103,7 @@ def make_yaml(models: List[str], saved_models: List[str], print_log: str, csv: L
     resnet_args = argparser.get_arguments()
     time_stamp = datetime.now()
     yaml_data = [{'Date': [time_stamp]}, {'Model(s)': models}, {'Dataset': [resnet_args.dataset]}, {'Batch Size': [resnet_args.batch_size]},
-                 {'Learning Rate': [resnet_args.learning_rate]}, {'Epochs': [resnet_args.training_number_of_epochs]}, {'Warm-Up Iterations': [resnet_args.warmup_iterations]},
+                 {'Learning Rate': [resnet_args.learning_rate]}, {'Epochs': [resnet_args.training_number_of_epochs]}, {'Training Milestones': [resnet_args.milestones]}, {'Warm-Up Iterations': [resnet_args.warmup_iterations]},
                  {'Rational Inits': [resnet_args.initialize_rationals]}, {'Data Seed': [resnet_args.data_seeds]}, {'Saved Model(s)': [saved_models]}, {'Print Log': [print_log]}]
 
     if resnet_args.save_res_csv:

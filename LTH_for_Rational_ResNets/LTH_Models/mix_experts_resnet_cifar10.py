@@ -185,6 +185,8 @@ class RationalResNet(nn.Module):
             elif isinstance(mod, (nn.BatchNorm2d, nn.GroupNorm)):
                 nn.init.constant_(mod.weight, 1)
                 nn.init.constant_(mod.bias, 0)
+            elif isinstance(mod, Rational):
+                mod.input_retrieve_mode(max_saves=1)
 
         # apply mask
         self.mask = mask

@@ -133,7 +133,7 @@ def make_mask_csv(all_PATHS: List[str], model_names: List[str]):
     index = pd.MultiIndex.from_tuples(tuples)
     df_dim = pd.DataFrame(all_data_dim, index=['Original Model'] + model_names, columns=index)
     df_weights = pd.DataFrame(all_data_weights, index=['Original Model'] + model_names, columns=index)
-    df_percent = pd.DataFrame(all_data_percent, index=['Original Model'] + model_names, columns=index)
+    df_percent = pd.DataFrame(all_data_percent, index=model_names, columns=index)
 
     display(df_dim)
     display(df_weights)
@@ -305,7 +305,7 @@ def make_yaml(models: List[str], saved_models: List[str], print_log: str, table:
     LTH_args = argparser.get_arguments()
     time_stamp = datetime.now()
     yaml_data = [{'Date': [time_stamp]}, {'Model(s)': models}, {'Dataset': [LTH_args.dataset]}, {'Batch Size': [LTH_args.batch_size]}, {'Pruning Percentage per Epoch': [LTH_args.pruning_percentage]},
-                 {'Training Epochs per Pruning Epoch': [LTH_args.training_number_of_epochs]}, {'Learning Rate': [LTH_args.learning_rate]}, {'Warm-Up Iterations': [LTH_args.warmup_iterations]},
+                 {'Training Epochs per Pruning Epoch': [LTH_args.training_number_of_epochs]}, {'Learning Rate': [LTH_args.learning_rate]}, {'Warm-Up Iterations': [LTH_args.warmup_iterations]}, {'Training Milestones': [LTH_args.milestones]},
                  {'Shortcuts pruned': [LTH_args.prune_shortcuts]}, {'Rational Inits': [LTH_args.initialize_rationals]}, {'Data Seed': [LTH_args.data_seeds]}, {'Saved Models': [saved_models]}, {'Print Log': [print_log]}]
 
     if LTH_args.stop_criteria is 'num_prune_epochs':
