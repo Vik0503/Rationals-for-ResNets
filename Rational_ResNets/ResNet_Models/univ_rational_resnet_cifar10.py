@@ -1,5 +1,5 @@
 """
-ResNet20 Model for CIFAR10 as originally described in: Deep Residual Learning for Image Recognition (arXiv:1512.03385)
+ResNet Model for CIFAR10 as originally described in: Deep Residual Learning for Image Recognition (arXiv:1512.03385)
 by Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun
 with Rational Activation Functions as activation functions instead of reLu activation functions.
 """
@@ -216,21 +216,21 @@ def _resnet(arch: str, block: Type[RationalBasicBlock], layers: List[int], **kwa
 
 def univ_rational_resnet20(**kwargs: Any) -> RationalResNet:
     """ResNet for CIFAR10 as mentioned in the paper above"""
-    return _resnet('resnet20', RationalBasicBlock, [3, 3, 3], **kwargs)
+    return _resnet('rational_resnet20', RationalBasicBlock, [3, 3, 3], **kwargs)
 
 
-def univ_rational_resnet20_2_BB(**kwargs: any) -> RationalResNet:
-    return _resnet('resnet20_2_BB', RationalBasicBlock, [2, 2, 2], **kwargs)
+def univ_rational_resnet14_A(**kwargs: any) -> RationalResNet:
+    return _resnet('rational_resnet14_A', RationalBasicBlock, [2, 2, 2], **kwargs)
 
 
-def univ_rational_resnet20_2_layers(**kwargs: Any) -> RationalResNet:
+def univ_rational_resnet14_B(**kwargs: Any) -> RationalResNet:
     """ResNet for CIFAR10 as mentioned in the paper above"""
-    return _resnet('resnet20', RationalBasicBlock, [3, 3], **kwargs)
+    return _resnet('rational_resnet14_B', RationalBasicBlock, [3, 3], **kwargs)
 
 
-def univ_rational_resnet20_1_layer(**kwargs: Any) -> RationalResNet:
+def univ_rational_resnet8(**kwargs: Any) -> RationalResNet:
     """ResNet for CIFAR10 as mentioned in the paper above"""
-    return _resnet('resnet20', RationalBasicBlock, [3], **kwargs)
+    return _resnet('rational_resnet8', RationalBasicBlock, [3], **kwargs)
 
 
 def rational_resnet32(**kwargs: Any) -> RationalResNet:

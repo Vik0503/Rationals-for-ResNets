@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import List
 
 import matplotlib
 import matplotlib.pyplot as plt
@@ -26,7 +27,7 @@ def final_plot(cm, epoch_time, best_test_acc: float, acc_x_vals: list, train_acc
         Tensor with confusion matrix.
     epoch_time:
                 Average time per epoch
-    test_acc: float
+    best_test_acc: float
               Best test accuracy.
     acc_x_vals: list
                 A list with the x values for the plot.
@@ -90,28 +91,52 @@ def activation_function_plots(model):
     plt.show()
 
 
-def plot_overview_all(training_accs, val_accs, test_accs, x_vals, best_test_accs, avg_epoch):  # TODO: allow diff. plot legend names + Doc
-    plot_labels = ['ReLU ResNet20', 'univ. rational ResNet20', 'mix. exp. ResNet20']
+def plot_overview_all(training_accs, val_accs, test_accs, x_vals, best_test_accs, avg_epoch, model_names: List[str]):
+    """
+    Make an overview graph, containing three sub-graphs to compare the three models.
+
+    Parameters
+    ----------
+    training_accs:
+                    A list with all training accuracies of all three models.
+    val_accs:
+                A list with all validation accuracies of all three models.
+    test_accs:
+                A list with all test accuracies of all three models.
+    x_vals:
+                Values for the x-axes of the graphs.
+    best_test_accs:
+                        A list with the best test accuracy for each model.
+    avg_epoch:
+                The average time per epoch.
+    model_names:    List[str]
+                    A list with the model names.
+
+    Returns
+    -------
+    PATH:   str
+            Path to the saved plot.
+    """
 
     plt.figure(figsize=(20, 6))
     plt.subplots_adjust(bottom=0.3)
 
     plt.subplot(141)
     for i in range(len(training_accs)):
-        plt.plot(x_vals, training_accs[i], label=plot_labels[i])
+        plt.plot(x_vals, training_accs[i], label=model_names[i])
     plt.xlabel('Epochs')
     plt.ylabel('Training Accuracy in Percent')
 
     plt.subplot(142)
     for i in range(len(val_accs)):
-        plt.plot(x_vals, val_accs[i], label=plot_labels[i])
+        plt.plot(x_vals, val_accs[i], label=model_names[i])
     plt.xlabel('Epochs')
     plt.ylabel('Validation Accuracy in Percent')
-    plt.legend(['ReLU ResNet20', 'univ. rational ResNet20', 'mix. exp. ResNet20'], bbox_to_anchor=(0.5, -0.2), loc='upper center', ncol=3)
+    plt.legend([model_names[0], model_names[1], model_names[2]], bbox_to_anchor=(0.5, -0.2), loc='upper center', ncol=3)
 
     plt.subplot(143)
     for i in range(len(test_accs)):
-        plt.plot(x_vals, test_accs[i], label=plot_labels[i])
+        plt.plot(x_vals, test_accs[i], label=model_names[i])
     plt.xlabel('Epochs')
     plt.ylabel('Test Accuracy in Percent')
 
@@ -119,10 +144,10 @@ def plot_overview_all(training_accs, val_accs, test_accs, x_vals, best_test_accs
     text = 'dataset: {}, '.format(resnet_args.dataset) + 'batch size: {}, '.format(resnet_args.batch_size) + '\n' + '{} training epochs, '.format(resnet_args.training_number_of_epochs) + '\n' + \
            'learning rate: {}, '.format(resnet_args.learning_rate) + '{} warm-up iterations, '.format(resnet_args.warmup_iterations) + '\n' + \
            'best test accuracy: ' + '\n' + \
-           '- ReLU ResNet: {:4f}'.format(best_test_accs[0]) + '\n' + '- univ. rational ResNet20: {:4f}'.format(best_test_accs[1]) + '\n' + '- mix. exp. ResNet20: {:4f}'.format(best_test_accs[2]) + '\n' + \
+           '- {}: {:4f}'.format(model_names[0], best_test_accs[0]) + '\n' + '- {}: {:4f}'.format(model_names[1], best_test_accs[1]) + '\n' + '- {}: {:4f}'.format(model_names[2], best_test_accs[2]) + '\n' + \
            'average time per epoch: ' + '\n' + \
-           '- ReLU ResNet: {:.0f}m {:.0f}s, '.format(avg_epoch[0] // 60, avg_epoch[0] % 60) + '\n' + '- univ. rational ResNet20: {:.0f}m {:.0f}s, '.format(avg_epoch[1] // 60, avg_epoch[1] % 60) + '\n' \
-           + '- mix. exp. ResNet20: {:.0f}m {:.0f}s, '.format(avg_epoch[2] // 60, avg_epoch[2] % 60)
+           '- {}: {:.0f}m {:.0f}s, '.format(model_names[0], avg_epoch[0] // 60, avg_epoch[0] % 60) + '\n' + '- {}: {:.0f}m {:.0f}s, '.format(model_names[1], avg_epoch[1] // 60, avg_epoch[1] % 60) + '\n' \
+           + '- {}: {:.0f}m {:.0f}s, '.format(model_names[2], avg_epoch[2] // 60, avg_epoch[2] % 60)
 
     plt.figtext(0.725, 0.5, text, bbox=props, size=9)
 

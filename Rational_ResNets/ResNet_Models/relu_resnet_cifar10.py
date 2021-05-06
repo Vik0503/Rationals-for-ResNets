@@ -1,5 +1,5 @@
 """
-ResNet18 Model for CIFAR10 as originally described in: Deep Residual Learning for Image Recognition (arXiv:1512.03385)
+ResNet Model for CIFAR10 as originally described in: Deep Residual Learning for Image Recognition (arXiv:1512.03385)
 by Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun
 """
 
@@ -210,16 +210,17 @@ def relu_resnet20(**kwargs: Any) -> ResNet:
 
 
 def relu_resnet14_A(**kwargs: any) -> ResNet:
+    """Smaller ResNet for CIFAR10 as mentioned in the paper above"""
     return _resnet('relu_resnet14_A', BasicBlock, [2, 2, 2], **kwargs)
 
 
 def relu_resnet14_B(**kwargs: Any) -> ResNet:
-    """ResNet for CIFAR10 as mentioned in the paper above"""
+    """Smaller ResNet for CIFAR10 as mentioned in the paper above"""
     return _resnet('relu_resnet14_B', BasicBlock, [3, 3], **kwargs)
 
 
 def relu_resnet8(**kwargs: Any) -> ResNet:
-    """ResNet for CIFAR10 as mentioned in the paper above"""
+    """Smaller ResNet for CIFAR10 as mentioned in the paper above"""
     return _resnet('relu_resnet8', BasicBlock, [3], **kwargs)
 
 

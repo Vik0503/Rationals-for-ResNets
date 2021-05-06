@@ -54,26 +54,26 @@ def run_all():
     rational_inits = resnet_args.initialize_rationals  # TODO: catch exceptions
     num_rationals = len(rational_inits)
     if resnet_args.run_all_classic and resnet_args.run_all_architecture == 'CIFAR10':
-        model_names = ['relu_resnet20', 'univ_rational_resnet20', 'mix_experts_resnet20']
+        model_names = ['ReLU ResNet20', 'univ. rational ResNet20', 'mix. exp. ResNet20']
         models_run_all = [relu_cifar.relu_resnet20(), univ_rat_cifar.univ_rational_resnet20(), mix_exp_cifar.mix_exp_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)]
     elif resnet_args.run_all_classic and resnet_args.run_all_architecture == 'ImageNet':
         model_names = ['relu_resnet18', 'univ_rational_resnet18', 'mix_experts_resnet18']
         models_run_all = [relu_imagenet.relu_resnet18(), univ_rat_imagenet.univ_rational_resnet18(), mix_exp_imagenet.mix_exp_resnet18(rational_inits=rational_inits, num_rationals=num_rationals)]
 
     elif resnet_args.run_all_two_BB:
-        model_names = ['relu_resnet14_A', 'univ_rational_resnet14_A', 'mix_experts_resnet14_A']
-        models_run_all = [relu_cifar.relu_resnet14_A(), univ_rat_cifar.univ_rational_resnet20_2_BB(), mix_exp_cifar.mix_exp_resnet20_2_BB(rational_inits=rational_inits, num_rationals=num_rationals)]
+        model_names = ['ReLU ResNet14_A', 'univ. rational ResNet14_A', 'mix. exp. ResNet14_A']
+        models_run_all = [relu_cifar.relu_resnet14_A(), univ_rat_cifar.univ_rational_resnet14_A(), mix_exp_cifar.mix_exp_resnet14_A(rational_inits=rational_inits, num_rationals=num_rationals)]
 
     elif resnet_args.run_all_two_layers and resnet_args.run_all_architecture == 'CIFAR10':
         model_names = ['relu_resnet14_B', 'univ_rational_resnet14_B', 'mix_experts_resnet14_B']
-        models_run_all = [relu_cifar.relu_resnet14_B(), univ_rat_cifar.univ_rational_resnet20_2_layers(), mix_exp_cifar.mix_exp_resnet20_2_layers(rational_inits=rational_inits, num_rationals=num_rationals)]
+        models_run_all = [relu_cifar.relu_resnet14_B(), univ_rat_cifar.univ_rational_resnet14_B(), mix_exp_cifar.mix_exp_resnet14_B(rational_inits=rational_inits, num_rationals=num_rationals)]
     elif resnet_args.run_all_two_layers and resnet_args.run_all_architecture == 'ImageNet':
         model_names = ['relu_resnet18_2_layers', 'univ_rational_resnet18_2_layers', 'mix_experts_resnet18_2_layers']
         models_run_all = [relu_imagenet.relu_resnet18_2_layers(), univ_rat_imagenet.univ_rational_resnet18_2_layers(), mix_exp_imagenet.mix_exp_resnet18_2_layers(rational_inits=rational_inits, num_rationals=num_rationals)]
 
     elif resnet_args.run_all_one_layer and resnet_args.run_all_architecture == 'CIFAR10':
-        model_names = ['relu_resnet8', 'univ_rational_resnet8', 'mix_experts_resnet8']
-        models_run_all = [relu_cifar.relu_resnet8(), univ_rat_cifar.univ_rational_resnet20_1_layer(), mix_exp_cifar.mix_exp_resnet20_1_layer(rational_inits=rational_inits, num_rationals=num_rationals)]
+        model_names = ['ReLU ResNet8', 'univ. rational ResNet8', 'mix. exp. ResNet8']
+        models_run_all = [relu_cifar.relu_resnet8(), univ_rat_cifar.univ_rational_resnet8(), mix_exp_cifar.mix_exp_resnet8(rational_inits=rational_inits, num_rationals=num_rationals)]
     else:
         model_names = ['relu_resnet18_1_layer', 'univ_rational_resnet18_1_layer', 'mix_experts_resnet18_1_layer']
         models_run_all = [relu_imagenet.relu_resnet18_1_layer(), univ_rat_imagenet.univ_rational_resnet18_1_layer(), mix_exp_imagenet.mix_exp_resnet18_1_layer(rational_inits=rational_inits, num_rationals=num_rationals)]
@@ -110,9 +110,9 @@ def run_all():
         torch.save(model, saved_model_PATH)
         saved_models_PATHS.append(saved_model_PATH)
 
-    plot_PATH = plots.plot_overview_all(train_accs, val_accs, test_accs, accuracy_plot_x_vals, best_test_accs, avg_time)
+    plot_PATH = plots.plot_overview_all(train_accs, val_accs, test_accs, accuracy_plot_x_vals, best_test_accs, avg_time, model_names)
     act_func_PATH = plots.plot_activation_func_overview(models_run_all[2], num_rationals, rational_inits)
-    utils.make_yaml(model_names, csv=csv_PATHS, print_log=print_PATH, plot=plot_PATH, act_func_plot=act_func_PATH, saved_models=saved_models_PATHS)
+    utils.make_yaml(model_names, csv=csv_PATHS, print_log=print_PATH, plot=[plot_PATH], act_func_plot=act_func_PATH, saved_models=saved_models_PATHS)
 
 
 def run_one():
@@ -132,13 +132,13 @@ def run_one():
         model = univ_rat_cifar.univ_rational_resnet20()
         num_rationals = 2
     elif resnet_args.model == 'univ_rational_resnet14_A':
-        model = univ_rat_cifar.univ_rational_resnet20_2_BB()
+        model = univ_rat_cifar.univ_rational_resnet14_A()
         num_rationals = 2
     elif resnet_args.model == 'univ_rational_resnet14_B':
-        model = univ_rat_cifar.univ_rational_resnet20_2_layers()
+        model = univ_rat_cifar.univ_rational_resnet14_B()
         num_rationals = 2
     elif resnet_args.model == 'univ_rational_resnet8':
-        model = univ_rat_cifar.univ_rational_resnet20_1_layer()
+        model = univ_rat_cifar.univ_rational_resnet8()
         num_rationals = 2
 
     elif resnet_args.model == 'mix_experts_resnet20':
@@ -147,15 +147,15 @@ def run_one():
         num_rationals = len(rational_inits) * 2
     elif resnet_args.model == 'mix_experts_resnet14_A':
         num_rationals = len(rational_inits)
-        model = mix_exp_cifar.mix_exp_resnet20_2_BB(rational_inits=rational_inits, num_rationals=num_rationals)
+        model = mix_exp_cifar.mix_exp_resnet14_A(rational_inits=rational_inits, num_rationals=num_rationals)
         num_rationals = len(rational_inits) * 2
     elif resnet_args.model == 'mix_experts_resnet14_B':
         num_rationals = len(rational_inits)
-        model = mix_exp_cifar.mix_exp_resnet20_2_layers(rational_inits=rational_inits, num_rationals=num_rationals)
+        model = mix_exp_cifar.mix_exp_resnet14_B(rational_inits=rational_inits, num_rationals=num_rationals)
         num_rationals = len(rational_inits) * 2
     elif resnet_args.model == 'mix_experts_resnet8':
         num_rationals = len(rational_inits)
-        model = mix_exp_cifar.mix_exp_resnet20_1_layer(rational_inits=rational_inits, num_rationals=num_rationals)
+        model = mix_exp_cifar.mix_exp_resnet8(rational_inits=rational_inits, num_rationals=num_rationals)
         num_rationals = len(rational_inits) * 2
 
     elif resnet_args.model == 'relu_resnet18':
