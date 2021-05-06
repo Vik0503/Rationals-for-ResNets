@@ -14,7 +14,7 @@ ResNet_arg_parser.add_argument('-m', '--model', default='univ_rational_resnet20'
 ResNet_arg_parser.add_argument('-ds', '--dataset', default='cifar10', type=str, choices=['cifar10', 'SVHN', 'ImageNet'])
 ResNet_arg_parser.add_argument('-aug', '--augment_data', default=False, type=bool)
 ResNet_arg_parser.add_argument('-epochs', '--training_number_of_epochs', default=25, type=int)
-ResNet_arg_parser.add_argument('-num_rat', '--number_of_rationals_per_vector', default=1, type=int)
+ResNet_arg_parser.add_argument('-num_rat', '--number_of_rationals_per_vector', default=1, type=int)  # needed?
 ResNet_arg_parser.add_argument('-init_rationals', '--initialize_rationals',
                                type=str, nargs='+', default=['leaky_relu', 'gelu', 'swish', 'tanh', 'sigmoid'], choices=['leaky_relu', 'gelu', 'swish', 'tanh', 'sigmoid'],
                                help="Examples: -init_rationals leaky_relu gelu, -init_rationals tanh")
@@ -25,7 +25,7 @@ run_all_groups = ResNet_arg_parser.add_mutually_exclusive_group()
 run_all_groups.add_argument('--run_all_classic', default=False, action='store_true',
                             help="Flag to perform all three experiments `original`, `univariate rational` and `mixture of experts` in a sequence and plot the results in one graph for further comparison.")
 run_all_groups.add_argument('--run_all_two_BB', default=False, action='store_true',
-                            help="Flag to perform all three experiments `original`, `univariate rational` and `mixture of experts` with a smaller architecture (in layers 2 and 3 only 2 BasicBlocks)"
+                            help="Flag to perform all three experiments `original`, `univariate rational` and `mixture of experts` with a smaller architecture (only two BasicBlocks)"
                                  " in a sequence and plot the results in one graph for further comparison.")
 run_all_groups.add_argument('--run_all_two_layers', default=False, action='store_true',
                             help="Flag to perform all three experiments `original`, `univariate rational` and `mixture of experts` with a smaller architecture (only two full layers) "

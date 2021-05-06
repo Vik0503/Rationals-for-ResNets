@@ -1,17 +1,34 @@
 import csv
+from typing import List
 
 import torch
 import yaml
 from torch import optim
 from torch.optim import lr_scheduler
 
-import argparser
+from Rational_ResNets import argparser
 from datetime import datetime
 
 args = argparser.get_arguments()
 
 
-def make_csv(model, epoch, train_acc: list, val_acc: list, test_acc: list):
+def make_csv(model, epoch: List[int], train_acc: list, val_acc: list, test_acc: list):
+    """
+    Save results as csv files.
+
+    Parameters
+    ----------
+    model
+    epoch:  List[int]
+    train_acc:  list
+    val_acc:    list
+    test_acc:   list
+
+    Returns
+    -------
+    PATH:   str
+            The path to the saved csv file.
+    """
     time_stamp = datetime.now()
     PATH = 'CSV/{}'.format(model) + '/{}'.format(time_stamp) + '.csv'
     with open(PATH, 'w', newline='') as csvfile:
@@ -64,12 +81,30 @@ def get_scheduler_optimizer(model, it_per_ep: int):
     return lr_scheduler.LambdaLR(optimizer, lr_lambda=lr_lambda), optimizer
 
 
-def make_yaml(models: list, saved_models, print_log, csv=None, act_func_plot=None, plot=None):
+def make_yaml(models: List[str], saved_models: List[str], print_log: str, csv: List[str] = None, act_func_plot: str = None, plot: List[str] = None):
+    """
+    Make YAML file for experiment (series).
+
+    Parameters
+    ----------
+    models: List[str]
+            A list with the model name(s).
+    saved_models: List[str]
+                  A list with the path(s) to the directory with the saved models.
+    print_log: str
+               The path to the print log.
+    csv:    List[str]
+            The path(s) to the csv file(s).
+    act_func_plot: str
+                   The path to the activation function overview plot.
+    plot:   List[str]
+            The path(s) to the plot(s).
+    """
     resnet_args = argparser.get_arguments()
     time_stamp = datetime.now()
     yaml_data = [{'Date': [time_stamp]}, {'Model(s)': models}, {'Dataset': [resnet_args.dataset]}, {'Batch Size': [resnet_args.batch_size]},
                  {'Learning Rate': [resnet_args.learning_rate]}, {'Epochs': [resnet_args.training_number_of_epochs]}, {'Warm-Up Iterations': [resnet_args.warmup_iterations]},
-                 {'Rational Inits': [resnet_args.initialize_rationals]}, {'Saved Model(s)': [saved_models]}, {'Print Log': [print_log]}]
+                 {'Rational Inits': [resnet_args.initialize_rationals]}, {'Data Seed': [resnet_args.data_seeds]}, {'Saved Model(s)': [saved_models]}, {'Print Log': [print_log]}]
 
     if resnet_args.save_res_csv:
         yaml_data.append({'CSV File(s)': [csv]})

@@ -204,7 +204,7 @@ def run_one():
     time_stamp = datetime.now()
     saved_model_PATH = './Saved_Models/{}.pth'.format(time_stamp)
     torch.save(model, saved_model_PATH)
-    utils.make_yaml(models, csv=csv_PATH, saved_models=saved_model_PATH, print_log=print_PATH, plot=plot_PATH, act_func_plot=act_func_PATH)
+    utils.make_yaml(models, csv=[csv_PATH], saved_models=[saved_model_PATH], print_log=print_PATH, plot=plot_PATH, act_func_plot=act_func_PATH)
 
 
 if resnet_args.run_all_classic or resnet_args.run_all_two_BB or resnet_args.run_all_two_layers or resnet_args.run_all_one_layer:

@@ -1,7 +1,7 @@
 """
 ResNet20 Model for CIFAR10 as originally described in: Deep Residual Learning for Image Recognition (arXiv:1512.03385)
 by Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun
-with Padè Activation Units as activation functions instead of reLu activation functions.
+with Rational Activation Functions as activation functions instead of reLu activation functions.
 """
 
 from __future__ import print_function, division
@@ -108,8 +108,6 @@ class RationalResNet(nn.Module):
         self.batch_norm_1 = self.norm_layer(self.planes_in)
 
         self.rational = Rational(cuda=cuda)
-
-        # self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
 
         self.layer1 = self.make_layer(block=block, planes_out=16, num_blocks=layers[0], stride=1)
         out_size = 16
@@ -222,7 +220,7 @@ def univ_rational_resnet20(**kwargs: Any) -> RationalResNet:
 
 
 def univ_rational_resnet20_2_BB(**kwargs: any) -> RationalResNet:
-    return _resnet('resnet20_2_BB', RationalBasicBlock, [3, 2, 2], **kwargs)
+    return _resnet('resnet20_2_BB', RationalBasicBlock, [2, 2, 2], **kwargs)
 
 
 def univ_rational_resnet20_2_layers(**kwargs: Any) -> RationalResNet:
@@ -252,7 +250,6 @@ def rational_resnet56(**kwargs: Any) -> RationalResNet:
 
 def rational_resnet110(**kwargs: Any) -> RationalResNet:
     """ResNet for CIFAR10 as mentioned in the paper above"""
-    print('inside 110')
     return _resnet('resnet110_cifar10', RationalBasicBlock, [18, 18, 18], **kwargs)
 
 

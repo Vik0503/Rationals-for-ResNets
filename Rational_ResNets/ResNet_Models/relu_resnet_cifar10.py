@@ -210,7 +210,7 @@ def relu_resnet20(**kwargs: Any) -> ResNet:
 
 
 def relu_resnet20_2_BB(**kwargs: any) -> ResNet:
-    return _resnet('resnet20_2_BB', BasicBlock, [3, 2, 2], **kwargs)
+    return _resnet('resnet20_2_BB', BasicBlock, [2, 2, 2], **kwargs)
 
 
 def relu_resnet20_2_layers(**kwargs: Any) -> ResNet:
