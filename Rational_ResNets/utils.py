@@ -81,7 +81,7 @@ def get_scheduler_optimizer(model, it_per_ep: int):
     return lr_scheduler.LambdaLR(optimizer, lr_lambda=lr_lambda), optimizer
 
 
-def make_yaml(models: List[str], saved_models: List[str], print_log: str, csv: List[str] = None, act_func_plot: str = None, plot: List[str] = None):
+def make_yaml(models: List[str], saved_models: List[str], print_log: str, csv: List[str] = None, act_func_plot: List[str] = None, plot: List[str] = None):
     """
     Make YAML file for experiment (series).
 

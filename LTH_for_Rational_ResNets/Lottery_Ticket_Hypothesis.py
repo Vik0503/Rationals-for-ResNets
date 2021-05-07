@@ -235,6 +235,11 @@ def iterative_pruning_by_test_acc(prune_model):
 
     scheduler, optimizer = utils.get_scheduler_optimizer(model=model)
 
+    if LTH_args.hist:
+        for mod in model.modules():
+            if isinstance(mod, Rational):
+                mod.input_retrieve_mode(max_saves=1)
+
     best_val_accuracy = tvt.train(model, optimizer, scheduler)
     print('Best validation accuracy: {}'.format(best_val_accuracy))
 
@@ -272,6 +277,12 @@ def iterative_pruning_by_test_acc(prune_model):
         utils.reinit(model, mask, initial_state)  # reinit
 
         scheduler, optimizer = utils.get_scheduler_optimizer(model=model)
+
+        if LTH_args.hist:
+            for mod in model.modules():
+                if isinstance(mod, Rational):
+                    mod.input_retrieve_mode(max_saves=1)
+
         best_val_accuracy = tvt.train(model, optimizer, scheduler)  # train
         print('Best validation accuracy: {}'.format(best_val_accuracy))
 

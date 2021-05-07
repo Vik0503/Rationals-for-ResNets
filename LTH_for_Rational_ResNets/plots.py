@@ -390,6 +390,8 @@ def plot_activation_func_overview_univ(model, saved_models_path: str):
     Parameters
     ----------
     model
+    saved_models_path:  str
+                        Path to the saved model.
 
     Returns
     -------

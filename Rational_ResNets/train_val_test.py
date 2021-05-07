@@ -40,6 +40,7 @@ elif resnet_args.dataset == 'SVHN':
 
 
 def train_val_test_model(model, optimizer, scheduler):
+    """Train, validate and test a model"""
     criterion = torch.nn.CrossEntropyLoss()
     best_model = copy.deepcopy(model.state_dict())
     since = time.time()

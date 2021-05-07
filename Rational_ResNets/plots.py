@@ -8,6 +8,9 @@ import torch
 from rational.torch import Rational
 import argparser
 
+from Rational_ResNets.ResNet_Models.mix_experts_resnet_cifar10 import RationalResNet as mix
+from Rational_ResNets.ResNet_Models.univ_rational_resnet_cifar10 import RationalResNet as univ
+
 plt.style.use(["science", "grid"])
 matplotlib.rcParams.update({
     "font.family": "serif",
@@ -183,7 +186,7 @@ def calc_mixture_plot(alphas, rationals):
     return all_x.sum(dim=0), rationals[0].show(display=False)['line']['x']
 
 
-def plot_activation_func_overview(model, num_rat, inits):
+def plot_activation_func_overview_mix(model, num_rat: int, inits: List[str]):
     """
     Plot a graph with all Rational Activation Functions of the mixture of experts models.
 
@@ -199,7 +202,6 @@ def plot_activation_func_overview(model, num_rat, inits):
     -------
     PATH:   The path to the saved plot.
     """
-    print(num_rat)
     c = 0
     tmp = []
     rat_groups = []
@@ -219,21 +221,21 @@ def plot_activation_func_overview(model, num_rat, inits):
 
     layers = model.layers
 
-    if 'mix_experts_resnet20' in resnet_args.model:
-        resnet20_plot(layers, rat_groups, alphas, inits)
+    if isinstance(model, mix):
+        resnet20_plot_mix(layers, rat_groups, alphas, inits)
     else:
-        resnet18_plot(layers, rat_groups, alphas, inits)
+        resnet18_plot_mix(layers, rat_groups, alphas, inits)
 
     plt.tight_layout()
     time_stamp = datetime.now()
 
-    PATH = './Plots/activation_functions/{}'.format(time_stamp) + '_{}'.format(resnet_args.dataset) + '_all.svg'
+    PATH = './Plots/activation_functions/{}'.format(time_stamp) + '_{}'.format(resnet_args.dataset) + '_all_mix.svg'
     plt.savefig(PATH)
     plt.show()
     return PATH
 
 
-def resnet20_plot(layers, rat_groups, alphas, inits):
+def resnet20_plot_mix(layers: List[int], rat_groups, alphas, inits: List[str]):
     """
     Method to plot activation function overview for CIFAR10 ResNet.
 
@@ -247,11 +249,13 @@ def resnet20_plot(layers, rat_groups, alphas, inits):
     inits:     List[str]
                The Rational Activation Functions' initializations.
     """
-    plt.figure(figsize=(layers[0] * 8, len(layers) * 8))
-    model_1 = False
-
-    if resnet_args.model == 'mix_experts_resnet14_A':
-        model_1 = True
+    if len(layers) == 1:
+        x = 1.75
+    elif len(layers) == 2:
+        x = 2.5
+    else:
+        x = 3
+    plt.figure(figsize=(layers[0] * 8, x * 8))
 
     plt_counter = 0
     for r in range(1, len(layers) * layers[0] * 2 + layers[0] * 2 + 1):
@@ -271,20 +275,12 @@ def resnet20_plot(layers, rat_groups, alphas, inits):
             plt.title('Basic Block 2', loc='left', fontsize=16)
         if r == layers[0] * 4 + 1:
             plt.title('Layer 2 \nBasic Block 0', loc='left', fontsize=16)
-        if model_1 and layers[0] * 4 + layers[0] * 2 - 2 < r < layers[0] * 4 + 2 * layers[0] + 1:
-            ax = plt.gca()
-            ax.axis('off')
-            show = False
         elif r == layers[0] * 4 + 5:
             plt.title('Basic Block 2', loc='left', fontsize=16)
         if r == layers[0] * 4 + 3:
             plt.title('Basic Block 1', loc='left', fontsize=16)
         if r == layers[0] * 6 + 1:
             plt.title('Layer 3 \nBasic Block 0', loc='left', fontsize=16)
-        if model_1 and layers[0] * 6 + layers[0] * 2 - 2 < r < layers[0] * 6 + 2 * layers[0] + 1:
-            ax = plt.gca()
-            ax.axis('off')
-            show = False
         elif r == layers[0] * 6 + 5:
             plt.title('Basic Block 2', loc='left', fontsize=16)
         if r == layers[0] * 6 + 3:
@@ -293,6 +289,7 @@ def resnet20_plot(layers, rat_groups, alphas, inits):
         if show:
             colors = ['C0', 'C1', 'C2', 'C4', 'C6']
             tmp = rat_groups[plt_counter]
+
             alpha_tmp = alphas[plt_counter]
             legend = []
             y, x = calc_mixture_plot(alpha_tmp, tmp)
@@ -306,16 +303,17 @@ def resnet20_plot(layers, rat_groups, alphas, inits):
                 legend.append('\u03B1_{}: {:0.4f}, init.: {}, deg.: {}'.format(rational, alpha_tmp[rational], inits[rational], tmp[rational].degrees))
 
             plt.legend(legend, bbox_to_anchor=(0.5, -0.4), ncol=1, loc='center')
-            bins = tmp[0].show(display=False)['hist']['bins']
-            freq = tmp[0].show(display=False)['hist']['freq']
-            ax = plt.gca()
-            ax2 = ax.twinx()
-            ax2.set_yticks([])
-            ax2.bar(bins, freq, width=bins[1] - bins[0], color='grey', edgecolor='grey', alpha=0.3)
+            if resnet_args.hist:
+                bins = tmp[0].show(display=False)['hist']['bins']
+                freq = tmp[0].show(display=False)['hist']['freq']
+                ax = plt.gca()
+                ax2 = ax.twinx()
+                ax2.set_yticks([])
+                ax2.bar(bins, freq, width=bins[1] - bins[0], color='grey', edgecolor='grey', alpha=0.3)
             plt_counter += 1
 
 
-def resnet18_plot(layers, rat_groups, alphas, inits):
+def resnet18_plot_mix(layers, rat_groups, alphas, inits):
     """
     Method to plot activation function overview for ImageNet ResNet.
 
@@ -329,7 +327,13 @@ def resnet18_plot(layers, rat_groups, alphas, inits):
     inits:     List[str]
                The Rational Activation Functions' initializations.
     """
-    plt.figure(figsize=(layers[0] * 8, len(layers) * 8))
+    if len(layers) == 1:
+        x = 1.75
+    elif len(layers) == 2:
+        x = 2.5
+    else:
+        x = 3
+    plt.figure(figsize=(layers[0] * 8, x * 8))
 
     plt_counter = 0
     for r in range(1, len(layers) * layers[0] * 2 + layers[0] * 2 + 1):
@@ -374,10 +378,171 @@ def resnet18_plot(layers, rat_groups, alphas, inits):
                 legend.append('\u03B1_{}: {:0.4f}, init.: {}, deg.: {}'.format(rational, alpha_tmp[rational], inits[rational], tmp[rational].degrees))
 
             plt.legend(legend, bbox_to_anchor=(0.5, -0.4), ncol=1, loc='center')
-            bins = tmp[0].show(display=False)['hist']['bins']
-            freq = tmp[0].show(display=False)['hist']['freq']
-            ax = plt.gca()
-            ax2 = ax.twinx()
-            ax2.set_yticks([])
-            ax2.bar(bins, freq, width=bins[1] - bins[0], color='grey', edgecolor='grey', alpha=0.3)
+            if resnet_args.hist:
+                bins = tmp[0].show(display=False)['hist']['bins']
+                freq = tmp[0].show(display=False)['hist']['freq']
+                ax = plt.gca()
+                ax2 = ax.twinx()
+                ax2.set_yticks([])
+                ax2.bar(bins, freq, width=bins[1] - bins[0], color='grey', edgecolor='grey', alpha=0.3)
             plt_counter += 1
+
+
+def plot_activation_func_overview_univ(model):
+    """
+    Plot a graph with all Rational Activation Functions of the mixture of experts models.
+
+    Parameters
+    ----------
+    model
+
+    Returns
+    -------
+    PATH:   The path to the saved plot.
+    """
+    rat = []
+    for m in model.modules():
+        if isinstance(m, Rational):
+            rat.append(m)
+
+    layers = model.layers
+
+    if isinstance(model, univ):
+        resnet20_plot_univ(layers, rat)
+
+    plt.tight_layout()
+    time_stamp = datetime.now()
+
+    PATH = './Plots/activation_functions/{}'.format(time_stamp) + '_{}'.format(resnet_args.dataset) + '_all_univ.svg'
+    plt.savefig(PATH)
+    plt.show()
+    return PATH
+
+
+def resnet20_plot_univ(layers: List[int], rat):
+    """
+    Method to plot activation function overview for CIFAR10 ResNet.
+
+    Parameters
+    ----------
+    layers:     List[int]
+    rat:
+                All Rationals.
+    """
+    if len(layers) == 1:
+        x = 1.75
+    elif len(layers) == 2:
+        x = 2.5
+    else:
+        x = 3
+    plt.figure(figsize=(layers[0] * 8, x * 7))
+
+    plt_counter = 0
+    for r in range(1, len(layers) * layers[0] * 2 + layers[0] * 2 + 1):
+        show = True
+        plt.subplot(len(layers) + 2, layers[0] * 2, r)
+        if r == 1:
+            plt.title('Layer 0', loc='left', fontsize=16)
+        if layers[0] * 2 + 1 > r > 1:
+            ax = plt.gca()
+            ax.axis('off')
+            show = False
+        if r == layers[0] * 2 + 1:
+            plt.title('Layer 1 \nBasic Block 0', loc='left', fontsize=16)
+        if r == layers[0] * 2 + 3:
+            plt.title('Basic Block 1', loc='left', fontsize=16)
+        if r == layers[0] * 2 + 5:
+            plt.title('Basic Block 2', loc='left', fontsize=16)
+        if r == layers[0] * 4 + 1:
+            plt.title('Layer 2 \nBasic Block 0', loc='left', fontsize=16)
+        elif r == layers[0] * 4 + 5:
+            plt.title('Basic Block 2', loc='left', fontsize=16)
+        if r == layers[0] * 4 + 3:
+            plt.title('Basic Block 1', loc='left', fontsize=16)
+        if r == layers[0] * 6 + 1:
+            plt.title('Layer 3 \nBasic Block 0', loc='left', fontsize=16)
+        elif r == layers[0] * 6 + 5:
+            plt.title('Basic Block 2', loc='left', fontsize=16)
+        if r == layers[0] * 6 + 3:
+            plt.title('Basic Block 1', loc='left', fontsize=16)
+
+        if show:
+            tmp = rat[plt_counter]
+
+            x = tmp.show(display=False)['line']['x']
+            y = tmp.show(display=False)['line']['y']
+            plt.plot(x, y)
+
+            plt.legend(['init.: leaky relu, deg.: {}'.format(tmp.degrees)], bbox_to_anchor=(0.5, -0.2), ncol=1, loc='center')
+            if resnet_args.hist:
+                bins = tmp[0].show(display=False)['hist']['bins']
+                freq = tmp[0].show(display=False)['hist']['freq']
+                ax = plt.gca()
+                ax2 = ax.twinx()
+                ax2.set_yticks([])
+                ax2.bar(bins, freq, width=bins[1] - bins[0], color='grey', edgecolor='grey', alpha=0.3)
+            plt_counter += 1
+
+
+def resnet18_plot_univ(layers: List[int], rat):
+    """
+    Method to plot activation function overview for ImageNet ResNet.
+
+    Parameters
+    ----------
+    layers:     List[int]
+    rat:
+                All Rationals.
+    """
+    if len(layers) == 1:
+        x = 1.75
+    elif len(layers) == 2:
+        x = 2.5
+    else:
+        x = 3
+    plt.figure(figsize=(layers[0] * 8, x * 8))
+
+    plt_counter = 0
+    for r in range(1, len(layers) * layers[0] * 2 + layers[0] * 2 + 1):
+        show = True
+        plt.subplot(len(layers) + 2, layers[0] * 2, r)
+        if r == 1:
+            plt.title('Layer 0', loc='left', fontsize=16)
+        if layers[0] * 2 + 1 > r > 1:
+            ax = plt.gca()
+            ax.axis('off')
+            show = False
+        if r == layers[0] * 2 + 1:
+            plt.title('Layer 1 \nBasic Block 0', loc='left', fontsize=16)
+        if r == layers[0] * 3 + 1:
+            plt.title('Basic Block 1', loc='left', fontsize=16)
+        if r == layers[0] * 4 + 1:
+            plt.title('Layer 2 \nBasic Block 0', loc='left', fontsize=16)
+        if r == layers[0] * 5 + 1:
+            plt.title('Basic Block 1', loc='left', fontsize=16)
+        if r == layers[0] * 6 + 1:
+            plt.title('Layer 3 \nBasic Block 0', loc='left', fontsize=16)
+        if r == layers[0] * 7 + 1:
+            plt.title('Basic Block 1', loc='left', fontsize=16)
+        if r == layers[0] * 8 + 1:
+            plt.title('Layer 4 \nBasic Block 0', loc='left', fontsize=16)
+        if r == layers[0] * 9 + 1:
+            plt.title('Basic Block 1', loc='left', fontsize=16)
+
+        if show:
+            tmp = rat[plt_counter]
+
+            x = tmp.show(display=False)['line']['x']
+            y = tmp.show(display=False)['line']['y']
+            plt.plot(x, y)
+
+            plt.legend(['init.: leaky relu, deg.: {}'.format(tmp.degrees)], bbox_to_anchor=(0.5, -0.2), ncol=1, loc='center')
+            if resnet_args.hist:
+                bins = tmp[0].show(display=False)['hist']['bins']
+                freq = tmp[0].show(display=False)['hist']['freq']
+                ax = plt.gca()
+                ax2 = ax.twinx()
+                ax2.set_yticks([])
+                ax2.bar(bins, freq, width=bins[1] - bins[0], color='grey', edgecolor='grey', alpha=0.3)
+            plt_counter += 1
+
