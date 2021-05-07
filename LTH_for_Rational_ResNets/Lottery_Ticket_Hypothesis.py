@@ -6,6 +6,7 @@ Jonathan Frankle, Michael Carbin arXiv:1803.03635,
 
 import os
 from datetime import datetime
+from typing import List
 
 import torch
 
@@ -15,6 +16,11 @@ from LTH_for_Rational_ResNets import utils
 from LTH_for_Rational_ResNets.Lottery_Ticket_Pruning import prune
 from LTH_for_Rational_ResNets.Mask import make_initial_mask
 from LTH_for_Rational_ResNets.Mask import mask_sparsity, Mask
+from LTH_for_Rational_ResNets.LTH_Models.univ_rational_resnet_cifar10 import RationalResNet as univ_cifar
+from LTH_for_Rational_ResNets.LTH_Models.mix_experts_resnet_cifar10 import RationalResNet as mix_cifar
+from LTH_for_Rational_ResNets.LTH_Models.univ_rational_resnet_imagenet import RationalResNet as univ_img
+from LTH_for_Rational_ResNets.LTH_Models.mix_experts_resnet_imagenet import RationalResNet as mix_img
+from LTH_for_Rational_ResNets import plots
 
 LTH_args = argparser.get_arguments()
 
@@ -121,6 +127,7 @@ def iterative_pruning_by_num(prune_model):
     os.makedirs(saved_models_PATH)
     sparsity = [0]
     test_accuracies = []
+    plot_PATHs = []
 
     model = prune_model
     mask = make_initial_mask(model)
@@ -138,6 +145,10 @@ def iterative_pruning_by_num(prune_model):
     print('Before Pruning')
     print('+' * 18)
     print('Model Test Accuracy: ', test_accuracy)
+    if isinstance(model, univ_img) or isinstance(model, univ_cifar):
+        plots.plot_activation_func_overview_univ(model, saved_models_PATH)
+    elif isinstance(model, mix_img) or isinstance(model, mix_cifar):
+        plots.plot_activation_func_overview_mix(model, len(LTH_args.initialize_rationals), LTH_args.initialize_rationals, saved_models_PATH)
 
     for epoch in range(1, LTH_args.iterative_pruning_epochs + 1):
 
@@ -161,6 +172,10 @@ def iterative_pruning_by_num(prune_model):
         test_accuracy = tvt.test(model)  # test
         test_accuracies.append(test_accuracy * 100)
 
+        if isinstance(model, univ_img) or isinstance(model, univ_cifar):
+            plots.plot_activation_func_overview_univ(model, saved_models_PATH)
+        elif isinstance(model, mix_img) or isinstance(model, mix_cifar):
+            plots.plot_activation_func_overview_mix(model, len(LTH_args.initialize_rationals), LTH_args.initialize_rationals, saved_models_PATH)
         print('Model Test Accuracy: ', test_accuracy)
 
     return test_accuracies, sparsity, saved_models_PATH, last_saved_checkpoint_PATH
@@ -196,6 +211,7 @@ def iterative_pruning_by_test_acc(prune_model):
     test_accuracies = []
     num_pruning_epochs = 0
     sparsity.append(0)
+    plot_PATHs = []
 
     model = prune_model
     mask = make_initial_mask(model)
@@ -212,6 +228,12 @@ def iterative_pruning_by_test_acc(prune_model):
 
     test_accuracy = tvt.test(model)
     test_accuracies.append(test_accuracy * 100)
+
+    if isinstance(model, univ_img) or isinstance(model, univ_cifar):
+        plots.plot_activation_func_overview_univ(model, saved_models_PATH)
+    elif isinstance(model, mix_img) or isinstance(model, mix_cifar):
+        plots.plot_activation_func_overview_mix(model, len(LTH_args.initialize_rationals), LTH_args.initialize_rationals, saved_models_PATH)
+
     print('Before Pruning')
     print('+' * 18)
     print('Model Test Accuracy: ', test_accuracy)
@@ -242,6 +264,11 @@ def iterative_pruning_by_test_acc(prune_model):
         test_accuracy = tvt.test(model)  # test
         test_accuracies.append(test_accuracy * 100)
 
+        if isinstance(model, univ_img) or isinstance(model, univ_cifar):
+            plot_PATHs.append(plots.plot_activation_func_overview_univ(model))
+        elif isinstance(model, mix_img) or isinstance(model, mix_cifar):
+            plot_PATHs.append(plots.plot_activation_func_overview_mix(model, len(LTH_args.initialize_rationals), LTH_args.initialize_rationals))
+
         print('Model Test Accuracy: ', test_accuracy)
 
-    return num_pruning_epochs, test_accuracies, sparsity, saved_models_PATH, last_saved_model_PATH
+    return num_pruning_epochs, test_accuracies, sparsity, saved_models_PATH, last_saved_model_PATH, plot_PATHs

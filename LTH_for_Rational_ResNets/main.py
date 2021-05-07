@@ -27,6 +27,7 @@ from LTH_for_Rational_ResNets.LTH_Models import mix_experts_resnet_cifar10 as mi
 from LTH_for_Rational_ResNets.LTH_Models import select_1_expert_group_rational_resnet as sel1exp
 from LTH_for_Rational_ResNets import LTH_write_read_csv
 
+
 time_stamp = datetime.now()
 print_PATH = './Print_Logs/{}.txt'.format(time_stamp)
 sys.stdout = open(print_PATH, 'wt')
@@ -101,6 +102,7 @@ def run_all():
     all_sparsities = []
     all_models = []
 
+    original_model = models_run_all[0]
     for m in range(len(models_run_all)):
         model = models_run_all[m]
         num_ftrs = model.fc.in_features
@@ -128,9 +130,8 @@ def run_all():
         all_models.append(model)
 
     plot_PATH = plots.plot_all(test_accs=all_test_accuracies, sparsities=all_sparsities, num_epoch_list=num_epoch_list, model_names=model_names)
-    act_func_plot_PATH = plots.plot_activation_func_overview(all_models[2], num_rationals, LTH_args.initialize_rationals)
-    mask_path_dim, mask_path_weights, mask_path_percent = LTH_write_read_csv.make_mask_csv(checkpoints, model_names)
-    LTH_write_read_csv.make_yaml(model_names, csv=[csv_PATH], saved_models=saved_model_PATHS, table=[mask_path_dim, mask_path_weights, mask_path_percent], plot=[plot_PATH], act_func_plot=act_func_plot_PATH, print_log=print_PATH)
+    mask_path_dim, mask_path_weights, mask_path_percent = LTH_write_read_csv.make_mask_csv(original_model, checkpoints, model_names)
+    LTH_write_read_csv.make_yaml(model_names, csv=[csv_PATH], saved_models=saved_model_PATHS, table=[mask_path_dim, mask_path_weights, mask_path_percent], plot=[plot_PATH], print_log=print_PATH)
 
 
 def run_one():  # TODO: Model name 18 str for plots + yaml
@@ -225,7 +226,7 @@ def run_one():  # TODO: Model name 18 str for plots + yaml
     if LTH_args.save_res_csv:
         PATH = LTH_write_read_csv.make_csv(LTH_args.model, sparsities, test_accuracies)
 
-    act_func_plot = plots.plot_activation_func_overview(model, num_rationals, LTH_args.initialize_rationals)
+    act_func_plot = plots.plot_activation_func_overview_mix(model, num_rationals, LTH_args.initialize_rationals)
     LTH_write_read_csv.make_yaml([model_name], csv=[PATH], saved_models=model_PATH, print_log=print_PATH, act_func_plot=act_func_plot, plot=plot_PATH)
 
 

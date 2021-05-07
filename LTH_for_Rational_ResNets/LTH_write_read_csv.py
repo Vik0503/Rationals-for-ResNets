@@ -9,7 +9,7 @@ from IPython.core.display import display
 
 from LTH_for_Rational_ResNets import Mask
 from LTH_for_Rational_ResNets import argparser
-from LTH_for_Rational_ResNets.LTH_Models import relu_resnet_cifar10 as rn20
+from LTH_for_Rational_ResNets.LTH_Models import relu_resnet_cifar10 as relu_cifar
 
 args = argparser.get_arguments()
 
@@ -44,12 +44,14 @@ def make_csv(model, prune_percent: List[float], test_acc: List[float]):
     return PATH
 
 
-def make_mask_csv(all_PATHS: List[str], model_names: List[str]):
+def make_mask_csv(original_model, all_PATHS: List[str], model_names: List[str]):
     """
     Visualize the masks resulting from the LTH experiments.
 
     Parameters
     ----------
+    original_model:
+                        Model that is not pruned for comparison.
     all_PATHS:  List[str]
                 A list with the paths to the last saved checkpoints.
     model_names:  List[str]
@@ -66,9 +68,8 @@ def make_mask_csv(all_PATHS: List[str], model_names: List[str]):
     time_stamp = datetime.now()
     args = argparser.get_arguments()
 
-    model = rn20.relu_resnet20()
     original_mask: Mask
-    original_mask = Mask.make_initial_mask(model)
+    original_mask = Mask.make_initial_mask(original_model)
 
     masks = [original_mask]
     for p in range(len(all_PATHS)):
@@ -127,9 +128,9 @@ def make_mask_csv(all_PATHS: List[str], model_names: List[str]):
             all_data_percent.append(data_percent)
 
     if args.arch_for_run_all == 'CIFAR10':
-        tuples= csv_cifar_models(model)
+        tuples = csv_cifar_models(original_model)
     else:
-        tuples= csv_imagenet_models(model)
+        tuples = csv_imagenet_models(original_model)
     index = pd.MultiIndex.from_tuples(tuples)
     df_dim = pd.DataFrame(all_data_dim, index=['Original Model'] + model_names, columns=index)
     df_weights = pd.DataFrame(all_data_weights, index=['Original Model'] + model_names, columns=index)
@@ -250,7 +251,7 @@ def csv_cifar_models(model):
                 array_2 = ['conv. 0'] + ['conv. 0', 'conv. 1'] * 2 + array_3_conv_1 * 2
 
         elif num_layers == 2:
-            array_0 = ['Layer 0'] + ['Layer 1'] + [''] * 5 + ['Layer 2'] + [''] * 5
+            array_0 = ['Layer 0'] + ['Layer 1'] + [''] * 5 + ['Layer 2'] + [''] * 6
             array_1 = [''] + ['BasicBlock 0', '', 'BasicBlock 1', '', 'BasicBlock 2', ''] + ['BasicBlock 0', '', '', 'BasicBlock 1', '', 'BasicBlock 2', '']
             array_2 = ['conv. 0'] + ['conv. 0', 'conv. 1'] * 3 + array_3_conv
 
@@ -281,7 +282,7 @@ def csv_cifar_models(model):
     return tuples
 
 
-def make_yaml(models: List[str], saved_models: List[str], print_log: str, table: List[str] = None, csv: List[str] = None, act_func_plot: str = None, plot: List[str] = None):
+def make_yaml(models: List[str], saved_models: List[str], print_log: str, table: List[str] = None, csv: List[str] = None, plot: List[str] = None):
     """
     Make YAML file for experiment (series).
 
@@ -297,8 +298,6 @@ def make_yaml(models: List[str], saved_models: List[str], print_log: str, table:
             The paths to the three different mask tables.
     csv:    List[str]
             The path(s) to the csv file(s).
-    act_func_plot: str
-                   The path to the activation function overview plot.
     plot:   List[str]
             The path(s) to the plot(s).
     """
@@ -319,10 +318,7 @@ def make_yaml(models: List[str], saved_models: List[str], print_log: str, table:
     if table is not None:
         yaml_data.append({'Mask CSV File': [table]})
 
-    if act_func_plot is not None:
-        yaml_data.append({'Activation Function Plot': [act_func_plot]})
-
-    if act_func_plot is not None:
+    if plot is not None:
         yaml_data.append({'Plot': [plot]})
 
     PATH = 'YAML/{}'.format(time_stamp) + '.yaml'

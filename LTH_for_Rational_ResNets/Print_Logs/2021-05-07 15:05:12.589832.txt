@@ -1,0 +1,465 @@
+Sequential(
+  (0): BasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu): ReLU(inplace=True)
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+  (1): BasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu): ReLU(inplace=True)
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+  (2): BasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu): ReLU(inplace=True)
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+)
+Sequential(
+  (0): RationalBasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+    cuda:0: 0x7f17416eccd0
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+    cuda:0: 0x7f17416fb960
+    (shortcut): Sequential()
+  )
+  (1): RationalBasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+    cuda:0: 0x7f17416fbd70
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+    cuda:0: 0x7f1740484280
+    (shortcut): Sequential()
+  )
+  (2): RationalBasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+    cuda:0: 0x7f17404846e0
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+    cuda:0: 0x7f1740484b40
+    (shortcut): Sequential()
+  )
+)
+Sequential(
+  (0): RationalBasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_expert_group_1): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f174048c3c0
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f174048cf50
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f174049e0a0
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f174049e5a0
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f174049e4b0
+    )
+    (rational_expert_group_2): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f174048c960
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f174049e460
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f174049e140
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f174049e0f0
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f174049e730
+    )
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+  (1): RationalBasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_expert_group_1): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f174049e870
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f17404a7500
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f17404a7550
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f17404a7b90
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f17404a7c80
+    )
+    (rational_expert_group_2): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f17404a74b0
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f17404a7410
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f17404a7370
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f17404a7e10
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f17404a7a50
+    )
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+  (2): RationalBasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_expert_group_1): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f17404b22d0
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f17404b28c0
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f17404b2f00
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f17404c1320
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f17404c1230
+    )
+    (rational_expert_group_2): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f17404b29b0
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f17404b2b40
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f17404b2aa0
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f17404c1190
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f17404c1460
+    )
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+)
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+[10, 15, 20]
+Warmup
+Training Epoch 0/1
+********************
+train Loss: 2.2906 Acc: 0.1733
+val Loss: 2.2377 Acc: 0.1878
+Epoch finished in 0m 6s
+Training Epoch 1/1
+********************
+Warmup
+train Loss: 2.2309 Acc: 0.1902
+val Loss: 2.2229 Acc: 0.1936
+Epoch finished in 0m 6s
+Best validation accuracy: 0.19362236540351643
+Before Pruning
+++++++++++++++++++
+Model Test Accuracy:  0.20628457283343576
+Pruning Epoch 1
+++++++++++++++++++
+number of weights to prune:  7128.0
+Sparsity of Pruned Mask:  tensor(0.5001)
+[10, 15, 20]
+Warmup
+Training Epoch 0/1
+********************
+train Loss: 2.2883 Acc: 0.1741
+val Loss: 2.2352 Acc: 0.1881
+Epoch finished in 0m 5s
+Training Epoch 1/1
+********************
+Warmup
+train Loss: 2.2286 Acc: 0.1906
+val Loss: 2.2237 Acc: 0.1911
+Epoch finished in 0m 5s
+Best validation accuracy: 0.19105602271486294
+Model Test Accuracy:  0.20152120467117393
+[10, 15, 20]
+Warmup
+Training Epoch 0/1
+********************
+train Loss: 2.2921 Acc: 0.1561
+val Loss: 2.2362 Acc: 0.1888
+Epoch finished in 0m 7s
+Training Epoch 1/1
+********************
+Warmup
+train Loss: 2.2137 Acc: 0.2094
+val Loss: 2.1783 Acc: 0.2323
+Epoch finished in 0m 7s
+Best validation accuracy: 0.23228131484110517
+Before Pruning
+++++++++++++++++++
+Model Test Accuracy:  0.2582974800245851
+Pruning Epoch 1
+++++++++++++++++++
+number of weights to prune:  7128.0
+Sparsity of Pruned Mask:  tensor(0.5001)
+[10, 15, 20]
+Warmup
+Training Epoch 0/1
+********************
+train Loss: 2.2778 Acc: 0.1718
+val Loss: 2.2030 Acc: 0.2264
+Epoch finished in 0m 7s
+Training Epoch 1/1
+********************
+Warmup
+train Loss: 2.1514 Acc: 0.2493
+val Loss: 2.1073 Acc: 0.2629
+Epoch finished in 0m 7s
+Best validation accuracy: 0.2628590149612319
+Model Test Accuracy:  0.27712046711739396
+[10, 15, 20]
+Warmup
+Training Epoch 0/1
+********************
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+train Loss: 2.2908 Acc: 0.1373
+val Loss: 2.2329 Acc: 0.1901
+Epoch finished in 0m 23s
+Training Epoch 1/1
+********************
+Warmup
+train Loss: 2.1957 Acc: 0.2198
+val Loss: 2.1235 Acc: 0.2596
+Epoch finished in 0m 24s
+Best validation accuracy: 0.259582832805504
+Before Pruning
+++++++++++++++++++
+Model Test Accuracy:  0.28641671788567913
+Pruning Epoch 1
+++++++++++++++++++
+number of weights to prune:  7128.0
+Sparsity of Pruned Mask:  tensor(0.5001)
+[10, 15, 20]
+Warmup
+Training Epoch 0/1
+********************
+train Loss: 2.2844 Acc: 0.1503
+val Loss: 2.2259 Acc: 0.2107
+Epoch finished in 0m 25s
+Training Epoch 1/1
+********************
+Warmup
+train Loss: 2.1317 Acc: 0.2506
+val Loss: 2.0249 Acc: 0.2747
+Epoch finished in 0m 23s
+Best validation accuracy: 0.27465327072185214
+Model Test Accuracy:  0.2953672403196066
+conv_layer_1.weight
+x:  16
+y:  3
+layer1.0.conv_layer_1.weight
+x:  16
+y:  16
+layer1.0.conv_layer_2.weight
+x:  16
+y:  16
+layer1.1.conv_layer_1.weight
+x:  16
+y:  16
+layer1.1.conv_layer_2.weight
+x:  16
+y:  16
+layer1.2.conv_layer_1.weight
+x:  16
+y:  16
+layer1.2.conv_layer_2.weight
+x:  16
+y:  16
+conv_layer_1.weight
+47.906976744186046
+x:  16
+y:  3
+layer1.0.conv_layer_1.weight
+50.73848827106863
+x:  16
+y:  16
+layer1.0.conv_layer_2.weight
+48.21894005212858
+x:  16
+y:  16
+layer1.1.conv_layer_1.weight
+50.73848827106863
+x:  16
+y:  16
+layer1.1.conv_layer_2.weight
+48.74022589052998
+x:  16
+y:  16
+layer1.2.conv_layer_1.weight
+51.34665508253693
+x:  16
+y:  16
+layer1.2.conv_layer_2.weight
+50.2606429192007
+x:  16
+y:  16
+conv_layer_1.weight
+52.55813953488372
+x:  16
+y:  3
+layer1.0.conv_layer_1.weight
+51.433536055603824
+x:  16
+y:  16
+layer1.0.conv_layer_2.weight
+49.95655951346655
+x:  16
+y:  16
+layer1.1.conv_layer_1.weight
+49.21807124239791
+x:  16
+y:  16
+layer1.1.conv_layer_2.weight
+49.869678540399654
+x:  16
+y:  16
+layer1.2.conv_layer_1.weight
+48.95742832319722
+x:  16
+y:  16
+layer1.2.conv_layer_2.weight
+49.7393570807993
+x:  16
+y:  16
+conv_layer_1.weight
+48.372093023255815
+x:  16
+y:  3
+layer1.0.conv_layer_1.weight
+50.47784535186794
+x:  16
+y:  16
+layer1.0.conv_layer_2.weight
+48.69678540399652
+x:  16
+y:  16
+layer1.1.conv_layer_1.weight
+49.087749782797566
+x:  16
+y:  16
+layer1.1.conv_layer_2.weight
+51.56385751520417
+x:  16
+y:  16
+layer1.2.conv_layer_1.weight
+49.95655951346655
+x:  16
+y:  16
+layer1.2.conv_layer_2.weight
+50.173761946133794
+x:  16
+y:  16
+                        Layer 0      Layer 1  ...                       
+                                BasicBlock 0  ... BasicBlock 2          
+                        conv. 0      conv. 0  ...      conv. 0   conv. 1
+Original Model          [16, 3]     [16, 16]  ...     [16, 16]  [16, 16]
+ReLU ResNet8            [16, 3]     [16, 16]  ...     [16, 16]  [16, 16]
+univ. rational ResNet8  [16, 3]     [16, 16]  ...     [16, 16]  [16, 16]
+mix. exp. ResNet8       [16, 3]     [16, 16]  ...     [16, 16]  [16, 16]
+
+[4 rows x 7 columns]
+                       Layer 0      Layer 1  ...                     
+                               BasicBlock 0  ... BasicBlock 2        
+                       conv. 0      conv. 0  ...      conv. 0 conv. 1
+Original Model             430         2302  ...         2302    2302
+ReLU ResNet8               206         1168  ...         1182    1157
+univ. rational ResNet8     226         1184  ...         1127    1145
+mix. exp. ResNet8          208         1162  ...         1150    1155
+
+[4 rows x 7 columns]
+                          Layer 0      Layer 1  ...                        
+                                  BasicBlock 0  ... BasicBlock 2           
+                          conv. 0      conv. 0  ...      conv. 0    conv. 1
+ReLU ResNet8            47.906977    50.738488  ...    51.346655  50.260643
+univ. rational ResNet8  52.558140    51.433536  ...    48.957428  49.739357
+mix. exp. ResNet8       48.372093    50.477845  ...    49.956560  50.173762
+
+[3 rows x 7 columns]
