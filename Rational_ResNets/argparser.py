@@ -14,12 +14,11 @@ ResNet_arg_parser.add_argument('-m', '--model', default='univ_rational_resnet20'
 ResNet_arg_parser.add_argument('-ds', '--dataset', default='cifar10', type=str, choices=['cifar10', 'SVHN', 'ImageNet'])
 ResNet_arg_parser.add_argument('-aug', '--augment_data', default=False, type=bool)
 ResNet_arg_parser.add_argument('-epochs', '--training_number_of_epochs', default=25, type=int)
-ResNet_arg_parser.add_argument('-num_rat', '--number_of_rationals_per_vector', default=1, type=int)  # needed?
 ResNet_arg_parser.add_argument('-init_rationals', '--initialize_rationals',
                                type=str, nargs='+', default=['leaky_relu', 'gelu', 'swish', 'tanh', 'sigmoid'], choices=['leaky_relu', 'gelu', 'swish', 'tanh', 'sigmoid'],
                                help="Examples: -init_rationals leaky_relu gelu, -init_rationals tanh")
 ResNet_arg_parser.add_argument('-wi', '--warmup_iterations', default=0, type=int)
-ResNet_arg_parser.add_argument('--save_res_csv', default=False, action='store_true', help='Flag to save the results of the experiment as csv')
+ResNet_arg_parser.add_argument('--save_res_csv', default=True, action='store_true', help='Flag to save the results of the experiment as csv')
 ResNet_arg_parser.add_argument('-seed', '--data_seeds', default=42, type=int)
 run_all_groups = ResNet_arg_parser.add_mutually_exclusive_group()
 run_all_groups.add_argument('--run_all_classic', default=False, action='store_true',
@@ -34,9 +33,8 @@ run_all_groups.add_argument('--run_all_one_layer', default=False, action='store_
                             help="Flag to perform all three experiments `original`, `univariate rational` and `mixture of experts` with a smaller architecture (only one full layer)"
                                  "in a sequence and plot the results in one graph for further comparison.")
 ResNet_arg_parser.add_argument('--arch_for_run_all', default='CIFAR10', choices=['CIFAR10', 'ImageNet'])
-ResNet_arg_parser.add_argument('--milestones',
-                               type=str, nargs='+', default=[10, 15, 20],
-                               help='Examples: --milestones 20 30, -milestones 5')
+ResNet_arg_parser.add_argument('--milestones', type=str, nargs='+', default=[10, 15, 20], help='Examples: --milestones 20 30, -milestones 5')
+ResNet_arg_parser.add_argument('--hist', default=False, action='store_true', help='Flag to save histograms')
 
 """'--model', 'univ_rational_resnet20', '--dataset', 'SVHN', '--warmup_iterations', '7167',
      '--iterative_pruning_epochs', '2', '--training_number_of_epochs', '10',
@@ -56,7 +54,7 @@ def get_argparser() -> arg.ArgumentParser:
 
 
 def get_arguments():
-    resnet_args = ResNet_arg_parser.parse_args([])
+    resnet_args = ResNet_arg_parser.parse_args()
     if resnet_args.arch_for_run_all == 'ImageNet' and resnet_args.run_all_two_BB:
         print('This option is not available for ResNet18.')
         exit()
