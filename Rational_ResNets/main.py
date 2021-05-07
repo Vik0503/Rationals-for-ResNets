@@ -51,7 +51,7 @@ elif resnet_args.dataset == 'SVHN':
 
 
 def run_all():
-    rational_inits = resnet_args.initialize_rationals  # TODO: catch exceptions
+    rational_inits = resnet_args.initialize_rationals
     num_rationals = len(rational_inits)
     if resnet_args.run_all_classic and resnet_args.run_all_architecture == 'CIFAR10':
         model_names = ['ReLU ResNet20', 'univ. rational ResNet20', 'mix. exp. ResNet20']
@@ -117,7 +117,7 @@ def run_all():
 
 def run_one():
     act_func_PATH = ''
-    rational_inits = resnet_args.initialize_rationals  # TODO: catch exceptions
+    rational_inits = resnet_args.initialize_rationals
     num_rationals = 0
     if resnet_args.model == 'relu_resnet20':
         model = relu_cifar.relu_resnet20()

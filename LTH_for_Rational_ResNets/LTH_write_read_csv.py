@@ -269,7 +269,7 @@ def csv_cifar_models(model):
                 array_1 = [''] + ['BasicBlock 0', '', 'BasicBlock 1', '', 'BasicBlock 2', ''] * 3
                 array_2 = ['conv. 0'] + ['conv. 0', 'conv. 1'] * 9
             elif num_bb == 2:
-                array_0 = ['Layer 0'] + ['Layer 1'] + [''] * 5 + ['Layer 2'] + [''] * 3 + ['Layer 3'] + [''] * 3
+                array_0 = ['Layer 0'] + ['Layer 1'] + [''] * 3 + ['Layer 2'] + [''] * 3 + ['Layer 3'] + [''] * 3
                 array_1 = [''] + ['BasicBlock 0', '', 'BasicBlock 1', ''] * 3
                 array_2 = ['conv. 0'] + ['conv. 0', 'conv. 1'] * 6
 

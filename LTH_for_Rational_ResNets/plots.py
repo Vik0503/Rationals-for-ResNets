@@ -298,12 +298,13 @@ def resnet20_plot_mix(layers: List[int], rat_groups, alphas, inits: List[str]):
                 legend.append('\u03B1_{}: {:0.4f}, init.: {}, deg.: {}'.format(rational, alpha_tmp[rational], inits[rational], tmp[rational].degrees))
 
             plt.legend(legend, bbox_to_anchor=(0.5, -0.4), ncol=1, loc='center')
-            bins = tmp[0].show(display=False)['hist']['bins']
-            freq = tmp[0].show(display=False)['hist']['freq']
-            ax = plt.gca()
-            ax2 = ax.twinx()
-            ax2.set_yticks([])
-            ax2.bar(bins, freq, width=bins[1] - bins[0], color='grey', edgecolor='grey', alpha=0.3)
+            if LTH_args.hist:
+                bins = tmp[0].show(display=False)['hist']['bins']
+                freq = tmp[0].show(display=False)['hist']['freq']
+                ax = plt.gca()
+                ax2 = ax.twinx()
+                ax2.set_yticks([])
+                ax2.bar(bins, freq, width=bins[1] - bins[0], color='grey', edgecolor='grey', alpha=0.3)
             plt_counter += 1
 
 
@@ -372,12 +373,13 @@ def resnet18_plot_mix(layers, rat_groups, alphas, inits):
                 legend.append('\u03B1_{}: {:0.4f}, init.: {}, deg.: {}'.format(rational, alpha_tmp[rational], inits[rational], tmp[rational].degrees))
 
             plt.legend(legend, bbox_to_anchor=(0.5, -0.4), ncol=1, loc='center')
-            bins = tmp[0].show(display=False)['hist']['bins']
-            freq = tmp[0].show(display=False)['hist']['freq']
-            ax = plt.gca()
-            ax2 = ax.twinx()
-            ax2.set_yticks([])
-            ax2.bar(bins, freq, width=bins[1] - bins[0], color='grey', edgecolor='grey', alpha=0.3)
+            if LTH_args.hist:
+                bins = tmp[0].show(display=False)['hist']['bins']
+                freq = tmp[0].show(display=False)['hist']['freq']
+                ax = plt.gca()
+                ax2 = ax.twinx()
+                ax2.set_yticks([])
+                ax2.bar(bins, freq, width=bins[1] - bins[0], color='grey', edgecolor='grey', alpha=0.3)
             plt_counter += 1
 
 
@@ -467,12 +469,13 @@ def resnet20_plot_univ(layers: List[int], rat):
             plt.plot(x, y)
 
             plt.legend(['init.: leaky relu, deg.: {}'.format(tmp.degrees)], bbox_to_anchor=(0.5, -0.2), ncol=1, loc='center')
-            bins = tmp.show(display=False)['hist']['bins']
-            freq = tmp.show(display=False)['hist']['freq']
-            ax = plt.gca()
-            ax2 = ax.twinx()
-            ax2.set_yticks([])
-            ax2.bar(bins, freq, width=bins[1] - bins[0], color='grey', edgecolor='grey', alpha=0.3)
+            if LTH_args.hist:
+                bins = tmp[0].show(display=False)['hist']['bins']
+                freq = tmp[0].show(display=False)['hist']['freq']
+                ax = plt.gca()
+                ax2 = ax.twinx()
+                ax2.set_yticks([])
+                ax2.bar(bins, freq, width=bins[1] - bins[0], color='grey', edgecolor='grey', alpha=0.3)
             plt_counter += 1
 
 
@@ -483,12 +486,8 @@ def resnet18_plot_univ(layers: List[int], rat):
     Parameters
     ----------
     layers:     List[int]
-    rat_groups:
-                All expert groups grouped together.
-    alphas:
-            All alphas (weights for weighted sum) grouped together.
-    inits:     List[str]
-               The Rational Activation Functions' initializations.
+    rat:
+                All Rationals.
     """
     if len(layers) == 1:
         x = 1.75
@@ -533,10 +532,11 @@ def resnet18_plot_univ(layers: List[int], rat):
             plt.plot(x, y)
 
             plt.legend(['init.: leaky relu, deg.: {}'.format(tmp.degrees)], bbox_to_anchor=(0.5, -0.2), ncol=1, loc='center')
-            bins = tmp.show(display=False)['hist']['bins']
-            freq = tmp.show(display=False)['hist']['freq']
-            ax = plt.gca()
-            ax2 = ax.twinx()
-            ax2.set_yticks([])
-            ax2.bar(bins, freq, width=bins[1] - bins[0], color='grey', edgecolor='grey', alpha=0.3)
+            if LTH_args.hist:
+                bins = tmp[0].show(display=False)['hist']['bins']
+                freq = tmp[0].show(display=False)['hist']['freq']
+                ax = plt.gca()
+                ax2 = ax.twinx()
+                ax2.set_yticks([])
+                ax2.bar(bins, freq, width=bins[1] - bins[0], color='grey', edgecolor='grey', alpha=0.3)
             plt_counter += 1

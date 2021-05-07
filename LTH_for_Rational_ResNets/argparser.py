@@ -39,6 +39,7 @@ LTH_arg_parser.add_argument('-seed', '--data_seeds', default=42, type=int)
 LTH_arg_parser.add_argument('--arch_for_run_all', default='CIFAR10', choices=['CIFAR10', 'ImageNet'])
 LTH_arg_parser.add_argument('--milestones', type=str, nargs='+', default=[10, 15, 20],
                             help='Examples: --milestones 20 30, -milestones 5')
+LTH_arg_parser.add_argument('--hist', default=False, action='store_true', help='Flag to save histograms')
 
 
 def get_argparser():
@@ -69,7 +70,7 @@ def get_arguments():
 
     LTH_args = LTH_arg_parser.parse_args(['--dataset', 'SVHN', '--warmup_iterations', '7167',
                                           '--iterative_pruning_epochs', '1', '--training_number_of_epochs', '2',
-                                          '--stop_criteria', 'num_prune_epochs', '--save_res_csv', '--prune_shortcuts', '--run_all_two_layers', '--arch_for_run_all', 'CIFAR10', '--pruning_percentage', '50'])
+                                          '--stop_criteria', 'num_prune_epochs', '--save_res_csv', '--run_all_one_layer', '--arch_for_run_all', 'CIFAR10', '--pruning_percentage', '50'])
     if LTH_args.arch_for_run_all == 'ImageNet' and LTH_args.run_all_two_BB:
         print('This option is not available for ResNet18.')
         exit()

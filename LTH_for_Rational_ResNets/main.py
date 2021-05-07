@@ -27,7 +27,6 @@ from LTH_for_Rational_ResNets.LTH_Models import mix_experts_resnet_cifar10 as mi
 from LTH_for_Rational_ResNets.LTH_Models import select_1_expert_group_rational_resnet as sel1exp
 from LTH_for_Rational_ResNets import LTH_write_read_csv
 
-
 time_stamp = datetime.now()
 print_PATH = './Print_Logs/{}.txt'.format(time_stamp)
 sys.stdout = open(print_PATH, 'wt')
@@ -226,8 +225,7 @@ def run_one():  # TODO: Model name 18 str for plots + yaml
     if LTH_args.save_res_csv:
         PATH = LTH_write_read_csv.make_csv(LTH_args.model, sparsities, test_accuracies)
 
-    act_func_plot = plots.plot_activation_func_overview_mix(model, num_rationals, LTH_args.initialize_rationals)
-    LTH_write_read_csv.make_yaml([model_name], csv=[PATH], saved_models=model_PATH, print_log=print_PATH, act_func_plot=act_func_plot, plot=plot_PATH)
+    LTH_write_read_csv.make_yaml([model_name], csv=[PATH], saved_models=model_PATH, print_log=print_PATH, plot=plot_PATH)
 
 
 if LTH_args.run_all_classic or LTH_args.run_all_two_BB or LTH_args.run_all_two_layers or LTH_args.run_all_one_layer:

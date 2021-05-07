@@ -9,6 +9,7 @@ from datetime import datetime
 from typing import List
 
 import torch
+from rational.torch import Rational
 
 from LTH_for_Rational_ResNets import Train_Val_Test as tvt
 from LTH_for_Rational_ResNets import argparser
@@ -127,9 +128,13 @@ def iterative_pruning_by_num(prune_model):
     os.makedirs(saved_models_PATH)
     sparsity = [0]
     test_accuracies = []
-    plot_PATHs = []
 
     model = prune_model
+
+    if LTH_args.hist:
+        for mod in model.modules():
+            if isinstance(mod, Rational):
+                mod.input_retrieve_mode(max_saves=1)
     mask = make_initial_mask(model)
     model.mask = Mask.cuda(mask)
 
@@ -145,6 +150,9 @@ def iterative_pruning_by_num(prune_model):
     print('Before Pruning')
     print('+' * 18)
     print('Model Test Accuracy: ', test_accuracy)
+
+    last_saved_model_PATH = checkpoint_save(saved_models_PATH, optimizer, 0, model, mask, test_accuracy, LTH_args.training_number_of_epochs)
+
     if isinstance(model, univ_img) or isinstance(model, univ_cifar):
         plots.plot_activation_func_overview_univ(model, saved_models_PATH)
     elif isinstance(model, mix_img) or isinstance(model, mix_cifar):
@@ -166,6 +174,12 @@ def iterative_pruning_by_num(prune_model):
         utils.reinit(model, mask, initial_state)  # reinit
 
         scheduler, optimizer = utils.get_scheduler_optimizer(model=model)
+
+        if LTH_args.hist:
+            for mod in model.modules():
+                if isinstance(mod, Rational):
+                    mod.input_retrieve_mode(max_saves=1)
+
         best_val_accuracy = tvt.train(model, optimizer, scheduler)  # train
         print('Best validation accuracy: {}'.format(best_val_accuracy))
 
@@ -203,7 +217,6 @@ def iterative_pruning_by_test_acc(prune_model):
     last_saved_checkpoint_PATH: str
                                 The path to the last checkpoint of the current experiment.
     """
-    last_saved_model_PATH = ''
     time_stamp = datetime.now()
     saved_models_PATH = './Saved_Models/{}'.format(time_stamp)
     os.makedirs(saved_models_PATH)
@@ -211,7 +224,6 @@ def iterative_pruning_by_test_acc(prune_model):
     test_accuracies = []
     num_pruning_epochs = 0
     sparsity.append(0)
-    plot_PATHs = []
 
     model = prune_model
     mask = make_initial_mask(model)
@@ -228,6 +240,8 @@ def iterative_pruning_by_test_acc(prune_model):
 
     test_accuracy = tvt.test(model)
     test_accuracies.append(test_accuracy * 100)
+
+    last_saved_model_PATH = checkpoint_save(saved_models_PATH, optimizer, num_pruning_epochs, model, mask, test_accuracy, LTH_args.training_number_of_epochs)
 
     if isinstance(model, univ_img) or isinstance(model, univ_cifar):
         plots.plot_activation_func_overview_univ(model, saved_models_PATH)
@@ -265,10 +279,10 @@ def iterative_pruning_by_test_acc(prune_model):
         test_accuracies.append(test_accuracy * 100)
 
         if isinstance(model, univ_img) or isinstance(model, univ_cifar):
-            plot_PATHs.append(plots.plot_activation_func_overview_univ(model))
+            plots.plot_activation_func_overview_univ(model, last_saved_model_PATH)
         elif isinstance(model, mix_img) or isinstance(model, mix_cifar):
-            plot_PATHs.append(plots.plot_activation_func_overview_mix(model, len(LTH_args.initialize_rationals), LTH_args.initialize_rationals))
+            plots.plot_activation_func_overview_mix(model, len(LTH_args.initialize_rationals), LTH_args.initialize_rationals, last_saved_model_PATH)
 
         print('Model Test Accuracy: ', test_accuracy)
 
-    return num_pruning_epochs, test_accuracies, sparsity, saved_models_PATH, last_saved_model_PATH, plot_PATHs
+    return num_pruning_epochs, test_accuracies, sparsity, saved_models_PATH, last_saved_model_PATH
