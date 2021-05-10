@@ -35,7 +35,7 @@ run_all_groups.add_argument('--run_all_one_layer', default=False, action='store_
                                  "in a sequence and plot the results in one graph for further comparison.")
 LTH_arg_parser.add_argument('--prune_shortcuts', default=False, action='store_true', help='Flag to prune shortcuts.')
 LTH_arg_parser.add_argument('--save_res_csv', default=True, action='store_true', help='Flag to save the results of the experiment as csv')
-LTH_arg_parser.add_argument('-seed', '--data_seeds', default=42, type=int)
+LTH_arg_parser.add_argument('-seed', '--data_seeds', default=2, type=int)
 LTH_arg_parser.add_argument('--arch_for_run_all', default='CIFAR10', choices=['CIFAR10', 'ImageNet'])
 LTH_arg_parser.add_argument('--milestones', type=str, nargs='+', default=[10, 15, 20],
                             help='Examples: --milestones 20 30, -milestones 5')
@@ -68,8 +68,8 @@ def get_arguments():
                                           '--iterative_pruning_epochs', '1', '--training_number_of_epochs', '5',
                                           '--stop_criteria', 'num_prune_epochs', '--milestones', '2', '3']"""
 
-    LTH_args = LTH_arg_parser.parse_args(['--model', 'univ_rational_resnet20', '--dataset', 'SVHN', '--warmup_iterations', '7167', '--training_number_of_epochs', '15',
-                                          '--stop_criteria', 'test_acc', '--save_res_csv', '-test_acc', '92'])
+    LTH_args = LTH_arg_parser.parse_args(['--dataset', 'SVHN', '--warmup_iterations', '7167', '--training_number_of_epochs', '25',
+                                          '--stop_criteria', 'test_acc', '--save_res_csv', '--run_all_classic', '--arch_for_run_all', 'CIFAR10'])
     if LTH_args.arch_for_run_all == 'ImageNet' and LTH_args.run_all_two_BB:
         print('This option is not available for ResNet18.')
         exit()

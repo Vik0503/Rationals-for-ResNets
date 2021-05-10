@@ -273,6 +273,7 @@ def iterative_pruning_by_test_acc(prune_model):
         print('Sparsity of Pruned Mask: ', mask_sparsity(mask))
 
         last_saved_model_PATH = checkpoint_save(saved_models_PATH, optimizer, num_pruning_epochs, model, mask, test_accuracy, LTH_args.training_number_of_epochs, mask_sparsity(mask) * 100)  # save
+        mask = Mask.cuda(mask)
 
         utils.reinit(model, mask, initial_state)  # reinit
 

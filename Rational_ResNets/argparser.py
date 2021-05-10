@@ -2,7 +2,7 @@ import argparse as arg
 
 ResNet_arg_parser = arg.ArgumentParser()
 ResNet_arg_parser.add_argument('-bs', '--batch_size', default=128, type=int)
-ResNet_arg_parser.add_argument('-lr', '--learning_rate', default=0.01, type=float)
+ResNet_arg_parser.add_argument('-lr', '--learning_rate', default=0.03, type=float)
 ResNet_arg_parser.add_argument('-m', '--model', default='univ_rational_resnet20', type=str,
                                choices=['univ_rational_resnet20', 'univ_rational_resnet14_A', 'univ_rational_resnet14_B', 'univ_rational_resnet8',
                                         'relu_resnet20', 'relu_resnet14_A', 'relu_resnet14_B', 'relu_resnet8',
@@ -54,7 +54,7 @@ def get_argparser() -> arg.ArgumentParser:
 
 
 def get_arguments():
-    resnet_args = ResNet_arg_parser.parse_args(['--dataset', 'SVHN','--training_number_of_epochs', '25', '--save_res_csv', '--data_seeds', '2', '--run_all_two_layers', '--arch_for_run_all', 'CIFAR10'])
+    resnet_args = ResNet_arg_parser.parse_args(['--dataset', 'SVHN','--training_number_of_epochs', '25', '--save_res_csv', '--data_seeds', '2', '--run_all_two_BB', '--arch_for_run_all', 'CIFAR10', '--learning_rate', '0.1'])
     if resnet_args.arch_for_run_all == 'ImageNet' and resnet_args.run_all_two_BB:
         print('This option is not available for ResNet18.')
         exit()
