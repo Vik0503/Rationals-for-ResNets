@@ -291,9 +291,9 @@ def iterative_pruning_by_test_acc(prune_model):
         test_accuracies.append(test_accuracy * 100)
 
         if isinstance(model, univ_img) or isinstance(model, univ_cifar):
-            plots.plot_activation_func_overview_univ(model, last_saved_model_PATH)
+            plots.plot_activation_func_overview_univ(model, saved_models_PATH)
         elif isinstance(model, mix_img) or isinstance(model, mix_cifar):
-            plots.plot_activation_func_overview_mix(model, len(LTH_args.initialize_rationals), LTH_args.initialize_rationals, last_saved_model_PATH)
+            plots.plot_activation_func_overview_mix(model, len(LTH_args.initialize_rationals), LTH_args.initialize_rationals, saved_models_PATH)
 
         print('Model Test Accuracy: ', test_accuracy)
 
