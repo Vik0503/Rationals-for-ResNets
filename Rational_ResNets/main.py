@@ -58,26 +58,30 @@ elif resnet_args.dataset == 'SVHN':
 def run_all():
     rational_inits = resnet_args.initialize_rationals
     num_rationals = len(rational_inits)
-    if resnet_args.run_all_classic and resnet_args.run_all_architecture == 'CIFAR10':
+    if resnet_args.run_all_classic and resnet_args.arch_for_run_all == 'CIFAR10':
         model_names = ['ReLU ResNet20', 'univ. rational ResNet20', 'mix. exp. ResNet20']
+        model_names_dir = ['relu_resnet20', 'univ_rational_resnet20', 'mix_experts_resnet20']
         models_run_all = [relu_cifar.relu_resnet20(), univ_rat_cifar.univ_rational_resnet20(), mix_exp_cifar.mix_exp_resnet20(rational_inits=rational_inits, num_rationals=num_rationals)]
-    elif resnet_args.run_all_classic and resnet_args.run_all_architecture == 'ImageNet':
+    elif resnet_args.run_all_classic and resnet_args.arch_for_run_all == 'ImageNet':
         model_names = ['relu_resnet18', 'univ_rational_resnet18', 'mix_experts_resnet18']
         models_run_all = [relu_imagenet.relu_resnet18(), univ_rat_imagenet.univ_rational_resnet18(), mix_exp_imagenet.mix_exp_resnet18(rational_inits=rational_inits, num_rationals=num_rationals)]
 
     elif resnet_args.run_all_two_BB:
         model_names = ['ReLU ResNet14_A', 'univ. rational ResNet14_A', 'mix. exp. ResNet14_A']
+        model_names_dir = ['relu_resnet14_A', 'univ_rational_resnet14_A', 'mix_experts_resnet14_A']
         models_run_all = [relu_cifar.relu_resnet14_A(), univ_rat_cifar.univ_rational_resnet14_A(), mix_exp_cifar.mix_exp_resnet14_A(rational_inits=rational_inits, num_rationals=num_rationals)]
 
-    elif resnet_args.run_all_two_layers and resnet_args.run_all_architecture == 'CIFAR10':
+    elif resnet_args.run_all_two_layers and resnet_args.arch_for_run_all == 'CIFAR10':
         model_names = ['relu_resnet14_B', 'univ_rational_resnet14_B', 'mix_experts_resnet14_B']
+        model_names_dir = ['relu_resnet14_B', 'univ_rational_resnet14_B', 'mix_experts_resnet14_B']
         models_run_all = [relu_cifar.relu_resnet14_B(), univ_rat_cifar.univ_rational_resnet14_B(), mix_exp_cifar.mix_exp_resnet14_B(rational_inits=rational_inits, num_rationals=num_rationals)]
-    elif resnet_args.run_all_two_layers and resnet_args.run_all_architecture == 'ImageNet':
+    elif resnet_args.run_all_two_layers and resnet_args.arch_for_run_all == 'ImageNet':
         model_names = ['relu_resnet18_2_layers', 'univ_rational_resnet18_2_layers', 'mix_experts_resnet18_2_layers']
         models_run_all = [relu_imagenet.relu_resnet18_2_layers(), univ_rat_imagenet.univ_rational_resnet18_2_layers(), mix_exp_imagenet.mix_exp_resnet18_2_layers(rational_inits=rational_inits, num_rationals=num_rationals)]
 
-    elif resnet_args.run_all_one_layer and resnet_args.run_all_architecture == 'CIFAR10':
+    elif resnet_args.run_all_one_layer and resnet_args.arch_for_run_all == 'CIFAR10':
         model_names = ['ReLU ResNet8', 'univ. rational ResNet8', 'mix. exp. ResNet8']
+        model_names_dir = ['relu_resnet8', 'univ_rational_resnet8', 'mix_experts_resnet8']
         models_run_all = [relu_cifar.relu_resnet8(), univ_rat_cifar.univ_rational_resnet8(), mix_exp_cifar.mix_exp_resnet8(rational_inits=rational_inits, num_rationals=num_rationals)]
     else:
         model_names = ['relu_resnet18_1_layer', 'univ_rational_resnet18_1_layer', 'mix_experts_resnet18_1_layer']
@@ -108,7 +112,7 @@ def run_all():
         model, cm, time_elapsed_epoch, best_acc, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals, accuracy_plot_x_vals = tvt.train_val_test_model(model, optimizer, scheduler)
 
         if resnet_args.save_res_csv:
-            PATH = utils.make_csv(model_names[m], accuracy_plot_x_vals, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals)
+            PATH = utils.make_csv(model_names_dir[m], accuracy_plot_x_vals, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals)
             csv_PATHS.append(PATH)
         train_accs.append(train_acc_plot_y_vals)
         val_accs.append(val_acc_plot_y_vals)
@@ -213,10 +217,12 @@ def run_one():
 
     plot_PATH = plots.final_plot(cm=cm, epoch_time=avg_time, best_test_acc=best_test_acc, num_rationals=num_rationals, test_acc_y_vals=test_acc_plot_y_vals, train_acc_y_vals=train_acc_plot_y_vals, acc_x_vals=accuracy_plot_x_vals,
                                  val_acc_y_vals=val_acc_plot_y_vals)
+
     if isinstance(model, mix_img) or isinstance(model, mix_cifar):
         act_func_PATH = plots.plot_activation_func_overview_mix(model, int(num_rationals / 2), rational_inits)
     if isinstance(model, univ_img) or isinstance(model, univ_cifar):
         act_func_PATH = plots.plot_activation_func_overview_univ(model)
+
     models = [resnet_args.model]
     csv_PATH = ''
     if resnet_args.save_res_csv:

@@ -19,7 +19,7 @@ ResNet_arg_parser.add_argument('-init_rationals', '--initialize_rationals',
                                help="Examples: -init_rationals leaky_relu gelu, -init_rationals tanh")
 ResNet_arg_parser.add_argument('-wi', '--warmup_iterations', default=0, type=int)
 ResNet_arg_parser.add_argument('--save_res_csv', default=True, action='store_true', help='Flag to save the results of the experiment as csv')
-ResNet_arg_parser.add_argument('-seed', '--data_seeds', default=42, type=int)
+ResNet_arg_parser.add_argument('-seed', '--data_seeds', default=2, type=int)
 run_all_groups = ResNet_arg_parser.add_mutually_exclusive_group()
 run_all_groups.add_argument('--run_all_classic', default=False, action='store_true',
                             help="Flag to perform all three experiments `original`, `univariate rational` and `mixture of experts` in a sequence and plot the results in one graph for further comparison.")
@@ -54,7 +54,7 @@ def get_argparser() -> arg.ArgumentParser:
 
 
 def get_arguments():
-    resnet_args = ResNet_arg_parser.parse_args()
+    resnet_args = ResNet_arg_parser.parse_args(['--dataset', 'SVHN','--training_number_of_epochs', '25', '--save_res_csv', '--data_seeds', '2', '--run_all_two_layers', '--arch_for_run_all', 'CIFAR10'])
     if resnet_args.arch_for_run_all == 'ImageNet' and resnet_args.run_all_two_BB:
         print('This option is not available for ResNet18.')
         exit()

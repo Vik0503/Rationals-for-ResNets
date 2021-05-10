@@ -106,7 +106,7 @@ class ResNet(nn.Module):
         if len(self.layers) > 1:
             self.layer2 = self.make_layer(block=block, planes_out=32, num_blocks=layers[1], stride=2)
             out_size = 32
-        if len(self.layeres) > 2:
+        if len(self.layers) > 2:
             self.layer3 = self.make_layer(block=block, planes_out=64, num_blocks=layers[2], stride=2)
             out_size = 64
 
