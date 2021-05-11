@@ -310,7 +310,7 @@ def make_yaml(models: List[str], saved_models: List[str], print_log: str, table:
     if LTH_args.stop_criteria is 'num_prune_epochs':
         yaml_data.append({'Iterative Pruning Epochs': [LTH_args.iterative_pruning_epochs]})
     elif LTH_args.stop_criteria is 'test_acc':
-        yaml_data.append({'Test Accuracy Threshold': [LTH_args.test_acc]})
+        yaml_data.append({'Test Accuracy Threshold': [LTH_args.test_accuracy_threshold]})
 
     if LTH_args.save_res_csv:
         yaml_data.append({'CSV File': [csv]})
