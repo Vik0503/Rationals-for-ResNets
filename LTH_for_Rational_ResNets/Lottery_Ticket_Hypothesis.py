@@ -131,7 +131,7 @@ def iterative_pruning_by_num(prune_model):
 
     model = prune_model
 
-    if LTH_args.hist:
+    if LTH_args.hist and (isinstance(model, univ_img) or isinstance(model, univ_cifar) or isinstance(model, mix_img) or isinstance(model, mix_cifar)):
         for mod in model.modules():
             if isinstance(mod, Rational):
                 mod.input_retrieve_mode(max_saves=1)
@@ -175,7 +175,7 @@ def iterative_pruning_by_num(prune_model):
 
         scheduler, optimizer = utils.get_scheduler_optimizer(model=model)
 
-        if LTH_args.hist:
+        if LTH_args.hist and (isinstance(model, univ_img) or isinstance(model, univ_cifar) or isinstance(model, mix_img) or isinstance(model, mix_cifar)):
             for mod in model.modules():
                 if isinstance(mod, Rational):
                     mod.input_retrieve_mode(max_saves=1)
@@ -235,10 +235,10 @@ def iterative_pruning_by_test_acc(prune_model):
 
     scheduler, optimizer = utils.get_scheduler_optimizer(model=model)
 
-    if LTH_args.hist:
+    if LTH_args.hist and (isinstance(model, univ_img) or isinstance(model, univ_cifar) or isinstance(model, mix_img) or isinstance(model, mix_cifar)):
         for mod in model.modules():
             if isinstance(mod, Rational):
-                mod.input_retrieve_mode(max_saves=1)
+                mod.input_retrieve_mode()
 
     best_val_accuracy = tvt.train(model, optimizer, scheduler)
     print('Best validation accuracy: {}'.format(best_val_accuracy))
@@ -279,10 +279,10 @@ def iterative_pruning_by_test_acc(prune_model):
 
         scheduler, optimizer = utils.get_scheduler_optimizer(model=model)
 
-        if LTH_args.hist:
+        if LTH_args.hist and (isinstance(model, univ_img) or isinstance(model, univ_cifar) or isinstance(model, mix_img) or isinstance(model, mix_cifar)):
             for mod in model.modules():
                 if isinstance(mod, Rational):
-                    mod.input_retrieve_mode(max_saves=1)
+                    mod.input_retrieve_mode()
 
         best_val_accuracy = tvt.train(model, optimizer, scheduler)  # train
         print('Best validation accuracy: {}'.format(best_val_accuracy))

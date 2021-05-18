@@ -1,0 +1,20 @@
+- Date: [!!timestamp '2021-05-14 16:39:02.746520']
+- Model(s): [mix. exp. ResNet20]
+- Dataset: [SVHN]
+- Batch Size: [128]
+- Pruning Percentage per Epoch: [20.0]
+- Training Epochs per Pruning Epoch: [25]
+- Learning Rate: [0.03]
+- Warm-Up Iterations: [7167]
+- Training Milestones:
+  - [10, 15, 20]
+- Shortcuts pruned: [false]
+- Rational Inits:
+  - [leaky_relu, gelu, swish, tanh, sigmoid]
+- Data Seed: [191]
+- Saved Models: ['./Saved_Models/2021-05-14 13:29:02.834172']
+- Print Log: ['./Print_Logs/2021-05-14 13:29:01.074733.txt']
+- Test Accuracy Threshold: [0.9]
+- CSV File:
+  - ['CSV/mix_experts_resnet20/2021-05-14 16:39:02.744599.csv']
+- Plot: ['./Plots/mix_experts_resnet20/2021-05-14 16:39:02.467326_mix_experts_resnet20_SVHN.svg']

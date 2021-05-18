@@ -1,0 +1,4128 @@
+Sequential(
+  (0): BasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu): ReLU(inplace=True)
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+  (1): BasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu): ReLU(inplace=True)
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+  (2): BasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu): ReLU(inplace=True)
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+)
+Sequential(
+  (0): BasicBlock(
+    (conv_layer_1): Conv2d(16, 32, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu): ReLU(inplace=True)
+    (conv_layer_2): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential(
+      (0): Conv2d(16, 32, kernel_size=(1, 1), stride=(2, 2), bias=False)
+      (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (1): BasicBlock(
+    (conv_layer_1): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu): ReLU(inplace=True)
+    (conv_layer_2): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+  (2): BasicBlock(
+    (conv_layer_1): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu): ReLU(inplace=True)
+    (conv_layer_2): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+)
+Sequential(
+  (0): BasicBlock(
+    (conv_layer_1): Conv2d(32, 64, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu): ReLU(inplace=True)
+    (conv_layer_2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential(
+      (0): Conv2d(32, 64, kernel_size=(1, 1), stride=(2, 2), bias=False)
+      (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (1): BasicBlock(
+    (conv_layer_1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu): ReLU(inplace=True)
+    (conv_layer_2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+  (2): BasicBlock(
+    (conv_layer_1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu): ReLU(inplace=True)
+    (conv_layer_2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+)
+Sequential(
+  (0): RationalBasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+    cuda:0: 0x7f76b84630a0
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+    cuda:0: 0x7f76b74e1d20
+    (shortcut): Sequential()
+  )
+  (1): RationalBasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+    cuda:0: 0x7f76b74d5af0
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+    cuda:0: 0x7f76b74ec640
+    (shortcut): Sequential()
+  )
+  (2): RationalBasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+    cuda:0: 0x7f76b74ecaa0
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+    cuda:0: 0x7f76b74ecf00
+    (shortcut): Sequential()
+  )
+)
+Sequential(
+  (0): RationalBasicBlock(
+    (conv_layer_1): Conv2d(16, 32, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+    cuda:0: 0x7f76b74f7410
+    (conv_layer_2): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+    cuda:0: 0x7f76b74f7820
+    (shortcut): Sequential(
+      (0): Conv2d(16, 32, kernel_size=(1, 1), stride=(2, 2), bias=False)
+      (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (1): RationalBasicBlock(
+    (conv_layer_1): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+    cuda:0: 0x7f76b74f7cd0
+    (conv_layer_2): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+    cuda:0: 0x7f76b62813c0
+    (shortcut): Sequential()
+  )
+  (2): RationalBasicBlock(
+    (conv_layer_1): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+    cuda:0: 0x7f76b6281870
+    (conv_layer_2): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+    cuda:0: 0x7f76b6281cd0
+    (shortcut): Sequential()
+  )
+)
+Sequential(
+  (0): RationalBasicBlock(
+    (conv_layer_1): Conv2d(32, 64, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+    cuda:0: 0x7f76b628f1e0
+    (conv_layer_2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+    cuda:0: 0x7f76b628f640
+    (shortcut): Sequential(
+      (0): Conv2d(32, 64, kernel_size=(1, 1), stride=(2, 2), bias=False)
+      (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (1): RationalBasicBlock(
+    (conv_layer_1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+    cuda:0: 0x7f76b628faf0
+    (conv_layer_2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+    cuda:0: 0x7f76b62991e0
+    (shortcut): Sequential()
+  )
+  (2): RationalBasicBlock(
+    (conv_layer_1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+    cuda:0: 0x7f76b6299690
+    (conv_layer_2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+    cuda:0: 0x7f76b6299af0
+    (shortcut): Sequential()
+  )
+)
+Sequential(
+  (0): RationalBasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_expert_group_1): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b62a73c0
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b62a7f00
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b62b7050
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b62b70a0
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b74d5d70
+    )
+    (rational_expert_group_2): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b62a7f50
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b62b74b0
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b62b7500
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b62b7140
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b62b7a00
+    )
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+  (1): RationalBasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_expert_group_1): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b62b78c0
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b6240500
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b6240550
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b6240460
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b6240cd0
+    )
+    (rational_expert_group_2): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b62404b0
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b6240410
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b6240370
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b6240a50
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b6240e10
+    )
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+  (2): RationalBasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_expert_group_1): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b624f320
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b624f230
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b624f910
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b625a370
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b625a280
+    )
+    (rational_expert_group_2): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b624fa00
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b624f9b0
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b624fb90
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b625a0f0
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b625a4b0
+    )
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+)
+Sequential(
+  (0): RationalBasicBlock(
+    (conv_layer_1): Conv2d(16, 32, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_expert_group_1): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b625a230
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b625ae60
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b62670a0
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b6267690
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b62675a0
+    )
+    (rational_expert_group_2): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b625a640
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b6267550
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b62671e0
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b62670f0
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b6267960
+    )
+    (conv_layer_2): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential(
+      (0): Conv2d(16, 32, kernel_size=(1, 1), stride=(2, 2), bias=False)
+      (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (1): RationalBasicBlock(
+    (conv_layer_1): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_expert_group_1): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b6267b90
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b62727d0
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b6272820
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b6272dc0
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b627b050
+    )
+    (rational_expert_group_2): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b6272780
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b62726e0
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b6272730
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b627b2d0
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b627b1e0
+    )
+    (conv_layer_2): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+  (2): RationalBasicBlock(
+    (conv_layer_1): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_expert_group_1): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b627b410
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b627be10
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b627bcd0
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b620a690
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b620a6e0
+    )
+    (rational_expert_group_2): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b627bd70
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b627bf00
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b627be60
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b620a460
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b620a410
+    )
+    (conv_layer_2): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+)
+Sequential(
+  (0): RationalBasicBlock(
+    (conv_layer_1): Conv2d(32, 64, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_expert_group_1): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b620a550
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b6214730
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b62142d0
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b6214640
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b9b6dc80
+    )
+    (rational_expert_group_2): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b62146e0
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b62145f0
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b6214550
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b62148c0
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b6214eb0
+    )
+    (conv_layer_2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential(
+      (0): Conv2d(32, 64, kernel_size=(1, 1), stride=(2, 2), bias=False)
+      (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (1): RationalBasicBlock(
+    (conv_layer_1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_expert_group_1): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b6214dc0
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b6221af0
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b6221960
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b622d410
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b622d460
+    )
+    (rational_expert_group_2): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b6221a50
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b6221a00
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b6221c30
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b622d1e0
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b622d190
+    )
+    (conv_layer_2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+  (2): RationalBasicBlock(
+    (conv_layer_1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_expert_group_1): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b622d2d0
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b622df00
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b6239050
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b62390a0
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b6239730
+    )
+    (rational_expert_group_2): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b622df50
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b62395a0
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b62395f0
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b6239140
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f76b6239870
+    )
+    (conv_layer_2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+)
+[10, 15, 20]
+Warmup
+Training Epoch 0/24
+********************
+train Loss: 2.2529 Acc: 0.1723
+val Loss: 2.2330 Acc: 0.1916
+Epoch finished in 0m 9s
+Training Epoch 1/24
+********************
+Warmup
+train Loss: 2.1422 Acc: 0.2328
+val Loss: 1.9238 Acc: 0.3079
+Epoch finished in 0m 9s
+Training Epoch 2/24
+********************
+Warmup
+train Loss: 1.6646 Acc: 0.4046
+val Loss: 1.3472 Acc: 0.5398
+Epoch finished in 0m 9s
+Training Epoch 3/24
+********************
+Warmup
+train Loss: 0.9226 Acc: 0.6970
+val Loss: 0.7409 Acc: 0.7584
+Epoch finished in 0m 9s
+Training Epoch 4/24
+********************
+Warmup
+train Loss: 0.5839 Acc: 0.8130
+val Loss: 0.6230 Acc: 0.7998
+Epoch finished in 0m 9s
+Training Epoch 5/24
+********************
+Warmup
+train Loss: 0.4693 Acc: 0.8537
+val Loss: 0.4640 Acc: 0.8556
+Epoch finished in 0m 9s
+Training Epoch 6/24
+********************
+Warmup
+train Loss: 0.4156 Acc: 0.8699
+val Loss: 0.5694 Acc: 0.8223
+Epoch finished in 0m 9s
+Training Epoch 7/24
+********************
+Warmup
+train Loss: 0.3793 Acc: 0.8827
+val Loss: 0.3939 Acc: 0.8776
+Epoch finished in 0m 9s
+Training Epoch 8/24
+********************
+Warmup
+train Loss: 0.3541 Acc: 0.8905
+val Loss: 0.3874 Acc: 0.8799
+Epoch finished in 0m 9s
+Training Epoch 9/24
+********************
+Warmup
+train Loss: 0.3348 Acc: 0.8987
+val Loss: 0.3726 Acc: 0.8830
+Epoch finished in 0m 9s
+Training Epoch 10/24
+********************
+Warmup
+train Loss: 0.3181 Acc: 0.9036
+val Loss: 0.3645 Acc: 0.8889
+Epoch finished in 0m 9s
+Training Epoch 11/24
+********************
+Warmup
+train Loss: 0.3052 Acc: 0.9069
+val Loss: 0.3717 Acc: 0.8840
+Epoch finished in 0m 9s
+Training Epoch 12/24
+********************
+Warmup
+train Loss: 0.2905 Acc: 0.9116
+val Loss: 0.3415 Acc: 0.8965
+Epoch finished in 0m 9s
+Training Epoch 13/24
+********************
+Warmup
+train Loss: 0.2855 Acc: 0.9131
+val Loss: 0.3394 Acc: 0.8968
+Epoch finished in 0m 9s
+Training Epoch 14/24
+********************
+Warmup
+train Loss: 0.2780 Acc: 0.9145
+val Loss: 0.3160 Acc: 0.9041
+Epoch finished in 0m 9s
+Training Epoch 15/24
+********************
+Warmup
+train Loss: 0.2692 Acc: 0.9190
+val Loss: 0.3033 Acc: 0.9092
+Epoch finished in 0m 9s
+Training Epoch 16/24
+********************
+Warmup
+train Loss: 0.2617 Acc: 0.9226
+val Loss: 0.2720 Acc: 0.9154
+Epoch finished in 0m 9s
+Training Epoch 17/24
+********************
+Milestone 2: 0.01
+train Loss: 0.2295 Acc: 0.9317
+val Loss: 0.2518 Acc: 0.9254
+Epoch finished in 0m 9s
+Training Epoch 18/24
+********************
+Milestone 2: 0.01
+train Loss: 0.2187 Acc: 0.9358
+val Loss: 0.2476 Acc: 0.9269
+Epoch finished in 0m 9s
+Training Epoch 19/24
+********************
+Milestone 2: 0.01
+train Loss: 0.2129 Acc: 0.9378
+val Loss: 0.2402 Acc: 0.9285
+Epoch finished in 0m 8s
+Training Epoch 20/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2091 Acc: 0.9385
+val Loss: 0.2386 Acc: 0.9286
+Epoch finished in 0m 9s
+Training Epoch 21/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2120 Acc: 0.9380
+val Loss: 0.2408 Acc: 0.9286
+Epoch finished in 0m 9s
+Training Epoch 22/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2083 Acc: 0.9392
+val Loss: 0.2398 Acc: 0.9305
+Epoch finished in 0m 9s
+Training Epoch 23/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2103 Acc: 0.9385
+val Loss: 0.2401 Acc: 0.9287
+Epoch finished in 0m 9s
+Training Epoch 24/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2078 Acc: 0.9386
+val Loss: 0.2417 Acc: 0.9290
+Epoch finished in 0m 9s
+Best validation accuracy: 0.9290160532925631
+Before Pruning
+++++++++++++++++++
+Model Test Accuracy:  0.9374231714812538
+Pruning Epoch 1
+++++++++++++++++++
+number of weights to prune:  53540.0
+Sparsity of Pruned Mask:  tensor(0.2000)
+[10, 15, 20]
+Warmup
+Training Epoch 0/24
+********************
+train Loss: 2.2103 Acc: 0.1981
+val Loss: 1.9896 Acc: 0.3045
+Epoch finished in 0m 9s
+Training Epoch 1/24
+********************
+Warmup
+train Loss: 1.5393 Acc: 0.4805
+val Loss: 0.9618 Acc: 0.6969
+Epoch finished in 0m 9s
+Training Epoch 2/24
+********************
+Warmup
+train Loss: 0.6747 Acc: 0.7907
+val Loss: 0.5576 Acc: 0.8198
+Epoch finished in 0m 9s
+Training Epoch 3/24
+********************
+Warmup
+train Loss: 0.4578 Acc: 0.8581
+val Loss: 0.4586 Acc: 0.8583
+Epoch finished in 0m 9s
+Training Epoch 4/24
+********************
+Warmup
+train Loss: 0.3931 Acc: 0.8781
+val Loss: 0.3825 Acc: 0.8796
+Epoch finished in 0m 9s
+Training Epoch 5/24
+********************
+Warmup
+train Loss: 0.3544 Acc: 0.8905
+val Loss: 0.4431 Acc: 0.8636
+Epoch finished in 0m 9s
+Training Epoch 6/24
+********************
+Warmup
+train Loss: 0.3314 Acc: 0.8986
+val Loss: 0.3692 Acc: 0.8851
+Epoch finished in 0m 9s
+Training Epoch 7/24
+********************
+Warmup
+train Loss: 0.3151 Acc: 0.9033
+val Loss: 0.3769 Acc: 0.8830
+Epoch finished in 0m 9s
+Training Epoch 8/24
+********************
+Warmup
+train Loss: 0.3014 Acc: 0.9077
+val Loss: 0.3102 Acc: 0.9067
+Epoch finished in 0m 9s
+Training Epoch 9/24
+********************
+Warmup
+train Loss: 0.2906 Acc: 0.9119
+val Loss: 0.3448 Acc: 0.8936
+Epoch finished in 0m 9s
+Training Epoch 10/24
+********************
+Warmup
+train Loss: 0.2798 Acc: 0.9135
+val Loss: 0.3501 Acc: 0.8958
+Epoch finished in 0m 9s
+Training Epoch 11/24
+********************
+Warmup
+train Loss: 0.2733 Acc: 0.9174
+val Loss: 0.3209 Acc: 0.9012
+Epoch finished in 0m 9s
+Training Epoch 12/24
+********************
+Warmup
+train Loss: 0.2676 Acc: 0.9199
+val Loss: 0.3479 Acc: 0.8958
+Epoch finished in 0m 9s
+Training Epoch 13/24
+********************
+Warmup
+train Loss: 0.2620 Acc: 0.9213
+val Loss: 0.3071 Acc: 0.9079
+Epoch finished in 0m 9s
+Training Epoch 14/24
+********************
+Warmup
+train Loss: 0.2553 Acc: 0.9216
+val Loss: 0.3454 Acc: 0.8972
+Epoch finished in 0m 9s
+Training Epoch 15/24
+********************
+Warmup
+train Loss: 0.2494 Acc: 0.9252
+val Loss: 0.2930 Acc: 0.9101
+Epoch finished in 0m 9s
+Training Epoch 16/24
+********************
+Warmup
+train Loss: 0.2423 Acc: 0.9267
+val Loss: 0.2542 Acc: 0.9241
+Epoch finished in 0m 9s
+Training Epoch 17/24
+********************
+Milestone 2: 0.01
+train Loss: 0.2103 Acc: 0.9378
+val Loss: 0.2337 Acc: 0.9306
+Epoch finished in 0m 9s
+Training Epoch 18/24
+********************
+Milestone 2: 0.01
+train Loss: 0.2010 Acc: 0.9412
+val Loss: 0.2317 Acc: 0.9331
+Epoch finished in 0m 9s
+Training Epoch 19/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1957 Acc: 0.9430
+val Loss: 0.2271 Acc: 0.9317
+Epoch finished in 0m 9s
+Training Epoch 20/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1926 Acc: 0.9437
+val Loss: 0.2290 Acc: 0.9343
+Epoch finished in 0m 9s
+Training Epoch 21/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1936 Acc: 0.9443
+val Loss: 0.2274 Acc: 0.9339
+Epoch finished in 0m 9s
+Training Epoch 22/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1909 Acc: 0.9443
+val Loss: 0.2268 Acc: 0.9332
+Epoch finished in 0m 9s
+Training Epoch 23/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1914 Acc: 0.9440
+val Loss: 0.2240 Acc: 0.9348
+Epoch finished in 0m 9s
+Training Epoch 24/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1933 Acc: 0.9438
+val Loss: 0.2287 Acc: 0.9332
+Epoch finished in 0m 9s
+Best validation accuracy: 0.9331658840231517
+Model Test Accuracy:  0.9415334972341732
+Pruning Epoch 2
+++++++++++++++++++
+number of weights to prune:  42831.0
+Sparsity of Pruned Mask:  tensor(0.3600)
+[10, 15, 20]
+Warmup
+Training Epoch 0/24
+********************
+train Loss: 1.9997 Acc: 0.3029
+val Loss: 1.4343 Acc: 0.5687
+Epoch finished in 0m 9s
+Training Epoch 1/24
+********************
+Warmup
+train Loss: 0.8485 Acc: 0.7599
+val Loss: 0.5275 Acc: 0.8451
+Epoch finished in 0m 9s
+Training Epoch 2/24
+********************
+Warmup
+train Loss: 0.4393 Acc: 0.8694
+val Loss: 0.4015 Acc: 0.8750
+Epoch finished in 0m 9s
+Training Epoch 3/24
+********************
+Warmup
+train Loss: 0.3604 Acc: 0.8899
+val Loss: 0.3650 Acc: 0.8881
+Epoch finished in 0m 9s
+Training Epoch 4/24
+********************
+Warmup
+train Loss: 0.3217 Acc: 0.9009
+val Loss: 0.3373 Acc: 0.8960
+Epoch finished in 0m 9s
+Training Epoch 5/24
+********************
+Warmup
+train Loss: 0.3031 Acc: 0.9089
+val Loss: 0.3434 Acc: 0.8936
+Epoch finished in 0m 9s
+Training Epoch 6/24
+********************
+Warmup
+train Loss: 0.2863 Acc: 0.9132
+val Loss: 0.3067 Acc: 0.9058
+Epoch finished in 0m 9s
+Training Epoch 7/24
+********************
+Warmup
+train Loss: 0.2785 Acc: 0.9158
+val Loss: 0.2980 Acc: 0.9064
+Epoch finished in 0m 9s
+Training Epoch 8/24
+********************
+Warmup
+train Loss: 0.2686 Acc: 0.9195
+val Loss: 0.2994 Acc: 0.9086
+Epoch finished in 0m 9s
+Training Epoch 9/24
+********************
+Warmup
+train Loss: 0.2633 Acc: 0.9206
+val Loss: 0.3099 Acc: 0.9060
+Epoch finished in 0m 9s
+Training Epoch 10/24
+********************
+Warmup
+train Loss: 0.2551 Acc: 0.9234
+val Loss: 0.3044 Acc: 0.9072
+Epoch finished in 0m 9s
+Training Epoch 11/24
+********************
+Warmup
+train Loss: 0.2516 Acc: 0.9243
+val Loss: 0.2973 Acc: 0.9119
+Epoch finished in 0m 9s
+Training Epoch 12/24
+********************
+Warmup
+train Loss: 0.2469 Acc: 0.9255
+val Loss: 0.2696 Acc: 0.9197
+Epoch finished in 0m 9s
+Training Epoch 13/24
+********************
+Warmup
+train Loss: 0.2441 Acc: 0.9262
+val Loss: 0.2947 Acc: 0.9088
+Epoch finished in 0m 9s
+Training Epoch 14/24
+********************
+Warmup
+train Loss: 0.2387 Acc: 0.9295
+val Loss: 0.2658 Acc: 0.9212
+Epoch finished in 0m 9s
+Training Epoch 15/24
+********************
+Warmup
+train Loss: 0.2341 Acc: 0.9295
+val Loss: 0.3023 Acc: 0.9095
+Epoch finished in 0m 9s
+Training Epoch 16/24
+********************
+Warmup
+train Loss: 0.2298 Acc: 0.9323
+val Loss: 0.2484 Acc: 0.9260
+Epoch finished in 0m 9s
+Training Epoch 17/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1996 Acc: 0.9420
+val Loss: 0.2306 Acc: 0.9327
+Epoch finished in 0m 9s
+Training Epoch 18/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1908 Acc: 0.9448
+val Loss: 0.2293 Acc: 0.9327
+Epoch finished in 0m 9s
+Training Epoch 19/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1852 Acc: 0.9469
+val Loss: 0.2261 Acc: 0.9334
+Epoch finished in 0m 9s
+Training Epoch 20/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1819 Acc: 0.9480
+val Loss: 0.2221 Acc: 0.9357
+Epoch finished in 0m 9s
+Training Epoch 21/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1822 Acc: 0.9482
+val Loss: 0.2240 Acc: 0.9344
+Epoch finished in 0m 9s
+Training Epoch 22/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1822 Acc: 0.9487
+val Loss: 0.2233 Acc: 0.9346
+Epoch finished in 0m 9s
+Training Epoch 23/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1817 Acc: 0.9476
+val Loss: 0.2220 Acc: 0.9350
+Epoch finished in 0m 9s
+Training Epoch 24/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1812 Acc: 0.9483
+val Loss: 0.2238 Acc: 0.9358
+Epoch finished in 0m 9s
+Best validation accuracy: 0.935786829747734
+Model Test Accuracy:  0.9433005531653349
+Pruning Epoch 3
+++++++++++++++++++
+number of weights to prune:  34265.0
+Sparsity of Pruned Mask:  tensor(0.4880)
+[10, 15, 20]
+Warmup
+Training Epoch 0/24
+********************
+train Loss: 1.7605 Acc: 0.4260
+val Loss: 0.9854 Acc: 0.7469
+Epoch finished in 0m 9s
+Training Epoch 1/24
+********************
+Warmup
+train Loss: 0.6163 Acc: 0.8370
+val Loss: 0.4388 Acc: 0.8727
+Epoch finished in 0m 9s
+Training Epoch 2/24
+********************
+Warmup
+train Loss: 0.3683 Acc: 0.8914
+val Loss: 0.3479 Acc: 0.8942
+Epoch finished in 0m 9s
+Training Epoch 3/24
+********************
+Warmup
+train Loss: 0.3147 Acc: 0.9052
+val Loss: 0.3231 Acc: 0.9019
+Epoch finished in 0m 9s
+Training Epoch 4/24
+********************
+Warmup
+train Loss: 0.2852 Acc: 0.9141
+val Loss: 0.3045 Acc: 0.9079
+Epoch finished in 0m 9s
+Training Epoch 5/24
+********************
+Warmup
+train Loss: 0.2680 Acc: 0.9191
+val Loss: 0.2929 Acc: 0.9139
+Epoch finished in 0m 9s
+Training Epoch 6/24
+********************
+Warmup
+train Loss: 0.2591 Acc: 0.9224
+val Loss: 0.3019 Acc: 0.9103
+Epoch finished in 0m 9s
+Training Epoch 7/24
+********************
+Warmup
+train Loss: 0.2507 Acc: 0.9244
+val Loss: 0.2919 Acc: 0.9121
+Epoch finished in 0m 9s
+Training Epoch 8/24
+********************
+Warmup
+train Loss: 0.2480 Acc: 0.9261
+val Loss: 0.2903 Acc: 0.9115
+Epoch finished in 0m 9s
+Training Epoch 9/24
+********************
+Warmup
+train Loss: 0.2435 Acc: 0.9270
+val Loss: 0.2822 Acc: 0.9133
+Epoch finished in 0m 9s
+Training Epoch 10/24
+********************
+Warmup
+train Loss: 0.2395 Acc: 0.9275
+val Loss: 0.2902 Acc: 0.9121
+Epoch finished in 0m 9s
+Training Epoch 11/24
+********************
+Warmup
+train Loss: 0.2335 Acc: 0.9291
+val Loss: 0.2689 Acc: 0.9194
+Epoch finished in 0m 9s
+Training Epoch 12/24
+********************
+Warmup
+train Loss: 0.2342 Acc: 0.9302
+val Loss: 0.2682 Acc: 0.9219
+Epoch finished in 0m 9s
+Training Epoch 13/24
+********************
+Warmup
+train Loss: 0.2288 Acc: 0.9313
+val Loss: 0.2663 Acc: 0.9210
+Epoch finished in 0m 9s
+Training Epoch 14/24
+********************
+Warmup
+train Loss: 0.2268 Acc: 0.9328
+val Loss: 0.2704 Acc: 0.9195
+Epoch finished in 0m 9s
+Training Epoch 15/24
+********************
+Warmup
+train Loss: 0.2261 Acc: 0.9330
+val Loss: 0.2932 Acc: 0.9120
+Epoch finished in 0m 9s
+Training Epoch 16/24
+********************
+Warmup
+train Loss: 0.2178 Acc: 0.9363
+val Loss: 0.2434 Acc: 0.9276
+Epoch finished in 0m 9s
+Training Epoch 17/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1916 Acc: 0.9440
+val Loss: 0.2292 Acc: 0.9346
+Epoch finished in 0m 9s
+Training Epoch 18/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1821 Acc: 0.9467
+val Loss: 0.2262 Acc: 0.9347
+Epoch finished in 0m 9s
+Training Epoch 19/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1776 Acc: 0.9488
+val Loss: 0.2222 Acc: 0.9349
+Epoch finished in 0m 9s
+Training Epoch 20/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1758 Acc: 0.9487
+val Loss: 0.2232 Acc: 0.9352
+Epoch finished in 0m 9s
+Training Epoch 21/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1754 Acc: 0.9493
+val Loss: 0.2240 Acc: 0.9362
+Epoch finished in 0m 9s
+Training Epoch 22/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1734 Acc: 0.9501
+val Loss: 0.2233 Acc: 0.9360
+Epoch finished in 0m 9s
+Training Epoch 23/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1750 Acc: 0.9491
+val Loss: 0.2205 Acc: 0.9375
+Epoch finished in 0m 9s
+Training Epoch 24/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1757 Acc: 0.9493
+val Loss: 0.2243 Acc: 0.9372
+Epoch finished in 0m 9s
+Best validation accuracy: 0.9372065086818827
+Model Test Accuracy:  0.9444913952059003
+Pruning Epoch 4
+++++++++++++++++++
+number of weights to prune:  27412.0
+Sparsity of Pruned Mask:  tensor(0.5904)
+[10, 15, 20]
+Warmup
+Training Epoch 0/24
+********************
+train Loss: 1.6703 Acc: 0.4816
+val Loss: 0.8699 Acc: 0.8014
+Epoch finished in 0m 9s
+Training Epoch 1/24
+********************
+Warmup
+train Loss: 0.5490 Acc: 0.8600
+val Loss: 0.4008 Acc: 0.8845
+Epoch finished in 0m 9s
+Training Epoch 2/24
+********************
+Warmup
+train Loss: 0.3415 Acc: 0.9006
+val Loss: 0.3237 Acc: 0.9053
+Epoch finished in 0m 9s
+Training Epoch 3/24
+********************
+Warmup
+train Loss: 0.2881 Acc: 0.9141
+val Loss: 0.3063 Acc: 0.9074
+Epoch finished in 0m 9s
+Training Epoch 4/24
+********************
+Warmup
+train Loss: 0.2658 Acc: 0.9217
+val Loss: 0.3208 Acc: 0.9030
+Epoch finished in 0m 9s
+Training Epoch 5/24
+********************
+Warmup
+train Loss: 0.2502 Acc: 0.9252
+val Loss: 0.2975 Acc: 0.9107
+Epoch finished in 0m 9s
+Training Epoch 6/24
+********************
+Warmup
+train Loss: 0.2450 Acc: 0.9265
+val Loss: 0.2663 Acc: 0.9221
+Epoch finished in 0m 9s
+Training Epoch 7/24
+********************
+Warmup
+train Loss: 0.2375 Acc: 0.9283
+val Loss: 0.2841 Acc: 0.9139
+Epoch finished in 0m 9s
+Training Epoch 8/24
+********************
+Warmup
+train Loss: 0.2333 Acc: 0.9291
+val Loss: 0.2931 Acc: 0.9117
+Epoch finished in 0m 9s
+Training Epoch 9/24
+********************
+Warmup
+train Loss: 0.2307 Acc: 0.9310
+val Loss: 0.2742 Acc: 0.9184
+Epoch finished in 0m 9s
+Training Epoch 10/24
+********************
+Warmup
+train Loss: 0.2246 Acc: 0.9331
+val Loss: 0.3182 Acc: 0.9058
+Epoch finished in 0m 9s
+Training Epoch 11/24
+********************
+Warmup
+train Loss: 0.2242 Acc: 0.9330
+val Loss: 0.2764 Acc: 0.9193
+Epoch finished in 0m 9s
+Training Epoch 12/24
+********************
+Warmup
+train Loss: 0.2226 Acc: 0.9331
+val Loss: 0.2675 Acc: 0.9209
+Epoch finished in 0m 9s
+Training Epoch 13/24
+********************
+Warmup
+train Loss: 0.2203 Acc: 0.9343
+val Loss: 0.3536 Acc: 0.8988
+Epoch finished in 0m 9s
+Training Epoch 14/24
+********************
+Warmup
+train Loss: 0.2196 Acc: 0.9337
+val Loss: 0.2568 Acc: 0.9244
+Epoch finished in 0m 9s
+Training Epoch 15/24
+********************
+Warmup
+train Loss: 0.2145 Acc: 0.9352
+val Loss: 0.2834 Acc: 0.9159
+Epoch finished in 0m 9s
+Training Epoch 16/24
+********************
+Warmup
+train Loss: 0.2101 Acc: 0.9372
+val Loss: 0.2438 Acc: 0.9290
+Epoch finished in 0m 9s
+Training Epoch 17/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1816 Acc: 0.9472
+val Loss: 0.2262 Acc: 0.9356
+Epoch finished in 0m 9s
+Training Epoch 18/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1752 Acc: 0.9491
+val Loss: 0.2211 Acc: 0.9378
+Epoch finished in 0m 9s
+Training Epoch 19/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1710 Acc: 0.9507
+val Loss: 0.2173 Acc: 0.9375
+Epoch finished in 0m 9s
+Training Epoch 20/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1685 Acc: 0.9517
+val Loss: 0.2190 Acc: 0.9371
+Epoch finished in 0m 9s
+Training Epoch 21/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1651 Acc: 0.9533
+val Loss: 0.2171 Acc: 0.9376
+Epoch finished in 0m 9s
+Training Epoch 22/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1669 Acc: 0.9522
+val Loss: 0.2168 Acc: 0.9393
+Epoch finished in 0m 9s
+Training Epoch 23/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1691 Acc: 0.9514
+val Loss: 0.2169 Acc: 0.9381
+Epoch finished in 0m 9s
+Training Epoch 24/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1705 Acc: 0.9513
+val Loss: 0.2154 Acc: 0.9395
+Epoch finished in 0m 9s
+Best validation accuracy: 0.9394998361908923
+Model Test Accuracy:  0.9461816226183158
+Pruning Epoch 5
+++++++++++++++++++
+number of weights to prune:  21929.0
+Sparsity of Pruned Mask:  tensor(0.6723)
+[10, 15, 20]
+Warmup
+Training Epoch 0/24
+********************
+train Loss: 1.5847 Acc: 0.5227
+val Loss: 0.7863 Acc: 0.8210
+Epoch finished in 0m 9s
+Training Epoch 1/24
+********************
+Warmup
+train Loss: 0.5112 Acc: 0.8709
+val Loss: 0.3787 Acc: 0.8918
+Epoch finished in 0m 9s
+Training Epoch 2/24
+********************
+Warmup
+train Loss: 0.3243 Acc: 0.9051
+val Loss: 0.3073 Acc: 0.9071
+Epoch finished in 0m 9s
+Training Epoch 3/24
+********************
+Warmup
+train Loss: 0.2752 Acc: 0.9183
+val Loss: 0.2917 Acc: 0.9127
+Epoch finished in 0m 9s
+Training Epoch 4/24
+********************
+Warmup
+train Loss: 0.2521 Acc: 0.9252
+val Loss: 0.2830 Acc: 0.9154
+Epoch finished in 0m 9s
+Training Epoch 5/24
+********************
+Warmup
+train Loss: 0.2405 Acc: 0.9278
+val Loss: 0.3048 Acc: 0.9057
+Epoch finished in 0m 9s
+Training Epoch 6/24
+********************
+Warmup
+train Loss: 0.2335 Acc: 0.9297
+val Loss: 0.2911 Acc: 0.9132
+Epoch finished in 0m 9s
+Training Epoch 7/24
+********************
+Warmup
+train Loss: 0.2282 Acc: 0.9315
+val Loss: 0.3505 Acc: 0.8939
+Epoch finished in 0m 9s
+Training Epoch 8/24
+********************
+Warmup
+train Loss: 0.2245 Acc: 0.9324
+val Loss: 0.2985 Acc: 0.9099
+Epoch finished in 0m 9s
+Training Epoch 9/24
+********************
+Warmup
+train Loss: 0.2198 Acc: 0.9340
+val Loss: 0.2647 Acc: 0.9235
+Epoch finished in 0m 9s
+Training Epoch 10/24
+********************
+Warmup
+train Loss: 0.2196 Acc: 0.9346
+val Loss: 0.2676 Acc: 0.9202
+Epoch finished in 0m 9s
+Training Epoch 11/24
+********************
+Warmup
+train Loss: 0.2173 Acc: 0.9341
+val Loss: 0.2771 Acc: 0.9179
+Epoch finished in 0m 9s
+Training Epoch 12/24
+********************
+Warmup
+train Loss: 0.2144 Acc: 0.9360
+val Loss: 0.2549 Acc: 0.9252
+Epoch finished in 0m 9s
+Training Epoch 13/24
+********************
+Warmup
+train Loss: 0.2150 Acc: 0.9362
+val Loss: 0.2693 Acc: 0.9198
+Epoch finished in 0m 9s
+Training Epoch 14/24
+********************
+Warmup
+train Loss: 0.2107 Acc: 0.9362
+val Loss: 0.2717 Acc: 0.9198
+Epoch finished in 0m 9s
+Training Epoch 15/24
+********************
+Warmup
+train Loss: 0.2099 Acc: 0.9376
+val Loss: 0.2585 Acc: 0.9234
+Epoch finished in 0m 9s
+Training Epoch 16/24
+********************
+Warmup
+train Loss: 0.2110 Acc: 0.9369
+val Loss: 0.2324 Acc: 0.9308
+Epoch finished in 0m 9s
+Training Epoch 17/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1799 Acc: 0.9477
+val Loss: 0.2197 Acc: 0.9367
+Epoch finished in 0m 9s
+Training Epoch 18/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1709 Acc: 0.9502
+val Loss: 0.2209 Acc: 0.9349
+Epoch finished in 0m 9s
+Training Epoch 19/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1657 Acc: 0.9524
+val Loss: 0.2177 Acc: 0.9381
+Epoch finished in 0m 9s
+Training Epoch 20/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1653 Acc: 0.9528
+val Loss: 0.2138 Acc: 0.9392
+Epoch finished in 0m 9s
+Training Epoch 21/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1634 Acc: 0.9526
+val Loss: 0.2175 Acc: 0.9362
+Epoch finished in 0m 9s
+Training Epoch 22/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1661 Acc: 0.9521
+val Loss: 0.2165 Acc: 0.9375
+Epoch finished in 0m 9s
+Training Epoch 23/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1636 Acc: 0.9525
+val Loss: 0.2154 Acc: 0.9385
+Epoch finished in 0m 9s
+Training Epoch 24/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1650 Acc: 0.9533
+val Loss: 0.2139 Acc: 0.9380
+Epoch finished in 0m 9s
+Best validation accuracy: 0.9379709511848859
+Model Test Accuracy:  0.9444913952059003
+Pruning Epoch 6
+++++++++++++++++++
+number of weights to prune:  17543.0
+Sparsity of Pruned Mask:  tensor(0.7379)
+[10, 15, 20]
+Warmup
+Training Epoch 0/24
+********************
+train Loss: 1.5677 Acc: 0.5335
+val Loss: 0.7850 Acc: 0.8288
+Epoch finished in 0m 9s
+Training Epoch 1/24
+********************
+Warmup
+train Loss: 0.5058 Acc: 0.8756
+val Loss: 0.3833 Acc: 0.8931
+Epoch finished in 0m 9s
+Training Epoch 2/24
+********************
+Warmup
+train Loss: 0.3161 Acc: 0.9094
+val Loss: 0.3073 Acc: 0.9106
+Epoch finished in 0m 9s
+Training Epoch 3/24
+********************
+Warmup
+train Loss: 0.2671 Acc: 0.9214
+val Loss: 0.2877 Acc: 0.9118
+Epoch finished in 0m 9s
+Training Epoch 4/24
+********************
+Warmup
+train Loss: 0.2440 Acc: 0.9274
+val Loss: 0.2826 Acc: 0.9152
+Epoch finished in 0m 9s
+Training Epoch 5/24
+********************
+Warmup
+train Loss: 0.2310 Acc: 0.9307
+val Loss: 0.2693 Acc: 0.9208
+Epoch finished in 0m 9s
+Training Epoch 6/24
+********************
+Warmup
+train Loss: 0.2266 Acc: 0.9319
+val Loss: 0.2914 Acc: 0.9114
+Epoch finished in 0m 9s
+Training Epoch 7/24
+********************
+Warmup
+train Loss: 0.2214 Acc: 0.9343
+val Loss: 0.3064 Acc: 0.9069
+Epoch finished in 0m 9s
+Training Epoch 8/24
+********************
+Warmup
+train Loss: 0.2213 Acc: 0.9341
+val Loss: 0.2712 Acc: 0.9185
+Epoch finished in 0m 9s
+Training Epoch 9/24
+********************
+Warmup
+train Loss: 0.2121 Acc: 0.9365
+val Loss: 0.2955 Acc: 0.9109
+Epoch finished in 0m 9s
+Training Epoch 10/24
+********************
+Warmup
+train Loss: 0.2140 Acc: 0.9372
+val Loss: 0.2759 Acc: 0.9204
+Epoch finished in 0m 9s
+Training Epoch 11/24
+********************
+Warmup
+train Loss: 0.2150 Acc: 0.9355
+val Loss: 0.2639 Acc: 0.9222
+Epoch finished in 0m 9s
+Training Epoch 12/24
+********************
+Warmup
+train Loss: 0.2107 Acc: 0.9379
+val Loss: 0.2746 Acc: 0.9188
+Epoch finished in 0m 9s
+Training Epoch 13/24
+********************
+Warmup
+train Loss: 0.2121 Acc: 0.9374
+val Loss: 0.2752 Acc: 0.9181
+Epoch finished in 0m 9s
+Training Epoch 14/24
+********************
+Warmup
+train Loss: 0.2096 Acc: 0.9376
+val Loss: 0.2761 Acc: 0.9212
+Epoch finished in 0m 9s
+Training Epoch 15/24
+********************
+Warmup
+train Loss: 0.2094 Acc: 0.9381
+val Loss: 0.2704 Acc: 0.9196
+Epoch finished in 0m 9s
+Training Epoch 16/24
+********************
+Warmup
+train Loss: 0.2024 Acc: 0.9396
+val Loss: 0.2374 Acc: 0.9317
+Epoch finished in 0m 9s
+Training Epoch 17/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1763 Acc: 0.9491
+val Loss: 0.2255 Acc: 0.9357
+Epoch finished in 0m 9s
+Training Epoch 18/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1677 Acc: 0.9513
+val Loss: 0.2242 Acc: 0.9355
+Epoch finished in 0m 9s
+Training Epoch 19/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1662 Acc: 0.9514
+val Loss: 0.2218 Acc: 0.9357
+Epoch finished in 0m 9s
+Training Epoch 20/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1619 Acc: 0.9530
+val Loss: 0.2200 Acc: 0.9351
+Epoch finished in 0m 9s
+Training Epoch 21/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1643 Acc: 0.9534
+val Loss: 0.2208 Acc: 0.9350
+Epoch finished in 0m 9s
+Training Epoch 22/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1626 Acc: 0.9529
+val Loss: 0.2187 Acc: 0.9361
+Epoch finished in 0m 9s
+Training Epoch 23/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1629 Acc: 0.9521
+val Loss: 0.2172 Acc: 0.9372
+Epoch finished in 0m 9s
+Training Epoch 24/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1622 Acc: 0.9533
+val Loss: 0.2193 Acc: 0.9368
+Epoch finished in 0m 9s
+Best validation accuracy: 0.9368242874303812
+Model Test Accuracy:  0.9456822372464658
+Pruning Epoch 7
+++++++++++++++++++
+number of weights to prune:  14034.0
+Sparsity of Pruned Mask:  tensor(0.7903)
+[10, 15, 20]
+Warmup
+Training Epoch 0/24
+********************
+train Loss: 1.5957 Acc: 0.5221
+val Loss: 0.7977 Acc: 0.8290
+Epoch finished in 0m 9s
+Training Epoch 1/24
+********************
+Warmup
+train Loss: 0.5094 Acc: 0.8751
+val Loss: 0.3699 Acc: 0.8943
+Epoch finished in 0m 9s
+Training Epoch 2/24
+********************
+Warmup
+train Loss: 0.3127 Acc: 0.9102
+val Loss: 0.3115 Acc: 0.9106
+Epoch finished in 0m 9s
+Training Epoch 3/24
+********************
+Warmup
+train Loss: 0.2634 Acc: 0.9227
+val Loss: 0.2774 Acc: 0.9159
+Epoch finished in 0m 9s
+Training Epoch 4/24
+********************
+Warmup
+train Loss: 0.2434 Acc: 0.9287
+val Loss: 0.2802 Acc: 0.9164
+Epoch finished in 0m 9s
+Training Epoch 5/24
+********************
+Warmup
+train Loss: 0.2341 Acc: 0.9300
+val Loss: 0.2647 Acc: 0.9214
+Epoch finished in 0m 9s
+Training Epoch 6/24
+********************
+Warmup
+train Loss: 0.2224 Acc: 0.9344
+val Loss: 0.2786 Acc: 0.9183
+Epoch finished in 0m 9s
+Training Epoch 7/24
+********************
+Warmup
+train Loss: 0.2168 Acc: 0.9343
+val Loss: 0.2529 Acc: 0.9240
+Epoch finished in 0m 9s
+Training Epoch 8/24
+********************
+Warmup
+train Loss: 0.2133 Acc: 0.9369
+val Loss: 0.2742 Acc: 0.9189
+Epoch finished in 0m 9s
+Training Epoch 9/24
+********************
+Warmup
+train Loss: 0.2150 Acc: 0.9356
+val Loss: 0.2565 Acc: 0.9272
+Epoch finished in 0m 9s
+Training Epoch 10/24
+********************
+Warmup
+train Loss: 0.2138 Acc: 0.9358
+val Loss: 0.2612 Acc: 0.9236
+Epoch finished in 0m 9s
+Training Epoch 11/24
+********************
+Warmup
+train Loss: 0.2117 Acc: 0.9364
+val Loss: 0.2864 Acc: 0.9161
+Epoch finished in 0m 9s
+Training Epoch 12/24
+********************
+Warmup
+train Loss: 0.2101 Acc: 0.9367
+val Loss: 0.2660 Acc: 0.9232
+Epoch finished in 0m 9s
+Training Epoch 13/24
+********************
+Warmup
+train Loss: 0.2103 Acc: 0.9380
+val Loss: 0.2655 Acc: 0.9230
+Epoch finished in 0m 9s
+Training Epoch 14/24
+********************
+Warmup
+train Loss: 0.2080 Acc: 0.9379
+val Loss: 0.2822 Acc: 0.9165
+Epoch finished in 0m 9s
+Training Epoch 15/24
+********************
+Warmup
+train Loss: 0.2066 Acc: 0.9386
+val Loss: 0.2735 Acc: 0.9182
+Epoch finished in 0m 9s
+Training Epoch 16/24
+********************
+Warmup
+train Loss: 0.2046 Acc: 0.9403
+val Loss: 0.2323 Acc: 0.9322
+Epoch finished in 0m 9s
+Training Epoch 17/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1790 Acc: 0.9480
+val Loss: 0.2222 Acc: 0.9362
+Epoch finished in 0m 9s
+Training Epoch 18/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1678 Acc: 0.9522
+val Loss: 0.2191 Acc: 0.9382
+Epoch finished in 0m 9s
+Training Epoch 19/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1653 Acc: 0.9526
+val Loss: 0.2169 Acc: 0.9382
+Epoch finished in 0m 9s
+Training Epoch 20/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1626 Acc: 0.9531
+val Loss: 0.2161 Acc: 0.9366
+Epoch finished in 0m 9s
+Training Epoch 21/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1633 Acc: 0.9533
+val Loss: 0.2144 Acc: 0.9376
+Epoch finished in 0m 9s
+Training Epoch 22/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1636 Acc: 0.9530
+val Loss: 0.2158 Acc: 0.9385
+Epoch finished in 0m 9s
+Training Epoch 23/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1619 Acc: 0.9540
+val Loss: 0.2102 Acc: 0.9391
+Epoch finished in 0m 9s
+Training Epoch 24/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1615 Acc: 0.9539
+val Loss: 0.2157 Acc: 0.9382
+Epoch finished in 0m 9s
+Best validation accuracy: 0.938189363328601
+Model Test Accuracy:  0.9442993239090349
+Pruning Epoch 8
+++++++++++++++++++
+number of weights to prune:  11227.0
+Sparsity of Pruned Mask:  tensor(0.8322)
+[10, 15, 20]
+Warmup
+Training Epoch 0/24
+********************
+train Loss: 1.5912 Acc: 0.5282
+val Loss: 0.8142 Acc: 0.8192
+Epoch finished in 0m 9s
+Training Epoch 1/24
+********************
+Warmup
+train Loss: 0.5121 Acc: 0.8748
+val Loss: 0.3731 Acc: 0.8963
+Epoch finished in 0m 9s
+Training Epoch 2/24
+********************
+Warmup
+train Loss: 0.3141 Acc: 0.9109
+val Loss: 0.3084 Acc: 0.9066
+Epoch finished in 0m 9s
+Training Epoch 3/24
+********************
+Warmup
+train Loss: 0.2629 Acc: 0.9225
+val Loss: 0.2789 Acc: 0.9166
+Epoch finished in 0m 9s
+Training Epoch 4/24
+********************
+Warmup
+train Loss: 0.2384 Acc: 0.9300
+val Loss: 0.2742 Acc: 0.9199
+Epoch finished in 0m 9s
+Training Epoch 5/24
+********************
+Warmup
+train Loss: 0.2284 Acc: 0.9313
+val Loss: 0.2633 Acc: 0.9216
+Epoch finished in 0m 9s
+Training Epoch 6/24
+********************
+Warmup
+train Loss: 0.2207 Acc: 0.9349
+val Loss: 0.3108 Acc: 0.9064
+Epoch finished in 0m 9s
+Training Epoch 7/24
+********************
+Warmup
+train Loss: 0.2184 Acc: 0.9355
+val Loss: 0.2755 Acc: 0.9161
+Epoch finished in 0m 9s
+Training Epoch 8/24
+********************
+Warmup
+train Loss: 0.2176 Acc: 0.9354
+val Loss: 0.2870 Acc: 0.9133
+Epoch finished in 0m 9s
+Training Epoch 9/24
+********************
+Warmup
+train Loss: 0.2127 Acc: 0.9368
+val Loss: 0.2802 Acc: 0.9161
+Epoch finished in 0m 9s
+Training Epoch 10/24
+********************
+Warmup
+train Loss: 0.2146 Acc: 0.9359
+val Loss: 0.2757 Acc: 0.9167
+Epoch finished in 0m 9s
+Training Epoch 11/24
+********************
+Warmup
+train Loss: 0.2108 Acc: 0.9372
+val Loss: 0.2841 Acc: 0.9142
+Epoch finished in 0m 9s
+Training Epoch 12/24
+********************
+Warmup
+train Loss: 0.2122 Acc: 0.9366
+val Loss: 0.2883 Acc: 0.9155
+Epoch finished in 0m 9s
+Training Epoch 13/24
+********************
+Warmup
+train Loss: 0.2099 Acc: 0.9388
+val Loss: 0.2670 Acc: 0.9197
+Epoch finished in 0m 9s
+Training Epoch 14/24
+********************
+Warmup
+train Loss: 0.2104 Acc: 0.9370
+val Loss: 0.2468 Acc: 0.9294
+Epoch finished in 0m 9s
+Training Epoch 15/24
+********************
+Warmup
+train Loss: 0.2065 Acc: 0.9377
+val Loss: 0.2687 Acc: 0.9189
+Epoch finished in 0m 9s
+Training Epoch 16/24
+********************
+Warmup
+train Loss: 0.2072 Acc: 0.9378
+val Loss: 0.2426 Acc: 0.9293
+Epoch finished in 0m 9s
+Training Epoch 17/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1813 Acc: 0.9471
+val Loss: 0.2307 Acc: 0.9331
+Epoch finished in 0m 9s
+Training Epoch 18/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1740 Acc: 0.9485
+val Loss: 0.2232 Acc: 0.9340
+Epoch finished in 0m 9s
+Training Epoch 19/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1692 Acc: 0.9506
+val Loss: 0.2200 Acc: 0.9364
+Epoch finished in 0m 9s
+Training Epoch 20/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1682 Acc: 0.9515
+val Loss: 0.2246 Acc: 0.9342
+Epoch finished in 0m 9s
+Training Epoch 21/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1675 Acc: 0.9512
+val Loss: 0.2204 Acc: 0.9354
+Epoch finished in 0m 9s
+Training Epoch 22/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1672 Acc: 0.9519
+val Loss: 0.2184 Acc: 0.9362
+Epoch finished in 0m 9s
+Training Epoch 23/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1672 Acc: 0.9518
+val Loss: 0.2178 Acc: 0.9370
+Epoch finished in 0m 9s
+Training Epoch 24/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1682 Acc: 0.9514
+val Loss: 0.2225 Acc: 0.9356
+Epoch finished in 0m 9s
+Best validation accuracy: 0.9355684176040188
+Model Test Accuracy:  0.9450676090964966
+Pruning Epoch 9
+++++++++++++++++++
+number of weights to prune:  8982.0
+Sparsity of Pruned Mask:  tensor(0.8658)
+[10, 15, 20]
+Warmup
+Training Epoch 0/24
+********************
+train Loss: 1.5768 Acc: 0.5408
+val Loss: 0.8067 Acc: 0.8215
+Epoch finished in 0m 9s
+Training Epoch 1/24
+********************
+Warmup
+train Loss: 0.5182 Acc: 0.8719
+val Loss: 0.3778 Acc: 0.8939
+Epoch finished in 0m 9s
+Training Epoch 2/24
+********************
+Warmup
+train Loss: 0.3165 Acc: 0.9101
+val Loss: 0.3114 Acc: 0.9086
+Epoch finished in 0m 9s
+Training Epoch 3/24
+********************
+Warmup
+train Loss: 0.2648 Acc: 0.9215
+val Loss: 0.2841 Acc: 0.9131
+Epoch finished in 0m 9s
+Training Epoch 4/24
+********************
+Warmup
+train Loss: 0.2408 Acc: 0.9279
+val Loss: 0.2689 Acc: 0.9188
+Epoch finished in 0m 9s
+Training Epoch 5/24
+********************
+Warmup
+train Loss: 0.2305 Acc: 0.9315
+val Loss: 0.2717 Acc: 0.9197
+Epoch finished in 0m 9s
+Training Epoch 6/24
+********************
+Warmup
+train Loss: 0.2227 Acc: 0.9340
+val Loss: 0.2736 Acc: 0.9197
+Epoch finished in 0m 9s
+Training Epoch 7/24
+********************
+Warmup
+train Loss: 0.2212 Acc: 0.9341
+val Loss: 0.2571 Acc: 0.9237
+Epoch finished in 0m 9s
+Training Epoch 8/24
+********************
+Warmup
+train Loss: 0.2172 Acc: 0.9365
+val Loss: 0.3249 Acc: 0.9032
+Epoch finished in 0m 9s
+Training Epoch 9/24
+********************
+Warmup
+train Loss: 0.2176 Acc: 0.9352
+val Loss: 0.2721 Acc: 0.9193
+Epoch finished in 0m 9s
+Training Epoch 10/24
+********************
+Warmup
+train Loss: 0.2192 Acc: 0.9352
+val Loss: 0.2710 Acc: 0.9208
+Epoch finished in 0m 9s
+Training Epoch 11/24
+********************
+Warmup
+train Loss: 0.2172 Acc: 0.9350
+val Loss: 0.2580 Acc: 0.9231
+Epoch finished in 0m 9s
+Training Epoch 12/24
+********************
+Warmup
+train Loss: 0.2148 Acc: 0.9363
+val Loss: 0.2470 Acc: 0.9256
+Epoch finished in 0m 9s
+Training Epoch 13/24
+********************
+Warmup
+train Loss: 0.2107 Acc: 0.9374
+val Loss: 0.3072 Acc: 0.9107
+Epoch finished in 0m 9s
+Training Epoch 14/24
+********************
+Warmup
+train Loss: 0.2154 Acc: 0.9349
+val Loss: 0.2615 Acc: 0.9218
+Epoch finished in 0m 9s
+Training Epoch 15/24
+********************
+Warmup
+train Loss: 0.2118 Acc: 0.9370
+val Loss: 0.2806 Acc: 0.9193
+Epoch finished in 0m 9s
+Training Epoch 16/24
+********************
+Warmup
+train Loss: 0.2089 Acc: 0.9386
+val Loss: 0.2418 Acc: 0.9281
+Epoch finished in 0m 9s
+Training Epoch 17/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1852 Acc: 0.9458
+val Loss: 0.2265 Acc: 0.9329
+Epoch finished in 0m 9s
+Training Epoch 18/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1764 Acc: 0.9489
+val Loss: 0.2214 Acc: 0.9358
+Epoch finished in 0m 9s
+Training Epoch 19/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1717 Acc: 0.9500
+val Loss: 0.2211 Acc: 0.9361
+Epoch finished in 0m 9s
+Training Epoch 20/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1702 Acc: 0.9516
+val Loss: 0.2235 Acc: 0.9343
+Epoch finished in 0m 9s
+Training Epoch 21/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1691 Acc: 0.9505
+val Loss: 0.2252 Acc: 0.9352
+Epoch finished in 0m 9s
+Training Epoch 22/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1692 Acc: 0.9504
+val Loss: 0.2197 Acc: 0.9350
+Epoch finished in 0m 9s
+Training Epoch 23/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1715 Acc: 0.9496
+val Loss: 0.2242 Acc: 0.9351
+Epoch finished in 0m 9s
+Training Epoch 24/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1686 Acc: 0.9510
+val Loss: 0.2222 Acc: 0.9354
+Epoch finished in 0m 9s
+Best validation accuracy: 0.9353500054603036
+Model Test Accuracy:  0.9452980946527351
+Pruning Epoch 10
+++++++++++++++++++
+number of weights to prune:  7185.0
+Sparsity of Pruned Mask:  tensor(0.8926)
+[10, 15, 20]
+Warmup
+Training Epoch 0/24
+********************
+train Loss: 1.6378 Acc: 0.5019
+val Loss: 0.8423 Acc: 0.8157
+Epoch finished in 0m 9s
+Training Epoch 1/24
+********************
+Warmup
+train Loss: 0.5364 Acc: 0.8704
+val Loss: 0.4095 Acc: 0.8844
+Epoch finished in 0m 9s
+Training Epoch 2/24
+********************
+Warmup
+train Loss: 0.3235 Acc: 0.9085
+val Loss: 0.3033 Acc: 0.9118
+Epoch finished in 0m 9s
+Training Epoch 3/24
+********************
+Warmup
+train Loss: 0.2699 Acc: 0.9210
+val Loss: 0.2826 Acc: 0.9155
+Epoch finished in 0m 9s
+Training Epoch 4/24
+********************
+Warmup
+train Loss: 0.2482 Acc: 0.9262
+val Loss: 0.2804 Acc: 0.9178
+Epoch finished in 0m 9s
+Training Epoch 5/24
+********************
+Warmup
+train Loss: 0.2347 Acc: 0.9300
+val Loss: 0.2643 Acc: 0.9215
+Epoch finished in 0m 9s
+Training Epoch 6/24
+********************
+Warmup
+train Loss: 0.2315 Acc: 0.9299
+val Loss: 0.2728 Acc: 0.9190
+Epoch finished in 0m 9s
+Training Epoch 7/24
+********************
+Warmup
+train Loss: 0.2235 Acc: 0.9330
+val Loss: 0.2737 Acc: 0.9189
+Epoch finished in 0m 9s
+Training Epoch 8/24
+********************
+Warmup
+train Loss: 0.2236 Acc: 0.9329
+val Loss: 0.2772 Acc: 0.9190
+Epoch finished in 0m 9s
+Training Epoch 9/24
+********************
+Warmup
+train Loss: 0.2221 Acc: 0.9343
+val Loss: 0.2613 Acc: 0.9214
+Epoch finished in 0m 9s
+Training Epoch 10/24
+********************
+Warmup
+train Loss: 0.2192 Acc: 0.9337
+val Loss: 0.2772 Acc: 0.9182
+Epoch finished in 0m 9s
+Training Epoch 11/24
+********************
+Warmup
+train Loss: 0.2181 Acc: 0.9357
+val Loss: 0.2715 Acc: 0.9204
+Epoch finished in 0m 9s
+Training Epoch 12/24
+********************
+Warmup
+train Loss: 0.2196 Acc: 0.9330
+val Loss: 0.2757 Acc: 0.9188
+Epoch finished in 0m 9s
+Training Epoch 13/24
+********************
+Warmup
+train Loss: 0.2202 Acc: 0.9344
+val Loss: 0.2867 Acc: 0.9131
+Epoch finished in 0m 9s
+Training Epoch 14/24
+********************
+Warmup
+train Loss: 0.2172 Acc: 0.9356
+val Loss: 0.2797 Acc: 0.9177
+Epoch finished in 0m 9s
+Training Epoch 15/24
+********************
+Warmup
+train Loss: 0.2166 Acc: 0.9348
+val Loss: 0.2627 Acc: 0.9221
+Epoch finished in 0m 9s
+Training Epoch 16/24
+********************
+Warmup
+train Loss: 0.2175 Acc: 0.9345
+val Loss: 0.2450 Acc: 0.9276
+Epoch finished in 0m 9s
+Training Epoch 17/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1942 Acc: 0.9423
+val Loss: 0.2348 Acc: 0.9316
+Epoch finished in 0m 9s
+Training Epoch 18/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1869 Acc: 0.9450
+val Loss: 0.2319 Acc: 0.9332
+Epoch finished in 0m 9s
+Training Epoch 19/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1807 Acc: 0.9468
+val Loss: 0.2263 Acc: 0.9338
+Epoch finished in 0m 9s
+Training Epoch 20/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1794 Acc: 0.9478
+val Loss: 0.2276 Acc: 0.9339
+Epoch finished in 0m 9s
+Training Epoch 21/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1796 Acc: 0.9482
+val Loss: 0.2276 Acc: 0.9344
+Epoch finished in 0m 9s
+Training Epoch 22/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1802 Acc: 0.9468
+val Loss: 0.2267 Acc: 0.9347
+Epoch finished in 0m 9s
+Training Epoch 23/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1779 Acc: 0.9473
+val Loss: 0.2258 Acc: 0.9360
+Epoch finished in 0m 9s
+Training Epoch 24/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1779 Acc: 0.9484
+val Loss: 0.2286 Acc: 0.9323
+Epoch finished in 0m 9s
+Best validation accuracy: 0.932292235448291
+Model Test Accuracy:  0.9430700676090964
+Pruning Epoch 11
+++++++++++++++++++
+number of weights to prune:  5748.0
+Sparsity of Pruned Mask:  tensor(0.9141)
+[10, 15, 20]
+Warmup
+Training Epoch 0/24
+********************
+train Loss: 1.6885 Acc: 0.4778
+val Loss: 0.9068 Acc: 0.7968
+Epoch finished in 0m 9s
+Training Epoch 1/24
+********************
+Warmup
+train Loss: 0.5620 Acc: 0.8657
+val Loss: 0.3948 Acc: 0.8883
+Epoch finished in 0m 9s
+Training Epoch 2/24
+********************
+Warmup
+train Loss: 0.3303 Acc: 0.9049
+val Loss: 0.3158 Acc: 0.9061
+Epoch finished in 0m 9s
+Training Epoch 3/24
+********************
+Warmup
+train Loss: 0.2746 Acc: 0.9198
+val Loss: 0.3000 Acc: 0.9084
+Epoch finished in 0m 9s
+Training Epoch 4/24
+********************
+Warmup
+train Loss: 0.2511 Acc: 0.9261
+val Loss: 0.2845 Acc: 0.9132
+Epoch finished in 0m 9s
+Training Epoch 5/24
+********************
+Warmup
+train Loss: 0.2400 Acc: 0.9293
+val Loss: 0.3086 Acc: 0.9058
+Epoch finished in 0m 9s
+Training Epoch 6/24
+********************
+Warmup
+train Loss: 0.2371 Acc: 0.9287
+val Loss: 0.2650 Acc: 0.9216
+Epoch finished in 0m 9s
+Training Epoch 7/24
+********************
+Warmup
+train Loss: 0.2328 Acc: 0.9311
+val Loss: 0.2844 Acc: 0.9145
+Epoch finished in 0m 9s
+Training Epoch 8/24
+********************
+Warmup
+train Loss: 0.2299 Acc: 0.9301
+val Loss: 0.2863 Acc: 0.9171
+Epoch finished in 0m 9s
+Training Epoch 9/24
+********************
+Warmup
+train Loss: 0.2286 Acc: 0.9312
+val Loss: 0.2703 Acc: 0.9177
+Epoch finished in 0m 9s
+Training Epoch 10/24
+********************
+Warmup
+train Loss: 0.2266 Acc: 0.9326
+val Loss: 0.2885 Acc: 0.9156
+Epoch finished in 0m 9s
+Training Epoch 11/24
+********************
+Warmup
+train Loss: 0.2278 Acc: 0.9323
+val Loss: 0.2849 Acc: 0.9156
+Epoch finished in 0m 9s
+Training Epoch 12/24
+********************
+Warmup
+train Loss: 0.2253 Acc: 0.9323
+val Loss: 0.2723 Acc: 0.9199
+Epoch finished in 0m 9s
+Training Epoch 13/24
+********************
+Warmup
+train Loss: 0.2258 Acc: 0.9334
+val Loss: 0.2753 Acc: 0.9183
+Epoch finished in 0m 9s
+Training Epoch 14/24
+********************
+Warmup
+train Loss: 0.2234 Acc: 0.9331
+val Loss: 0.2595 Acc: 0.9237
+Epoch finished in 0m 9s
+Training Epoch 15/24
+********************
+Warmup
+train Loss: 0.2223 Acc: 0.9333
+val Loss: 0.2968 Acc: 0.9104
+Epoch finished in 0m 9s
+Training Epoch 16/24
+********************
+Warmup
+train Loss: 0.2224 Acc: 0.9340
+val Loss: 0.2449 Acc: 0.9278
+Epoch finished in 0m 9s
+Training Epoch 17/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1992 Acc: 0.9413
+val Loss: 0.2361 Acc: 0.9298
+Epoch finished in 0m 9s
+Training Epoch 18/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1909 Acc: 0.9439
+val Loss: 0.2305 Acc: 0.9333
+Epoch finished in 0m 9s
+Training Epoch 19/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1862 Acc: 0.9447
+val Loss: 0.2235 Acc: 0.9350
+Epoch finished in 0m 9s
+Training Epoch 20/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1849 Acc: 0.9462
+val Loss: 0.2241 Acc: 0.9346
+Epoch finished in 0m 9s
+Training Epoch 21/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1842 Acc: 0.9459
+val Loss: 0.2233 Acc: 0.9339
+Epoch finished in 0m 9s
+Training Epoch 22/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1821 Acc: 0.9472
+val Loss: 0.2279 Acc: 0.9331
+Epoch finished in 0m 9s
+Training Epoch 23/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1829 Acc: 0.9472
+val Loss: 0.2267 Acc: 0.9327
+Epoch finished in 0m 9s
+Training Epoch 24/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1830 Acc: 0.9469
+val Loss: 0.2259 Acc: 0.9341
+Epoch finished in 0m 9s
+Best validation accuracy: 0.93414873866987
+Model Test Accuracy:  0.9410725261216963
+Pruning Epoch 12
+++++++++++++++++++
+number of weights to prune:  4598.0
+Sparsity of Pruned Mask:  tensor(0.9313)
+[10, 15, 20]
+Warmup
+Training Epoch 0/24
+********************
+train Loss: 1.6968 Acc: 0.4749
+val Loss: 0.9444 Acc: 0.7832
+Epoch finished in 0m 9s
+Training Epoch 1/24
+********************
+Warmup
+train Loss: 0.5848 Acc: 0.8597
+val Loss: 0.4071 Acc: 0.8886
+Epoch finished in 0m 9s
+Training Epoch 2/24
+********************
+Warmup
+train Loss: 0.3421 Acc: 0.9040
+val Loss: 0.3273 Acc: 0.9022
+Epoch finished in 0m 9s
+Training Epoch 3/24
+********************
+Warmup
+train Loss: 0.2872 Acc: 0.9164
+val Loss: 0.2880 Acc: 0.9126
+Epoch finished in 0m 9s
+Training Epoch 4/24
+********************
+Warmup
+train Loss: 0.2625 Acc: 0.9224
+val Loss: 0.2852 Acc: 0.9133
+Epoch finished in 0m 9s
+Training Epoch 5/24
+********************
+Warmup
+train Loss: 0.2505 Acc: 0.9256
+val Loss: 0.2771 Acc: 0.9165
+Epoch finished in 0m 9s
+Training Epoch 6/24
+********************
+Warmup
+train Loss: 0.2415 Acc: 0.9277
+val Loss: 0.2915 Acc: 0.9122
+Epoch finished in 0m 9s
+Training Epoch 7/24
+********************
+Warmup
+train Loss: 0.2429 Acc: 0.9279
+val Loss: 0.2690 Acc: 0.9191
+Epoch finished in 0m 9s
+Training Epoch 8/24
+********************
+Warmup
+train Loss: 0.2340 Acc: 0.9301
+val Loss: 0.2918 Acc: 0.9131
+Epoch finished in 0m 9s
+Training Epoch 9/24
+********************
+Warmup
+train Loss: 0.2356 Acc: 0.9298
+val Loss: 0.2970 Acc: 0.9119
+Epoch finished in 0m 9s
+Training Epoch 10/24
+********************
+Warmup
+train Loss: 0.2347 Acc: 0.9289
+val Loss: 0.2866 Acc: 0.9128
+Epoch finished in 0m 9s
+Training Epoch 11/24
+********************
+Warmup
+train Loss: 0.2345 Acc: 0.9302
+val Loss: 0.2822 Acc: 0.9147
+Epoch finished in 0m 9s
+Training Epoch 12/24
+********************
+Warmup
+train Loss: 0.2353 Acc: 0.9290
+val Loss: 0.2959 Acc: 0.9103
+Epoch finished in 0m 9s
+Training Epoch 13/24
+********************
+Warmup
+train Loss: 0.2345 Acc: 0.9304
+val Loss: 0.3357 Acc: 0.8996
+Epoch finished in 0m 9s
+Training Epoch 14/24
+********************
+Warmup
+train Loss: 0.2303 Acc: 0.9308
+val Loss: 0.3107 Acc: 0.9076
+Epoch finished in 0m 9s
+Training Epoch 15/24
+********************
+Warmup
+train Loss: 0.2309 Acc: 0.9316
+val Loss: 0.3029 Acc: 0.9124
+Epoch finished in 0m 9s
+Training Epoch 16/24
+********************
+Warmup
+train Loss: 0.2272 Acc: 0.9313
+val Loss: 0.2459 Acc: 0.9287
+Epoch finished in 0m 9s
+Training Epoch 17/24
+********************
+Milestone 2: 0.01
+train Loss: 0.2016 Acc: 0.9403
+val Loss: 0.2375 Acc: 0.9302
+Epoch finished in 0m 9s
+Training Epoch 18/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1952 Acc: 0.9430
+val Loss: 0.2360 Acc: 0.9309
+Epoch finished in 0m 9s
+Training Epoch 19/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1909 Acc: 0.9444
+val Loss: 0.2334 Acc: 0.9325
+Epoch finished in 0m 9s
+Training Epoch 20/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1923 Acc: 0.9429
+val Loss: 0.2335 Acc: 0.9310
+Epoch finished in 0m 9s
+Training Epoch 21/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1902 Acc: 0.9445
+val Loss: 0.2308 Acc: 0.9320
+Epoch finished in 0m 9s
+Training Epoch 22/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1904 Acc: 0.9442
+val Loss: 0.2293 Acc: 0.9335
+Epoch finished in 0m 9s
+Training Epoch 23/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1907 Acc: 0.9442
+val Loss: 0.2309 Acc: 0.9323
+Epoch finished in 0m 9s
+Training Epoch 24/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1911 Acc: 0.9455
+val Loss: 0.2342 Acc: 0.9305
+Epoch finished in 0m 9s
+Best validation accuracy: 0.9304903352626406
+Model Test Accuracy:  0.9404963122311001
+Pruning Epoch 13
+++++++++++++++++++
+number of weights to prune:  3678.0
+Sparsity of Pruned Mask:  tensor(0.9450)
+[10, 15, 20]
+Warmup
+Training Epoch 0/24
+********************
+train Loss: 1.8349 Acc: 0.4028
+val Loss: 1.0900 Acc: 0.7557
+Epoch finished in 0m 9s
+Training Epoch 1/24
+********************
+Warmup
+train Loss: 0.6563 Acc: 0.8448
+val Loss: 0.4312 Acc: 0.8849
+Epoch finished in 0m 9s
+Training Epoch 2/24
+********************
+Warmup
+train Loss: 0.3646 Acc: 0.8984
+val Loss: 0.3420 Acc: 0.8989
+Epoch finished in 0m 9s
+Training Epoch 3/24
+********************
+Warmup
+train Loss: 0.2980 Acc: 0.9131
+val Loss: 0.3061 Acc: 0.9087
+Epoch finished in 0m 9s
+Training Epoch 4/24
+********************
+Warmup
+train Loss: 0.2728 Acc: 0.9184
+val Loss: 0.2900 Acc: 0.9107
+Epoch finished in 0m 9s
+Training Epoch 5/24
+********************
+Warmup
+train Loss: 0.2619 Acc: 0.9217
+val Loss: 0.2944 Acc: 0.9112
+Epoch finished in 0m 9s
+Training Epoch 6/24
+********************
+Warmup
+train Loss: 0.2529 Acc: 0.9242
+val Loss: 0.3038 Acc: 0.9099
+Epoch finished in 0m 9s
+Training Epoch 7/24
+********************
+Warmup
+train Loss: 0.2517 Acc: 0.9243
+val Loss: 0.2856 Acc: 0.9136
+Epoch finished in 0m 9s
+Training Epoch 8/24
+********************
+Warmup
+train Loss: 0.2474 Acc: 0.9256
+val Loss: 0.3019 Acc: 0.9082
+Epoch finished in 0m 9s
+Training Epoch 9/24
+********************
+Warmup
+train Loss: 0.2450 Acc: 0.9265
+val Loss: 0.2967 Acc: 0.9105
+Epoch finished in 0m 9s
+Training Epoch 10/24
+********************
+Warmup
+train Loss: 0.2468 Acc: 0.9265
+val Loss: 0.3020 Acc: 0.9065
+Epoch finished in 0m 9s
+Training Epoch 11/24
+********************
+Warmup
+train Loss: 0.2434 Acc: 0.9272
+val Loss: 0.3513 Acc: 0.8976
+Epoch finished in 0m 9s
+Training Epoch 12/24
+********************
+Warmup
+train Loss: 0.2447 Acc: 0.9261
+val Loss: 0.2967 Acc: 0.9092
+Epoch finished in 0m 9s
+Training Epoch 13/24
+********************
+Warmup
+train Loss: 0.2448 Acc: 0.9262
+val Loss: 0.2747 Acc: 0.9186
+Epoch finished in 0m 9s
+Training Epoch 14/24
+********************
+Warmup
+train Loss: 0.2429 Acc: 0.9272
+val Loss: 0.2994 Acc: 0.9115
+Epoch finished in 0m 9s
+Training Epoch 15/24
+********************
+Warmup
+train Loss: 0.2431 Acc: 0.9258
+val Loss: 0.2785 Acc: 0.9159
+Epoch finished in 0m 9s
+Training Epoch 16/24
+********************
+Warmup
+train Loss: 0.2399 Acc: 0.9275
+val Loss: 0.2577 Acc: 0.9242
+Epoch finished in 0m 9s
+Training Epoch 17/24
+********************
+Milestone 2: 0.01
+train Loss: 0.2158 Acc: 0.9368
+val Loss: 0.2472 Acc: 0.9286
+Epoch finished in 0m 9s
+Training Epoch 18/24
+********************
+Milestone 2: 0.01
+train Loss: 0.2080 Acc: 0.9401
+val Loss: 0.2447 Acc: 0.9277
+Epoch finished in 0m 9s
+Training Epoch 19/24
+********************
+Milestone 2: 0.01
+train Loss: 0.2038 Acc: 0.9408
+val Loss: 0.2358 Acc: 0.9299
+Epoch finished in 0m 9s
+Training Epoch 20/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2015 Acc: 0.9420
+val Loss: 0.2360 Acc: 0.9315
+Epoch finished in 0m 9s
+Training Epoch 21/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2019 Acc: 0.9410
+val Loss: 0.2374 Acc: 0.9308
+Epoch finished in 0m 9s
+Training Epoch 22/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2017 Acc: 0.9411
+val Loss: 0.2358 Acc: 0.9309
+Epoch finished in 0m 9s
+Training Epoch 23/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2019 Acc: 0.9411
+val Loss: 0.2346 Acc: 0.9316
+Epoch finished in 0m 9s
+Training Epoch 24/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2033 Acc: 0.9402
+val Loss: 0.2342 Acc: 0.9308
+Epoch finished in 0m 9s
+Best validation accuracy: 0.9307633504422846
+Model Test Accuracy:  0.9386524277811923
+Pruning Epoch 14
+++++++++++++++++++
+number of weights to prune:  2943.0
+Sparsity of Pruned Mask:  tensor(0.9560)
+[10, 15, 20]
+Warmup
+Training Epoch 0/24
+********************
+train Loss: 1.9249 Acc: 0.3534
+val Loss: 1.2218 Acc: 0.7018
+Epoch finished in 0m 9s
+Training Epoch 1/24
+********************
+Warmup
+train Loss: 0.7465 Acc: 0.8193
+val Loss: 0.4809 Acc: 0.8697
+Epoch finished in 0m 9s
+Training Epoch 2/24
+********************
+Warmup
+train Loss: 0.4009 Acc: 0.8881
+val Loss: 0.3682 Acc: 0.8911
+Epoch finished in 0m 9s
+Training Epoch 3/24
+********************
+Warmup
+train Loss: 0.3235 Acc: 0.9052
+val Loss: 0.3396 Acc: 0.8953
+Epoch finished in 0m 9s
+Training Epoch 4/24
+********************
+Warmup
+train Loss: 0.2929 Acc: 0.9131
+val Loss: 0.3270 Acc: 0.9006
+Epoch finished in 0m 9s
+Training Epoch 5/24
+********************
+Warmup
+train Loss: 0.2802 Acc: 0.9165
+val Loss: 0.3035 Acc: 0.9076
+Epoch finished in 0m 9s
+Training Epoch 6/24
+********************
+Warmup
+train Loss: 0.2738 Acc: 0.9184
+val Loss: 0.3049 Acc: 0.9059
+Epoch finished in 0m 9s
+Training Epoch 7/24
+********************
+Warmup
+train Loss: 0.2690 Acc: 0.9184
+val Loss: 0.2945 Acc: 0.9085
+Epoch finished in 0m 9s
+Training Epoch 8/24
+********************
+Warmup
+train Loss: 0.2657 Acc: 0.9201
+val Loss: 0.3067 Acc: 0.9066
+Epoch finished in 0m 9s
+Training Epoch 9/24
+********************
+Warmup
+train Loss: 0.2648 Acc: 0.9207
+val Loss: 0.2975 Acc: 0.9099
+Epoch finished in 0m 9s
+Training Epoch 10/24
+********************
+Warmup
+train Loss: 0.2576 Acc: 0.9222
+val Loss: 0.2863 Acc: 0.9144
+Epoch finished in 0m 9s
+Training Epoch 11/24
+********************
+Warmup
+train Loss: 0.2601 Acc: 0.9225
+val Loss: 0.3041 Acc: 0.9094
+Epoch finished in 0m 9s
+Training Epoch 12/24
+********************
+Warmup
+train Loss: 0.2561 Acc: 0.9234
+val Loss: 0.3343 Acc: 0.8973
+Epoch finished in 0m 9s
+Training Epoch 13/24
+********************
+Warmup
+train Loss: 0.2568 Acc: 0.9227
+val Loss: 0.3321 Acc: 0.8985
+Epoch finished in 0m 9s
+Training Epoch 14/24
+********************
+Warmup
+train Loss: 0.2538 Acc: 0.9236
+val Loss: 0.3377 Acc: 0.8984
+Epoch finished in 0m 9s
+Training Epoch 15/24
+********************
+Warmup
+train Loss: 0.2551 Acc: 0.9235
+val Loss: 0.2996 Acc: 0.9107
+Epoch finished in 0m 9s
+Training Epoch 16/24
+********************
+Warmup
+train Loss: 0.2521 Acc: 0.9249
+val Loss: 0.2602 Acc: 0.9223
+Epoch finished in 0m 9s
+Training Epoch 17/24
+********************
+Milestone 2: 0.01
+train Loss: 0.2257 Acc: 0.9347
+val Loss: 0.2504 Acc: 0.9267
+Epoch finished in 0m 9s
+Training Epoch 18/24
+********************
+Milestone 2: 0.01
+train Loss: 0.2192 Acc: 0.9357
+val Loss: 0.2467 Acc: 0.9281
+Epoch finished in 0m 9s
+Training Epoch 19/24
+********************
+Milestone 2: 0.01
+train Loss: 0.2153 Acc: 0.9362
+val Loss: 0.2419 Acc: 0.9285
+Epoch finished in 0m 9s
+Training Epoch 20/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2125 Acc: 0.9380
+val Loss: 0.2404 Acc: 0.9282
+Epoch finished in 0m 9s
+Training Epoch 21/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2141 Acc: 0.9376
+val Loss: 0.2393 Acc: 0.9314
+Epoch finished in 0m 9s
+Training Epoch 22/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2158 Acc: 0.9371
+val Loss: 0.2402 Acc: 0.9299
+Epoch finished in 0m 9s
+Training Epoch 23/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2129 Acc: 0.9372
+val Loss: 0.2396 Acc: 0.9296
+Epoch finished in 0m 9s
+Training Epoch 24/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2150 Acc: 0.9360
+val Loss: 0.2420 Acc: 0.9295
+Epoch finished in 0m 9s
+Best validation accuracy: 0.9295074806159223
+Model Test Accuracy:  0.9366548862937922
+Pruning Epoch 15
+++++++++++++++++++
+number of weights to prune:  2354.0
+Sparsity of Pruned Mask:  tensor(0.9648)
+[10, 15, 20]
+Warmup
+Training Epoch 0/24
+********************
+train Loss: 1.9629 Acc: 0.3331
+val Loss: 1.3754 Acc: 0.6216
+Epoch finished in 0m 9s
+Training Epoch 1/24
+********************
+Warmup
+train Loss: 0.8763 Acc: 0.7782
+val Loss: 0.5480 Acc: 0.8571
+Epoch finished in 0m 9s
+Training Epoch 2/24
+********************
+Warmup
+train Loss: 0.4529 Acc: 0.8741
+val Loss: 0.3930 Acc: 0.8834
+Epoch finished in 0m 9s
+Training Epoch 3/24
+********************
+Warmup
+train Loss: 0.3554 Acc: 0.8957
+val Loss: 0.3479 Acc: 0.8997
+Epoch finished in 0m 9s
+Training Epoch 4/24
+********************
+Warmup
+train Loss: 0.3175 Acc: 0.9058
+val Loss: 0.3229 Acc: 0.9024
+Epoch finished in 0m 9s
+Training Epoch 5/24
+********************
+Warmup
+train Loss: 0.2998 Acc: 0.9100
+val Loss: 0.3213 Acc: 0.9011
+Epoch finished in 0m 9s
+Training Epoch 6/24
+********************
+Warmup
+train Loss: 0.2925 Acc: 0.9126
+val Loss: 0.3424 Acc: 0.8964
+Epoch finished in 0m 9s
+Training Epoch 7/24
+********************
+Warmup
+train Loss: 0.2848 Acc: 0.9143
+val Loss: 0.3023 Acc: 0.9086
+Epoch finished in 0m 9s
+Training Epoch 8/24
+********************
+Warmup
+train Loss: 0.2848 Acc: 0.9148
+val Loss: 0.3024 Acc: 0.9092
+Epoch finished in 0m 9s
+Training Epoch 9/24
+********************
+Warmup
+train Loss: 0.2813 Acc: 0.9150
+val Loss: 0.3161 Acc: 0.9061
+Epoch finished in 0m 9s
+Training Epoch 10/24
+********************
+Warmup
+train Loss: 0.2749 Acc: 0.9174
+val Loss: 0.3168 Acc: 0.9054
+Epoch finished in 0m 9s
+Training Epoch 11/24
+********************
+Warmup
+train Loss: 0.2743 Acc: 0.9181
+val Loss: 0.3132 Acc: 0.9055
+Epoch finished in 0m 9s
+Training Epoch 12/24
+********************
+Warmup
+train Loss: 0.2725 Acc: 0.9180
+val Loss: 0.2981 Acc: 0.9094
+Epoch finished in 0m 9s
+Training Epoch 13/24
+********************
+Warmup
+train Loss: 0.2721 Acc: 0.9176
+val Loss: 0.3650 Acc: 0.8886
+Epoch finished in 0m 9s
+Training Epoch 14/24
+********************
+Warmup
+train Loss: 0.2723 Acc: 0.9177
+val Loss: 0.3141 Acc: 0.9036
+Epoch finished in 0m 9s
+Training Epoch 15/24
+********************
+Warmup
+train Loss: 0.2673 Acc: 0.9198
+val Loss: 0.3115 Acc: 0.9052
+Epoch finished in 0m 9s
+Training Epoch 16/24
+********************
+Warmup
+train Loss: 0.2630 Acc: 0.9204
+val Loss: 0.2744 Acc: 0.9180
+Epoch finished in 0m 9s
+Training Epoch 17/24
+********************
+Milestone 2: 0.01
+train Loss: 0.2440 Acc: 0.9273
+val Loss: 0.2632 Acc: 0.9249
+Epoch finished in 0m 9s
+Training Epoch 18/24
+********************
+Milestone 2: 0.01
+train Loss: 0.2335 Acc: 0.9313
+val Loss: 0.2587 Acc: 0.9238
+Epoch finished in 0m 9s
+Training Epoch 19/24
+********************
+Milestone 2: 0.01
+train Loss: 0.2343 Acc: 0.9310
+val Loss: 0.2556 Acc: 0.9231
+Epoch finished in 0m 9s
+Training Epoch 20/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2289 Acc: 0.9330
+val Loss: 0.2507 Acc: 0.9258
+Epoch finished in 0m 9s
+Training Epoch 21/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2284 Acc: 0.9327
+val Loss: 0.2542 Acc: 0.9248
+Epoch finished in 0m 9s
+Training Epoch 22/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2290 Acc: 0.9310
+val Loss: 0.2511 Acc: 0.9263
+Epoch finished in 0m 9s
+Training Epoch 23/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2294 Acc: 0.9325
+val Loss: 0.2528 Acc: 0.9247
+Epoch finished in 0m 9s
+Training Epoch 24/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2292 Acc: 0.9331
+val Loss: 0.2518 Acc: 0.9264
+Epoch finished in 0m 9s
+Best validation accuracy: 0.9263951075679808
+Model Test Accuracy:  0.9321220036877689
+Pruning Epoch 16
+++++++++++++++++++
+number of weights to prune:  1883.0
+Sparsity of Pruned Mask:  tensor(0.9719)
+[10, 15, 20]
+Warmup
+Training Epoch 0/24
+********************
+train Loss: 2.0336 Acc: 0.2877
+val Loss: 1.5704 Acc: 0.5233
+Epoch finished in 0m 9s
+Training Epoch 1/24
+********************
+Warmup
+train Loss: 1.0522 Acc: 0.7145
+val Loss: 0.6726 Acc: 0.8193
+Epoch finished in 0m 9s
+Training Epoch 2/24
+********************
+Warmup
+train Loss: 0.5171 Acc: 0.8598
+val Loss: 0.4361 Acc: 0.8764
+Epoch finished in 0m 9s
+Training Epoch 3/24
+********************
+Warmup
+train Loss: 0.3861 Acc: 0.8878
+val Loss: 0.3725 Acc: 0.8886
+Epoch finished in 0m 9s
+Training Epoch 4/24
+********************
+Warmup
+train Loss: 0.3452 Acc: 0.8975
+val Loss: 0.3568 Acc: 0.8895
+Epoch finished in 0m 9s
+Training Epoch 5/24
+********************
+Warmup
+train Loss: 0.3224 Acc: 0.9019
+val Loss: 0.4031 Acc: 0.8725
+Epoch finished in 0m 9s
+Training Epoch 6/24
+********************
+Warmup
+train Loss: 0.3085 Acc: 0.9077
+val Loss: 0.3419 Acc: 0.8959
+Epoch finished in 0m 9s
+Training Epoch 7/24
+********************
+Warmup
+train Loss: 0.3039 Acc: 0.9083
+val Loss: 0.3434 Acc: 0.8979
+Epoch finished in 0m 9s
+Training Epoch 8/24
+********************
+Warmup
+train Loss: 0.2979 Acc: 0.9091
+val Loss: 0.3209 Acc: 0.9016
+Epoch finished in 0m 9s
+Training Epoch 9/24
+********************
+Warmup
+train Loss: 0.2955 Acc: 0.9103
+val Loss: 0.3264 Acc: 0.9000
+Epoch finished in 0m 9s
+Training Epoch 10/24
+********************
+Warmup
+train Loss: 0.2894 Acc: 0.9127
+val Loss: 0.3377 Acc: 0.8960
+Epoch finished in 0m 9s
+Training Epoch 11/24
+********************
+Warmup
+train Loss: 0.2894 Acc: 0.9121
+val Loss: 0.3061 Acc: 0.9076
+Epoch finished in 0m 9s
+Training Epoch 12/24
+********************
+Warmup
+train Loss: 0.2887 Acc: 0.9122
+val Loss: 0.3213 Acc: 0.9021
+Epoch finished in 0m 9s
+Training Epoch 13/24
+********************
+Warmup
+train Loss: 0.2838 Acc: 0.9139
+val Loss: 0.3296 Acc: 0.9002
+Epoch finished in 0m 9s
+Training Epoch 14/24
+********************
+Warmup
+train Loss: 0.2832 Acc: 0.9147
+val Loss: 0.3121 Acc: 0.9041
+Epoch finished in 0m 9s
+Training Epoch 15/24
+********************
+Warmup
+train Loss: 0.2836 Acc: 0.9140
+val Loss: 0.3160 Acc: 0.9038
+Epoch finished in 0m 9s
+Training Epoch 16/24
+********************
+Warmup
+train Loss: 0.2799 Acc: 0.9167
+val Loss: 0.2878 Acc: 0.9140
+Epoch finished in 0m 9s
+Training Epoch 17/24
+********************
+Milestone 2: 0.01
+train Loss: 0.2575 Acc: 0.9236
+val Loss: 0.2698 Acc: 0.9193
+Epoch finished in 0m 9s
+Training Epoch 18/24
+********************
+Milestone 2: 0.01
+train Loss: 0.2527 Acc: 0.9252
+val Loss: 0.2666 Acc: 0.9207
+Epoch finished in 0m 9s
+Training Epoch 19/24
+********************
+Milestone 2: 0.01
+train Loss: 0.2459 Acc: 0.9270
+val Loss: 0.2648 Acc: 0.9211
+Epoch finished in 0m 9s
+Training Epoch 20/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2435 Acc: 0.9274
+val Loss: 0.2621 Acc: 0.9228
+Epoch finished in 0m 9s
+Training Epoch 21/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2462 Acc: 0.9270
+val Loss: 0.2658 Acc: 0.9208
+Epoch finished in 0m 9s
+Training Epoch 22/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2413 Acc: 0.9281
+val Loss: 0.2597 Acc: 0.9226
+Epoch finished in 0m 9s
+Training Epoch 23/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2443 Acc: 0.9282
+val Loss: 0.2616 Acc: 0.9211
+Epoch finished in 0m 9s
+Training Epoch 24/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2433 Acc: 0.9281
+val Loss: 0.2656 Acc: 0.9210
+Epoch finished in 0m 9s
+Best validation accuracy: 0.9209894070110298
+Model Test Accuracy:  0.9298939766441302
+Pruning Epoch 17
+++++++++++++++++++
+number of weights to prune:  1506.0
+Sparsity of Pruned Mask:  tensor(0.9775)
+[10, 15, 20]
+Warmup
+Training Epoch 0/24
+********************
+train Loss: 2.1630 Acc: 0.2264
+val Loss: 1.8805 Acc: 0.3580
+Epoch finished in 0m 9s
+Training Epoch 1/24
+********************
+Warmup
+train Loss: 1.4297 Acc: 0.5566
+val Loss: 0.9571 Acc: 0.7377
+Epoch finished in 0m 9s
+Training Epoch 2/24
+********************
+Warmup
+train Loss: 0.7047 Acc: 0.8105
+val Loss: 0.5426 Acc: 0.8418
+Epoch finished in 0m 9s
+Training Epoch 3/24
+********************
+Warmup
+train Loss: 0.4711 Acc: 0.8635
+val Loss: 0.4359 Acc: 0.8716
+Epoch finished in 0m 9s
+Training Epoch 4/24
+********************
+Warmup
+train Loss: 0.4019 Acc: 0.8804
+val Loss: 0.4117 Acc: 0.8756
+Epoch finished in 0m 9s
+Training Epoch 5/24
+********************
+Warmup
+train Loss: 0.3694 Acc: 0.8887
+val Loss: 0.3596 Acc: 0.8889
+Epoch finished in 0m 9s
+Training Epoch 6/24
+********************
+Warmup
+train Loss: 0.3473 Acc: 0.8948
+val Loss: 0.3670 Acc: 0.8880
+Epoch finished in 0m 9s
+Training Epoch 7/24
+********************
+Warmup
+train Loss: 0.3351 Acc: 0.8988
+val Loss: 0.3983 Acc: 0.8788
+Epoch finished in 0m 9s
+Training Epoch 8/24
+********************
+Warmup
+train Loss: 0.3298 Acc: 0.9001
+val Loss: 0.3224 Acc: 0.9030
+Epoch finished in 0m 9s
+Training Epoch 9/24
+********************
+Warmup
+train Loss: 0.3210 Acc: 0.9023
+val Loss: 0.3457 Acc: 0.8935
+Epoch finished in 0m 9s
+Training Epoch 10/24
+********************
+Warmup
+train Loss: 0.3188 Acc: 0.9029
+val Loss: 0.3365 Acc: 0.8979
+Epoch finished in 0m 9s
+Training Epoch 11/24
+********************
+Warmup
+train Loss: 0.3130 Acc: 0.9056
+val Loss: 0.3458 Acc: 0.8939
+Epoch finished in 0m 9s
+Training Epoch 12/24
+********************
+Warmup
+train Loss: 0.3085 Acc: 0.9061
+val Loss: 0.3575 Acc: 0.8916
+Epoch finished in 0m 9s
+Training Epoch 13/24
+********************
+Warmup
+train Loss: 0.3069 Acc: 0.9076
+val Loss: 0.3282 Acc: 0.9013
+Epoch finished in 0m 9s
+Training Epoch 14/24
+********************
+Warmup
+train Loss: 0.3016 Acc: 0.9087
+val Loss: 0.3584 Acc: 0.8877
+Epoch finished in 0m 9s
+Training Epoch 15/24
+********************
+Warmup
+train Loss: 0.3022 Acc: 0.9083
+val Loss: 0.3439 Acc: 0.8941
+Epoch finished in 0m 9s
+Training Epoch 16/24
+********************
+Warmup
+train Loss: 0.2998 Acc: 0.9087
+val Loss: 0.2982 Acc: 0.9118
+Epoch finished in 0m 9s
+Training Epoch 17/24
+********************
+Milestone 2: 0.01
+train Loss: 0.2771 Acc: 0.9158
+val Loss: 0.2831 Acc: 0.9141
+Epoch finished in 0m 9s
+Training Epoch 18/24
+********************
+Milestone 2: 0.01
+train Loss: 0.2675 Acc: 0.9205
+val Loss: 0.2791 Acc: 0.9172
+Epoch finished in 0m 9s
+Training Epoch 19/24
+********************
+Milestone 2: 0.01
+train Loss: 0.2632 Acc: 0.9205
+val Loss: 0.2819 Acc: 0.9165
+Epoch finished in 0m 9s
+Training Epoch 20/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2607 Acc: 0.9209
+val Loss: 0.2752 Acc: 0.9188
+Epoch finished in 0m 9s
+Training Epoch 21/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2596 Acc: 0.9234
+val Loss: 0.2772 Acc: 0.9159
+Epoch finished in 0m 9s
+Training Epoch 22/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2600 Acc: 0.9230
+val Loss: 0.2781 Acc: 0.9157
+Epoch finished in 0m 9s
+Training Epoch 23/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2610 Acc: 0.9226
+val Loss: 0.2739 Acc: 0.9184
+Epoch finished in 0m 9s
+Training Epoch 24/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2608 Acc: 0.9222
+val Loss: 0.2749 Acc: 0.9177
+Epoch finished in 0m 9s
+Best validation accuracy: 0.9176586218193732
+Model Test Accuracy:  0.9227873386601105
+Pruning Epoch 18
+++++++++++++++++++
+number of weights to prune:  1205.0
+Sparsity of Pruned Mask:  tensor(0.9820)
+[10, 15, 20]
+Warmup
+Training Epoch 0/24
+********************
+train Loss: 2.1621 Acc: 0.2260
+val Loss: 1.9083 Acc: 0.3373
+Epoch finished in 0m 9s
+Training Epoch 1/24
+********************
+Warmup
+train Loss: 1.5573 Acc: 0.4910
+val Loss: 1.1259 Acc: 0.6858
+Epoch finished in 0m 9s
+Training Epoch 2/24
+********************
+Warmup
+train Loss: 0.8402 Acc: 0.7722
+val Loss: 0.6369 Acc: 0.8207
+Epoch finished in 0m 9s
+Training Epoch 3/24
+********************
+Warmup
+train Loss: 0.5437 Acc: 0.8463
+val Loss: 0.4819 Acc: 0.8567
+Epoch finished in 0m 9s
+Training Epoch 4/24
+********************
+Warmup
+train Loss: 0.4516 Acc: 0.8656
+val Loss: 0.4740 Acc: 0.8534
+Epoch finished in 0m 9s
+Training Epoch 5/24
+********************
+Warmup
+train Loss: 0.4076 Acc: 0.8786
+val Loss: 0.4182 Acc: 0.8705
+Epoch finished in 0m 9s
+Training Epoch 6/24
+********************
+Warmup
+train Loss: 0.3794 Acc: 0.8851
+val Loss: 0.4082 Acc: 0.8730
+Epoch finished in 0m 9s
+Training Epoch 7/24
+********************
+Warmup
+train Loss: 0.3636 Acc: 0.8898
+val Loss: 0.3722 Acc: 0.8873
+Epoch finished in 0m 9s
+Training Epoch 8/24
+********************
+Warmup
+train Loss: 0.3556 Acc: 0.8918
+val Loss: 0.3914 Acc: 0.8804
+Epoch finished in 0m 9s
+Training Epoch 9/24
+********************
+Warmup
+train Loss: 0.3498 Acc: 0.8923
+val Loss: 0.3791 Acc: 0.8818
+Epoch finished in 0m 9s
+Training Epoch 10/24
+********************
+Warmup
+train Loss: 0.3415 Acc: 0.8964
+val Loss: 0.3551 Acc: 0.8924
+Epoch finished in 0m 9s
+Training Epoch 11/24
+********************
+Warmup
+train Loss: 0.3326 Acc: 0.8978
+val Loss: 0.3898 Acc: 0.8773
+Epoch finished in 0m 9s
+Training Epoch 12/24
+********************
+Warmup
+train Loss: 0.3309 Acc: 0.8974
+val Loss: 0.3995 Acc: 0.8749
+Epoch finished in 0m 9s
+Training Epoch 13/24
+********************
+Warmup
+train Loss: 0.3251 Acc: 0.9003
+val Loss: 0.3651 Acc: 0.8892
+Epoch finished in 0m 9s
+Training Epoch 14/24
+********************
+Warmup
+train Loss: 0.3238 Acc: 0.9003
+val Loss: 0.3481 Acc: 0.8946
+Epoch finished in 0m 9s
+Training Epoch 15/24
+********************
+Warmup
+train Loss: 0.3236 Acc: 0.9014
+val Loss: 0.3551 Acc: 0.8900
+Epoch finished in 0m 9s
+Training Epoch 16/24
+********************
+Warmup
+train Loss: 0.3176 Acc: 0.9039
+val Loss: 0.3117 Acc: 0.9068
+Epoch finished in 0m 9s
+Training Epoch 17/24
+********************
+Milestone 2: 0.01
+train Loss: 0.2966 Acc: 0.9126
+val Loss: 0.2984 Acc: 0.9112
+Epoch finished in 0m 9s
+Training Epoch 18/24
+********************
+Milestone 2: 0.01
+train Loss: 0.2868 Acc: 0.9140
+val Loss: 0.2963 Acc: 0.9103
+Epoch finished in 0m 9s
+Training Epoch 19/24
+********************
+Milestone 2: 0.01
+train Loss: 0.2842 Acc: 0.9157
+val Loss: 0.2886 Acc: 0.9142
+Epoch finished in 0m 9s
+Training Epoch 20/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2824 Acc: 0.9155
+val Loss: 0.2928 Acc: 0.9134
+Epoch finished in 0m 9s
+Training Epoch 21/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2797 Acc: 0.9157
+val Loss: 0.2948 Acc: 0.9089
+Epoch finished in 0m 9s
+Training Epoch 22/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2821 Acc: 0.9159
+val Loss: 0.2919 Acc: 0.9107
+Epoch finished in 0m 9s
+Training Epoch 23/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2815 Acc: 0.9157
+val Loss: 0.2912 Acc: 0.9113
+Epoch finished in 0m 9s
+Training Epoch 24/24
+********************
+Milestone 3: 0.001
+train Loss: 0.2814 Acc: 0.9155
+val Loss: 0.2904 Acc: 0.9113
+Epoch finished in 0m 9s
+Best validation accuracy: 0.9113246696516326
+Model Test Accuracy:  0.9166026429010448
+Pruning Epoch 19
+++++++++++++++++++
+number of weights to prune:  963.0
+Sparsity of Pruned Mask:  tensor(0.9856)
+[10, 15, 20]
+Warmup
+Training Epoch 0/24
+********************
+train Loss: 2.2197 Acc: 0.1916
+val Loss: 2.1059 Acc: 0.2722
+Epoch finished in 0m 9s
+Training Epoch 1/24
+********************
+Warmup
+train Loss: 1.8203 Acc: 0.3683
+val Loss: 1.4902 Acc: 0.4974
+Epoch finished in 0m 9s
+Training Epoch 2/24
+********************
+Warmup
+train Loss: 1.1554 Acc: 0.6615
+val Loss: 0.8411 Acc: 0.7608
+Epoch finished in 0m 9s
+Training Epoch 3/24
+********************
+Warmup
+train Loss: 0.6985 Acc: 0.8017
+val Loss: 0.6027 Acc: 0.8188
+Epoch finished in 0m 9s
+Training Epoch 4/24
+********************
+Warmup
+train Loss: 0.5333 Acc: 0.8420
+val Loss: 0.5105 Acc: 0.8474
+Epoch finished in 0m 9s
+Training Epoch 5/24
+********************
+Warmup
+train Loss: 0.4653 Acc: 0.8604
+val Loss: 0.4559 Acc: 0.8585
+Epoch finished in 0m 9s
+Training Epoch 6/24
+********************
+Warmup
+train Loss: 0.4278 Acc: 0.8703
+val Loss: 0.4443 Acc: 0.8629
+Epoch finished in 0m 9s
+Training Epoch 7/24
+********************
+Warmup
+train Loss: 0.4063 Acc: 0.8770
+val Loss: 0.4101 Acc: 0.8735
+Epoch finished in 0m 9s
+Training Epoch 8/24
+********************
+Warmup
+train Loss: 0.3946 Acc: 0.8792
+val Loss: 0.3841 Acc: 0.8822
+Epoch finished in 0m 9s
+Training Epoch 9/24
+********************
+Warmup
+train Loss: 0.3786 Acc: 0.8843
+val Loss: 0.4002 Acc: 0.8775
+Epoch finished in 0m 9s
+Training Epoch 10/24
+********************
+Warmup
+train Loss: 0.3721 Acc: 0.8864
+val Loss: 0.3805 Acc: 0.8856
+Epoch finished in 0m 9s
+Training Epoch 11/24
+********************
+Warmup
+train Loss: 0.3654 Acc: 0.8880
+val Loss: 0.4027 Acc: 0.8749
+Epoch finished in 0m 9s
+Training Epoch 12/24
+********************
+Warmup
+train Loss: 0.3614 Acc: 0.8890
+val Loss: 0.3681 Acc: 0.8885
+Epoch finished in 0m 9s
+Training Epoch 13/24
+********************
+Warmup
+train Loss: 0.3560 Acc: 0.8913
+val Loss: 0.3579 Acc: 0.8893
+Epoch finished in 0m 9s
+Training Epoch 14/24
+********************
+Warmup
+train Loss: 0.3482 Acc: 0.8937
+val Loss: 0.3553 Acc: 0.8908
+Epoch finished in 0m 9s
+Training Epoch 15/24
+********************
+Warmup
+train Loss: 0.3439 Acc: 0.8962
+val Loss: 0.3533 Acc: 0.8919
+Epoch finished in 0m 9s
+Training Epoch 16/24
+********************
+Warmup
+train Loss: 0.3391 Acc: 0.8969
+val Loss: 0.3347 Acc: 0.8985
+Epoch finished in 0m 9s
+Training Epoch 17/24
+********************
+Milestone 2: 0.01
+train Loss: 0.3179 Acc: 0.9033
+val Loss: 0.3206 Acc: 0.9044
+Epoch finished in 0m 9s
+Training Epoch 18/24
+********************
+Milestone 2: 0.01
+train Loss: 0.3075 Acc: 0.9071
+val Loss: 0.3159 Acc: 0.9055
+Epoch finished in 0m 9s
+Training Epoch 19/24
+********************
+Milestone 2: 0.01
+train Loss: 0.3044 Acc: 0.9092
+val Loss: 0.3101 Acc: 0.9070
+Epoch finished in 0m 9s
+Training Epoch 20/24
+********************
+Milestone 3: 0.001
+train Loss: 0.3038 Acc: 0.9102
+val Loss: 0.3088 Acc: 0.9059
+Epoch finished in 0m 9s
+Training Epoch 21/24
+********************
+Milestone 3: 0.001
+train Loss: 0.3033 Acc: 0.9088
+val Loss: 0.3095 Acc: 0.9060
+Epoch finished in 0m 9s
+Training Epoch 22/24
+********************
+Milestone 3: 0.001
+train Loss: 0.3026 Acc: 0.9093
+val Loss: 0.3092 Acc: 0.9074
+Epoch finished in 0m 9s
+Training Epoch 23/24
+********************
+Milestone 3: 0.001
+train Loss: 0.3026 Acc: 0.9102
+val Loss: 0.3126 Acc: 0.9058
+Epoch finished in 0m 9s
+Training Epoch 24/24
+********************
+Milestone 3: 0.001
+train Loss: 0.3036 Acc: 0.9102
+val Loss: 0.3125 Acc: 0.9059
+Epoch finished in 0m 9s
+Best validation accuracy: 0.9059189690946817
+Model Test Accuracy:  0.9096496619545175
+Pruning Epoch 20
+++++++++++++++++++
+number of weights to prune:  771.0
+Sparsity of Pruned Mask:  tensor(0.9885)
+[10, 15, 20]
+Warmup
+Training Epoch 0/24
+********************
+train Loss: 2.2157 Acc: 0.2023
+val Loss: 2.1054 Acc: 0.2594
+Epoch finished in 0m 9s
+Training Epoch 1/24
+********************
+Warmup
+train Loss: 1.9045 Acc: 0.3249
+val Loss: 1.6573 Acc: 0.4296
+Epoch finished in 0m 9s
+Training Epoch 2/24
+********************
+Warmup
+train Loss: 1.3506 Acc: 0.5718
+val Loss: 1.0218 Acc: 0.6867
+Epoch finished in 0m 9s
+Training Epoch 3/24
+********************
+Warmup
+train Loss: 0.8286 Acc: 0.7541
+val Loss: 0.7213 Acc: 0.7771
+Epoch finished in 0m 9s
+Training Epoch 4/24
+********************
+Warmup
+train Loss: 0.6238 Acc: 0.8109
+val Loss: 0.5983 Acc: 0.8141
+Epoch finished in 0m 9s
+Training Epoch 5/24
+********************
+Warmup
+train Loss: 0.5410 Acc: 0.8365
+val Loss: 0.5334 Acc: 0.8351
+Epoch finished in 0m 9s
+Training Epoch 6/24
+********************
+Warmup
+train Loss: 0.5005 Acc: 0.8475
+val Loss: 0.4892 Acc: 0.8507
+Epoch finished in 0m 9s
+Training Epoch 7/24
+********************
+Warmup
+train Loss: 0.4673 Acc: 0.8572
+val Loss: 0.4649 Acc: 0.8522
+Epoch finished in 0m 9s
+Training Epoch 8/24
+********************
+Warmup
+train Loss: 0.4483 Acc: 0.8613
+val Loss: 0.4409 Acc: 0.8621
+Epoch finished in 0m 9s
+Training Epoch 9/24
+********************
+Warmup
+train Loss: 0.4326 Acc: 0.8669
+val Loss: 0.4284 Acc: 0.8687
+Epoch finished in 0m 9s
+Training Epoch 10/24
+********************
+Warmup
+train Loss: 0.4155 Acc: 0.8723
+val Loss: 0.4296 Acc: 0.8702
+Epoch finished in 0m 9s
+Training Epoch 11/24
+********************
+Warmup
+train Loss: 0.4101 Acc: 0.8738
+val Loss: 0.4272 Acc: 0.8679
+Epoch finished in 0m 9s
+Training Epoch 12/24
+********************
+Warmup
+train Loss: 0.3960 Acc: 0.8777
+val Loss: 0.4402 Acc: 0.8644
+Epoch finished in 0m 9s
+Training Epoch 13/24
+********************
+Warmup
+train Loss: 0.3920 Acc: 0.8808
+val Loss: 0.4381 Acc: 0.8641
+Epoch finished in 0m 9s
+Training Epoch 14/24
+********************
+Warmup
+train Loss: 0.3870 Acc: 0.8801
+val Loss: 0.3994 Acc: 0.8785
+Epoch finished in 0m 9s
+Training Epoch 15/24
+********************
+Warmup
+train Loss: 0.3796 Acc: 0.8833
+val Loss: 0.4342 Acc: 0.8640
+Epoch finished in 0m 9s
+Training Epoch 16/24
+********************
+Warmup
+train Loss: 0.3727 Acc: 0.8852
+val Loss: 0.3716 Acc: 0.8864
+Epoch finished in 0m 9s
+Training Epoch 17/24
+********************
+Milestone 2: 0.01
+train Loss: 0.3495 Acc: 0.8944
+val Loss: 0.3450 Acc: 0.8966
+Epoch finished in 0m 9s
+Training Epoch 18/24
+********************
+Milestone 2: 0.01
+train Loss: 0.3393 Acc: 0.8969
+val Loss: 0.3420 Acc: 0.8957
+Epoch finished in 0m 9s
+Training Epoch 19/24
+********************
+Milestone 2: 0.01
+train Loss: 0.3373 Acc: 0.8989
+val Loss: 0.3400 Acc: 0.8965
+Epoch finished in 0m 9s
+Training Epoch 20/24
+********************
+Milestone 3: 0.001
+train Loss: 0.3375 Acc: 0.8990
+val Loss: 0.3436 Acc: 0.8989
+Epoch finished in 0m 9s
+Training Epoch 21/24
+********************
+Milestone 3: 0.001
+train Loss: 0.3336 Acc: 0.8986
+val Loss: 0.3389 Acc: 0.8978
+Epoch finished in 0m 9s
+Training Epoch 22/24
+********************
+Milestone 3: 0.001
+train Loss: 0.3387 Acc: 0.8981
+val Loss: 0.3396 Acc: 0.8970
+Epoch finished in 0m 9s
+Training Epoch 23/24
+********************
+Milestone 3: 0.001
+train Loss: 0.3361 Acc: 0.8975
+val Loss: 0.3378 Acc: 0.8977
+Epoch finished in 0m 9s
+Training Epoch 24/24
+********************
+Milestone 3: 0.001
+train Loss: 0.3347 Acc: 0.8984
+val Loss: 0.3371 Acc: 0.8994
+Epoch finished in 0m 9s
+Best validation accuracy: 0.8994212078191548
+Model Test Accuracy:  0.9001613398893669
+Pruning Epoch 21
+++++++++++++++++++
+number of weights to prune:  616.0
+Sparsity of Pruned Mask:  tensor(0.9908)
+[10, 15, 20]
+Warmup
+Training Epoch 0/24
+********************
+train Loss: 2.2258 Acc: 0.1938
+val Loss: 2.1572 Acc: 0.2398
+Epoch finished in 0m 9s
+Training Epoch 1/24
+********************
+Warmup
+train Loss: 1.9691 Acc: 0.2971
+val Loss: 1.7966 Acc: 0.3646
+Epoch finished in 0m 9s
+Training Epoch 2/24
+********************
+Warmup
+train Loss: 1.5808 Acc: 0.4695
+val Loss: 1.2784 Acc: 0.6125
+Epoch finished in 0m 9s
+Training Epoch 3/24
+********************
+Warmup
+train Loss: 1.0467 Acc: 0.6803
+val Loss: 0.8790 Acc: 0.7283
+Epoch finished in 0m 9s
+Training Epoch 4/24
+********************
+Warmup
+train Loss: 0.7529 Acc: 0.7720
+val Loss: 0.6939 Acc: 0.7762
+Epoch finished in 0m 9s
+Training Epoch 5/24
+********************
+Warmup
+train Loss: 0.6310 Acc: 0.8058
+val Loss: 0.5939 Acc: 0.8130
+Epoch finished in 0m 9s
+Training Epoch 6/24
+********************
+Warmup
+train Loss: 0.5665 Acc: 0.8251
+val Loss: 0.5718 Acc: 0.8199
+Epoch finished in 0m 9s
+Training Epoch 7/24
+********************
+Warmup
+train Loss: 0.5306 Acc: 0.8359
+val Loss: 0.5631 Acc: 0.8209
+Epoch finished in 0m 9s
+Training Epoch 8/24
+********************
+Warmup
+train Loss: 0.5063 Acc: 0.8427
+val Loss: 0.5542 Acc: 0.8286
+Epoch finished in 0m 9s
+Training Epoch 9/24
+********************
+Warmup
+train Loss: 0.4788 Acc: 0.8506
+val Loss: 0.4776 Acc: 0.8504
+Epoch finished in 0m 9s
+Training Epoch 10/24
+********************
+Warmup
+train Loss: 0.4610 Acc: 0.8576
+val Loss: 0.4743 Acc: 0.8523
+Epoch finished in 0m 9s
+Training Epoch 11/24
+********************
+Warmup
+train Loss: 0.4468 Acc: 0.8622
+val Loss: 0.4498 Acc: 0.8593
+Epoch finished in 0m 9s
+Training Epoch 12/24
+********************
+Warmup
+train Loss: 0.4333 Acc: 0.8661
+val Loss: 0.5144 Acc: 0.8385
+Epoch finished in 0m 9s
+Training Epoch 13/24
+********************
+Warmup
+train Loss: 0.4299 Acc: 0.8669
+val Loss: 0.4633 Acc: 0.8549
+Epoch finished in 0m 9s
+Training Epoch 14/24
+********************
+Warmup
+train Loss: 0.4171 Acc: 0.8708
+val Loss: 0.4392 Acc: 0.8656
+Epoch finished in 0m 9s
+Training Epoch 15/24
+********************
+Warmup
+train Loss: 0.4120 Acc: 0.8727
+val Loss: 0.4798 Acc: 0.8501
+Epoch finished in 0m 9s
+Training Epoch 16/24
+********************
+Warmup
+train Loss: 0.4057 Acc: 0.8763
+val Loss: 0.3896 Acc: 0.8825
+Epoch finished in 0m 9s
+Training Epoch 17/24
+********************
+Milestone 2: 0.01
+train Loss: 0.3796 Acc: 0.8841
+val Loss: 0.3751 Acc: 0.8846
+Epoch finished in 0m 9s
+Training Epoch 18/24
+********************
+Milestone 2: 0.01
+train Loss: 0.3718 Acc: 0.8874
+val Loss: 0.3718 Acc: 0.8872
+Epoch finished in 0m 9s
+Training Epoch 19/24
+********************
+Milestone 2: 0.01
+train Loss: 0.3657 Acc: 0.8888
+val Loss: 0.3681 Acc: 0.8869
+Epoch finished in 0m 9s
+Training Epoch 20/24
+********************
+Milestone 3: 0.001
+train Loss: 0.3633 Acc: 0.8905
+val Loss: 0.3720 Acc: 0.8847
+Epoch finished in 0m 9s
+Training Epoch 21/24
+********************
+Milestone 3: 0.001
+train Loss: 0.3634 Acc: 0.8893
+val Loss: 0.3667 Acc: 0.8893
+Epoch finished in 0m 9s
+Training Epoch 22/24
+********************
+Milestone 3: 0.001
+train Loss: 0.3624 Acc: 0.8886
+val Loss: 0.3725 Acc: 0.8850
+Epoch finished in 0m 9s
+Training Epoch 23/24
+********************
+Milestone 3: 0.001
+train Loss: 0.3631 Acc: 0.8900
+val Loss: 0.3678 Acc: 0.8885
+Epoch finished in 0m 9s
+Training Epoch 24/24
+********************
+Milestone 3: 0.001
+train Loss: 0.3649 Acc: 0.8879
+val Loss: 0.3684 Acc: 0.8878
+Epoch finished in 0m 9s
+Best validation accuracy: 0.8878453642022497
+Model Test Accuracy:  0.8892901044867855
+[10, 15, 20]
+Warmup
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Training Epoch 0/24
+********************
+train Loss: 2.2558 Acc: 0.1789
+val Loss: 2.2294 Acc: 0.1991
+Epoch finished in 0m 41s
+Training Epoch 1/24
+********************
+Warmup
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+train Loss: 2.0932 Acc: 0.2533
+val Loss: 1.8844 Acc: 0.3276
+Epoch finished in 0m 34s
+Training Epoch 2/24
+********************
+Warmup
+train Loss: 1.2747 Acc: 0.5647
+val Loss: 0.7857 Acc: 0.7395
+Epoch finished in 0m 12s
+Training Epoch 3/24
+********************
+Warmup
+train Loss: 0.5761 Acc: 0.8169
+val Loss: 0.5530 Acc: 0.8240
+Epoch finished in 0m 12s
+Training Epoch 4/24
+********************
+Warmup
+train Loss: 0.4375 Acc: 0.8655
+val Loss: 0.4402 Acc: 0.8634
+Epoch finished in 0m 12s
+Training Epoch 5/24
+********************
+Warmup
+train Loss: 0.3781 Acc: 0.8846
+val Loss: 0.4098 Acc: 0.8720
+Epoch finished in 0m 12s
+Training Epoch 6/24
+********************
+Warmup
+train Loss: 0.3464 Acc: 0.8952
+val Loss: 0.3499 Acc: 0.8946
+Epoch finished in 0m 12s
+Training Epoch 7/24
+********************
+Warmup
+train Loss: 0.3199 Acc: 0.9034
+val Loss: 0.3741 Acc: 0.8852
+Epoch finished in 0m 12s
+Training Epoch 8/24
+********************
+Warmup
+train Loss: 0.3020 Acc: 0.9099
+val Loss: 0.3898 Acc: 0.8854
+Epoch finished in 0m 12s
+Training Epoch 9/24
+********************
+Warmup
+train Loss: 0.2902 Acc: 0.9121
+val Loss: 0.3303 Acc: 0.8972
+Epoch finished in 0m 12s
+Training Epoch 10/24
+********************
+Warmup
+train Loss: 0.2736 Acc: 0.9178
+val Loss: 0.3206 Acc: 0.9014
+Epoch finished in 0m 12s
+Training Epoch 11/24
+********************
+Warmup
+train Loss: 0.2609 Acc: 0.9223
+val Loss: 0.3113 Acc: 0.9078
+Epoch finished in 0m 12s
+Training Epoch 12/24
+********************
+Warmup
+train Loss: 0.2538 Acc: 0.9242
+val Loss: 0.3007 Acc: 0.9136
+Epoch finished in 0m 12s
+Training Epoch 13/24
+********************
+Warmup
+train Loss: 0.2420 Acc: 0.9272
+val Loss: 0.3122 Acc: 0.9066
+Epoch finished in 0m 12s
+Training Epoch 14/24
+********************
+Warmup
+train Loss: 0.2351 Acc: 0.9305
+val Loss: 0.3277 Acc: 0.9064
+Epoch finished in 0m 12s
+Training Epoch 15/24
+********************
+Warmup
+train Loss: 0.2327 Acc: 0.9316
+val Loss: 0.3309 Acc: 0.9072
+Epoch finished in 0m 12s
+Training Epoch 16/24
+********************
+Warmup
+train Loss: 0.2235 Acc: 0.9334
+val Loss: 0.2446 Acc: 0.9296
+Epoch finished in 0m 12s
+Training Epoch 17/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1879 Acc: 0.9442
+val Loss: 0.2283 Acc: 0.9337
+Epoch finished in 0m 12s
+Training Epoch 18/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1792 Acc: 0.9462
+val Loss: 0.2285 Acc: 0.9344
+Epoch finished in 0m 12s
+Training Epoch 19/24
+********************
+Milestone 2: 0.01
+train Loss: 0.1726 Acc: 0.9495
+val Loss: 0.2237 Acc: 0.9351
+Epoch finished in 0m 12s
+Training Epoch 20/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1694 Acc: 0.9506
+val Loss: 0.2230 Acc: 0.9358
+Epoch finished in 0m 12s
+Training Epoch 21/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1691 Acc: 0.9504
+val Loss: 0.2240 Acc: 0.9356
+Epoch finished in 0m 12s
+Training Epoch 22/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1697 Acc: 0.9502
+val Loss: 0.2215 Acc: 0.9371
+Epoch finished in 0m 12s
+Training Epoch 23/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1702 Acc: 0.9503
+val Loss: 0.2209 Acc: 0.9369
+Epoch finished in 0m 12s
+Training Epoch 24/24
+********************
+Milestone 3: 0.001
+train Loss: 0.1694 Acc: 0.9499
+val Loss: 0.2235 Acc: 0.9360
+Epoch finished in 0m 12s
+Best validation accuracy: 0.9360052418914492
