@@ -69,7 +69,7 @@ def get_arguments():
                                           '--stop_criteria', 'num_prune_epochs', '--milestones', '2', '3']"""
 
     LTH_args = LTH_arg_parser.parse_args(['--dataset', 'SVHN', '--warmup_iterations', '7167', '--training_number_of_epochs', '25',
-                                          '--stop_criteria', 'test_acc', '--save_res_csv', '--run_all_classic', '--arch_for_run_all', 'CIFAR10', '--data_seeds', '79', '--prune_shortcuts'])
+                                          '--stop_criteria', 'test_acc', '--save_res_csv', '--run_all_classic', '--arch_for_run_all', 'CIFAR10', '--data_seeds', '439', '--prune_shortcuts'])
     if LTH_args.arch_for_run_all == 'ImageNet' and LTH_args.run_all_two_BB:
         print('This option is not available for ResNet18.')
         exit()

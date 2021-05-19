@@ -1,0 +1,486 @@
+Sequential(
+  (0): BasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu): ReLU(inplace=True)
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+  (1): BasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu): ReLU(inplace=True)
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+  (2): BasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu): ReLU(inplace=True)
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+)
+Sequential(
+  (0): BasicBlock(
+    (conv_layer_1): Conv2d(16, 32, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu): ReLU(inplace=True)
+    (conv_layer_2): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential(
+      (0): Conv2d(16, 32, kernel_size=(1, 1), stride=(2, 2), bias=False)
+      (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (1): BasicBlock(
+    (conv_layer_1): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu): ReLU(inplace=True)
+    (conv_layer_2): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+  (2): BasicBlock(
+    (conv_layer_1): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu): ReLU(inplace=True)
+    (conv_layer_2): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+)
+Sequential(
+  (0): BasicBlock(
+    (conv_layer_1): Conv2d(32, 64, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu): ReLU(inplace=True)
+    (conv_layer_2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential(
+      (0): Conv2d(32, 64, kernel_size=(1, 1), stride=(2, 2), bias=False)
+      (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (1): BasicBlock(
+    (conv_layer_1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu): ReLU(inplace=True)
+    (conv_layer_2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+  (2): BasicBlock(
+    (conv_layer_1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu): ReLU(inplace=True)
+    (conv_layer_2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+)
+Sequential(
+  (0): RationalBasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+    cpu: 0x7f4946a60140
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+    cpu: 0x7f486f743f00
+    (shortcut): Sequential()
+  )
+  (1): RationalBasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+    cpu: 0x7f486f74d3c0
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+    cpu: 0x7f486f74d7d0
+    (shortcut): Sequential()
+  )
+  (2): RationalBasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+    cpu: 0x7f486f74dbe0
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+    cpu: 0x7f486f74df50
+    (shortcut): Sequential()
+  )
+)
+Sequential(
+  (0): RationalBasicBlock(
+    (conv_layer_1): Conv2d(16, 32, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+    cpu: 0x7f486f75a500
+    (conv_layer_2): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+    cpu: 0x7f486f75a910
+    (shortcut): Sequential(
+      (0): Conv2d(16, 32, kernel_size=(1, 1), stride=(2, 2), bias=False)
+      (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (1): RationalBasicBlock(
+    (conv_layer_1): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+    cpu: 0x7f486f75af00
+    (conv_layer_2): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+    cpu: 0x7f486f6e9460
+    (shortcut): Sequential()
+  )
+  (2): RationalBasicBlock(
+    (conv_layer_1): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+    cpu: 0x7f486f6e9820
+    (conv_layer_2): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+    cpu: 0x7f486f6e9c30
+    (shortcut): Sequential()
+  )
+)
+Sequential(
+  (0): RationalBasicBlock(
+    (conv_layer_1): Conv2d(32, 64, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+    cpu: 0x7f486f6e9fa0
+    (conv_layer_2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+    cpu: 0x7f486f6f6550
+    (shortcut): Sequential(
+      (0): Conv2d(32, 64, kernel_size=(1, 1), stride=(2, 2), bias=False)
+      (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (1): RationalBasicBlock(
+    (conv_layer_1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+    cpu: 0x7f486f6f6af0
+    (conv_layer_2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+    cpu: 0x7f486f6f6aa0
+    (shortcut): Sequential()
+  )
+  (2): RationalBasicBlock(
+    (conv_layer_1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+    cpu: 0x7f486f703460
+    (conv_layer_2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+    cpu: 0x7f486f703820
+    (shortcut): Sequential()
+  )
+)
+Sequential(
+  (0): RationalBasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_expert_group_1): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f7136e0
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f713690
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f7135f0
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f713640
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f713be0
+    )
+    (rational_expert_group_2): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f713280
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f713780
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f713730
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f713eb0
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f7137d0
+    )
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+  (1): RationalBasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_expert_group_1): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f71e820
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f71e7d0
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f71e730
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f71ef50
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6ad0f0
+    )
+    (rational_expert_group_2): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f71e140
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f71e8c0
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f71e780
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f71ed70
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6ad2d0
+    )
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+  (2): RationalBasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_expert_group_1): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6ada50
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6ada00
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6adb40
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6bb0f0
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6bb370
+    )
+    (rational_expert_group_2): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6ad460
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6ad960
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6bb280
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6bb1e0
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6bb460
+    )
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+)
+Sequential(
+  (0): RationalBasicBlock(
+    (conv_layer_1): Conv2d(16, 32, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_expert_group_1): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6bbb90
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6bbc80
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6cb410
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6cb370
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6cb5f0
+    )
+    (rational_expert_group_2): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6bb640
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6bbb40
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6cb280
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6cb500
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6cb6e0
+    )
+    (conv_layer_2): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential(
+      (0): Conv2d(16, 32, kernel_size=(1, 1), stride=(2, 2), bias=False)
+      (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (1): RationalBasicBlock(
+    (conv_layer_1): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_expert_group_1): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6d6190
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6d60f0
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6d6730
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6d6910
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6d6af0
+    )
+    (rational_expert_group_2): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6d60a0
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6d6230
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6d6820
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6d6a00
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6d6be0
+    )
+    (conv_layer_2): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+  (2): RationalBasicBlock(
+    (conv_layer_1): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_expert_group_1): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6e24b0
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6e2410
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6e2960
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6e2b40
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6e2e60
+    )
+    (rational_expert_group_2): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6e23c0
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6e2550
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6e2a50
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6e2c80
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6e2d70
+    )
+    (conv_layer_2): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+)
+Sequential(
+  (0): RationalBasicBlock(
+    (conv_layer_1): Conv2d(32, 64, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_expert_group_1): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f670aa0
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f670a00
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f670be0
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f670f00
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f670dc0
+    )
+    (rational_expert_group_2): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6709b0
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f6707d0
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f670d20
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f670e10
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f67e050
+    )
+    (conv_layer_2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential(
+      (0): Conv2d(32, 64, kernel_size=(1, 1), stride=(2, 2), bias=False)
+      (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (1): RationalBasicBlock(
+    (conv_layer_1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_expert_group_1): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f67eaf0
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f67eb90
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f68d320
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f68d280
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f68d500
+    )
+    (rational_expert_group_2): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f67e320
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f67ea50
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f68d190
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f68d410
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f68d5f0
+    )
+    (conv_layer_2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+  (2): RationalBasicBlock(
+    (conv_layer_1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_expert_group_1): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f68de10
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f68deb0
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f69c550
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f69c4b0
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f69c730
+    )
+    (rational_expert_group_2): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f68d7d0
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f68dd70
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f69c3c0
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f69c640
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cpu
+      cpu: 0x7f486f69c820
+    )
+    (conv_layer_2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+)
