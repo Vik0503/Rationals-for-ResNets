@@ -216,11 +216,18 @@ class RationalResNet(nn.Module):
 
     def multi_rational(self, out: Tensor) -> Tensor:
         out_tensor = torch.zeros_like(out)
+        #softmax_alpha = self.softmax(self.alpha)
         for n in range(self.num_rationals):
             rational = self.rational_expert_group[n]
-            rational_out = rational(out.clone())
-            out_tensor = out_tensor.clone() + self.alpha[n].clone() * rational_out.clone()
-        out = out_tensor.clone()
+            #rational_out = rational(out.clone())
+            #out_tensor = out_tensor.clone() + self.alpha[n].clone() * rational_out.clone()
+            rational_out = rational(out)
+            #out_tensor = out_tensor.clone() + self.alpha[n] * rational_out
+            #out_tensor += softmax_alpha[n] * rational_out
+            out_tensor += self.alpha[n] * rational_out
+
+        #out = out_tensor.clone()
+        out = out_tensor
         return out
 
     def pow_multi_rational(self, out: Tensor) -> Tensor:
