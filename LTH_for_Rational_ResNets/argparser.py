@@ -66,10 +66,11 @@ def get_arguments():
 
     """['--model', 'mix_experts_resnet18', '--dataset', 'SVHN', '--warmup_iterations', '1',
                                           '--iterative_pruning_epochs', '1', '--training_number_of_epochs', '5',
-                                          '--stop_criteria', 'num_prune_epochs', '--milestones', '2', '3']"""
+                                          '--stop_criteria', 'num_prune_epochs', '--milestones', '2', '3'], '--dataset', 'SVHN', '--warmup_iterations', '7167', '--training_number_of_epochs', '25',
+                                          '--stop_criteria', 'test_acc', '--save_res_csv', '--run_all_classic', '--arch_for_run_all', 'CIFAR10', '--data_seeds', '857', '--prune_shortcuts'"""
 
-    LTH_args = LTH_arg_parser.parse_args(['--dataset', 'SVHN', '--warmup_iterations', '7167', '--training_number_of_epochs', '25',
-                                          '--stop_criteria', 'test_acc', '--save_res_csv', '--run_all_classic', '--arch_for_run_all', 'CIFAR10', '--data_seeds', '439', '--prune_shortcuts'])
+    LTH_args = LTH_arg_parser.parse_args(['--model', 'mix_experts_resnet20', '--dataset', 'SVHN', '--warmup_iterations', '7167', '--training_number_of_epochs', '25',
+                                          '--stop_criteria', 'test_acc', '--save_res_csv', '--data_seeds', '857', '--prune_shortcuts'])
     if LTH_args.arch_for_run_all == 'ImageNet' and LTH_args.run_all_two_BB:
         print('This option is not available for ResNet18.')
         exit()

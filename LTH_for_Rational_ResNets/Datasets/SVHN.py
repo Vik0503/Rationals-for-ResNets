@@ -16,7 +16,7 @@ test_transform = transforms.Compose([
 ])
 
 train_val_set = torchvision.datasets.SVHN(root='../data/SVHN', split='train', download=True, transform=train_transform)
-testset = torchvision.datasets.SVHN(root='../data/SVHN', split='test', download=True, transform=train_transform)
+testset = torchvision.datasets.SVHN(root='../data/SVHN', split='test', download=True, transform=test_transform)
 trainset, valset = torch.utils.data.random_split(train_val_set, [54943, 18314])  # 3/4 of train set for training 1/4 for validation
 
 classes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]

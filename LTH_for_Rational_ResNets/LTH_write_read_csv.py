@@ -305,7 +305,7 @@ def make_yaml(models: List[str], saved_models: List[str], print_log: str, table:
     time_stamp = datetime.now()
     yaml_data = [{'Date': [time_stamp]}, {'Model(s)': models}, {'Dataset': [LTH_args.dataset]}, {'Batch Size': [LTH_args.batch_size]}, {'Pruning Percentage per Epoch': [LTH_args.pruning_percentage]},
                  {'Training Epochs per Pruning Epoch': [LTH_args.training_number_of_epochs]}, {'Learning Rate': [LTH_args.learning_rate]}, {'Warm-Up Iterations': [LTH_args.warmup_iterations]}, {'Training Milestones': [LTH_args.milestones]},
-                 {'Shortcuts pruned': [LTH_args.prune_shortcuts]}, {'Rational Inits': [LTH_args.initialize_rationals]}, {'Data Seed': [LTH_args.data_seeds]}, {'Saved Models': [saved_models]}, {'Print Log': [print_log]}]
+                 {'Shortcuts pruned': [LTH_args.prune_shortcuts]}, {'Rational Inits': [LTH_args.initialize_rationals]}, {'Data Seed': [LTH_args.data_seeds]}, {'Saved Models': [saved_models]}, {'Print Log': [print_log]}, {'Testset augmented': [False]}]
 
     if LTH_args.stop_criteria is 'num_prune_epochs':
         yaml_data.append({'Iterative Pruning Epochs': [LTH_args.iterative_pruning_epochs]})
