@@ -62,6 +62,7 @@ def prunable_layers(model) -> List:
 
 
 def initial_state(model) -> dict:
+    """Save the initial state for the reinitialization"""
     initial_state_model = {}
     for name, param in model.named_parameters():
         initial_state_model[name] = param.data.clone().detach()
@@ -82,7 +83,7 @@ def initialize_alpha(b: int = 4) -> torch.Tensor:
     alpha : torch.Tensor
             The tensor with initial values for alpha.
     """
-    alpha = torch.rand(b, requires_grad=True)
+    alpha = torch.ones(b, requires_grad=True)
     alpha = alpha / alpha.sum()
     return alpha
 

@@ -1,5 +1,0 @@
-,Layer 0,Layer 1,,,,,Layer 2,,,,,Layer 3,,,
-,,BasicBlock 0,,BasicBlock 1,,BasicBlock 0,,,BasicBlock 1,,BasicBlock 0,,,BasicBlock 1,
-,conv. 0,conv. 0,conv. 1,conv. 0,conv. 1,conv. 0,conv. 1,conv. 2,conv. 0,conv. 1,conv. 0,conv. 1,conv. 2,conv. 0,conv. 1
-Original Model,430,2302,2302,2302,2302,4606,9214,510,9214,9214,18430,36862,2046,36862,36862
-test,230,1247,1167,1202,1195,1673,3290,387,3263,3278,3568,7232,1363,7136,7109

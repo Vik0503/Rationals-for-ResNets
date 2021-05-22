@@ -49,6 +49,7 @@ class RationalBasicBlock(nn.Module):
         self.rational_inits = rational_inits
         self.conv_layer_1 = nn.Conv2d(planes_in, planes_out, kernel_size=3, stride=stride, padding=1, bias=False)
         self.batch_norm_1 = nn.BatchNorm2d(planes_out)
+        self.softmax = torch.nn.Softmax(dim=0)
         # use Rationals instead of reLu activation function
         self.num_rationals = num_rationals
         self.expert_group_1 = []
@@ -88,18 +89,20 @@ class RationalBasicBlock(nn.Module):
         out:    torch.Tensor
         alphas: torch.Tensor
                 The weights of the rational experts.
+        rationals: nn.Sequential
+                   The rational expert group.
 
         Returns
         -------
         out:    torch.Tensor
         """
         out_tensor = torch.zeros_like(out)
-
+        softmax_alpha = self.softmax(alphas)
         for n in range(self.num_rationals):
             rational = rationals[n]
             rational_out = rational(out.clone())
-            out_tensor = out_tensor.clone() + alphas[n].clone() * rational_out.clone()
-        out = out_tensor.clone()
+            out_tensor += softmax_alpha[n] * rational_out
+        out = out_tensor
         return out
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -147,6 +150,7 @@ class RationalResNet(nn.Module):
 
         self.layers = layers
         self.norm_layer = nn.BatchNorm2d
+        self.softmax = torch.nn.Softmax(dim=0)
         self.planes_in = 16
 
         self.rational_inits = rational_inits
@@ -256,11 +260,12 @@ class RationalResNet(nn.Module):
         out:    torch.Tensor
         """
         out_tensor = torch.zeros_like(out)
+        alpha_softmax = self.softmax(self.alpha)
         for n in range(self.num_rationals):
             rational = self.rational_expert_group[n]
             rational_out = rational(out.clone())
-            out_tensor = out_tensor.clone() + self.alpha[n].clone() * rational_out.clone()
-        out = out_tensor.clone()
+            out_tensor += alpha_softmax[n] * rational_out
+        out = out_tensor
         return out
 
     def forward(self, out: torch.Tensor):

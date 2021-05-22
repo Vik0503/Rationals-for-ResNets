@@ -33,7 +33,7 @@ from Rational_ResNets import utils
 
 time_stamp = datetime.now()
 print_PATH = './Print_Logs/{}.txt'.format(time_stamp)
-sys.stdout = open(print_PATH, 'wt')
+# sys.stdout = open(print_PATH, 'wt')
 
 global classes
 global num_classes
@@ -109,7 +109,7 @@ def run_all():
         model = model.to(device)
 
         scheduler, optimizer = utils.get_scheduler_optimizer(model, it_per_ep)
-        model, cm, time_elapsed_epoch, best_acc, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals, accuracy_plot_x_vals = tvt.train_val_test_model(model, optimizer, scheduler)
+        cm, time_elapsed_epoch, best_acc, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals, accuracy_plot_x_vals = tvt.train_val_test_model(model, optimizer, scheduler)
 
         if resnet_args.save_res_csv:
             PATH = utils.make_csv(model_names_dir[m], accuracy_plot_x_vals, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals)
@@ -213,7 +213,7 @@ def run_one():
     model = model.to(device)
 
     scheduler, optimizer = utils.get_scheduler_optimizer(model, it_per_ep)
-    model, cm, avg_time, best_test_acc, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals, accuracy_plot_x_vals = tvt.train_val_test_model(model, optimizer=optimizer, scheduler=scheduler)
+    cm, avg_time, best_test_acc, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals, accuracy_plot_x_vals = tvt.train_val_test_model(model, optimizer=optimizer, scheduler=scheduler)
 
     plot_PATH = plots.final_plot(cm=cm, epoch_time=avg_time, best_test_acc=best_test_acc, num_rationals=num_rationals, test_acc_y_vals=test_acc_plot_y_vals, train_acc_y_vals=train_acc_plot_y_vals, acc_x_vals=accuracy_plot_x_vals,
                                  val_acc_y_vals=val_acc_plot_y_vals)

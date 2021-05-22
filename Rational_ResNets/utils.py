@@ -133,6 +133,6 @@ def initialize_alpha(b: int = 4) -> torch.Tensor:
     alpha : torch.Tensor
             The tensor with initial values for alpha.
     """
-    alpha = torch.rand(b, requires_grad=True)
+    alpha = torch.ones(b, requires_grad=True)
     alpha = alpha / alpha.sum()
     return alpha

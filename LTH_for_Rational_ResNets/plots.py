@@ -201,6 +201,7 @@ def plot_activation_func_overview_mix(model, num_rat: int, inits: List[str], sav
     tmp = []
     rat_groups = []
     alphas = []
+    softmax = torch.nn.Softmax(dim=0)
     for m in model.modules():
         if isinstance(m, Rational):
             tmp.append(m)
@@ -212,7 +213,7 @@ def plot_activation_func_overview_mix(model, num_rat: int, inits: List[str], sav
 
     for m, param in model.named_parameters():
         if 'alpha' in m:
-            alphas.append(param)
+            alphas.append(softmax(param))
 
     layers = model.layers
 

@@ -2,6 +2,7 @@ import inspect
 import os
 import sys
 from datetime import datetime
+import time
 
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
@@ -62,6 +63,7 @@ elif LTH_args.dataset == 'SVHN':
 
 def run_all():
     global model_PATH, last_checkpoint, csv_PATH
+    begin = time.time()
     num_epochs = 0
     test_accuracies = []
     sparsities = []
@@ -131,6 +133,9 @@ def run_all():
     plot_PATH = plots.plot_all(test_accs=all_test_accuracies, sparsities=all_sparsities, num_epoch_list=num_epoch_list, model_names=model_names)
     mask_path_dim, mask_path_weights, mask_path_percent = LTH_write_read_csv.make_mask_csv(original_model, checkpoints, model_names)
     LTH_write_read_csv.make_yaml(model_names, csv=[csv_PATH], saved_models=saved_model_PATHS, table=[mask_path_dim, mask_path_weights, mask_path_percent], plot=[plot_PATH], print_log=print_PATH)
+    end = time.time()
+    elapsed = end - begin
+    print('time needed: {:.0f}m {:.0f}s', elapsed // 60, elapsed % 60)
 
 
 def run_one():  # TODO: Model name 18 str for plots + yaml

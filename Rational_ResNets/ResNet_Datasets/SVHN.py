@@ -129,6 +129,6 @@ def get_test_data(aug: bool = False, bs: int = 128):
         data_transform = aug_transform
     else:
         data_transform = transform
-    testset = torchvision.datasets.SVHN(root='../data/SVHN', split='test', download=True, transform=data_transform)
+    testset = torchvision.datasets.SVHN(root='../data/SVHN', split='test', download=True, transform=transform)
     testloader = torch.utils.data.DataLoader(testset, shuffle=False, num_workers=16, batch_size=bs, drop_last=True, worker_init_fn=random_seed_for_worker)
     return testset, testloader

@@ -1,7 +1,0 @@
-,Layer 0,Layer 1,,,,,
-,,BasicBlock 0,,BasicBlock 1,,BasicBlock 2,
-,conv. 0,conv. 0,conv. 1,conv. 0,conv. 1,conv. 0,conv. 1
-Original Model,430,2302,2302,2302,2302,2302,2302
-ReLU ResNet8,199,1150,1151,1149,1183,1154,1127
-univ. rational ResNet8,221,1148,1152,1153,1147,1131,1161
-mix. exp. ResNet8,227,1149,1165,1102,1146,1165,1159

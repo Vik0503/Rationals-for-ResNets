@@ -9,7 +9,6 @@ from IPython.core.display import display
 
 from LTH_for_Rational_ResNets import Mask
 from LTH_for_Rational_ResNets import argparser
-from LTH_for_Rational_ResNets.LTH_Models import relu_resnet_cifar10 as relu_cifar
 
 args = argparser.get_arguments()
 
@@ -41,7 +40,17 @@ def make_csv(model, prune_percent: List[float], test_acc: List[float]):
         for i in range(len(prune_percent)):
             writer.writerow({'Percentage of Weights pruned': prune_percent[i], 'Test Accuracy': test_acc[i]})
 
+    make_all_results_csv(model, prune_percent, test_acc)
     return PATH
+
+
+def make_all_results_csv(model, prune_percent: List[float], test_acc: List[float]):
+    PATH = 'CSV/{}/'.format(model) + 'test_accs.csv'
+    with open(PATH, 'a') as csvfile:
+        fieldnames = ['pruning_percentage', 'test_acc']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames, dialect='excel')
+        for i in range(len(prune_percent)):
+            writer.writerow({'pruning_percentage': prune_percent[i], 'test_acc': test_acc[i]})
 
 
 def make_mask_csv(original_model, all_PATHS: List[str], model_names: List[str]):
@@ -139,9 +148,9 @@ def make_mask_csv(original_model, all_PATHS: List[str], model_names: List[str]):
     display(df_dim)
     display(df_weights)
     display(df_percent)
-    PATH_dim = './CSV/Masks/all_models/{}'.format(time_stamp) + '_dim' + '.csv'
-    PATH_weights = './CSV/Masks/all_models/{}'.format(time_stamp) + '_weights' + '.csv'
-    PATH_percent = './CSV/Masks/all_models/{}'.format(time_stamp) + '_percent' + '.csv'
+    PATH_dim = './CSV/Masks/{}'.format(time_stamp) + '_dim' + '.csv'
+    PATH_weights = './CSV/Masks/{}'.format(time_stamp) + '_weights' + '.csv'
+    PATH_percent = './CSV/Masks/{}'.format(time_stamp) + '_percent' + '.csv'
     df_dim.to_csv(PATH_dim, index=True)
     df_weights.to_csv(PATH_weights, index=True)
     df_percent.to_csv(PATH_percent, index=True)

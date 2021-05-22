@@ -12,7 +12,7 @@ ResNet_arg_parser.add_argument('-m', '--model', default='univ_rational_resnet20'
                                         'mix_experts_resnet18', 'mix_experts_resnet18_2_layers', 'mix_experts_resnet18_1_layer',
                                         'select_1_expert_group_rational_resnet20'])
 ResNet_arg_parser.add_argument('-ds', '--dataset', default='cifar10', type=str, choices=['cifar10', 'SVHN', 'ImageNet'])
-ResNet_arg_parser.add_argument('-aug', '--augment_data', default=False, type=bool)
+ResNet_arg_parser.add_argument('-aug', '--augment_data', default=True, action='store_true')
 ResNet_arg_parser.add_argument('-epochs', '--training_number_of_epochs', default=25, type=int)
 ResNet_arg_parser.add_argument('-init_rationals', '--initialize_rationals',
                                type=str, nargs='+', default=['leaky_relu', 'gelu', 'swish', 'tanh', 'sigmoid'], choices=['leaky_relu', 'gelu', 'swish', 'tanh', 'sigmoid'],
@@ -38,7 +38,7 @@ ResNet_arg_parser.add_argument('--hist', default=False, action='store_true', hel
 
 """'--model', 'univ_rational_resnet20', '--dataset', 'SVHN', '--warmup_iterations', '7167',
      '--iterative_pruning_epochs', '2', '--training_number_of_epochs', '10',
-     '--stop_criteria', 'num_prune_epochs', '--save_res_csv', '--prune_shortcuts'"""
+     '--stop_criteria', 'num_prune_epochs', '--save_res_csv', '--prune_shortcuts'   '--run_all_classic', '--arch_for_run_all', 'CIFAR10',"""
 
 
 def get_argparser() -> arg.ArgumentParser:
@@ -54,7 +54,7 @@ def get_argparser() -> arg.ArgumentParser:
 
 
 def get_arguments():
-    resnet_args = ResNet_arg_parser.parse_args(['--dataset', 'SVHN','--training_number_of_epochs', '25', '--save_res_csv', '--data_seeds', '2', '--run_all_two_BB', '--arch_for_run_all', 'CIFAR10', '--learning_rate', '0.1'])
+    resnet_args = ResNet_arg_parser.parse_args(['--run_all_classic', '--arch_for_run_all', 'CIFAR10', '--dataset', 'SVHN','--training_number_of_epochs', '10', '--save_res_csv', '--data_seeds', '2',  '--learning_rate', '0.03'])
     if resnet_args.arch_for_run_all == 'ImageNet' and resnet_args.run_all_two_BB:
         print('This option is not available for ResNet18.')
         exit()

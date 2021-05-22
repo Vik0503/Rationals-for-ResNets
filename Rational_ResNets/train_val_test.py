@@ -7,10 +7,7 @@ import torch
 
 from Rational_ResNets.ResNet_Datasets import CIFAR10, SVHN
 
-torch.cuda.manual_seed_all(42)
-
 import numpy as np
-np.random.seed(42)
 
 from sklearn.metrics import confusion_matrix
 
@@ -145,7 +142,7 @@ def train_val_test_model(model, optimizer, scheduler):
 
     model.load_state_dict(best_model)
 
-    return model, cm, time_elapsed_epoch, best_acc, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals, accuracy_plot_x_vals
+    return cm, time_elapsed_epoch, best_acc, train_acc_plot_y_vals, val_acc_plot_y_vals, test_acc_plot_y_vals, accuracy_plot_x_vals
 
 
 def average_epoch_time(avg_epoch_time: list):
