@@ -135,7 +135,7 @@ def run_all():
     LTH_write_read_csv.make_yaml(model_names, csv=[csv_PATH], saved_models=saved_model_PATHS, table=[mask_path_dim, mask_path_weights, mask_path_percent], plot=[plot_PATH], print_log=print_PATH)
     end = time.time()
     elapsed = end - begin
-    print('time needed: {:.0f}m {:.0f}s', elapsed // 60, elapsed % 60)
+    print('time needed: {:.0f}m {:.0f}s'.format(elapsed // 60, elapsed % 60))
 
 
 def run_one():  # TODO: Model name 18 str for plots + yaml

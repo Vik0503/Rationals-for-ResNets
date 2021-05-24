@@ -122,7 +122,7 @@ def plot_all(test_accs, sparsities, num_epoch_list: list, model_names: List[str]
     else:
         stop_criterion = 'terminate after {} epochs'.format(LTH_args.iterative_pruning_epochs)
     text = 'dataset: {}, '.format(LTH_args.dataset) + 'batch size: {}, '.format(LTH_args.batch_size) + '\n' + '{} training epochs per pruning epoch, '.format(LTH_args.training_number_of_epochs) + '\n' + \
-           'learning rate: {}, '.format(0.03) + '{}% pruning per epoch, '.format(LTH_args.pruning_percentage) + '\n' + '{} warm-up iterations, '.format(LTH_args.warmup_iterations) + '\n' + \
+           'learning rate: {}, '.format(LTH_args.learning_rate) + '{}% pruning per epoch, '.format(LTH_args.pruning_percentage) + '\n' + '{} warm-up iterations, '.format(LTH_args.warmup_iterations) + '\n' + \
            'shortcuts pruned: {}, '.format(LTH_args.prune_shortcuts) + '\n' + 'number of iterative pruning epochs: ' + '\n' + \
            '- {}: {}'.format(model_names[0], num_epoch_list[0]) + '\n' + '- {}: {}'.format(model_names[1], num_epoch_list[1]) + '\n' + '- {}: {}'.format(model_names[2], num_epoch_list[2]) + '\n' + stop_criterion
 

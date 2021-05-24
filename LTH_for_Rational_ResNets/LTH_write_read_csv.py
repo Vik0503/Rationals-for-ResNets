@@ -45,7 +45,10 @@ def make_csv(model, prune_percent: List[float], test_acc: List[float]):
 
 
 def make_all_results_csv(model, prune_percent: List[float], test_acc: List[float]):
-    PATH = 'CSV/{}/'.format(model) + 'test_accs.csv'
+    if args.prune_shortcuts:
+        PATH = 'CSV/{}/'.format(model) + 'test_accs_shortcuts.csv'
+    else:
+        PATH = 'CSV/{}/'.format(model) + 'test_accs.csv'
     with open(PATH, 'a') as csvfile:
         fieldnames = ['pruning_percentage', 'test_acc']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames, dialect='excel')
@@ -91,17 +94,20 @@ def make_mask_csv(original_model, all_PATHS: List[str], model_names: List[str]):
     all_data_weights = []
     all_data_percent = []
     control_weights = []
+    num_original = 0
 
     for m in range(len(masks)):
         mask = masks[m]
         data_dim = []
         data_weights = []
         data_percent = []
+        total_weights = 0
         j = 0
         for key, values in mask.items():
             print(key)
             x = torch.nonzero(values)
             num_weights = len(x) - 2
+            total_weights += num_weights
             data_weights.append(num_weights)
 
             if m == 0:
@@ -131,18 +137,25 @@ def make_mask_csv(original_model, all_PATHS: List[str], model_names: List[str]):
             data_dim.append(x_y_data)
             print('x: ', x_counter)
             print('y: ', y_counter)
+
+            if m == 0:
+                num_original = total_weights
+        total_percent = (total_weights * 100) / num_original
+        data_weights.append(total_weights)
+        data_weights.append(total_percent)
         all_data_dim.append(data_dim)
         all_data_weights.append(data_weights)
         if m != 0:
             all_data_percent.append(data_percent)
 
     if args.arch_for_run_all == 'CIFAR10':
-        tuples = csv_cifar_models(original_model)
+        tuples, tuples_weights = csv_cifar_models(original_model)
     else:
-        tuples = csv_imagenet_models(original_model)
+        tuples, tuples_weights = csv_imagenet_models(original_model)
     index = pd.MultiIndex.from_tuples(tuples)
+    index_weights = pd.MultiIndex.from_tuples(tuples_weights)
     df_dim = pd.DataFrame(all_data_dim, index=['Original Model'] + model_names, columns=index)
-    df_weights = pd.DataFrame(all_data_weights, index=['Original Model'] + model_names, columns=index)
+    df_weights = pd.DataFrame(all_data_weights, index=['Original Model'] + model_names, columns=index_weights)
     df_percent = pd.DataFrame(all_data_percent, index=model_names, columns=index)
 
     display(df_dim)
@@ -213,9 +226,11 @@ def csv_imagenet_models(model):
             array_1 = [''] + ['BasicBlock 0', '', 'BasicBlock 1', ''] * 2
             array_2 = ['conv. 0'] + ['conv. 0', 'conv. 1'] * 4
     arrays = [array_0, array_1, array_2]
+    arrays_weights = [array_0 + [''] * 2, array_1 + ['Total weights'] + ['Remained in %'], array_2 + [''] * 2]
     tuples = list(zip(*arrays))
+    tuples_weights = list(zip(*arrays_weights))
 
-    return tuples
+    return tuples, tuples_weights
 
 
 def csv_cifar_models(model):
@@ -287,8 +302,10 @@ def csv_cifar_models(model):
             array_1 = [''] + ['BasicBlock 0', '', 'BasicBlock 1', '', 'BasicBlock 2', ''] * 2
             array_2 = ['conv. 0'] + ['conv. 0', 'conv. 1'] * 6
     arrays = [array_0, array_1, array_2]
+    arrays_weights = [array_0 + [''] * 2, array_1 + ['Total weights'] + ['Remained in %'], array_2 + [''] * 2]
     tuples = list(zip(*arrays))
-    return tuples
+    tuples_weights = list(zip(*arrays_weights))
+    return tuples, tuples_weights
 
 
 def make_yaml(models: List[str], saved_models: List[str], print_log: str, table: List[str] = None, csv: List[str] = None, plot: List[str] = None):

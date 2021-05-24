@@ -1,5 +1,4 @@
-pruning_percentage, test_acc
-
+Percentage of Weights pruned,Test Accuracy
 0,92.53610940381068
 tensor(20.0007),92.61293792255685
 tensor(36.0009),92.80116779348492

@@ -2,7 +2,7 @@ import argparse as arg
 
 LTH_arg_parser = arg.ArgumentParser()
 LTH_arg_parser.add_argument('-bs', '--batch_size', default=128, type=int)
-LTH_arg_parser.add_argument('-lr', '--learning_rate', default=0.005, type=float)
+LTH_arg_parser.add_argument('-lr', '--learning_rate', default=0.03, type=float)
 LTH_arg_parser.add_argument('-m', '--model', default='univ_rational_resnet20', type=str, choices=['univ_rational_resnet20', 'univ_rational_resnet14_A', 'univ_rational_resnet14_B', 'univ_rational_resnet8',
                                                                                                   'relu_resnet20', 'relu_resnet14_A', 'relu_resnet14_B', 'relu_resnet8',
                                                                                                   'mix_experts_resnet20', 'mix_experts_resnet14_A', 'mix_experts_resnet14_B', 'mix_experts_resnet8',
@@ -70,7 +70,7 @@ def get_arguments():
                                           '--stop_criteria', 'test_acc', '--save_res_csv', '--run_all_classic', '--arch_for_run_all', 'CIFAR10', '--data_seeds', '857', '--prune_shortcuts'"""
 
     LTH_args = LTH_arg_parser.parse_args(['--dataset', 'SVHN', '--warmup_iterations', '7167', '--training_number_of_epochs', '25',
-                                          '--stop_criteria', 'test_acc', '--save_res_csv', '--run_all_classic', '--arch_for_run_all', 'CIFAR10', '--data_seeds', '2', '--prune_shortcuts'])
+                                          '--stop_criteria', 'test_acc', '--save_res_csv', '--run_all_classic', '--arch_for_run_all', 'CIFAR10', '--data_seeds', '2'])
     if LTH_args.arch_for_run_all == 'ImageNet' and LTH_args.run_all_two_BB:
         print('This option is not available for ResNet18.')
         exit()
