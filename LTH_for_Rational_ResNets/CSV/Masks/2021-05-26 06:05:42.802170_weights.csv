@@ -1,0 +1,7 @@
+,Layer 0,Layer 1,,,,,,Layer 2,,,,,,Layer 3,,,,,,,
+,,BasicBlock 0,,BasicBlock 1,,BasicBlock 2,,BasicBlock 0,,BasicBlock 1,,BasicBlock 2,,BasicBlock 0,,BasicBlock 1,,BasicBlock 2,,Total weights,Remained in %
+,conv. 0,conv. 0,conv. 1,conv. 0,conv. 1,conv. 0,conv. 1,conv. 0,conv. 1,conv. 0,conv. 1,conv. 0,conv. 1,conv. 0,conv. 1,conv. 0,conv. 1,conv. 0,conv. 1,,
+Original Model,430,2302,2302,2302,2302,2302,2302,4606,9214,9214,9214,9214,9214,18430,36862,36862,36862,36862,36862,267658,100.0
+ReLU ResNet20,117,292,208,208,219,234,179,153,221,219,209,196,143,103,108,130,51,43,8,3041,1.1361513573291289
+univ. rational ResNet20,71,182,120,100,103,112,82,49,62,101,88,104,103,28,23,96,82,16,13,1535,0.5734930396251934
+mix. exp. ResNet20,60,211,222,168,162,148,141,90,135,125,143,159,139,78,81,180,139,25,18,2424,0.9056333081768525

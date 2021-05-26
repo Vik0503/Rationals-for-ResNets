@@ -1,0 +1,27 @@
+- Date: [!!timestamp '2021-05-25 09:16:25.160348']
+- Model(s): [ReLU ResNet20, univ. rational ResNet20, mix. exp. ResNet20]
+- Dataset: [SVHN]
+- Batch Size: [128]
+- Pruning Percentage per Epoch: [20.0]
+- Training Epochs per Pruning Epoch: [25]
+- Learning Rate: [0.03]
+- Warm-Up Iterations: [7167]
+- Training Milestones:
+  - [10, 15, 20]
+- Shortcuts pruned: [false]
+- Rational Inits:
+  - [leaky_relu, gelu, swish, tanh, sigmoid]
+- Data Seed: [79]
+- Saved Models:
+  - ['./Saved_Models/2021-05-24 23:29:29.121894', './Saved_Models/2021-05-25 00:50:33.373089',
+    './Saved_Models/2021-05-25 03:01:45.118158']
+- Print Log: ['./Print_Logs/2021-05-24 23:29:27.433597.txt']
+- Testset augmented: [false]
+- Test Accuracy Threshold: [0.9]
+- CSV File:
+  - ['CSV/mix_experts_resnet20/2021-05-25 09:15:08.197333.csv']
+- Mask CSV File:
+  - ['./CSV/Masks/2021-05-25 09:15:08.567639_dim.csv', './CSV/Masks/2021-05-25 09:15:08.567639_weights.csv',
+    './CSV/Masks/2021-05-25 09:15:08.567639_percent.csv']
+- Plot:
+  - ['./Plots/LTH_all_models/2021-05-25 09:15:08.220711_SVHN.svg']
