@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import torch
 from rational.torch import Rational
-import argparser
+from Rational_ResNets import argparser
 
 from Rational_ResNets.ResNet_Models.mix_experts_resnet_cifar10 import RationalResNet as mix
 from Rational_ResNets.ResNet_Models.univ_rational_resnet_cifar10 import RationalResNet as univ

@@ -12,7 +12,7 @@ from rational.torch import Rational
 from LTH_for_Rational_ResNets.LTH_Models.mix_experts_resnet_cifar10 import RationalResNet as mix
 from LTH_for_Rational_ResNets.LTH_Models.univ_rational_resnet_cifar10 import RationalResNet as univ
 
-import argparser
+from LTH_for_Rational_ResNets import argparser
 
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
