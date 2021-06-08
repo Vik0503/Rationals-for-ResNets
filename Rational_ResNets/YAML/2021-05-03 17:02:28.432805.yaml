@@ -1,7 +1,0 @@
-- Date: [!!timestamp '2021-05-03 17:02:28.432805']
-- Model(s): [mix_experts_resnet20]
-- Dataset: [cifar10]
-- Batch Size: [128]
-- Learning Rate: [0.01]
-- Epochs: [1]
-- Warm-Up Iterations: [0]

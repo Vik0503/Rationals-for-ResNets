@@ -1,12 +1,10 @@
 import random
 
 import torch
-torch.cuda.manual_seed_all(42)
 
 import torchvision
 from torchvision import transforms
 import numpy as np
-np.random.seed(42)
 
 transform = transforms.Compose([
     transforms.ToTensor(),
@@ -21,12 +19,6 @@ aug_transform = transforms.Compose([
 ])
 
 classes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-
-
-def random_seed_for_worker(worker_id):
-    seed = torch.initial_seed() % 2 ** 32
-    np.random.seed(seed)
-    random.seed(seed)
 
 
 def get_classes() -> list:
@@ -53,7 +45,7 @@ def get_num_classes() -> int:
     return len(classes)
 
 
-def get_train_data(aug: bool = False, bs: int = 128):  # TODO: is split a problem???
+def get_data(aug: bool = False, bs: int = 128):
     """
     Parameters
     ----------
@@ -74,10 +66,15 @@ def get_train_data(aug: bool = False, bs: int = 128):  # TODO: is split a proble
         data_transform = transform
 
     train_val_set = torchvision.datasets.SVHN(root='../data/SVHN', split='train', download=True, transform=data_transform)
-    trainset, _ = torch.utils.data.random_split(train_val_set, [54943, 18314])
-    trainloader = torch.utils.data.DataLoader(trainset, shuffle=True, num_workers=16, batch_size=bs, drop_last=True, worker_init_fn=random_seed_for_worker)
+    trainset, valset = torch.utils.data.random_split(train_val_set, [54943, 18314])
+    trainloader = torch.utils.data.DataLoader(trainset, shuffle=True, num_workers=16, batch_size=bs, drop_last=True)
+    valloader = torch.utils.data.DataLoader(valset, shuffle=True, num_workers=16, batch_size=bs, drop_last=True)
+
+    testset = torchvision.datasets.SVHN(root='../data/SVHN', split='test', download=True, transform=transform)
+    testloader = torch.utils.data.DataLoader(testset, shuffle=False, num_workers=16, batch_size=bs, drop_last=True)
+
     it_per_ep = np.ceil(len(trainset) / bs).astype(int)
-    return trainset, trainloader, it_per_ep
+    return trainset, trainloader, valset, valloader, testset, testloader, it_per_ep
 
 
 def get_validation_data(aug: bool = False, bs: int = 128):
@@ -104,7 +101,7 @@ def get_validation_data(aug: bool = False, bs: int = 128):
 
     train_val_set = torchvision.datasets.SVHN(root='../data/SVHN', split='train', download=True, transform=data_transform)
     _, valset = torch.utils.data.random_split(train_val_set, [54943, 18314])
-    valloader = torch.utils.data.DataLoader(valset, shuffle=True, num_workers=16, batch_size=bs, drop_last=True, worker_init_fn=random_seed_for_worker)
+    valloader = torch.utils.data.DataLoader(valset, shuffle=True, num_workers=16, batch_size=bs, drop_last=True)
     return valset, valloader
 
 
@@ -130,5 +127,5 @@ def get_test_data(aug: bool = False, bs: int = 128):
     else:
         data_transform = transform
     testset = torchvision.datasets.SVHN(root='../data/SVHN', split='test', download=True, transform=transform)
-    testloader = torch.utils.data.DataLoader(testset, shuffle=False, num_workers=16, batch_size=bs, drop_last=True, worker_init_fn=random_seed_for_worker)
+    testloader = torch.utils.data.DataLoader(testset, shuffle=False, num_workers=16, batch_size=bs, drop_last=True)
     return testset, testloader

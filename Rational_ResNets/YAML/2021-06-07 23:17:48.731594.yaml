@@ -1,0 +1,24 @@
+- Date: [!!timestamp '2021-06-07 23:17:48.731594']
+- Model(s): [relu_resnet14_B, univ_rational_resnet14_B, mix_experts_resnet14_B]
+- Dataset: [SVHN]
+- Batch Size: [128]
+- Learning Rate: [0.1]
+- Epochs: [25]
+- Training Milestones:
+  - [10, 15, 20]
+- Warm-Up Iterations: [0]
+- Rational Inits:
+  - [leaky_relu, gelu, swish, tanh, sigmoid]
+- Data Seed: [191]
+- Saved Model(s):
+  - ['./Saved_Models/2021-06-07 22:58:40.155433.pth', './Saved_Models/2021-06-07 23:03:16.742931.pth',
+    './Saved_Models/2021-06-07 23:17:39.088432.pth']
+- Print Log: ['./Print_Logs/2021-06-07 22:55:05.407005.txt']
+- CSV File(s):
+  - ['CSV/relu_resnet14_B/2021-06-07 22:58:40.155126.csv', 'CSV/univ_rational_resnet14_B/2021-06-07
+      23:03:16.742621.csv', 'CSV/mix_experts_resnet14_B/2021-06-07 23:17:39.088123.csv']
+- Activation Function Plot:
+  - ['./Plots/activation_functions/2021-06-07 23:17:40.942038_SVHN_all_mix.svg', './Plots/activation_functions/2021-06-07
+      23:17:45.585018_SVHN_all_univ.svg']
+- Plot:
+  - ['./Plots/all/2021-06-07 23:17:39.129395_SVHN.svg']

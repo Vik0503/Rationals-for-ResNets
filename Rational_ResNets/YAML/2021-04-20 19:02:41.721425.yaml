@@ -1,8 +1,0 @@
-- Date: [!!timestamp '2021-04-20 19:02:41.721425']
-- Model(s): [mix_experts_resnet20]
-- Dataset: [SVHN]
-- Batch Size: [128]
-- Learning Rate: [0.01]
-- Epochs: [3]
-- Warm-Up Iterations: [300]
-- CSV File(s): ['CSV/mix_experts_resnet20/2021-04-20 19:02:41.721202.csv']

@@ -19,7 +19,7 @@ else:
     device = 'cpu'
 
 resnet_args = argparser.get_arguments()
-
+print(resnet_args.augment_data)
 
 if resnet_args.dataset == 'cifar10':
     trainset, trainloader, _ = CIFAR10.get_train_data(aug=resnet_args.augment_data, bs=resnet_args.batch_size)
@@ -29,9 +29,7 @@ if resnet_args.dataset == 'cifar10':
     num_classes = CIFAR10.get_num_classes()
 
 elif resnet_args.dataset == 'SVHN':
-    trainset, trainloader, _ = SVHN.get_train_data(aug=resnet_args.augment_data, bs=resnet_args.batch_size)
-    valset, valloader = SVHN.get_validation_data(aug=resnet_args.augment_data, bs=resnet_args.batch_size)
-    testset, testloader = SVHN.get_test_data(aug=resnet_args.augment_data, bs=resnet_args.batch_size)
+    trainset, trainloader, valset, valloader, testset, testloader, _ = SVHN.get_data(aug=resnet_args.augment_data, bs=resnet_args.batch_size)
     classes = SVHN.get_classes()
     num_classes = SVHN.get_num_classes()
 

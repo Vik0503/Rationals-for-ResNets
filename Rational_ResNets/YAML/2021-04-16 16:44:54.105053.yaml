@@ -1,7 +1,0 @@
-- Date: [!!timestamp '2021-04-16 16:44:54.105053']
-- Model(s): [univ_rational_resnet20]
-- Dataset: [SVHN]
-- Batch Size: [128]
-- Learning Rate: [0.01]
-- Epochs: [3]
-- Warm-Up Iterations: [0]

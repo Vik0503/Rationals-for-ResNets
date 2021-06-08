@@ -29,6 +29,14 @@ def make_csv(model, epoch: List[int], train_acc: list, val_acc: list, test_acc: 
     PATH:   str
             The path to the saved csv file.
     """
+    PATH = 'CSV/{}/'.format(model) + 'final_plot.csv'
+
+    with open(PATH, 'a') as csvfile:
+        fieldnames = ['Epoch', 'Train Accuracy', 'Validation Accuracy', 'Test Accuracy']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames, dialect='excel')
+        for i in range(len(epoch)):
+            writer.writerow({'Epoch': epoch[i], 'Train Accuracy': train_acc[i].cpu().numpy(), 'Validation Accuracy': val_acc[i].cpu().numpy(), 'Test Accuracy': test_acc[i].cpu().numpy()})
+
     time_stamp = datetime.now()
     PATH = 'CSV/{}'.format(model) + '/{}'.format(time_stamp) + '.csv'
     with open(PATH, 'w', newline='') as csvfile:

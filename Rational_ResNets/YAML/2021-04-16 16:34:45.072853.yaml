@@ -1,6 +1,0 @@
-- {Date: !!timestamp '2021-04-16 16:34:45.072853'}
-- {Model(s): '[''univ_rational_resnet20'']'}
-- {Dataset: SVHN}
-- {Batch Size: '128'}
-- {Learning Rate: '0.01'}
-- {Epochs: '3'}

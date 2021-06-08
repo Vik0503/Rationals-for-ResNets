@@ -33,7 +33,7 @@ from Rational_ResNets import utils
 
 time_stamp = datetime.now()
 print_PATH = './Print_Logs/{}.txt'.format(time_stamp)
-# sys.stdout = open(print_PATH, 'wt')
+sys.stdout = open(print_PATH, 'wt')
 
 global classes
 global num_classes
@@ -50,7 +50,7 @@ if resnet_args.dataset == 'cifar10':
     num_classes = CIFAR10.get_num_classes()
 
 elif resnet_args.dataset == 'SVHN':
-    _, _, it_per_ep = SVHN.get_train_data(aug=resnet_args.augment_data, bs=resnet_args.batch_size)
+    _, _, _, _, _, _, it_per_ep = SVHN.get_data(aug=resnet_args.augment_data, bs=resnet_args.batch_size)
     classes = SVHN.get_classes()
     num_classes = SVHN.get_num_classes()
 

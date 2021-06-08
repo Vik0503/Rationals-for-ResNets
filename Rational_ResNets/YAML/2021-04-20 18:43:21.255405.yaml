@@ -1,8 +1,0 @@
-- Date: [!!timestamp '2021-04-20 18:43:21.255405']
-- Model(s): [univ_rational_resnet20]
-- Dataset: [SVHN]
-- Batch Size: [128]
-- Learning Rate: [0.01]
-- Epochs: [3]
-- Warm-Up Iterations: [300]
-- CSV File(s): ['CSV/univ_rational_resnet20/2021-04-20 18:43:21.255152.csv']

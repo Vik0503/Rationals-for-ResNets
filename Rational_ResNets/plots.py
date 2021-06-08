@@ -217,8 +217,7 @@ def plot_activation_func_overview_mix(model, num_rat: int, inits: List[str]):
     softmax = torch.nn.Softmax(dim=0)
     for m, param in model.named_parameters():
         if 'alpha' in m:
-            alphas.append(param)
-           # alphas.append(softmax(param))
+            alphas.append(softmax(param))
 
     layers = model.layers
 
@@ -476,8 +475,8 @@ def resnet20_plot_univ(layers: List[int], rat):
 
             plt.legend(['init.: leaky relu, deg.: {}'.format(tmp.degrees)], bbox_to_anchor=(0.5, -0.2), ncol=1, loc='center')
             if resnet_args.hist:
-                bins = tmp[0].show(display=False)['hist']['bins']
-                freq = tmp[0].show(display=False)['hist']['freq']
+                bins = tmp.show(display=False)['hist']['bins']
+                freq = tmp.show(display=False)['hist']['freq']
                 ax = plt.gca()
                 ax2 = ax.twinx()
                 ax2.set_yticks([])
@@ -539,8 +538,8 @@ def resnet18_plot_univ(layers: List[int], rat):
 
             plt.legend(['init.: leaky relu, deg.: {}'.format(tmp.degrees)], bbox_to_anchor=(0.5, -0.2), ncol=1, loc='center')
             if resnet_args.hist:
-                bins = tmp[0].show(display=False)['hist']['bins']
-                freq = tmp[0].show(display=False)['hist']['freq']
+                bins = tmp.show(display=False)['hist']['bins']
+                freq = tmp.show(display=False)['hist']['freq']
                 ax = plt.gca()
                 ax2 = ax.twinx()
                 ax2.set_yticks([])

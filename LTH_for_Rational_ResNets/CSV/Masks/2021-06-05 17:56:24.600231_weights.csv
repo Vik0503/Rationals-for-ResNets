@@ -1,0 +1,7 @@
+,Layer 0,Layer 1,,,,Layer 2,,,,Layer 3,,,,,
+,,BasicBlock 0,,BasicBlock 1,,BasicBlock 0,,BasicBlock 1,,BasicBlock 0,,BasicBlock 1,,Total weights,Remained in %
+,conv. 0,conv. 0,conv. 1,conv. 0,conv. 1,conv. 0,conv. 1,conv. 0,conv. 1,conv. 0,conv. 1,conv. 0,conv. 1,,
+Original Model,430,2302,2302,2302,2302,4606,9214,9214,9214,18430,36862,36862,36862,170902,100.0
+ReLU ResNet14_A,151,211,195,208,184,191,271,310,229,161,165,125,29,2430,1.421867503013423
+univ. rational ResNet14_A,96,187,94,104,96,95,105,138,138,114,121,159,96,1543,0.9028566078805397
+mix. exp. ResNet14_A,84,184,115,138,95,60,78,139,114,76,48,69,28,1228,0.7185404500825034
