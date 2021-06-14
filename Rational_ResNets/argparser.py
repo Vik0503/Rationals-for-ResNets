@@ -12,7 +12,7 @@ ResNet_arg_parser.add_argument('-m', '--model', default='univ_rational_resnet20'
                                         'mix_experts_resnet18', 'mix_experts_resnet18_2_layers', 'mix_experts_resnet18_1_layer',
                                         'select_1_expert_group_rational_resnet20'])
 ResNet_arg_parser.add_argument('-ds', '--dataset', default='cifar10', type=str, choices=['cifar10', 'SVHN', 'ImageNet'])
-ResNet_arg_parser.add_argument('-aug', '--augment_data', default=True, action='store_true')
+ResNet_arg_parser.add_argument('-aug', '--augment_data', default=False, action='store_true')
 ResNet_arg_parser.add_argument('-epochs', '--training_number_of_epochs', default=25, type=int)
 ResNet_arg_parser.add_argument('-init_rationals', '--initialize_rationals',
                                type=str, nargs='+', default=['leaky_relu', 'gelu', 'swish', 'tanh', 'sigmoid'], choices=['leaky_relu', 'gelu', 'swish', 'tanh', 'sigmoid'],
@@ -35,6 +35,7 @@ run_all_groups.add_argument('--run_all_one_layer', default=False, action='store_
 ResNet_arg_parser.add_argument('--arch_for_run_all', default='CIFAR10', choices=['CIFAR10', 'ImageNet'])
 ResNet_arg_parser.add_argument('--milestones', type=str, nargs='+', default=[10, 15, 20], help='Examples: --milestones 20 30, -milestones 5')
 ResNet_arg_parser.add_argument('--hist', default=False, action='store_true', help='Flag to save histograms')
+ResNet_arg_parser.add_argument('--clip_gradients', default=False, action='store_true', help='Flag to clip gradients')
 
 """'--model', 'univ_rational_resnet20', '--dataset', 'SVHN', '--warmup_iterations', '7167',
      '--iterative_pruning_epochs', '2', '--training_number_of_epochs', '10',
@@ -54,7 +55,7 @@ def get_argparser() -> arg.ArgumentParser:
 
 
 def get_arguments():
-    resnet_args = ResNet_arg_parser.parse_args(['--run_all_one_layer', '--arch_for_run_all', 'CIFAR10', '--dataset', 'SVHN', '--training_number_of_epochs', '25', '--save_res_csv', '--data_seeds', '439',  '--learning_rate', '0.1', '--hist'])
+    resnet_args = ResNet_arg_parser.parse_args(['--model', 'mix_experts_resnet20', '--dataset', 'SVHN', '--training_number_of_epochs', '25', '--save_res_csv', '--data_seeds', '2',  '--learning_rate', '0.1', '--clip_gradients', '--augment_data', '--initialize_rationals', 'leaky_relu'])
     if resnet_args.arch_for_run_all == 'ImageNet' and resnet_args.run_all_two_BB:
         print('This option is not available for ResNet18.')
         exit()

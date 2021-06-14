@@ -57,8 +57,8 @@ class RationalBasicBlock(nn.Module):
 
         self.softmax = torch.nn.Softmax(dim=0)
 
-        self.pow_1 = torch.nn.parameter.Parameter(p_0, requires_grad=True)
-        self.pow_2 = torch.nn.parameter.Parameter(p_1, requires_grad=True)
+        self.pow_1 = torch.nn.parameter.Parameter(torch.tensor(1.0), requires_grad=True)
+        self.pow_2 = torch.nn.parameter.Parameter(torch.tensor(1.0), requires_grad=True)
 
         self.rational_expert_group_1 = nn.Sequential(*self.expert_group_1)
         self.rational_expert_group_2 = nn.Sequential(*self.expert_group_2)
@@ -91,15 +91,15 @@ class RationalBasicBlock(nn.Module):
         out = out_tensor
         return out
 
+
     def pow_multi_rational(self, out: Tensor, alphas: torch.Tensor, rationals, p) -> Tensor:
-        alphas = torch.nn.Parameter(alphas / alphas.sum(), requires_grad=True)
-        p = torch.nn.parameter.Parameter(abs(p), requires_grad=True)
+
         out_tensor = torch.zeros_like(out)
         for n in range(self.num_rationals):
             rational = rationals[n]
             rational_out = rational(out.clone())
-            out_tensor = out_tensor.clone() + alphas[n].clone() * rational_out.clone() ** p.clone()
-        out = out_tensor.clone() ** (1 / p.clone())
+            out_tensor += alphas[n] * rational_out ** p
+        out = out_tensor ** (1 / p)
         return out
 
     def forward(self, x: Tensor) -> Tensor:
@@ -119,13 +119,13 @@ class RationalBasicBlock(nn.Module):
         out = self.conv_layer_1(x)
         out = self.batch_norm_1(out)
         # out = self.multi_rational(out, self.alpha_1, self.rational_expert_group_1, self.softmax_alpha_1)
-        out = self.multi_rational(out, self.alpha_1, self.rational_expert_group_1)
+        out = self.pow_multi_rational(out, self.alpha_1, self.rational_expert_group_1, self.pow_1)
         out = self.conv_layer_2(out)
 
         out = self.batch_norm_2(out)
         out += self.shortcut(x)
         # out = self.multi_rational(out, self.alpha_2, self.rational_expert_group_2, self.softmax_alpha_2)
-        out = self.multi_rational(out, self.alpha_2, self.rational_expert_group_2)
+        out = self.pow_multi_rational(out, self.alpha_2, self.rational_expert_group_2, self.pow_2)
 
         return out
 
@@ -164,7 +164,7 @@ class RationalResNet(nn.Module):
         self.rational_expert_group = nn.Sequential(*self.expert_group)
 
         p = torch.randn(1)
-        self.pow = torch.nn.parameter.Parameter(p, requires_grad=True)
+        self.pow = torch.nn.parameter.Parameter(torch.tensor(1.0), requires_grad=True)
         data = utils.initialize_alpha(self.num_rationals)
 
         self.alpha = torch.nn.parameter.Parameter(data, requires_grad=True)
@@ -232,13 +232,12 @@ class RationalResNet(nn.Module):
         return out
 
     def pow_multi_rational(self, out: Tensor) -> Tensor:
-        self.pow = torch.nn.parameter.Parameter(abs(self.pow), requires_grad=True)
         out_tensor = torch.zeros_like(out)
         for n in range(self.num_rationals):
             rational = self.rational_expert_group[n]
             rational_out = rational(out.clone())
-            out_tensor = out_tensor.clone() + self.alpha[n].clone() * rational_out.clone() ** self.pow.clone()
-        out = out_tensor.clone() ** (1 / self.pow.clone())
+            out_tensor += self.alpha[n] * rational_out ** self.pow
+        out = out_tensor.clone() ** (1 / self.pow)
         return out
 
     def forward(self, out: Tensor):
@@ -257,7 +256,7 @@ class RationalResNet(nn.Module):
         """
         out = self.conv_layer_1(out)
         out = self.batch_norm_1(out)
-        out = self.multi_rational(out)
+        out = self.pow_multi_rational(out)
 
         out = self.layer1(out)
         if len(self.layers) > 1:

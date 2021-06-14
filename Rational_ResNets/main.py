@@ -33,7 +33,7 @@ from Rational_ResNets import utils
 
 time_stamp = datetime.now()
 print_PATH = './Print_Logs/{}.txt'.format(time_stamp)
-sys.stdout = open(print_PATH, 'wt')
+# sys.stdout = open(print_PATH, 'wt')
 
 global classes
 global num_classes

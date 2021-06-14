@@ -87,6 +87,8 @@ def train_val_test_model(model, optimizer, scheduler):
                     # backward + optimize only if in training phase
                     if phase == 'train':
                         loss.backward()
+                        if resnet_args.clip_gradients:
+                            torch.nn.utils.clip_grad_value_(model.parameters(), 5)
                         optimizer.step()
 
                 if phase == 'train':

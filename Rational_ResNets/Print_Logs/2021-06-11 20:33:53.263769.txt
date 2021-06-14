@@ -1,0 +1,1529 @@
+Using downloaded and verified file: ../data/SVHN/train_32x32.mat
+Using downloaded and verified file: ../data/SVHN/test_32x32.mat
+Sequential(
+  (0): BasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu): ReLU(inplace=True)
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+  (1): BasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu): ReLU(inplace=True)
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+  (2): BasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu): ReLU(inplace=True)
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+)
+Sequential(
+  (0): RationalBasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+    cuda:0: 0x7f8f017446e0
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+    cuda:0: 0x7f8f01744d20
+    (shortcut): Sequential()
+  )
+  (1): RationalBasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+    cuda:0: 0x7f8f0168c230
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+    cuda:0: 0x7f8f0168c640
+    (shortcut): Sequential()
+  )
+  (2): RationalBasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+    cuda:0: 0x7f8f0168caa0
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (rational_2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+    cuda:0: 0x7f8f0168cf00
+    (shortcut): Sequential()
+  )
+)
+Sequential(
+  (0): RationalBasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (softmax): Softmax(dim=0)
+    (rational_expert_group_1): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f8f01698a50
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f8f016a45f0
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f8f016a4640
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f8f016a4550
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f8f016a4d20
+    )
+    (rational_expert_group_2): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f8f016a45a0
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f8f016a4500
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f8f016a4460
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f8f0d4c3690
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f8f016a4fa0
+    )
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+  (1): RationalBasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (softmax): Softmax(dim=0)
+    (rational_expert_group_1): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f8f016a4e10
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f8f016b0a00
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f8f016b0e60
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f8f016b0870
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f8f016bd410
+    )
+    (rational_expert_group_2): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f8f016b09b0
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f8f016b0910
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f8f016b0960
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f8f016bd3c0
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f8f016bd2d0
+    )
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+  (2): RationalBasicBlock(
+    (conv_layer_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (softmax): Softmax(dim=0)
+    (rational_expert_group_1): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f8f016bd140
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f8f016bdeb0
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f8f017cf5a0
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f8f017cf4b0
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f8f017cf460
+    )
+    (rational_expert_group_2): Sequential(
+      (0): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f8f016bdf00
+      (1): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f8f016bdfa0
+      (2): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f8f017cf050
+      (3): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f8f017cf6e0
+      (4): Rational Activation Function (PYTORCH version A) of degrees (5, 4) running on cuda
+      cuda:0: 0x7f8f017cf5f0
+    )
+    (conv_layer_2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (batch_norm_2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (shortcut): Sequential()
+  )
+)
+[10, 15, 20]
+Milestone 0: 1
+Epoch 0/24
+**********
+train Loss: 2.0448 Acc: 0.2673
+val Loss: 1.8608 Acc: 0.3353
+test Loss: 1.7484 Acc: 0.3703
+tensor([[ 0,  8,  1,  2,  0,  0,  0,  0,  1,  0],
+        [ 0, 23,  0,  0,  0,  0,  0,  1,  0,  0],
+        [ 0,  3,  9,  5,  0,  0,  0,  0,  0,  0],
+        [ 0,  3,  2,  7,  0,  1,  0,  0,  0,  0],
+        [ 0,  8,  1,  1,  0,  0,  0,  1,  0,  0],
+        [ 0,  1,  6,  6,  0,  0,  0,  0,  0,  0],
+        [ 0,  3,  5,  2,  0,  0,  0,  0,  1,  0],
+        [ 0,  4,  3,  2,  1,  0,  0,  0,  0,  0],
+        [ 0,  1,  1,  3,  0,  1,  0,  0,  0,  0],
+        [ 1,  3,  0,  4,  0,  1,  0,  0,  2,  0]])
+Epoch finished in 0m 6s
+Epoch 1/24
+**********
+Milestone 0: 1
+train Loss: 1.2874 Acc: 0.5548
+val Loss: 1.8461 Acc: 0.4126
+test Loss: 1.7416 Acc: 0.4222
+tensor([[ 4,  0,  0,  0,  0,  0,  8,  0,  0,  0],
+        [ 6,  5,  3,  1,  1,  0,  8,  0,  0,  0],
+        [ 0,  0, 12,  0,  0,  4,  1,  0,  0,  0],
+        [ 0,  0,  0,  5,  0,  3,  3,  0,  2,  0],
+        [ 0,  0,  2,  1,  2,  0,  6,  0,  0,  0],
+        [ 0,  0,  1,  0,  0, 12,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  3,  8,  0,  0,  0],
+        [ 0,  0,  1,  0,  0,  1,  1,  7,  0,  0],
+        [ 0,  0,  0,  0,  0,  2,  4,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  2,  8,  0,  0,  1]])
+Epoch finished in 0m 6s
+Epoch 2/24
+**********
+Milestone 0: 1
+train Loss: 0.9061 Acc: 0.7034
+val Loss: 0.9723 Acc: 0.6912
+test Loss: 1.0161 Acc: 0.6713
+tensor([[ 7,  0,  0,  0,  1,  0,  1,  0,  0,  3],
+        [ 2, 19,  0,  0,  1,  0,  1,  1,  0,  0],
+        [ 0,  0,  9,  1,  1,  5,  0,  0,  0,  1],
+        [ 0,  0,  0,  9,  0,  2,  0,  0,  0,  2],
+        [ 0,  0,  0,  0,  8,  3,  0,  0,  0,  0],
+        [ 0,  0,  0,  2,  0, 10,  0,  0,  0,  1],
+        [ 1,  0,  0,  0,  0,  3,  6,  0,  0,  1],
+        [ 0,  1,  0,  0,  0,  0,  0,  9,  0,  0],
+        [ 0,  0,  0,  0,  0,  2,  1,  0,  1,  2],
+        [ 0,  0,  0,  0,  0,  1,  0,  1,  0,  9]])
+Epoch finished in 0m 6s
+Epoch 3/24
+**********
+Milestone 0: 1
+train Loss: 0.7408 Acc: 0.7652
+val Loss: 1.3389 Acc: 0.5885
+test Loss: 1.4557 Acc: 0.5446
+tensor([[ 4,  0,  0,  0,  0,  0,  1,  3,  0,  4],
+        [ 0,  9,  1,  0,  1,  0,  0, 13,  0,  0],
+        [ 0,  0, 10,  0,  0,  1,  0,  6,  0,  0],
+        [ 0,  0,  2,  7,  0,  0,  0,  4,  0,  0],
+        [ 0,  0,  1,  0,  7,  0,  0,  3,  0,  0],
+        [ 0,  0,  0,  0,  1,  7,  0,  5,  0,  0],
+        [ 0,  0,  0,  0,  1,  0,  6,  1,  0,  3],
+        [ 0,  0,  0,  0,  0,  0,  0, 10,  0,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  2,  1,  3],
+        [ 0,  0,  0,  0,  0,  1,  0,  3,  0,  7]])
+Epoch finished in 0m 6s
+Epoch 4/24
+**********
+Milestone 0: 1
+train Loss: 0.6384 Acc: 0.7981
+val Loss: 0.7530 Acc: 0.7572
+test Loss: 0.6992 Acc: 0.7693
+tensor([[ 5,  1,  2,  0,  0,  0,  3,  0,  0,  1],
+        [ 0, 19,  3,  1,  0,  0,  1,  0,  0,  0],
+        [ 0,  0, 15,  1,  0,  0,  1,  0,  0,  0],
+        [ 0,  0,  2,  9,  0,  0,  0,  0,  2,  0],
+        [ 0,  2,  3,  0,  6,  0,  0,  0,  0,  0],
+        [ 0,  0,  1,  1,  0, 10,  1,  0,  0,  0],
+        [ 0,  1,  0,  0,  0,  0,  9,  0,  1,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  9,  0,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  0,  5,  1],
+        [ 0,  0,  1,  1,  0,  2,  0,  1,  1,  5]])
+Epoch finished in 0m 6s
+Epoch 5/24
+**********
+Milestone 0: 1
+train Loss: 0.5837 Acc: 0.8161
+val Loss: 0.6767 Acc: 0.7854
+test Loss: 0.6142 Acc: 0.8006
+tensor([[ 5,  0,  0,  0,  0,  1,  4,  0,  1,  1],
+        [ 0, 23,  0,  0,  0,  0,  0,  1,  0,  0],
+        [ 0,  0, 14,  1,  0,  2,  0,  0,  0,  0],
+        [ 0,  1,  1, 10,  0,  1,  0,  0,  0,  0],
+        [ 0,  1,  1,  1,  6,  1,  0,  1,  0,  0],
+        [ 0,  0,  0,  0,  1, 11,  1,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  2,  9,  0,  0,  0],
+        [ 0,  1,  1,  0,  0,  0,  0,  8,  0,  0],
+        [ 0,  0,  0,  0,  0,  2,  0,  0,  3,  1],
+        [ 0,  0,  0,  1,  0,  1,  0,  1,  0,  8]])
+Epoch finished in 0m 6s
+Epoch 6/24
+**********
+Milestone 0: 1
+train Loss: 0.5343 Acc: 0.8328
+val Loss: 0.8631 Acc: 0.7282
+test Loss: 0.7861 Acc: 0.7440
+tensor([[ 8,  1,  0,  0,  0,  0,  0,  1,  1,  1],
+        [ 0, 22,  1,  0,  0,  0,  0,  1,  0,  0],
+        [ 1,  0, 16,  0,  0,  0,  0,  0,  0,  0],
+        [ 0,  2,  3,  6,  0,  0,  0,  0,  2,  0],
+        [ 0,  3,  3,  0,  5,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  1,  0,  9,  1,  0,  2,  0],
+        [ 0,  1,  0,  0,  0,  0,  8,  0,  1,  1],
+        [ 0,  0,  1,  0,  0,  0,  0,  9,  0,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  0,  5,  0],
+        [ 0,  1,  0,  0,  0,  0,  0,  0,  1,  9]])
+Epoch finished in 0m 6s
+Epoch 7/24
+**********
+Milestone 0: 1
+train Loss: 0.5129 Acc: 0.8387
+val Loss: 0.7805 Acc: 0.7569
+test Loss: 0.7810 Acc: 0.7518
+tensor([[ 6,  2,  0,  0,  0,  0,  2,  1,  0,  1],
+        [ 0, 23,  0,  0,  0,  0,  1,  0,  0,  0],
+        [ 0,  0,  9,  7,  0,  0,  1,  0,  0,  0],
+        [ 0,  2,  0, 11,  0,  0,  0,  0,  0,  0],
+        [ 0,  1,  0,  1,  9,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  3,  0, 10,  0,  0,  0,  0],
+        [ 0,  1,  0,  1,  0,  0,  9,  0,  0,  0],
+        [ 0,  0,  0,  0,  1,  0,  0,  9,  0,  0],
+        [ 0,  0,  0,  3,  0,  0,  1,  0,  2,  0],
+        [ 0,  1,  0,  2,  0,  1,  0,  0,  0,  7]])
+Epoch finished in 0m 6s
+Epoch 8/24
+**********
+Milestone 0: 1
+train Loss: 0.4854 Acc: 0.8488
+val Loss: 0.6978 Acc: 0.7820
+test Loss: 0.6198 Acc: 0.8032
+tensor([[ 8,  0,  0,  0,  1,  0,  2,  0,  0,  1],
+        [ 0, 23,  0,  0,  0,  0,  0,  1,  0,  0],
+        [ 0,  1, 10,  1,  0,  0,  0,  3,  2,  0],
+        [ 1,  1,  0, 10,  0,  0,  0,  0,  0,  1],
+        [ 0,  1,  0,  0,  9,  0,  0,  1,  0,  0],
+        [ 0,  0,  0,  1,  0, 11,  1,  0,  0,  0],
+        [ 0,  1,  0,  0,  0,  0,  9,  0,  1,  0],
+        [ 0,  0,  0,  0,  0,  0,  0, 10,  0,  0],
+        [ 0,  0,  0,  0,  0,  0,  1,  0,  4,  1],
+        [ 0,  1,  0,  0,  0,  2,  0,  0,  0,  8]])
+Epoch finished in 0m 6s
+Epoch 9/24
+**********
+Milestone 0: 1
+train Loss: 0.4762 Acc: 0.8515
+val Loss: 0.6126 Acc: 0.8119
+test Loss: 0.5490 Acc: 0.8309
+tensor([[10,  0,  0,  0,  0,  0,  0,  2,  0,  0],
+        [ 1, 18,  0,  0,  1,  0,  1,  3,  0,  0],
+        [ 1,  0, 15,  1,  0,  0,  0,  0,  0,  0],
+        [ 1,  0,  0, 12,  0,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0, 11,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  3,  0,  9,  0,  0,  0,  1],
+        [ 0,  0,  0,  1,  1,  0,  9,  0,  0,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  9,  0,  0],
+        [ 0,  0,  1,  0,  0,  0,  1,  0,  4,  0],
+        [ 0,  0,  0,  1,  0,  0,  0,  1,  0,  9]])
+Epoch finished in 0m 6s
+Epoch 10/24
+**********
+Milestone 1: 0.1
+train Loss: 0.3868 Acc: 0.8820
+val Loss: 0.3980 Acc: 0.8777
+test Loss: 0.3470 Acc: 0.8980
+tensor([[11,  0,  0,  0,  0,  0,  1,  0,  0,  0],
+        [ 1, 22,  0,  0,  0,  0,  0,  1,  0,  0],
+        [ 1,  0, 15,  1,  0,  0,  0,  0,  0,  0],
+        [ 1,  1,  0,  9,  0,  0,  0,  0,  2,  0],
+        [ 0,  1,  0,  0, 10,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  1,  0, 12,  0,  0,  0,  0],
+        [ 1,  1,  0,  0,  0,  0,  9,  0,  0,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  9,  0,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  0,  6,  0],
+        [ 0,  0,  0,  1,  1,  0,  0,  0,  0,  9]])
+Epoch finished in 0m 6s
+Epoch 11/24
+**********
+Milestone 1: 0.1
+train Loss: 0.3682 Acc: 0.8887
+val Loss: 0.3960 Acc: 0.8793
+test Loss: 0.3436 Acc: 0.8973
+tensor([[10,  0,  0,  0,  0,  0,  1,  0,  0,  1],
+        [ 1, 21,  0,  0,  0,  0,  1,  1,  0,  0],
+        [ 0,  0, 15,  1,  0,  1,  0,  0,  0,  0],
+        [ 1,  0,  0, 10,  0,  0,  0,  0,  2,  0],
+        [ 0,  1,  0,  0, 10,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  1,  0, 11,  0,  0,  0,  1],
+        [ 0,  1,  0,  0,  0,  0,  9,  0,  0,  1],
+        [ 0,  0,  1,  0,  0,  0,  0,  9,  0,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  0,  6,  0],
+        [ 0,  0,  0,  0,  1,  0,  0,  0,  0, 10]])
+Epoch finished in 0m 6s
+Epoch 12/24
+**********
+Milestone 1: 0.1
+train Loss: 0.3622 Acc: 0.8910
+val Loss: 0.3915 Acc: 0.8805
+test Loss: 0.3410 Acc: 0.8987
+tensor([[10,  0,  0,  0,  0,  0,  1,  0,  0,  1],
+        [ 1, 22,  0,  0,  0,  0,  0,  1,  0,  0],
+        [ 0,  0, 16,  0,  0,  1,  0,  0,  0,  0],
+        [ 1,  1,  1,  9,  0,  0,  0,  0,  1,  0],
+        [ 0,  1,  0,  0, 10,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 13,  0,  0,  0,  0],
+        [ 0,  1,  0,  0,  0,  0,  9,  0,  1,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  9,  0,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  0,  6,  0],
+        [ 0,  0,  0,  0,  1,  0,  0,  0,  0, 10]])
+Epoch finished in 0m 6s
+Epoch 13/24
+**********
+Milestone 1: 0.1
+train Loss: 0.3585 Acc: 0.8918
+val Loss: 0.3945 Acc: 0.8792
+test Loss: 0.3395 Acc: 0.8980
+tensor([[11,  0,  0,  0,  0,  0,  1,  0,  0,  0],
+        [ 1, 22,  0,  0,  0,  0,  0,  1,  0,  0],
+        [ 0,  0, 15,  1,  0,  1,  0,  0,  0,  0],
+        [ 1,  1,  0,  9,  0,  0,  0,  0,  2,  0],
+        [ 0,  1,  0,  0, 10,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 13,  0,  0,  0,  0],
+        [ 1,  1,  0,  0,  0,  0,  9,  0,  0,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  9,  0,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  0,  6,  0],
+        [ 0,  0,  0,  0,  1,  1,  0,  0,  0,  9]])
+Epoch finished in 0m 6s
+Epoch 14/24
+**********
+Milestone 1: 0.1
+train Loss: 0.3559 Acc: 0.8923
+val Loss: 0.3915 Acc: 0.8816
+test Loss: 0.3370 Acc: 0.8983
+tensor([[10,  0,  0,  0,  0,  0,  1,  0,  0,  1],
+        [ 0, 22,  0,  0,  0,  0,  1,  1,  0,  0],
+        [ 1,  0, 15,  1,  0,  0,  0,  0,  0,  0],
+        [ 1,  1,  0,  9,  0,  0,  0,  0,  2,  0],
+        [ 0,  1,  0,  0, 10,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  1,  0, 11,  0,  0,  0,  1],
+        [ 0,  1,  0,  1,  0,  0,  9,  0,  0,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  9,  0,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  0,  6,  0],
+        [ 0,  0,  0,  0,  1,  0,  0,  0,  0, 10]])
+Epoch finished in 0m 6s
+Epoch 15/24
+**********
+Milestone 2: 0.01
+train Loss: 0.3454 Acc: 0.8960
+val Loss: 0.3833 Acc: 0.8830
+test Loss: 0.3334 Acc: 0.9013
+tensor([[10,  0,  0,  0,  0,  0,  1,  0,  0,  1],
+        [ 1, 21,  0,  0,  0,  0,  1,  1,  0,  0],
+        [ 0,  0, 16,  0,  0,  1,  0,  0,  0,  0],
+        [ 1,  1,  0,  9,  0,  0,  0,  0,  2,  0],
+        [ 0,  1,  0,  0, 10,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 13,  0,  0,  0,  0],
+        [ 1,  1,  0,  0,  0,  0,  9,  0,  0,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  9,  0,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  0,  6,  0],
+        [ 0,  0,  0,  0,  1,  0,  0,  0,  0, 10]])
+Epoch finished in 0m 6s
+Epoch 16/24
+**********
+Milestone 2: 0.01
+train Loss: 0.3431 Acc: 0.8970
+val Loss: 0.3829 Acc: 0.8833
+test Loss: 0.3322 Acc: 0.9010
+tensor([[10,  0,  0,  0,  0,  0,  1,  0,  0,  1],
+        [ 1, 22,  0,  0,  0,  0,  0,  1,  0,  0],
+        [ 0,  0, 16,  0,  0,  1,  0,  0,  0,  0],
+        [ 1,  1,  0,  9,  0,  0,  0,  0,  2,  0],
+        [ 0,  1,  0,  0, 10,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 13,  0,  0,  0,  0],
+        [ 1,  1,  0,  0,  0,  0,  9,  0,  0,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  9,  0,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  0,  6,  0],
+        [ 0,  0,  0,  0,  1,  0,  0,  0,  0, 10]])
+Epoch finished in 0m 6s
+Epoch 17/24
+**********
+Milestone 2: 0.01
+train Loss: 0.3420 Acc: 0.8973
+val Loss: 0.3824 Acc: 0.8838
+test Loss: 0.3316 Acc: 0.9008
+tensor([[10,  0,  0,  0,  0,  0,  1,  0,  0,  1],
+        [ 1, 22,  0,  0,  0,  0,  0,  1,  0,  0],
+        [ 0,  0, 16,  0,  0,  1,  0,  0,  0,  0],
+        [ 1,  1,  0,  9,  0,  0,  0,  0,  2,  0],
+        [ 0,  1,  0,  0, 10,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  1,  0, 11,  0,  0,  0,  1],
+        [ 1,  1,  0,  0,  0,  0,  9,  0,  0,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  9,  0,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  0,  6,  0],
+        [ 0,  0,  0,  0,  1,  0,  0,  0,  0, 10]])
+Epoch finished in 0m 6s
+Epoch 18/24
+**********
+Milestone 2: 0.01
+train Loss: 0.3412 Acc: 0.8974
+val Loss: 0.3820 Acc: 0.8851
+test Loss: 0.3294 Acc: 0.9021
+tensor([[10,  0,  0,  0,  0,  0,  1,  0,  0,  1],
+        [ 1, 22,  0,  0,  0,  0,  0,  1,  0,  0],
+        [ 0,  0, 16,  0,  0,  1,  0,  0,  0,  0],
+        [ 1,  1,  0,  9,  0,  0,  0,  0,  2,  0],
+        [ 0,  1,  0,  0, 10,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 13,  0,  0,  0,  0],
+        [ 1,  1,  0,  0,  0,  0,  9,  0,  0,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  9,  0,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  0,  6,  0],
+        [ 0,  0,  0,  0,  1,  0,  0,  0,  0, 10]])
+Epoch finished in 0m 6s
+Epoch 19/24
+**********
+Milestone 2: 0.01
+train Loss: 0.3413 Acc: 0.8971
+val Loss: 0.3815 Acc: 0.8844
+test Loss: 0.3308 Acc: 0.9018
+tensor([[10,  0,  0,  0,  0,  0,  1,  0,  0,  1],
+        [ 1, 21,  0,  0,  0,  0,  1,  1,  0,  0],
+        [ 0,  0, 16,  0,  0,  1,  0,  0,  0,  0],
+        [ 1,  1,  0,  9,  0,  0,  0,  0,  2,  0],
+        [ 0,  1,  0,  0, 10,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 13,  0,  0,  0,  0],
+        [ 1,  1,  0,  0,  0,  0,  9,  0,  0,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  9,  0,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  0,  6,  0],
+        [ 0,  0,  0,  0,  1,  0,  0,  0,  0, 10]])
+Epoch finished in 0m 6s
+Epoch 20/24
+**********
+Milestone 3: 0.001
+train Loss: 0.3398 Acc: 0.8981
+val Loss: 0.3815 Acc: 0.8842
+test Loss: 0.3312 Acc: 0.9013
+tensor([[10,  0,  0,  0,  0,  0,  1,  0,  0,  1],
+        [ 1, 21,  0,  0,  0,  0,  1,  1,  0,  0],
+        [ 0,  0, 16,  0,  0,  1,  0,  0,  0,  0],
+        [ 1,  1,  0,  9,  0,  0,  0,  0,  2,  0],
+        [ 0,  1,  0,  0, 10,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 13,  0,  0,  0,  0],
+        [ 1,  1,  0,  0,  0,  0,  9,  0,  0,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  9,  0,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  0,  6,  0],
+        [ 0,  0,  0,  0,  1,  0,  0,  0,  0, 10]])
+Epoch finished in 0m 6s
+Epoch 21/24
+**********
+Milestone 3: 0.001
+train Loss: 0.3392 Acc: 0.8981
+val Loss: 0.3816 Acc: 0.8846
+test Loss: 0.3310 Acc: 0.9022
+tensor([[10,  0,  0,  0,  0,  0,  1,  0,  0,  1],
+        [ 1, 21,  0,  0,  0,  0,  1,  1,  0,  0],
+        [ 0,  0, 16,  0,  0,  1,  0,  0,  0,  0],
+        [ 1,  1,  0,  9,  0,  0,  0,  0,  2,  0],
+        [ 0,  1,  0,  0, 10,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 13,  0,  0,  0,  0],
+        [ 1,  1,  0,  0,  0,  0,  9,  0,  0,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  9,  0,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  0,  6,  0],
+        [ 0,  0,  0,  0,  1,  0,  0,  0,  0, 10]])
+Epoch finished in 0m 6s
+Epoch 22/24
+**********
+Milestone 3: 0.001
+train Loss: 0.3388 Acc: 0.8985
+val Loss: 0.3813 Acc: 0.8847
+test Loss: 0.3305 Acc: 0.9022
+tensor([[10,  0,  0,  0,  0,  0,  1,  0,  0,  1],
+        [ 1, 21,  0,  0,  0,  0,  1,  1,  0,  0],
+        [ 0,  0, 16,  0,  0,  1,  0,  0,  0,  0],
+        [ 1,  1,  0,  9,  0,  0,  0,  0,  2,  0],
+        [ 0,  1,  0,  0, 10,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 13,  0,  0,  0,  0],
+        [ 1,  1,  0,  0,  0,  0,  9,  0,  0,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  9,  0,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  0,  6,  0],
+        [ 0,  0,  0,  0,  1,  0,  0,  0,  0, 10]])
+Epoch finished in 0m 6s
+Epoch 23/24
+**********
+Milestone 3: 0.001
+train Loss: 0.3394 Acc: 0.8976
+val Loss: 0.3818 Acc: 0.8844
+test Loss: 0.3298 Acc: 0.9017
+tensor([[10,  0,  0,  0,  0,  0,  1,  0,  0,  1],
+        [ 1, 22,  0,  0,  0,  0,  0,  1,  0,  0],
+        [ 0,  0, 16,  0,  0,  1,  0,  0,  0,  0],
+        [ 1,  1,  0,  9,  0,  0,  0,  0,  2,  0],
+        [ 0,  1,  0,  0, 10,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 13,  0,  0,  0,  0],
+        [ 1,  1,  0,  0,  0,  0,  9,  0,  0,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  9,  0,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  0,  6,  0],
+        [ 0,  0,  0,  0,  1,  0,  0,  0,  0, 10]])
+Epoch finished in 0m 6s
+Epoch 24/24
+**********
+Milestone 3: 0.001
+train Loss: 0.3391 Acc: 0.8979
+val Loss: 0.3811 Acc: 0.8852
+test Loss: 0.3303 Acc: 0.9020
+tensor([[10,  0,  0,  0,  0,  0,  1,  0,  0,  1],
+        [ 1, 22,  0,  0,  0,  0,  0,  1,  0,  0],
+        [ 0,  0, 16,  0,  0,  1,  0,  0,  0,  0],
+        [ 1,  1,  0,  9,  0,  0,  0,  0,  2,  0],
+        [ 0,  1,  0,  0, 10,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 13,  0,  0,  0,  0],
+        [ 1,  1,  0,  0,  0,  0,  9,  0,  0,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  9,  0,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  0,  6,  0],
+        [ 0,  0,  0,  0,  1,  0,  0,  0,  0, 10]])
+Epoch finished in 0m 6s
+Training complete in 2m 24s
+Best test Acc: 0.902236
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+[10, 15, 20]
+Milestone 0: 1
+Epoch 0/24
+**********
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+train Loss: 2.1267 Acc: 0.2402
+val Loss: 2.0683 Acc: 0.2779
+test Loss: 2.0811 Acc: 0.2677
+tensor([[ 1,  0,  2,  1,  0,  3,  0,  0,  2,  3],
+        [ 0, 14,  2,  0,  0,  5,  0,  0,  0,  3],
+        [ 0,  0,  6,  0,  0, 11,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 13,  0,  0,  0,  0],
+        [ 0,  1,  7,  0,  0,  2,  0,  0,  0,  1],
+        [ 0,  0,  1,  0,  0, 12,  0,  0,  0,  0],
+        [ 1,  0,  2,  0,  0,  8,  0,  0,  0,  0],
+        [ 0,  1,  3,  0,  0,  5,  0,  1,  0,  0],
+        [ 0,  0,  0,  0,  0,  6,  0,  0,  0,  0],
+        [ 0,  0,  2,  0,  0,  8,  0,  0,  1,  0]])
+Epoch finished in 0m 7s
+Epoch 1/24
+**********
+Milestone 0: 1
+train Loss: 1.4247 Acc: 0.5140
+val Loss: 1.3380 Acc: 0.5661
+test Loss: 1.3122 Acc: 0.5666
+tensor([[ 3,  0,  0,  0,  0,  0,  8,  0,  0,  1],
+        [ 0, 11,  1,  3,  2,  2,  1,  1,  0,  3],
+        [ 0,  0, 13,  1,  0,  1,  2,  0,  0,  0],
+        [ 0,  0,  2,  7,  0,  3,  0,  0,  1,  0],
+        [ 0,  0,  2,  0,  5,  1,  3,  0,  0,  0],
+        [ 0,  0,  1,  1,  0,  9,  2,  0,  0,  0],
+        [ 0,  0,  0,  0,  1,  0,  9,  0,  0,  1],
+        [ 0,  0,  1,  0,  0,  1,  1,  7,  0,  0],
+        [ 0,  0,  0,  1,  0,  1,  1,  0,  0,  3],
+        [ 0,  0,  0,  1,  0,  1,  3,  0,  0,  6]])
+Epoch finished in 0m 7s
+Epoch 2/24
+**********
+Milestone 0: 1
+train Loss: 0.9137 Acc: 0.7091
+val Loss: 1.0156 Acc: 0.6933
+test Loss: 0.9159 Acc: 0.7114
+tensor([[ 6,  0,  0,  0,  0,  0,  3,  2,  1,  0],
+        [ 0, 21,  0,  0,  0,  0,  1,  2,  0,  0],
+        [ 0,  0, 10,  5,  0,  0,  0,  2,  0,  0],
+        [ 0,  1,  0, 12,  0,  0,  0,  0,  0,  0],
+        [ 0,  1,  0,  0,  9,  0,  1,  0,  0,  0],
+        [ 0,  0,  0,  5,  0,  7,  0,  1,  0,  0],
+        [ 1,  0,  0,  1,  0,  0,  9,  0,  0,  0],
+        [ 0,  1,  0,  0,  0,  0,  0,  9,  0,  0],
+        [ 0,  0,  0,  2,  0,  0,  1,  1,  2,  0],
+        [ 0,  0,  0,  1,  0,  0,  0,  1,  0,  9]])
+Epoch finished in 0m 7s
+Epoch 3/24
+**********
+Milestone 0: 1
+train Loss: 0.6547 Acc: 0.7953
+val Loss: 1.1732 Acc: 0.6799
+test Loss: 1.1389 Acc: 0.6801
+tensor([[ 4,  0,  0,  0,  0,  0,  0,  1,  1,  6],
+        [ 0, 22,  0,  0,  0,  0,  1,  1,  0,  0],
+        [ 0,  0, 13,  1,  0,  0,  1,  0,  2,  0],
+        [ 0,  0,  0,  5,  0,  1,  0,  0,  6,  1],
+        [ 0,  0,  1,  0,  8,  0,  0,  0,  1,  1],
+        [ 0,  0,  0,  0,  0, 11,  0,  0,  2,  0],
+        [ 0,  0,  0,  0,  0,  0,  4,  0,  6,  1],
+        [ 0,  0,  0,  1,  0,  1,  0,  6,  0,  2],
+        [ 0,  0,  0,  0,  0,  1,  0,  0,  5,  0],
+        [ 0,  0,  0,  0,  0,  2,  0,  0,  1,  8]])
+Epoch finished in 0m 7s
+Epoch 4/24
+**********
+Milestone 0: 1
+train Loss: 0.5628 Acc: 0.8251
+val Loss: 0.7159 Acc: 0.7811
+test Loss: 0.6062 Acc: 0.8062
+tensor([[ 7,  1,  0,  0,  1,  0,  1,  0,  0,  2],
+        [ 0, 21,  0,  0,  3,  0,  0,  0,  0,  0],
+        [ 0,  0, 16,  0,  0,  0,  0,  0,  0,  1],
+        [ 0,  2,  2,  7,  2,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0, 11,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 12,  0,  0,  0,  1],
+        [ 0,  0,  0,  0,  0,  1,  9,  0,  0,  1],
+        [ 0,  1,  1,  0,  0,  1,  0,  6,  0,  1],
+        [ 0,  0,  0,  2,  0,  1,  0,  0,  3,  0],
+        [ 0,  0,  0,  0,  1,  2,  0,  0,  0,  8]])
+Epoch finished in 0m 7s
+Epoch 5/24
+**********
+Milestone 0: 1
+train Loss: 0.5144 Acc: 0.8396
+val Loss: 0.5634 Acc: 0.8230
+test Loss: 0.5125 Acc: 0.8376
+tensor([[10,  0,  0,  0,  0,  0,  0,  0,  0,  2],
+        [ 0, 21,  0,  0,  1,  0,  0,  1,  0,  1],
+        [ 0,  0, 14,  2,  0,  1,  0,  0,  0,  0],
+        [ 0,  1,  3,  7,  0,  2,  0,  0,  0,  0],
+        [ 0,  0,  1,  0, 10,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 12,  0,  0,  0,  1],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  0,  1],
+        [ 0,  0,  1,  0,  0,  0,  0,  9,  0,  0],
+        [ 0,  0,  0,  2,  0,  0,  0,  0,  3,  1],
+        [ 0,  0,  1,  0,  0,  1,  0,  1,  0,  8]])
+Epoch finished in 0m 7s
+Epoch 6/24
+**********
+Milestone 0: 1
+train Loss: 0.4823 Acc: 0.8515
+val Loss: 0.6194 Acc: 0.8112
+test Loss: 0.5034 Acc: 0.8391
+tensor([[ 9,  0,  1,  0,  1,  0,  1,  0,  0,  0],
+        [ 0, 22,  0,  0,  2,  0,  0,  0,  0,  0],
+        [ 0,  0, 15,  1,  0,  0,  1,  0,  0,  0],
+        [ 0,  0,  2,  8,  2,  1,  0,  0,  0,  0],
+        [ 0,  0,  0,  0, 11,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 13,  0,  0,  0,  0],
+        [ 1,  0,  0,  0,  0,  0, 10,  0,  0,  0],
+        [ 0,  0,  5,  0,  0,  0,  0,  5,  0,  0],
+        [ 0,  0,  0,  0,  0,  1,  1,  0,  4,  0],
+        [ 0,  0,  0,  1,  0,  2,  0,  0,  0,  8]])
+Epoch finished in 0m 7s
+Epoch 7/24
+**********
+Milestone 0: 1
+train Loss: 0.4572 Acc: 0.8591
+val Loss: 0.5580 Acc: 0.8327
+test Loss: 0.4698 Acc: 0.8546
+tensor([[ 6,  0,  0,  0,  0,  0,  1,  2,  2,  1],
+        [ 0, 22,  0,  0,  0,  0,  0,  2,  0,  0],
+        [ 0,  0, 15,  1,  0,  0,  0,  0,  1,  0],
+        [ 0,  1,  1, 11,  0,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0, 11,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 13,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  0,  0,  0,  0,  0,  0, 10,  0,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  0,  6,  0],
+        [ 0,  0,  0,  0,  0,  2,  0,  1,  0,  8]])
+Epoch finished in 0m 7s
+Epoch 8/24
+**********
+Milestone 0: 1
+train Loss: 0.4398 Acc: 0.8645
+val Loss: 0.4486 Acc: 0.8631
+test Loss: 0.3865 Acc: 0.8851
+tensor([[11,  0,  0,  0,  0,  0,  0,  1,  0,  0],
+        [ 1, 22,  0,  0,  0,  0,  0,  1,  0,  0],
+        [ 0,  0, 16,  0,  0,  0,  0,  0,  1,  0],
+        [ 0,  1,  3,  7,  0,  0,  0,  0,  1,  1],
+        [ 0,  1,  0,  0, 10,  0,  0,  0,  0,  0],
+        [ 1,  0,  0,  0,  0, 12,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  1,  0,  0,  0,  0,  0,  9,  0,  0],
+        [ 0,  0,  0,  0,  0,  0,  1,  0,  5,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  1,  0, 10]])
+Epoch finished in 0m 7s
+Epoch 9/24
+**********
+Milestone 0: 1
+train Loss: 0.4252 Acc: 0.8701
+val Loss: 0.5724 Acc: 0.8320
+test Loss: 0.4699 Acc: 0.8665
+tensor([[10,  0,  0,  0,  0,  0,  0,  1,  0,  1],
+        [ 0, 23,  0,  0,  0,  0,  0,  0,  1,  0],
+        [ 0,  0, 17,  0,  0,  0,  0,  0,  0,  0],
+        [ 0,  0,  3,  9,  0,  0,  0,  0,  1,  0],
+        [ 0,  0,  0,  1,  7,  0,  3,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 12,  1,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  0,  0,  1,  0,  0,  0,  9,  0,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  0,  4,  1],
+        [ 0,  0,  1,  0,  0,  0,  0,  0,  0, 10]])
+Epoch finished in 0m 7s
+Epoch 10/24
+**********
+Milestone 1: 0.1
+train Loss: 0.3322 Acc: 0.8984
+val Loss: 0.3548 Acc: 0.8918
+test Loss: 0.2876 Acc: 0.9129
+tensor([[11,  0,  0,  0,  0,  0,  1,  0,  0,  0],
+        [ 0, 23,  0,  0,  0,  0,  0,  1,  0,  0],
+        [ 0,  0, 16,  0,  0,  0,  0,  0,  1,  0],
+        [ 0,  2,  2,  9,  0,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0, 11,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 12,  1,  0,  0,  0],
+        [ 1,  0,  0,  0,  0,  0, 10,  0,  0,  0],
+        [ 0,  1,  0,  0,  0,  0,  0,  9,  0,  0],
+        [ 0,  0,  0,  1,  0,  0,  0,  0,  5,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  1,  0, 10]])
+Epoch finished in 0m 7s
+Epoch 11/24
+**********
+Milestone 1: 0.1
+train Loss: 0.3128 Acc: 0.9044
+val Loss: 0.3550 Acc: 0.8919
+test Loss: 0.3018 Acc: 0.9102
+tensor([[11,  0,  0,  0,  0,  0,  1,  0,  0,  0],
+        [ 0, 23,  0,  0,  0,  0,  0,  1,  0,  0],
+        [ 0,  0, 16,  0,  0,  0,  1,  0,  0,  0],
+        [ 0,  1,  1,  9,  1,  0,  0,  0,  1,  0],
+        [ 0,  0,  0,  0, 11,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 12,  1,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  1,  0,  0,  0,  0,  0,  9,  0,  0],
+        [ 0,  0,  0,  1,  0,  0,  0,  0,  5,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  1,  0, 10]])
+Epoch finished in 0m 7s
+Epoch 12/24
+**********
+Milestone 1: 0.1
+train Loss: 0.3059 Acc: 0.9072
+val Loss: 0.3521 Acc: 0.8932
+test Loss: 0.2908 Acc: 0.9116
+tensor([[10,  0,  0,  0,  0,  0,  1,  1,  0,  0],
+        [ 0, 22,  0,  0,  0,  0,  1,  1,  0,  0],
+        [ 0,  0, 16,  0,  0,  0,  0,  0,  1,  0],
+        [ 0,  1,  3,  9,  0,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0, 11,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 12,  0,  0,  0,  1],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  0,  0,  0,  0,  0,  0, 10,  0,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  0,  5,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  1,  0, 10]])
+Epoch finished in 0m 7s
+Epoch 13/24
+**********
+Milestone 1: 0.1
+train Loss: 0.3016 Acc: 0.9085
+val Loss: 0.3508 Acc: 0.8955
+test Loss: 0.2869 Acc: 0.9145
+tensor([[10,  0,  1,  0,  0,  0,  1,  0,  0,  0],
+        [ 0, 22,  0,  0,  1,  0,  0,  1,  0,  0],
+        [ 0,  0, 16,  0,  0,  0,  0,  0,  1,  0],
+        [ 0,  2,  1,  9,  0,  0,  0,  0,  1,  0],
+        [ 0,  0,  0,  0, 11,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 13,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  1,  0,  0,  0,  0,  0,  9,  0,  0],
+        [ 0,  0,  0,  1,  0,  0,  0,  0,  5,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  1,  0, 10]])
+Epoch finished in 0m 7s
+Epoch 14/24
+**********
+Milestone 1: 0.1
+train Loss: 0.2989 Acc: 0.9091
+val Loss: 0.3488 Acc: 0.8938
+test Loss: 0.2916 Acc: 0.9118
+tensor([[10,  0,  0,  0,  0,  0,  0,  2,  0,  0],
+        [ 0, 22,  0,  0,  0,  0,  0,  2,  0,  0],
+        [ 0,  0, 16,  0,  0,  0,  0,  0,  1,  0],
+        [ 0,  1,  3,  8,  0,  0,  0,  0,  1,  0],
+        [ 0,  0,  0,  0, 11,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 13,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  0,  0,  0,  0,  0,  0, 10,  0,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  0,  5,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  1,  0, 10]])
+Epoch finished in 0m 7s
+Epoch 15/24
+**********
+Milestone 2: 0.01
+train Loss: 0.2851 Acc: 0.9144
+val Loss: 0.3408 Acc: 0.8969
+test Loss: 0.2827 Acc: 0.9155
+tensor([[11,  0,  0,  0,  0,  0,  0,  1,  0,  0],
+        [ 1, 21,  0,  0,  1,  0,  0,  1,  0,  0],
+        [ 0,  0, 16,  0,  0,  0,  0,  0,  1,  0],
+        [ 0,  1,  1,  8,  1,  0,  0,  0,  2,  0],
+        [ 0,  0,  0,  0, 11,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 13,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  0,  0,  0,  0,  0,  0, 10,  0,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  0,  5,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  1,  0, 10]])
+Epoch finished in 0m 7s
+Epoch 16/24
+**********
+Milestone 2: 0.01
+train Loss: 0.2828 Acc: 0.9150
+val Loss: 0.3397 Acc: 0.8970
+test Loss: 0.2809 Acc: 0.9158
+tensor([[10,  0,  0,  0,  0,  0,  0,  2,  0,  0],
+        [ 1, 22,  0,  0,  0,  0,  0,  1,  0,  0],
+        [ 0,  0, 16,  0,  0,  0,  0,  0,  1,  0],
+        [ 0,  2,  1,  8,  0,  0,  0,  0,  2,  0],
+        [ 0,  0,  0,  0, 11,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 13,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  1,  0,  0,  0,  0,  0,  9,  0,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  0,  5,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  1,  0, 10]])
+Epoch finished in 0m 7s
+Epoch 17/24
+**********
+Milestone 2: 0.01
+train Loss: 0.2818 Acc: 0.9155
+val Loss: 0.3403 Acc: 0.8976
+test Loss: 0.2802 Acc: 0.9156
+tensor([[11,  0,  0,  0,  0,  0,  0,  1,  0,  0],
+        [ 1, 22,  0,  0,  0,  0,  0,  1,  0,  0],
+        [ 0,  0, 16,  0,  0,  0,  0,  0,  1,  0],
+        [ 0,  1,  1,  9,  1,  0,  0,  0,  1,  0],
+        [ 0,  0,  0,  0, 11,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 13,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  1,  0,  0,  0,  0,  0,  9,  0,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  0,  5,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  1,  0, 10]])
+Epoch finished in 0m 7s
+Epoch 18/24
+**********
+Milestone 2: 0.01
+train Loss: 0.2810 Acc: 0.9152
+val Loss: 0.3413 Acc: 0.8967
+test Loss: 0.2801 Acc: 0.9154
+tensor([[10,  0,  0,  0,  0,  0,  0,  2,  0,  0],
+        [ 1, 21,  0,  0,  1,  0,  0,  1,  0,  0],
+        [ 0,  0, 16,  0,  0,  0,  0,  0,  1,  0],
+        [ 0,  2,  1,  9,  0,  0,  0,  0,  1,  0],
+        [ 0,  0,  0,  0, 11,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 13,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  0,  0,  0,  0,  0,  0, 10,  0,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  0,  5,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  1,  0, 10]])
+Epoch finished in 0m 7s
+Epoch 19/24
+**********
+Milestone 2: 0.01
+train Loss: 0.2809 Acc: 0.9154
+val Loss: 0.3407 Acc: 0.8969
+test Loss: 0.2813 Acc: 0.9154
+tensor([[10,  0,  0,  0,  0,  0,  0,  2,  0,  0],
+        [ 1, 21,  0,  0,  1,  0,  0,  1,  0,  0],
+        [ 0,  0, 16,  0,  0,  0,  0,  0,  1,  0],
+        [ 0,  1,  1,  9,  1,  0,  0,  0,  1,  0],
+        [ 0,  0,  0,  0, 11,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 13,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  0,  0,  0,  0,  0,  0, 10,  0,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  0,  5,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  1,  0, 10]])
+Epoch finished in 0m 7s
+Epoch 20/24
+**********
+Milestone 3: 0.001
+train Loss: 0.2792 Acc: 0.9159
+val Loss: 0.3412 Acc: 0.8966
+test Loss: 0.2810 Acc: 0.9156
+tensor([[10,  0,  0,  0,  0,  0,  0,  2,  0,  0],
+        [ 1, 21,  0,  0,  1,  0,  0,  1,  0,  0],
+        [ 0,  0, 16,  0,  0,  0,  0,  0,  1,  0],
+        [ 0,  1,  1,  9,  1,  0,  0,  0,  1,  0],
+        [ 0,  0,  0,  0, 11,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 13,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  0,  0,  0,  0,  0,  0, 10,  0,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  0,  5,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  1,  0, 10]])
+Epoch finished in 0m 7s
+Epoch 21/24
+**********
+Milestone 3: 0.001
+train Loss: 0.2790 Acc: 0.9164
+val Loss: 0.3410 Acc: 0.8969
+test Loss: 0.2806 Acc: 0.9158
+tensor([[10,  0,  0,  0,  0,  0,  0,  2,  0,  0],
+        [ 1, 21,  0,  0,  1,  0,  0,  1,  0,  0],
+        [ 0,  0, 16,  0,  0,  0,  0,  0,  1,  0],
+        [ 0,  1,  1,  9,  1,  0,  0,  0,  1,  0],
+        [ 0,  0,  0,  0, 11,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 13,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  1,  0,  0,  0,  0,  0,  9,  0,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  0,  5,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  1,  0, 10]])
+Epoch finished in 0m 7s
+Epoch 22/24
+**********
+Milestone 3: 0.001
+train Loss: 0.2786 Acc: 0.9163
+val Loss: 0.3411 Acc: 0.8972
+test Loss: 0.2807 Acc: 0.9157
+tensor([[11,  0,  0,  0,  0,  0,  0,  1,  0,  0],
+        [ 1, 21,  0,  0,  1,  0,  0,  1,  0,  0],
+        [ 0,  0, 16,  0,  0,  0,  0,  0,  1,  0],
+        [ 0,  2,  1,  9,  0,  0,  0,  0,  1,  0],
+        [ 0,  0,  0,  0, 11,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 13,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  0,  0,  0,  0,  0,  0, 10,  0,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  0,  5,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  1,  0, 10]])
+Epoch finished in 0m 7s
+Epoch 23/24
+**********
+Milestone 3: 0.001
+train Loss: 0.2793 Acc: 0.9159
+val Loss: 0.3417 Acc: 0.8973
+test Loss: 0.2807 Acc: 0.9154
+tensor([[10,  0,  0,  0,  0,  0,  0,  2,  0,  0],
+        [ 1, 21,  0,  0,  1,  0,  0,  1,  0,  0],
+        [ 0,  0, 16,  0,  0,  0,  0,  0,  1,  0],
+        [ 0,  2,  1,  9,  0,  0,  0,  0,  1,  0],
+        [ 0,  0,  0,  0, 11,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 13,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  0,  0,  0,  0,  0,  0, 10,  0,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  0,  5,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  1,  0, 10]])
+Epoch finished in 0m 7s
+Epoch 24/24
+**********
+Milestone 3: 0.001
+train Loss: 0.2786 Acc: 0.9160
+val Loss: 0.3408 Acc: 0.8976
+test Loss: 0.2804 Acc: 0.9155
+tensor([[11,  0,  0,  0,  0,  0,  0,  1,  0,  0],
+        [ 1, 21,  0,  0,  1,  0,  0,  1,  0,  0],
+        [ 0,  0, 16,  0,  0,  0,  0,  0,  1,  0],
+        [ 0,  2,  1,  9,  0,  0,  0,  0,  1,  0],
+        [ 0,  0,  0,  0, 11,  0,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0, 13,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  1,  0,  0,  0,  0,  0,  9,  0,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  0,  5,  0],
+        [ 0,  0,  0,  0,  0,  0,  0,  1,  0, 10]])
+Epoch finished in 0m 7s
+Training complete in 3m 3s
+Best test Acc: 0.915834
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+Retrieving input from now on.
+[10, 15, 20]
+Milestone 0: 1
+Epoch 0/24
+**********
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+Training mode, no longer retrieving the input.
+train Loss: 2.1095 Acc: 0.2449
+val Loss: 1.8817 Acc: 0.3342
+test Loss: 1.8405 Acc: 0.3563
+tensor([[ 0,  6,  3,  2,  0,  0,  0,  0,  1,  0],
+        [ 0, 19,  5,  0,  0,  0,  0,  0,  0,  0],
+        [ 0,  0, 15,  1,  1,  0,  0,  0,  0,  0],
+        [ 0,  2,  8,  3,  0,  0,  0,  0,  0,  0],
+        [ 0,  3,  6,  0,  0,  0,  0,  2,  0,  0],
+        [ 0,  0, 11,  2,  0,  0,  0,  0,  0,  0],
+        [ 0,  1,  9,  1,  0,  0,  0,  0,  0,  0],
+        [ 0,  1,  5,  0,  1,  0,  0,  3,  0,  0],
+        [ 0,  1,  2,  2,  0,  0,  0,  0,  1,  0],
+        [ 0,  2,  5,  3,  0,  0,  0,  0,  1,  0]])
+Epoch finished in 0m 23s
+Epoch 1/24
+**********
+Milestone 0: 1
+train Loss: 1.5518 Acc: 0.4545
+val Loss: 1.4609 Acc: 0.5041
+test Loss: 1.4379 Acc: 0.5000
+tensor([[ 7,  0,  1,  1,  1,  0,  1,  0,  1,  0],
+        [ 4, 14,  1,  1,  4,  0,  0,  0,  0,  0],
+        [ 0,  0, 12,  3,  0,  0,  1,  0,  1,  0],
+        [ 0,  0,  2,  7,  1,  1,  0,  0,  2,  0],
+        [ 2,  0,  1,  1,  7,  0,  0,  0,  0,  0],
+        [ 0,  0,  1,  8,  0,  3,  1,  0,  0,  0],
+        [ 3,  0,  1,  0,  0,  1,  4,  0,  1,  1],
+        [ 1,  0,  4,  2,  1,  0,  0,  2,  0,  0],
+        [ 0,  0,  1,  2,  0,  1,  0,  0,  2,  0],
+        [ 1,  0,  0,  1,  1,  0,  6,  0,  2,  0]])
+Epoch finished in 0m 22s
+Epoch 2/24
+**********
+Milestone 0: 1
+train Loss: 1.1491 Acc: 0.6199
+val Loss: 1.1103 Acc: 0.6347
+test Loss: 1.0338 Acc: 0.6535
+tensor([[ 7,  1,  0,  0,  1,  0,  2,  0,  1,  0],
+        [ 1, 19,  1,  1,  1,  0,  0,  1,  0,  0],
+        [ 0,  0, 15,  1,  0,  0,  0,  0,  1,  0],
+        [ 0,  1,  1,  6,  1,  0,  0,  0,  4,  0],
+        [ 0,  2,  2,  0,  7,  0,  0,  0,  0,  0],
+        [ 0,  1,  1,  5,  0,  5,  1,  0,  0,  0],
+        [ 1,  0,  1,  1,  2,  0,  5,  0,  1,  0],
+        [ 2,  0,  2,  0,  0,  1,  0,  5,  0,  0],
+        [ 0,  0,  1,  2,  0,  0,  1,  0,  2,  0],
+        [ 1,  2,  1,  0,  1,  0,  4,  0,  1,  1]])
+Epoch finished in 0m 23s
+Epoch 3/24
+**********
+Milestone 0: 1
+train Loss: 0.9495 Acc: 0.6966
+val Loss: 0.9329 Acc: 0.7044
+test Loss: 0.9124 Acc: 0.7048
+tensor([[ 5,  0,  1,  0,  1,  0,  1,  0,  0,  4],
+        [ 0, 17,  0,  0,  4,  0,  0,  2,  0,  1],
+        [ 0,  0, 13,  2,  0,  1,  0,  0,  1,  0],
+        [ 0,  0,  0,  9,  0,  2,  0,  0,  2,  0],
+        [ 0,  0,  1,  0,  7,  1,  2,  0,  0,  0],
+        [ 0,  0,  1,  1,  0, 10,  1,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  0,  2,  0,  1,  1,  0,  6,  0,  0],
+        [ 0,  0,  0,  0,  0,  1,  1,  0,  3,  1],
+        [ 0,  0,  0,  0,  0,  0,  3,  0,  1,  7]])
+Epoch finished in 0m 22s
+Epoch 4/24
+**********
+Milestone 0: 1
+train Loss: 0.8199 Acc: 0.7426
+val Loss: 0.9415 Acc: 0.7061
+test Loss: 0.8893 Acc: 0.7168
+tensor([[ 6,  1,  0,  0,  1,  0,  2,  0,  0,  2],
+        [ 0, 19,  1,  0,  2,  0,  1,  1,  0,  0],
+        [ 0,  0, 14,  1,  0,  1,  1,  0,  0,  0],
+        [ 0,  1,  2,  6,  0,  0,  0,  0,  4,  0],
+        [ 0,  0,  1,  0,  8,  1,  0,  0,  1,  0],
+        [ 0,  0,  0,  1,  0, 12,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  1,  0,  9,  0,  0,  1],
+        [ 0,  1,  1,  0,  1,  1,  0,  6,  0,  0],
+        [ 0,  0,  0,  0,  0,  1,  1,  0,  3,  1],
+        [ 0,  0,  0,  0,  1,  1,  1,  0,  0,  8]])
+Epoch finished in 0m 22s
+Epoch 5/24
+**********
+Milestone 0: 1
+train Loss: 0.7406 Acc: 0.7703
+val Loss: 0.9408 Acc: 0.7048
+test Loss: 0.9242 Acc: 0.7001
+tensor([[ 6,  1,  0,  0,  0,  0,  2,  1,  0,  2],
+        [ 0, 19,  2,  0,  0,  0,  1,  2,  0,  0],
+        [ 0,  0, 14,  3,  0,  0,  0,  0,  0,  0],
+        [ 0,  1,  3,  7,  0,  0,  0,  0,  2,  0],
+        [ 1,  0,  2,  0,  7,  1,  0,  0,  0,  0],
+        [ 0,  0,  2,  1,  0,  9,  0,  0,  0,  1],
+        [ 1,  1,  1,  0,  0,  1,  7,  0,  0,  0],
+        [ 0,  1,  0,  0,  0,  0,  1,  8,  0,  0],
+        [ 0,  0,  0,  0,  0,  1,  0,  0,  3,  2],
+        [ 0,  0,  2,  0,  0,  0,  1,  1,  2,  5]])
+Epoch finished in 0m 22s
+Epoch 6/24
+**********
+Milestone 0: 1
+train Loss: 0.6759 Acc: 0.7919
+val Loss: 1.4786 Acc: 0.5734
+test Loss: 1.5490 Acc: 0.5504
+tensor([[ 1,  1,  6,  2,  0,  0,  1,  1,  0,  0],
+        [ 0, 12,  5,  7,  0,  0,  0,  0,  0,  0],
+        [ 0,  0, 16,  1,  0,  0,  0,  0,  0,  0],
+        [ 0,  0,  3, 10,  0,  0,  0,  0,  0,  0],
+        [ 0,  0,  3,  0,  7,  1,  0,  0,  0,  0],
+        [ 0,  0,  5,  3,  0,  5,  0,  0,  0,  0],
+        [ 0,  0,  1,  0,  0,  1,  9,  0,  0,  0],
+        [ 0,  0,  0,  2,  0,  0,  0,  8,  0,  0],
+        [ 0,  0,  2,  1,  0,  0,  1,  0,  2,  0],
+        [ 0,  0,  8,  2,  0,  0,  0,  0,  0,  1]])
+Epoch finished in 0m 22s
+Epoch 7/24
+**********
+Milestone 0: 1
+train Loss: 0.6509 Acc: 0.7995
+val Loss: 0.8894 Acc: 0.7157
+test Loss: 0.8320 Acc: 0.7311
+tensor([[ 6,  2,  0,  0,  1,  0,  0,  2,  1,  0],
+        [ 0, 24,  0,  0,  0,  0,  0,  0,  0,  0],
+        [ 0,  1, 14,  2,  0,  0,  0,  0,  0,  0],
+        [ 0,  1,  0, 12,  0,  0,  0,  0,  0,  0],
+        [ 0,  5,  0,  0,  6,  0,  0,  0,  0,  0],
+        [ 0,  0,  1,  1,  0, 10,  0,  0,  1,  0],
+        [ 0,  1,  0,  1,  0,  3,  6,  0,  0,  0],
+        [ 0,  1,  0,  1,  0,  1,  0,  7,  0,  0],
+        [ 0,  0,  0,  0,  0,  2,  0,  0,  4,  0],
+        [ 0,  1,  1,  2,  0,  2,  0,  0,  0,  5]])
+Epoch finished in 0m 22s
+Epoch 8/24
+**********
+Milestone 0: 1
+train Loss: 0.6337 Acc: 0.8026
+val Loss: 0.8334 Acc: 0.7324
+test Loss: 0.7954 Acc: 0.7395
+tensor([[ 8,  0,  0,  0,  1,  0,  1,  1,  0,  1],
+        [ 0, 20,  0,  0,  0,  0,  1,  3,  0,  0],
+        [ 0,  0, 13,  2,  1,  1,  0,  0,  0,  0],
+        [ 0,  0,  1, 11,  0,  0,  1,  0,  0,  0],
+        [ 0,  2,  1,  0,  6,  0,  1,  0,  1,  0],
+        [ 0,  0,  0,  3,  0,  7,  3,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  1,  1,  0,  1,  0,  1,  6,  0,  0],
+        [ 0,  0,  0,  1,  0,  0,  2,  0,  3,  0],
+        [ 1,  0,  0,  0,  0,  1,  2,  0,  0,  7]])
+Epoch finished in 0m 22s
+Epoch 9/24
+**********
+Milestone 0: 1
+train Loss: 0.6127 Acc: 0.8112
+val Loss: 0.8024 Acc: 0.7630
+test Loss: 0.7059 Acc: 0.7836
+tensor([[10,  0,  0,  0,  0,  0,  1,  0,  0,  1],
+        [ 1, 19,  0,  0,  0,  0,  1,  2,  0,  1],
+        [ 0,  0, 14,  1,  0,  0,  0,  1,  0,  1],
+        [ 0,  1,  1,  8,  0,  1,  0,  0,  0,  2],
+        [ 0,  0,  0,  0, 10,  0,  0,  1,  0,  0],
+        [ 0,  0,  0,  1,  1, 10,  0,  1,  0,  0],
+        [ 1,  0,  0,  0,  0,  0, 10,  0,  0,  0],
+        [ 0,  0,  1,  0,  0,  0,  0,  9,  0,  0],
+        [ 1,  0,  0,  0,  0,  0,  2,  0,  3,  0],
+        [ 0,  1,  0,  0,  0,  0,  0,  0,  0, 10]])
+Epoch finished in 0m 22s
+Epoch 10/24
+**********
+Milestone 1: 0.1
+train Loss: 0.4770 Acc: 0.8557
+val Loss: 0.5085 Acc: 0.8435
+test Loss: 0.4697 Acc: 0.8572
+tensor([[ 9,  0,  0,  0,  0,  0,  2,  0,  0,  1],
+        [ 0, 20,  1,  0,  1,  0,  1,  1,  0,  0],
+        [ 0,  1, 15,  1,  0,  0,  0,  0,  0,  0],
+        [ 0,  0,  2,  9,  0,  1,  0,  0,  0,  1],
+        [ 0,  0,  1,  0, 10,  0,  0,  0,  0,  0],
+        [ 0,  0,  1,  1,  0, 11,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  1,  0,  0,  0,  1,  0,  8,  0,  0],
+        [ 0,  0,  0,  0,  0,  1,  1,  0,  4,  0],
+        [ 1,  0,  0,  0,  0,  1,  0,  0,  0,  9]])
+Epoch finished in 0m 22s
+Epoch 11/24
+**********
+Milestone 1: 0.1
+train Loss: 0.4465 Acc: 0.8634
+val Loss: 0.5031 Acc: 0.8471
+test Loss: 0.4615 Acc: 0.8598
+tensor([[10,  0,  0,  0,  0,  0,  1,  0,  0,  1],
+        [ 0, 20,  1,  0,  2,  0,  0,  1,  0,  0],
+        [ 0,  1, 15,  1,  0,  0,  0,  0,  0,  0],
+        [ 0,  0,  2,  8,  0,  1,  0,  0,  1,  1],
+        [ 0,  1,  1,  0,  9,  0,  0,  0,  0,  0],
+        [ 0,  0,  1,  1,  0, 11,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  0,  0,  1,  0,  1,  0,  8,  0,  0],
+        [ 0,  0,  0,  0,  0,  1,  1,  0,  4,  0],
+        [ 1,  0,  0,  0,  0,  0,  0,  0,  0, 10]])
+Epoch finished in 0m 22s
+Epoch 12/24
+**********
+Milestone 1: 0.1
+train Loss: 0.4367 Acc: 0.8675
+val Loss: 0.4969 Acc: 0.8481
+test Loss: 0.4538 Acc: 0.8613
+tensor([[10,  0,  0,  0,  0,  0,  1,  0,  0,  1],
+        [ 0, 21,  1,  0,  2,  0,  0,  0,  0,  0],
+        [ 0,  1, 15,  1,  0,  0,  0,  0,  0,  0],
+        [ 0,  0,  2,  8,  0,  1,  0,  0,  1,  1],
+        [ 0,  0,  1,  0, 10,  0,  0,  0,  0,  0],
+        [ 0,  0,  1,  1,  0, 11,  0,  0,  0,  0],
+        [ 0,  0,  0,  1,  0,  0, 10,  0,  0,  0],
+        [ 0,  0,  0,  1,  0,  1,  0,  8,  0,  0],
+        [ 0,  0,  0,  0,  0,  0,  2,  0,  4,  0],
+        [ 0,  1,  0,  0,  0,  1,  0,  0,  0,  9]])
+Epoch finished in 0m 22s
+Epoch 13/24
+**********
+Milestone 1: 0.1
+train Loss: 0.4291 Acc: 0.8693
+val Loss: 0.4981 Acc: 0.8485
+test Loss: 0.4554 Acc: 0.8611
+tensor([[ 9,  0,  0,  0,  0,  0,  2,  0,  0,  1],
+        [ 0, 22,  1,  0,  0,  0,  1,  0,  0,  0],
+        [ 0,  1, 15,  1,  0,  0,  0,  0,  0,  0],
+        [ 0,  0,  2,  9,  0,  1,  0,  0,  0,  1],
+        [ 0,  1,  1,  0,  9,  0,  0,  0,  0,  0],
+        [ 0,  0,  1,  1,  0, 11,  0,  0,  0,  0],
+        [ 0,  0,  0,  1,  0,  0, 10,  0,  0,  0],
+        [ 0,  1,  0,  0,  0,  1,  0,  8,  0,  0],
+        [ 0,  0,  0,  0,  0,  1,  1,  0,  4,  0],
+        [ 0,  1,  0,  0,  0,  2,  0,  0,  0,  8]])
+Epoch finished in 0m 22s
+Epoch 14/24
+**********
+Milestone 1: 0.1
+train Loss: 0.4247 Acc: 0.8714
+val Loss: 0.4928 Acc: 0.8494
+test Loss: 0.4506 Acc: 0.8608
+tensor([[ 9,  0,  0,  0,  0,  0,  1,  1,  0,  1],
+        [ 0, 21,  1,  0,  1,  0,  1,  0,  0,  0],
+        [ 0,  0, 15,  1,  1,  0,  0,  0,  0,  0],
+        [ 0,  0,  1,  9,  0,  2,  0,  0,  0,  1],
+        [ 0,  0,  1,  0, 10,  0,  0,  0,  0,  0],
+        [ 0,  0,  1,  1,  0, 11,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  0,  0,  1,  0,  1,  0,  8,  0,  0],
+        [ 0,  0,  0,  0,  0,  1,  0,  0,  5,  0],
+        [ 0,  1,  0,  0,  0,  0,  0,  0,  0, 10]])
+Epoch finished in 0m 22s
+Epoch 15/24
+**********
+Milestone 2: 0.01
+train Loss: 0.4049 Acc: 0.8773
+val Loss: 0.4848 Acc: 0.8520
+test Loss: 0.4406 Acc: 0.8651
+tensor([[10,  0,  0,  0,  0,  0,  1,  0,  0,  1],
+        [ 0, 21,  1,  0,  1,  0,  1,  0,  0,  0],
+        [ 0,  1, 15,  1,  0,  0,  0,  0,  0,  0],
+        [ 0,  0,  1, 10,  0,  1,  0,  0,  0,  1],
+        [ 0,  0,  1,  0, 10,  0,  0,  0,  0,  0],
+        [ 0,  0,  1,  1,  0, 11,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  0,  1,  0,  0,  1,  0,  8,  0,  0],
+        [ 0,  0,  0,  0,  0,  1,  0,  0,  4,  1],
+        [ 0,  1,  0,  0,  0,  0,  0,  0,  0, 10]])
+Epoch finished in 0m 22s
+Epoch 16/24
+**********
+Milestone 2: 0.01
+train Loss: 0.4015 Acc: 0.8788
+val Loss: 0.4849 Acc: 0.8518
+test Loss: 0.4395 Acc: 0.8671
+tensor([[10,  0,  0,  0,  0,  0,  1,  0,  0,  1],
+        [ 0, 21,  0,  0,  1,  0,  1,  1,  0,  0],
+        [ 0,  1, 15,  1,  0,  0,  0,  0,  0,  0],
+        [ 0,  0,  1, 10,  0,  1,  0,  0,  0,  1],
+        [ 0,  0,  1,  0, 10,  0,  0,  0,  0,  0],
+        [ 0,  0,  1,  1,  0, 11,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  1,  0,  0,  0,  1,  0,  8,  0,  0],
+        [ 0,  0,  0,  0,  0,  1,  1,  0,  4,  0],
+        [ 0,  1,  0,  0,  0,  0,  0,  0,  0, 10]])
+Epoch finished in 0m 22s
+Epoch 17/24
+**********
+Milestone 2: 0.01
+train Loss: 0.3998 Acc: 0.8790
+val Loss: 0.4836 Acc: 0.8515
+test Loss: 0.4365 Acc: 0.8658
+tensor([[10,  0,  0,  0,  0,  0,  1,  0,  0,  1],
+        [ 0, 21,  1,  0,  1,  0,  1,  0,  0,  0],
+        [ 0,  1, 15,  1,  0,  0,  0,  0,  0,  0],
+        [ 0,  0,  1,  9,  0,  1,  0,  0,  1,  1],
+        [ 0,  0,  1,  0, 10,  0,  0,  0,  0,  0],
+        [ 0,  0,  1,  1,  0, 11,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  1,  0,  0,  0,  1,  0,  8,  0,  0],
+        [ 0,  0,  0,  0,  0,  1,  1,  0,  4,  0],
+        [ 0,  1,  0,  0,  0,  0,  0,  0,  0, 10]])
+Epoch finished in 0m 22s
+Epoch 18/24
+**********
+Milestone 2: 0.01
+train Loss: 0.3986 Acc: 0.8793
+val Loss: 0.4850 Acc: 0.8520
+test Loss: 0.4391 Acc: 0.8670
+tensor([[10,  0,  0,  0,  0,  0,  1,  0,  0,  1],
+        [ 0, 21,  0,  0,  1,  0,  1,  1,  0,  0],
+        [ 0,  1, 15,  1,  0,  0,  0,  0,  0,  0],
+        [ 0,  0,  1, 10,  0,  1,  0,  0,  0,  1],
+        [ 0,  0,  0,  0, 10,  0,  0,  1,  0,  0],
+        [ 0,  0,  1,  1,  0, 11,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  0,  0,  0,  0,  1,  0,  9,  0,  0],
+        [ 0,  0,  0,  0,  0,  1,  1,  0,  4,  0],
+        [ 0,  1,  0,  0,  0,  0,  0,  0,  0, 10]])
+Epoch finished in 0m 22s
+Epoch 19/24
+**********
+Milestone 2: 0.01
+train Loss: 0.3982 Acc: 0.8787
+val Loss: 0.4837 Acc: 0.8518
+test Loss: 0.4411 Acc: 0.8662
+tensor([[10,  0,  0,  0,  0,  0,  1,  0,  0,  1],
+        [ 0, 21,  1,  0,  1,  0,  1,  0,  0,  0],
+        [ 0,  1, 15,  1,  0,  0,  0,  0,  0,  0],
+        [ 0,  0,  1, 10,  0,  1,  0,  0,  0,  1],
+        [ 0,  0,  0,  0, 10,  0,  0,  1,  0,  0],
+        [ 0,  0,  1,  1,  0, 11,  0,  0,  0,  0],
+        [ 0,  0,  1,  0,  0,  0, 10,  0,  0,  0],
+        [ 0,  1,  0,  0,  0,  1,  0,  8,  0,  0],
+        [ 0,  0,  0,  0,  0,  1,  0,  0,  4,  1],
+        [ 0,  1,  0,  0,  0,  0,  0,  0,  0, 10]])
+Epoch finished in 0m 22s
+Epoch 20/24
+**********
+Milestone 3: 0.001
+train Loss: 0.3961 Acc: 0.8797
+val Loss: 0.4837 Acc: 0.8521
+test Loss: 0.4380 Acc: 0.8672
+tensor([[10,  0,  0,  0,  0,  0,  1,  0,  0,  1],
+        [ 0, 21,  1,  0,  1,  0,  1,  0,  0,  0],
+        [ 0,  1, 15,  1,  0,  0,  0,  0,  0,  0],
+        [ 0,  0,  1, 10,  0,  1,  0,  0,  0,  1],
+        [ 0,  0,  0,  0, 10,  0,  0,  1,  0,  0],
+        [ 0,  0,  1,  1,  0, 11,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  1,  0,  0,  0,  1,  0,  8,  0,  0],
+        [ 0,  0,  0,  0,  0,  1,  1,  0,  4,  0],
+        [ 0,  1,  0,  0,  0,  0,  0,  0,  0, 10]])
+Epoch finished in 0m 22s
+Epoch 21/24
+**********
+Milestone 3: 0.001
+train Loss: 0.3958 Acc: 0.8799
+val Loss: 0.4833 Acc: 0.8527
+test Loss: 0.4387 Acc: 0.8668
+tensor([[10,  0,  0,  0,  0,  0,  1,  0,  0,  1],
+        [ 0, 21,  1,  0,  1,  0,  1,  0,  0,  0],
+        [ 0,  1, 15,  1,  0,  0,  0,  0,  0,  0],
+        [ 0,  0,  1, 10,  0,  1,  0,  0,  0,  1],
+        [ 0,  0,  0,  0, 10,  0,  0,  1,  0,  0],
+        [ 0,  0,  1,  1,  0, 11,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  1,  0,  0,  0,  1,  0,  8,  0,  0],
+        [ 0,  0,  0,  0,  0,  1,  1,  0,  4,  0],
+        [ 0,  1,  0,  0,  0,  0,  0,  0,  0, 10]])
+Epoch finished in 0m 22s
+Epoch 22/24
+**********
+Milestone 3: 0.001
+train Loss: 0.3952 Acc: 0.8804
+val Loss: 0.4836 Acc: 0.8530
+test Loss: 0.4369 Acc: 0.8674
+tensor([[10,  0,  0,  0,  0,  0,  1,  0,  0,  1],
+        [ 0, 21,  1,  0,  1,  0,  1,  0,  0,  0],
+        [ 0,  1, 15,  1,  0,  0,  0,  0,  0,  0],
+        [ 0,  0,  1, 10,  0,  1,  0,  0,  0,  1],
+        [ 0,  0,  0,  0, 10,  0,  0,  1,  0,  0],
+        [ 0,  0,  1,  1,  0, 11,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  1,  0,  0,  0,  1,  0,  8,  0,  0],
+        [ 0,  0,  0,  0,  0,  1,  1,  0,  4,  0],
+        [ 0,  1,  0,  0,  0,  0,  0,  0,  0, 10]])
+Epoch finished in 0m 22s
+Epoch 23/24
+**********
+Milestone 3: 0.001
+train Loss: 0.3949 Acc: 0.8798
+val Loss: 0.4834 Acc: 0.8525
+test Loss: 0.4380 Acc: 0.8674
+tensor([[10,  0,  0,  0,  0,  0,  1,  0,  0,  1],
+        [ 0, 21,  1,  0,  1,  0,  1,  0,  0,  0],
+        [ 0,  1, 15,  1,  0,  0,  0,  0,  0,  0],
+        [ 0,  0,  1, 10,  0,  1,  0,  0,  0,  1],
+        [ 0,  0,  0,  0, 10,  0,  0,  1,  0,  0],
+        [ 0,  0,  1,  1,  0, 11,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  1,  0,  0,  0,  1,  0,  8,  0,  0],
+        [ 0,  0,  0,  0,  0,  1,  1,  0,  4,  0],
+        [ 0,  1,  0,  0,  0,  0,  0,  0,  0, 10]])
+Epoch finished in 0m 22s
+Epoch 24/24
+**********
+Milestone 3: 0.001
+train Loss: 0.3948 Acc: 0.8803
+val Loss: 0.4832 Acc: 0.8526
+test Loss: 0.4378 Acc: 0.8672
+tensor([[10,  0,  0,  0,  0,  0,  1,  0,  0,  1],
+        [ 0, 21,  1,  0,  1,  0,  1,  0,  0,  0],
+        [ 0,  1, 15,  1,  0,  0,  0,  0,  0,  0],
+        [ 0,  0,  1, 10,  0,  1,  0,  0,  0,  1],
+        [ 0,  0,  0,  0, 10,  0,  0,  1,  0,  0],
+        [ 0,  0,  1,  1,  0, 11,  0,  0,  0,  0],
+        [ 0,  0,  0,  0,  0,  0, 10,  0,  1,  0],
+        [ 0,  1,  0,  0,  0,  1,  0,  8,  0,  0],
+        [ 0,  0,  0,  0,  0,  1,  1,  0,  4,  0],
+        [ 0,  1,  0,  0,  0,  0,  0,  0,  0, 10]])
+Epoch finished in 0m 22s
+Training complete in 9m 22s
+Best test Acc: 0.867432

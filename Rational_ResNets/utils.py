@@ -29,7 +29,12 @@ def make_csv(model, epoch: List[int], train_acc: list, val_acc: list, test_acc: 
     PATH:   str
             The path to the saved csv file.
     """
-    PATH = 'CSV/{}/'.format(model) + 'final_plot.csv'
+    if args.clip_gradients:
+        PATH = 'CSV/{}/'.format(model) + 'final_plot_pow.csv'
+    elif not args.augment_data:
+        PATH = 'CSV/{}/'.format(model) + 'final_plot_no_aug.csv'
+    else:
+        PATH = 'CSV/{}/'.format(model) + 'final_plot.csv'
 
     with open(PATH, 'a') as csvfile:
         fieldnames = ['Epoch', 'Train Accuracy', 'Validation Accuracy', 'Test Accuracy']
