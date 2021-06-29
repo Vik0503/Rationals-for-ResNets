@@ -1,3 +1,11 @@
+import inspect
+import os
+import sys
+
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir)
+
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
@@ -10,19 +18,15 @@ matplotlib.rcParams.update({
     "text.usetex": False,
 })
 
-relu_data_ns = pd.read_csv('/Users/viktoriasartor/git/Rationals-for-ResNets/LTH_for_Rational_ResNets/CSV/' +
-                           'relu_resnet20/test_accs.csv')
-univ_rat_data_ns = pd.read_csv('/Users/viktoriasartor/git/Rationals-for-ResNets/LTH_for_Rational_ResNets/CSV/' +
-                               'univ_rational_resnet20/test_accs.csv')
-mix_exp_data_ns = pd.read_csv('/Users/viktoriasartor/git/Rationals-for-ResNets/LTH_for_Rational_ResNets/CSV/' +
-                              'mix_experts_resnet20/test_accs.csv')
+print(sys.path)
 
-relu_data_s = pd.read_csv('/Users/viktoriasartor/git/Rationals-for-ResNets/LTH_for_Rational_ResNets/CSV/' +
-                          'relu_resnet20/test_accs_shortcuts.csv')
-univ_rat_data_s = pd.read_csv('/Users/viktoriasartor/git/Rationals-for-ResNets/LTH_for_Rational_ResNets/CSV/' +
-                              'univ_rational_resnet20/test_accs_shortcuts.csv')
-mix_exp_data_s = pd.read_csv('/Users/viktoriasartor/git/Rationals-for-ResNets/LTH_for_Rational_ResNets/CSV/' +
-                             'mix_experts_resnet20/test_accs_shortcuts.csv')
+relu_data_ns = pd.read_csv('../LTH_for_Rational_ResNets/CSV/relu_resnet20/test_accs.csv')
+univ_rat_data_ns = pd.read_csv('./CSV/univ_rational_resnet20/test_accs.csv')
+mix_exp_data_ns = pd.read_csv('./CSV/mix_experts_resnet20/test_accs.csv')
+
+relu_data_s = pd.read_csv('../LTH_for_Rational_ResNets/CSV/relu_resnet20/test_accs_shortcuts.csv')
+univ_rat_data_s = pd.read_csv('../LTH_for_Rational_ResNets/CSV/univ_rational_resnet20/test_accs_shortcuts.csv')
+mix_exp_data_s = pd.read_csv('./CSV/mix_experts_resnet20/test_accs_shortcuts.csv')
 
 test_accs_ns = [relu_data_ns['test_acc'], univ_rat_data_ns['test_acc'],
                 mix_exp_data_ns['test_acc']]
@@ -38,7 +42,7 @@ plt.figure(figsize=(10, 6))
 plt.subplots_adjust(bottom=0.3)
 plt.subplot(121)
 ax = plt.gca()
-# plt.xticks(data['pruning_percentage'])
+
 for i in range(len(test_accs_ns)):
     sns.lineplot(x=x_vals_ns[i], y=test_accs_ns[i])
 plt.xlabel('Percentage of Pruned Weights')
@@ -53,8 +57,8 @@ plt.ylabel('Test Accuracy in Percent')
 ax = plt.gca()
 
 plt.figlegend(['ReLU ResNet20', 'Univariate Rational ResNet20', 'Mixture of Experts ResNet20'],
-              loc='upper center', bbox_to_anchor=(0.2, -0.375, 0.45, 0.5), ncol=3)
-PATH = '/Users/viktoriasartor/git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Plots/all.svg'
+              bbox_to_anchor=(0, -0.776, 1, 1), loc='upper center', ncol=3, bbox_transform=plt.gcf().transFigure)
+PATH = './Plots/all.svg'
 plt.savefig(PATH)
 plt.show()
 
@@ -62,7 +66,7 @@ plt.figure(figsize=(10, 6))
 
 plt.subplots_adjust(bottom=0.3)
 plt.subplot(121)
-# plt.xticks(data['pruning_percentage'])
+
 for i in range(len(test_accs_ns)):
     sns.lineplot(x=x_vals_ns[i], y=test_accs_ns[i])
 plt.xlabel('Percentage of Pruned Weights')
@@ -102,8 +106,8 @@ plt.xticks([0, 20, 40, 60, 80, 100])
 ax.set_yscale('function', functions=(forward, inverse))
 
 plt.figlegend(['ReLU ResNet20', 'Univariate Rational ResNet20', 'Mixture of Experts ResNet20'],
-              loc='upper center', bbox_to_anchor=(0.2, -0.375, 0.45, 0.5), ncol=3)
-PATH = '/Users/viktoriasartor/git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Plots/all_exp.svg'
+              bbox_to_anchor=(0, -0.776, 1, 1), loc='upper center', ncol=3, bbox_transform=plt.gcf().transFigure)
+PATH = './Plots/all_exp.svg'
 plt.savefig(PATH)
 plt.show()
 
@@ -153,7 +157,7 @@ ax.set_yscale('function', functions=(forward, inverse))
 
 
 plt.figlegend(['ReLU ResNet20', 'Univariate Rational ResNet20', 'Mixture of Experts ResNet20'],
-              loc='upper center', bbox_to_anchor=(0.2, -0.375, 0.45, 0.5), ncol=3)
-PATH = '/Users/viktoriasartor/git/Rationals-for-ResNets/LTH_for_Rational_ResNets/Plots/small_exp.svg'
+              bbox_to_anchor=(0, -0.776, 1, 1), loc='upper center', ncol=3, bbox_transform=plt.gcf().transFigure)
+PATH = './Plots/small_exp.svg'
 plt.savefig(PATH)
 plt.show()
